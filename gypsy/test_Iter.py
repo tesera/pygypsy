@@ -109,7 +109,7 @@ N_Aw = 100.0
 SI_bh_Aw = 4.2
 bhage_Aw = 35.0
 
-y_Aw = densityAw  (69.0, bhage_Aw, SI_bh_Aw)
+#y_Aw = densityAw  (SDF_Aw, bhage_Aw, SI_bh_Aw)
 
 
 x0 = [200.0]
@@ -118,7 +118,7 @@ x0 = [200.0]
 
 
 
-optimize = fmin (densityAw, x0, args = (bhage_Aw, SI_bh_Aw))
+optimize = fmin (densityAw, x0 , args = (bhage_Aw, SI_bh_Aw))
 
 '''
 

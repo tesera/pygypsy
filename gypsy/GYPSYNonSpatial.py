@@ -9,6 +9,8 @@ import numpy
 from asaCompileAgeGivenSpSiHt import ComputeGypsySiteIndex
 from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
 
+from scipy.optimize import fmin
+
 
 """
 estimating Sit, total age, and bhage using asaCompileAgeGivenSpSiHt functions
@@ -260,6 +262,12 @@ def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw, SDF_Sw, SDF_Sb, N_Pl, 
     
     
 '''The purpose of the functiona below is to etimate N given that SDF have been estimated '''
+
+def minimumN_SDF_Aw (SDF_Aw0, bhage_Aw, SI_bh_Aw):
+    x0 = [200.0]
+    optimize = fmin (densityAw, x0 , args = (bhage_Aw, SI_bh_Aw))
+    
+    return optimize
 
 def densityAw (SDF_Aw0, bhage_Aw, SI_bh_Aw):
     
