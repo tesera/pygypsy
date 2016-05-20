@@ -66,9 +66,10 @@ def densityNonSpatialAw (sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings = True):
            while NDiffFlag == False:
                
                b3=(1+c0) * SDF_Aw0**((c1+numpy.log(SDF_Aw0))/SDF_Aw0)
-               b2=(c0/4) * ((SDF_Aw0**0.5)**(1/SDF_Aw0))
+               b2=c0 * (SDF_Aw0**0.5)**(1/(4*SDF_Aw0))
                
-               b1=( (1/(numpy.sqrt(SDF_Aw0/1000))) + (numpy.sqrt(1+numpy.sqrt(50/(numpy.sqrt(SDF_Aw0)*numpy.log(50+1))))) )  *  numpy.log(50+1)
+               b1= -( (1/((SDF_Aw0/1000)**(0.5)) ) + numpy.sqrt(1+numpy.sqrt(50/(numpy.sqrt(SDF_Aw0)*numpy.log(50+1)))) ) * numpy.log(50+1)
+             
                
                k1=1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(50+1)))
                k2=1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(1+bhage_Aw)))
@@ -276,9 +277,9 @@ def densityAw (SDF_Aw0, bhage_Aw, SI_bh_Aw):
         c1=6.67468
         b3=(1+c0) * SDF_Aw0**((c1+numpy.log(SDF_Aw0))/SDF_Aw0)
         
-        b2=(c0/4)*((SDF_Aw0**0.5)**(1/SDF_Aw0))
+        b2=c0*(SDF_Aw0**0.5)**(1/(4*SDF_Aw0))
         
-        b1=( (1/((SDF_Aw0/1000)**(0.5)) ) + (numpy.sqrt(1+numpy.sqrt(50/(numpy.sqrt(SDF_Aw0)*numpy.log(50+1))))) ) * numpy.log(50+1)
+        b1= -( (1/((SDF_Aw0/1000)**(0.5)) ) + (numpy.sqrt(1+numpy.sqrt(50/(numpy.sqrt(SDF_Aw0)*numpy.log(50+1))))) ) * numpy.log(50+1)
         
         k1=1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(50+1)))
         k2=1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(1+bhage_Aw)))
