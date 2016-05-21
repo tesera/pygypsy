@@ -83,7 +83,7 @@ def densityNonSpatialAw (sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings = True):
                else: 
                    N_est_Aw = (N_Aw + N_est_Aw)/2
                    SDF_Aw0 = N_est_Aw *k2/k1
-                   print 'Aw',  N_est_Aw, SDF_Aw0
+                   #print 'Aw',  N_est_Aw, SDF_Aw0
                                       
                iterCount = iterCount + 1
                if iterCount == 150 and printWarnings == True:
@@ -119,7 +119,9 @@ def densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings = True):
                    while abs(N_Sb-N_est_Sb) > acceptableDiff:
                        b2=c3
                        b3=c3*(SDF_Sb0**(1/SDF_Sb0))
-                       b1=c1/((((SDF_Sb0/1000)**0.5)+numpy.log(50+1))**c2)
+                       
+                       b1=c1/ ((((SDF_Sb0/1000)**0.5)+numpy.log(50+1))**c2)
+                       
                        k1=1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sb))+(b3*numpy.log(1+50)))
                        k2=1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sb))+(b3*numpy.log(1+tage_Sb)))
                       
@@ -131,7 +133,7 @@ def densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings = True):
                        else: 
                            N_est_Sb = (N_Sb + N_est_Sb)/2
                            SDF_Sb0 = N_est_Sb * k2/k1
-                           print 'Sb', N_est_Sb, SDF_Sb0
+                           #print 'Sb', N_est_Sb, SDF_Sb0
                                               
                        iterCount = iterCount + 1
                        if iterCount == 150 and printWarnings == True:
@@ -185,7 +187,7 @@ def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw, N_Sw, printWarnings = 
                        else: 
                            N_est_Sw = (N_Sw + N_est_Sw)/2
                            SDF_Sw0 = N_est_Sw * k2/k1
-                           print 'Sw', N_est_Sw, SDF_Sw0
+                           #print 'Sw', N_est_Sw, SDF_Sw0
                            
                        iterCount = iterCount + 1
                        if iterCount == 150 and printWarnings == True:
@@ -239,7 +241,9 @@ def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw, SDF_Sw, SDF_Sb, N_Pl, 
                        k=(1+(c6*(SDF_Pl0**0.5)))/SDF_Pl0    
                        b3=c4*(SDF_Pl0**k)
                        b2=c4/((SDF_Pl0**0.5)**c5)
+                       
                        b1=(c1+(z1*(SDF_Aw/1000)/2)+(z2*(SDF_Sw/1000)/3)+(z3*(SDF_Sb/1000)/4))+(c2/((SDF_Pl0**0.5)**c3))
+                       
                        k1=1+numpy.exp(b1+(b2*numpy.log(SI_bh_Pl))+(b3*numpy.log(50+1)))
                        k2=1+numpy.exp(b1+(b2*numpy.log(SI_bh_Pl))+(b3*numpy.log(1+tage_Pl)))
                 
@@ -250,7 +254,7 @@ def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw, SDF_Sw, SDF_Sb, N_Pl, 
                        else: 
                            N_est_Pl = (N_Pl + N_est_Pl)/2
                            SDF_Pl0 = N_est_Pl * k2/k1
-                           print 'Pl', N_est_Pl, SDF_Pl0
+                           #print 'Pl', N_est_Pl, SDF_Pl0
                            
                        iterCount = iterCount + 1
                        if iterCount == 150 and printWarnings == True:
@@ -473,7 +477,8 @@ def BasalAreaIncrementNonSpatialSb (sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhag
         a1      =       0.966285 
         a2      =       0.056315 
         a3      =        0.17191 
-        k=(1+((N0_Sb**0.5)*((1+bhage_Sb)**0.5) ) )*(numpy.exp(-(N0_Sb/4)/10000))*(numpy.log(1+SI_bh_Sb)) /  ((1+bhage_Sb )**a2)
+        k=(1+((N0_Sb**0.5)*((1+bhage_Sb)**0.5) ) )*(numpy.exp(-(N0_Sb/4)/10000))*(numpy.log(1+SI_bh_Sb)) /  ((1+BA_Sb )**a2)
+        
         k1=(10**-4)*a1*(numpy.exp(-a2*bhage_Sb))*(SC_Sb**a3)*(bhage_Sb**(a2+numpy.sqrt(a1)) )
         BAinc_Sb=k*k1
         
@@ -481,8 +486,6 @@ def BasalAreaIncrementNonSpatialSb (sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhag
     return BAinc_Sb
     
     
-
-
 
            
     

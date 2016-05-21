@@ -117,7 +117,7 @@ for plotID, row in inputDF.iterrows():
     N0_Pl  = inputDF.loc[plotID,'N0_Pl']
     N0_Sb  = inputDF.loc[plotID,'N0_Sb']
     
-    print N0_Aw, N0_Sw, N0_Pl, N0_Sb
+    #print N0_Aw, N0_Sw, N0_Pl, N0_Sb
     
     tageData = [ tage_AwT, tage_SwT, tage_PlT, tage_SbT ]
     startTageAw = tageData[0]-1
@@ -174,7 +174,7 @@ for plotID, row in inputDF.iterrows():
             N_bh_Pl = densityPl (SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl , SI_bh_Pl)
  
         
-        print startTage, N_bh_Aw,  N_bh_Sb, N_bh_Sw, N_bh_Pl
+        #print startTage, N_bh_Aw,  N_bh_Sb, N_bh_Sw, N_bh_Pl
         
         
         ''' species composition at time t-1 '''
@@ -192,7 +192,7 @@ for plotID, row in inputDF.iterrows():
         #print BasalAreaIncrementNonSpatialAw (sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, bhage_Aw, BA_AwT )
 
         #print BAinc_AwT, BA_AwT, SC_Aw, SI_bh_Aw, N_bh_Aw, bhage_Aw
-        '''        
+       
         if bhage_Aw >= 0:
             BA_Aw = BAincIter_Aw (sp_Aw, BAinc_AwT, BA_AwT, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, printWarnings = True)
         else:
@@ -200,14 +200,14 @@ for plotID, row in inputDF.iterrows():
             BAinc_AwT = 0
         
         
-        #print startTage, BA_AwT, BAinc_AwT,  N_bh_Aw, SC_AwT
+        print startTage, BA_AwT, BAinc_AwT,  N_bh_Aw, SC_AwT
         
         
         N_bh_AwT = N_bh_Aw
         BA_AwT = BA_Aw[0]
         BAinc_AwT = BA_Aw[1]
         SC_AwT = SC_Aw
-        '''
+ 
  
        
         startTage = startTage - 1

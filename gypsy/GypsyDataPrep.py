@@ -37,9 +37,9 @@ from GYPSYNonSpatial import SCestimate
 
 data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/Inputs/LCR_join10b_x_julianno_1row.csv')
 
-print data
+#print data
 
-print data.shape  #gives number of rows and number of columns
+#print data.shape  #gives number of rows and number of columns
 
 fplot = {'Aw': {'topHeight': 0, 'tage': 0, 'bhage': 0, 'N': 0, 'BA': 0, 'PS': 16.9, 'StumpDOB':13, 'StumpHeight': 0.3, 'TopDib': 7, 'SI': 0, 'PCT': 0}, 
                  'Pl': {'topHeight': 0, 'tage': 0, 'bhage': 0, 'N': 0, 'BA': 0, 'PS': 16.9, 'StumpDOB':13, 'StumpHeight': 0.3, 'TopDib': 7, 'SI': 0, 'PCT': 0}, 
@@ -52,62 +52,62 @@ plotDict = {}
 
 # input - species, top height, total age, BH age, N (or density), current Basal Area, Measured Percent Stocking, StumpDOB, StumpHeight, TopDib
 def SIfromDomSp (domSp, SI):
-        if SI>0:
-            if domSp == 'Aw':
-                SI_Aw = SI
-                SI_Pl = 0.85 * SI_Aw + 3.4
-                SI_Sw = 1.31 * SI_Aw - 2.64
-                SI_Fb = 0.92 * SI_Sw + 1.68
-                SI_Fd = 0.94 * SI_Pl + 0.71
-                SI_Sb = 0.64 * SI_Pl + 2.76
-                SI_Pb = SI_Aw
-                
-            elif domSp == 'Sw':
-                SI_Sw = SI
-                SI_Pl = 0.86 * SI_Sw + 2.13
-                SI_Aw = 0.76 * SI_Sw + 2.01
-                SI_Fb = 0.92 * SI_Sw + 1.68
-                SI_Fd = 0.74 * SI_Sw + 4.75
-                SI_Sb = 0.64 * SI_Pl + 2.76
-                SI_Pb = SI_Aw
-                
-            elif domSp == 'Fb':
-                SI_Fb = SI       
-                SI_Sw = 1.09 * SI_Fb - 1.83
-                SI_Pl = 0.86 * SI_Sw + 2.13
-                SI_Aw = 0.76 * SI_Sw + 2.01
-                SI_Fd = 0.74 * SI_Sw + 4.75
-                SI_Sb = 0.64 * SI_Pl + 2.76
-                SI_Pb = SI_Aw
-                
-            if domSp == 'Fd':
-                SI_Fd = SI         
-                SI_Pl = 1.07 * SI_Fd - 0.76
-                SI_Aw = 1.18 * SI_Pl  - 4.02
-                SI_Sw = 1.36 * SI_Fd  - 6.45
-                SI_Pb = SI_Aw
-                SI_Fb = 0.92 * SI_Sw + 1.68
-                SI_Sb = 0.64 * SI_Pl + 2.76
-                
-            if domSp == 'Pl':
-                SI_Pl = SI   
-                SI_Aw = 1.18 * SI_Pl  - 4.02
-                SI_Sw = 1.16 * SI_Pl  - 2.47
-                SI_Fd = 0.94* SI_Pl + 0.71
-                SI_Pb = SI_Aw
-                SI_Fb = 0.92 * SI_Sw + 1.68
-                SI_Sb = 0.64 * SI_Pl + 2.76
-                
-            if domSp == 'Pb':  
-                SI_Pb = SI
-                SI_Aw = SI_Pb
-                SI_Pl = 0.85 * SI_Aw + 3.4
-                SI_Sw = 1.31 * SI_Aw -2.64
-                SI_Fd = 0.92* SI_Pl + 1.68
-                SI_Fb = 0.92 * SI_Sw + 1.68
-                SI_Sb = 0.64 * SI_Pl + 2.76
+    if SI>0:
+        if domSp == 'Aw':
+            SI_Aw = SI
+            SI_Pl = 0.85 * SI_Aw + 3.4
+            SI_Sw = 1.31 * SI_Aw - 2.64
+            SI_Fb = 0.92 * SI_Sw + 1.68
+            SI_Fd = 0.94 * SI_Pl + 0.71
+            SI_Sb = 0.64 * SI_Pl + 2.76
+            SI_Pb = SI_Aw
             
-        return SI_Aw, SI_Pl, SI_Sw, SI_Sb
+        elif domSp == 'Sw':
+            SI_Sw = SI
+            SI_Pl = 0.86 * SI_Sw + 2.13
+            SI_Aw = 0.76 * SI_Sw + 2.01
+            SI_Fb = 0.92 * SI_Sw + 1.68
+            SI_Fd = 0.74 * SI_Sw + 4.75
+            SI_Sb = 0.64 * SI_Pl + 2.76
+            SI_Pb = SI_Aw
+            
+        elif domSp == 'Fb':
+            SI_Fb = SI       
+            SI_Sw = 1.09 * SI_Fb - 1.83
+            SI_Pl = 0.86 * SI_Sw + 2.13
+            SI_Aw = 0.76 * SI_Sw + 2.01
+            SI_Fd = 0.74 * SI_Sw + 4.75
+            SI_Sb = 0.64 * SI_Pl + 2.76
+            SI_Pb = SI_Aw
+            
+        if domSp == 'Fd':
+            SI_Fd = SI         
+            SI_Pl = 1.07 * SI_Fd - 0.76
+            SI_Aw = 1.18 * SI_Pl  - 4.02
+            SI_Sw = 1.36 * SI_Fd  - 6.45
+            SI_Pb = SI_Aw
+            SI_Fb = 0.92 * SI_Sw + 1.68
+            SI_Sb = 0.64 * SI_Pl + 2.76
+            
+        if domSp == 'Pl':
+            SI_Pl = SI   
+            SI_Aw = 1.18 * SI_Pl  - 4.02
+            SI_Sw = 1.16 * SI_Pl  - 2.47
+            SI_Fd = 0.94* SI_Pl + 0.71
+            SI_Pb = SI_Aw
+            SI_Fb = 0.92 * SI_Sw + 1.68
+            SI_Sb = 0.64 * SI_Pl + 2.76
+            
+        if domSp == 'Pb':  
+            SI_Pb = SI
+            SI_Aw = SI_Pb
+            SI_Pl = 0.85 * SI_Aw + 3.4
+            SI_Sw = 1.31 * SI_Aw -2.64
+            SI_Fd = 0.92* SI_Pl + 1.68
+            SI_Fb = 0.92 * SI_Sw + 1.68
+            SI_Sb = 0.64 * SI_Pl + 2.76
+        
+    return SI_Aw, SI_Pl, SI_Sw, SI_Sb
 
 '''function to define SI of all other species given the dominant species, which is the one from  data '''
 
@@ -144,9 +144,10 @@ def dataPrepGypsy (data):
                 tempDomSp= 'Sw'
             return tempDomSp
         
-        '''estimate SI Dom from inventory Age and HD !!!!
+        '''
+        estimate SI Dom from inventory Age and HD !!!!
             Use this SI to estimate the other species SIs
-            ex: FD is dom sp take HD and Age, assume fir is Sw generate SI for Sw
+            ex: FD is dom sp take HD and Age, assume FD is Sw generate SI for Sw
             
             get the SW SI
             calculate the SIs for other sp from the conversion formulas
@@ -163,8 +164,11 @@ def dataPrepGypsy (data):
             
             return SI
         
+
         SI = domSpSI_estim(tempDomSp, domTage, domHT)
+        
         SI_x = SIfromDomSp (initSI_estimation (tempDomSp), SI)
+        
     
     
         '''fill the dictionary with estimated SIs - I filled all the SIs to avoid IFs and loops. Some of them will not be used. '''
@@ -241,7 +245,7 @@ def dataPrepGypsy (data):
             
         sorted_spList1, spList1 = sortedSp (spList)
         
-        print sorted_spList1
+        #print sorted_spList1
         
              
         fplot ['Aw']['PCT'] = spList1['Aw']
@@ -353,6 +357,7 @@ def dataPrepGypsy (data):
         '''treeHeight is the Top Height or Htop in the paper'''
         topHeight_Aw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(sp_Aw[0],  si_Aw,  tage_Aw)
         
+        '''
         
         print ' estimated Site Index for species Aw is:  ', si_Aw
         print ' estimated Total age for species Aw is:  ', tage_Aw
@@ -360,7 +365,9 @@ def dataPrepGypsy (data):
         print ' estimated Site Index BH for species Aw is:  ',SI_bh_Aw
         print ' estimated number of years until measuring BH becomes possible:  ',  y2bh_Aw
         print '----------------------'
-              
+         
+        '''
+        
         #x_Sb=ComputeGypsySiteIndex(sp_Sb[0],  sp_Sb[1],  sp_Sb[2], sp_Sb[3])
         
         bhage_Sb=sp_Sb[3]
@@ -455,7 +462,7 @@ def dataPrepGypsy (data):
         SDF_Pl = y_Pl[1]
         N_bh_Pl = y_Pl[0]
         
-        print 'N_aw' , N_Aw, bhage_Aw, SI_bh_Aw
+        #print 'N_aw' , N_Aw, bhage_Aw, SI_bh_Aw
                 
         
         N0_Aw = densityAw (SDF_Aw, 0, SI_bh_Aw)
@@ -597,5 +604,5 @@ def dataPrepGypsy (data):
     return plotDict
     
     
-print dataPrepGypsy (data)
+#print dataPrepGypsy (data)
     
