@@ -66,7 +66,7 @@ def densityNonSpatialAw (sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings = True):
            while NDiffFlag == False:
                
                b3=(1+c0) * SDF_Aw0**((c1+numpy.log(SDF_Aw0))/SDF_Aw0)
-               b2=c0 * (SDF_Aw0**0.5)**(1/(4*SDF_Aw0))
+               b2=(c0/4) * (SDF_Aw0**0.5)**(1/(SDF_Aw0))
                
                b1= -( (1/((SDF_Aw0/1000)**(0.5)) ) + numpy.sqrt(1+numpy.sqrt(50/(numpy.sqrt(SDF_Aw0)*numpy.log(50+1)))) ) * numpy.log(50+1)
              
@@ -150,7 +150,7 @@ def densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings = True):
      
 
               
-def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw, N_Sw, printWarnings = True):
+def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings = True):
     N_est_Sw = 0
     SDF_Sw0 = 0         
     if N_Sw>0:
@@ -160,9 +160,9 @@ def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw, N_Sw, printWarnings = 
                sp_Sw[0] == 'Fd' or \
                sp_Sw[0] == 'Fb' or \
                sp_Sw[0] == 'Fa':
-                   if SDF_Aw==0:
+                   if SDF_Aw0==0:
                        z1=0
-                   elif SDF_Aw>0:
+                   elif SDF_Aw0>0:
                        z1=1
                    c1=-231.617
                    c2=1.176995
@@ -176,7 +176,7 @@ def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw, N_Sw, printWarnings = 
                        
                        b3=c3*(SDF_Sw0**(1/SDF_Sw0))
                        b2=c3
-                       b1=(c1/((numpy.log(SDF_Sw0)+numpy.log(50+1))**c2))+(z1*((1+(SDF_Aw/1000))**0.5))
+                       b1=(c1/((numpy.log(SDF_Sw0)+numpy.log(50+1))**c2))+(z1*((1+(SDF_Aw0/1000))**0.5))
                        k1=1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sw))+(b3*numpy.log(50+1)))
                        k2=1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sw))+(b3*numpy.log(1+tage_Sw)))
                        
@@ -204,7 +204,7 @@ def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw, N_Sw, printWarnings = 
  
 
                 
-def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw, SDF_Sw, SDF_Sb, N_Pl, printWarnings = True):
+def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, N_Pl, printWarnings = True):
     N_est_Pl = 0
     SDF_Pl0 = 0  
     if N_Pl>0:
@@ -220,17 +220,17 @@ def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw, SDF_Sw, SDF_Sb, N_Pl, 
                    c4=1.017479
                    c5=-0.05471
                    c6=4.11215
-                   if SDF_Aw==0:
+                   if SDF_Aw0==0:
                        z1=0
-                   elif SDF_Aw>0:
+                   elif SDF_Aw0>0:
                        z1=1
-                   if SDF_Sw==0:
+                   if SDF_Sw0==0:
                        z2=0
-                   elif SDF_Sw>0:
+                   elif SDF_Sw0>0:
                        z2=1
-                   if SDF_Sb==0:
+                   if SDF_Sb0==0:
                        z3=0
-                   elif SDF_Sb>0:
+                   elif SDF_Sb0>0:
                        z3=1
                        
                    SDF_Pl0 = N_Pl # best SDF_Sb guess
@@ -242,7 +242,7 @@ def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw, SDF_Sw, SDF_Sb, N_Pl, 
                        b3=c4*(SDF_Pl0**k)
                        b2=c4/((SDF_Pl0**0.5)**c5)
                        
-                       b1=(c1+(z1*(SDF_Aw/1000)/2)+(z2*(SDF_Sw/1000)/3)+(z3*(SDF_Sb/1000)/4))+(c2/((SDF_Pl0**0.5)**c3))
+                       b1=(c1+(z1*(SDF_Aw0/1000)/2)+(z2*(SDF_Sw0/1000)/3)+(z3*(SDF_Sb0/1000)/4))+(c2/((SDF_Pl0**0.5)**c3))
                        
                        k1=1+numpy.exp(b1+(b2*numpy.log(SI_bh_Pl))+(b3*numpy.log(50+1)))
                        k2=1+numpy.exp(b1+(b2*numpy.log(SI_bh_Pl))+(b3*numpy.log(1+tage_Pl)))
@@ -274,6 +274,9 @@ def minimumN_SDF_Aw (SDF_Aw0, bhage_Aw, SI_bh_Aw):
     
     return optimize
 
+
+
+
 def densityAw (SDF_Aw0, bhage_Aw, SI_bh_Aw):
     
     if SDF_Aw0 > 0:
@@ -281,7 +284,7 @@ def densityAw (SDF_Aw0, bhage_Aw, SI_bh_Aw):
         c1=6.67468
         b3=(1+c0) * SDF_Aw0**((c1+numpy.log(SDF_Aw0))/SDF_Aw0)
         
-        b2=c0*(SDF_Aw0**0.5)**(1/(4*SDF_Aw0))
+        b2=(c0/4)*(SDF_Aw0**0.5)**(1/(SDF_Aw0))
         
         b1= -( (1/((SDF_Aw0/1000)**(0.5)) ) + (numpy.sqrt(1+numpy.sqrt(50/(numpy.sqrt(SDF_Aw0)*numpy.log(50+1))))) ) * numpy.log(50+1)
         
@@ -312,19 +315,19 @@ def densitySb (SDF_Sb0, tage_Sb, SI_bh_Sb):
     
     return N_bh_Sb
     
-def densitySw (SDF_Sw0, SDF_Aw, tage_Sw, SI_bh_Sw):
+def densitySw (SDF_Sw0, SDF_Aw0, tage_Sw, SI_bh_Sw):
   
     if SDF_Sw0 > 0:
-        if SDF_Aw==0:
+        if SDF_Aw0==0:
             z1=0
-        elif SDF_Aw>0:
+        elif SDF_Aw0>0:
             z1=1
         c1=-231.617
         c2=1.176995
         c3=1.733601
         b3=c3*(SDF_Sw0**(1/SDF_Sw0))
         b2=c3
-        b1=(c1/((numpy.log(SDF_Sw0)+numpy.log(50+1))**c2))+(z1*((1+(SDF_Aw/1000))**0.5))
+        b1=(c1/((numpy.log(SDF_Sw0)+numpy.log(50+1))**c2))+(z1*((1+(SDF_Aw0/1000))**0.5))
         k1=1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sw))+(b3*numpy.log(50+1)))
         k2=1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sw))+(b3*numpy.log(1+tage_Sw)))
         
@@ -334,7 +337,7 @@ def densitySw (SDF_Sw0, SDF_Aw, tage_Sw, SI_bh_Sw):
     
     return N_bh_Sw
     
-def densityPl (SDF_Aw, SDF_Sw, SDF_Sb, SDF_Pl0, tage_Pl, SI_bh_Pl):
+def densityPl (SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl, SI_bh_Pl):
     
     if SDF_Pl0 > 0:
         c1=-5.25144
@@ -343,24 +346,24 @@ def densityPl (SDF_Aw, SDF_Sw, SDF_Sb, SDF_Pl0, tage_Pl, SI_bh_Pl):
         c4=1.017479
         c5=-0.05471
         c6=4.11215
-        if SDF_Aw==0:
+        if SDF_Aw0==0:
             z1=0
-        elif SDF_Aw>0:
+        elif SDF_Aw0>0:
             z1=1
-        if SDF_Sw==0:
+        if SDF_Sw0==0:
             z2=0
-        elif SDF_Sw>0:
+        elif SDF_Sw0>0:
             z2=1
-        if SDF_Sb==0:
+        if SDF_Sb0==0:
             z3=0
-        elif SDF_Sb>0:
+        elif SDF_Sb0>0:
             z3=1
         k=(1+(c6*(SDF_Pl0**0.5)))/SDF_Pl0 
         
         b3=c4*(SDF_Pl0**k)
         b2=c4/(numpy.sqrt(SDF_Pl0)**c5)
         
-        b1=(c1+(z1*(SDF_Aw/1000)/2) + (z2*(SDF_Sw/1000)/3) + (z3*(SDF_Sb/1000)/4)  ) + (c2/((SDF_Pl0**0.5)**c3))
+        b1=(c1+(z1*(SDF_Aw0/1000)/2) + (z2*(SDF_Sw0/1000)/3) + (z3*(SDF_Sb0/1000)/4)  ) + (c2/((SDF_Pl0**0.5)**c3))
         
         k1=1+numpy.exp(b1 + (b2*numpy.log(SI_bh_Pl)) + (b3*numpy.log(50+1)) )
         k2=1+numpy.exp(b1 + (b2*numpy.log(SI_bh_Pl)) + (b3*numpy.log(1+tage_Pl)) )
@@ -486,11 +489,43 @@ def BasalAreaIncrementNonSpatialSb (sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhag
     return BAinc_Sb
     
     
-
+def BAincIter_Sb(sp_Sb, BAinc_SbT, BA_SbT, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, printWarnings = True):
+    
+    
+    acceptableDiff= 0.00001
+    BADiffFlag = False
+    iterCount = 0 
+    BA_Sb = BA_SbT - BAinc_SbT # BA_Sb = best estimate of BA  and BAinc_AwT best estimate of decrement to previous year , ie, at time T-1
+    
+    while BADiffFlag == False:
+        #import pdb; pdb.set_trace()
+        BAinc_SbtoT =  BasalAreaIncrementNonSpatialSb (sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, BA_Sb) # based on best estimate of BA at time T-1
+        
+         
+        BA_SbT_est = BA_Sb + BAinc_SbtoT
+        
+        
+        
+        if abs(BA_SbT_est - BA_SbT) < acceptableDiff:           #BA_SbT is known
+            BADiffFlag = True
+            
+        else:
+            BA_Sb = (1+ ((BA_SbT - BA_SbT_est)/ BA_SbT)) * BA_Sb
+            
+            
+           
+        iterCount = iterCount + 1
+            
+        if iterCount == 150 and printWarnings == True:
+            print '\n GYPSYNonSpatial.BAincIter_Aw()'
+            print ' Slow convergence'
+            return BA_Sb, BAinc_SbT
+        
+    return BA_Sb, BAinc_SbtoT
            
     
     
-def BasalAreaIncrementNonSpatialSw (sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw, SDF_Pl, SDF_Sb, BA_Sw):
+def BasalAreaIncrementNonSpatialSw (sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw):
 
     if N_bh_Sw==0:
         BAinc_Sw = 0
@@ -502,20 +537,20 @@ def BasalAreaIncrementNonSpatialSw (sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhag
         a4     =        5.839408
         a5     =        1.753002
         a6     =        0.239521
-        if SDF_Aw==0:
+        if SDF_Aw0==0:
             z1=0
-        elif SDF_Aw>0:
+        elif SDF_Aw0>0:
             z1=1
-        if SDF_Pl==0:
+        if SDF_Pl0==0:
             z2=0
-        elif SDF_Pl>0:
+        elif SDF_Pl0>0:
             z2=1
-        if SDF_Sb==0:
+        if SDF_Sb0==0:
             z3=0
-        elif SDF_Sb>0:
+        elif SDF_Sb0>0:
             z3=1       
             
-        k=(a4*z1*numpy.log(1+(SDF_Aw/10000)) ) + (a5*z2*numpy.log(1+(SDF_Pl/10000))) + (z3*numpy.log(1+(SDF_Sb/10000)))
+        k=(a4*z1*numpy.log(1+(SDF_Aw0/10000)) ) + (a5*z2*numpy.log(1+(SDF_Pl0/10000))) + (z3*numpy.log(1+(SDF_Sb0/10000)))
         
         k1=(10**-4)*a1*((a2+bhage_Sw)**2)*((1+bhage_Sw)**((a1**0.5)+a2-a3))*numpy.exp(-a2*bhage_Sw)*(SC_Sw**a6)
         
@@ -529,10 +564,42 @@ def BasalAreaIncrementNonSpatialSw (sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhag
     return BAinc_Sw
 
 
+def BAincIter_Sw(sp_Sw, BAinc_SwT, BA_SwT, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, printWarnings = True):
+    
+    
+    acceptableDiff= 0.00001
+    BADiffFlag = False
+    iterCount = 0 
+    BA_Sw = BA_SwT - BAinc_SwT # BA_Sw = best estimate of BA  and BAinc_AwT best estimate of decrement to previous year , ie, at time T-1
+    
+    while BADiffFlag == False:
+        #import pdb; pdb.set_trace()
+        BAinc_SwtoT =  BasalAreaIncrementNonSpatialSw (sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw) # based on best estimate of BA at time T-1
+        
+         
+        BA_SwT_est = BA_Sw + BAinc_SwtoT
         
         
         
-def BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage_Pl, SDF_Aw, SDF_Sw, SDF_Sb, BA_Pl):
+        if abs(BA_SwT_est - BA_SwT) < acceptableDiff:           #BA_SbT is known
+            BADiffFlag = True
+            
+        else:
+            BA_Sw = (1+ ((BA_SwT - BA_SwT_est)/ BA_SwT)) * BA_Sw
+            
+            
+           
+        iterCount = iterCount + 1
+            
+        if iterCount == 150 and printWarnings == True:
+            print '\n GYPSYNonSpatial.BAincIter_Aw()'
+            print ' Slow convergence'
+            return BA_Sw, BAinc_SwT
+        
+    return BA_Sw, BAinc_SwtoT  
+        
+        
+def BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl):
     
     if N_bh_Pl==0:
         BAinc_Pl = 0
@@ -545,20 +612,20 @@ def BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage
         a5   =          -0.00358
         a6   =          0.775765
 
-        if SDF_Aw==0:
+        if SDF_Aw0==0:
             z1=0
-        elif SDF_Aw>0:
+        elif SDF_Aw0>0:
             z1=1
-        if SDF_Sw==0:
+        if SDF_Sw0==0:
             z2=0
-        elif SDF_Sw>0:
+        elif SDF_Sw0>0:
             z2=1
-        if SDF_Sb==0:
+        if SDF_Sb0==0:
             z3=0
-        elif SDF_Sb>0:
+        elif SDF_Sb0>0:
             z3=1       
             
-        k= (z1*numpy.log (1+(SDF_Aw/1000 ))) + (z2*(numpy.log (1+(SDF_Sw/1000) ) )/2 )+ (z3* (numpy.log (1+(SDF_Sb/1000) ) )/2)
+        k= (z1*numpy.log (1+(SDF_Aw0/1000 ))) + (z2*(numpy.log (1+(SDF_Sw0/1000) ) )/2 )+ (z3* (numpy.log (1+(SDF_Sb0/1000) ) )/2)
                 
         k1 = (10**-4)*a1*bhage_Pl* numpy.exp(-a2* bhage_Pl) * ( 1 + ((numpy.log(1+ bhage_Pl))/2) )
         
@@ -571,8 +638,42 @@ def BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage
         BAinc_Pl = (k1*m1/k2)+m2
                    
     return BAinc_Pl
+    
+    
  
-
+def BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, printWarnings = True):
+    
+    
+    acceptableDiff= 0.00001
+    BADiffFlag = False
+    iterCount = 0 
+    BA_Pl = BA_PlT - BAinc_PlT # BA_Pl = best estimate of BA  and BAinc_AwT best estimate of decrement to previous year , ie, at time T-1
+    
+    while BADiffFlag == False:
+        #import pdb; pdb.set_trace()
+        BAinc_PltoT =  BasalAreaIncrementNonSpatialPl (sp_Pl, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl) # based on best estimate of BA at time T-1
+        
+         
+        BA_PlT_est = BA_Pl + BAinc_PltoT
+        
+        
+        
+        if abs(BA_PlT_est - BA_PlT) < acceptableDiff:           #BA_SbT is known
+            BADiffFlag = True
+            
+        else:
+            BA_Pl = (1+ ((BA_PlT - BA_PlT_est)/ BA_PlT)) * BA_Pl
+            
+            
+           
+        iterCount = iterCount + 1
+            
+        if iterCount == 150 and printWarnings == True:
+            print '\n GYPSYNonSpatial.BAincIter_Aw()'
+            print ' Slow convergence'
+            return BA_Pl, BAinc_PlT
+        
+    return BA_Pl, BAinc_PltoT  
 
 
 '''

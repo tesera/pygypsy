@@ -30,6 +30,9 @@ from GYPSYNonSpatial import (densityAw, densitySw, densitySb, densityPl)
 from GYPSYNonSpatial import SCestimate
 
 from GYPSYNonSpatial import BAincIter_Aw
+from GYPSYNonSpatial import BAincIter_Sw
+from GYPSYNonSpatial import BAincIter_Sb
+#from GYPSYNonSpatial import BAincIter_Pl
 
 # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
 sp_Aw=['Aw', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
@@ -102,6 +105,8 @@ for plotID, row in inputDF.iterrows():
     BA_PlT  = inputDF.loc[plotID,'BA_Pl']
     BA_SbT  = inputDF.loc[plotID,'BA_Sb']
     
+    #print 'kkkk', BA_PlT
+    
     BAinc_AwT  = inputDF.loc[plotID,'BAinc_Aw']
     BAinc_SwT  = inputDF.loc[plotID,'BAinc_Sw']
     BAinc_PlT  = inputDF.loc[plotID,'BAinc_Pl']
@@ -112,6 +117,7 @@ for plotID, row in inputDF.iterrows():
     SDF_Pl0  = inputDF.loc[plotID,'SDF_Pl']
     SDF_Sb0  = inputDF.loc[plotID,'SDF_Sb']
     
+     
     N0_Aw  = inputDF.loc[plotID,'N0_Aw']
     N0_Sw  = inputDF.loc[plotID,'N0_Sw']
     N0_Pl  = inputDF.loc[plotID,'N0_Pl']
@@ -129,9 +135,8 @@ for plotID, row in inputDF.iterrows():
 
     startTage = tageData[0]-1
     
-    
-    #print SDF_Sw0
-
+    startTage_forward = tageData[0] + 1
+  
  # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
     
     
@@ -151,7 +156,7 @@ for plotID, row in inputDF.iterrows():
 
         #print tage_Pl  
         
-        '''densities at time T-1 '''
+        '''densities at time t-1 '''
         
         if bhage_Aw <0:
             N_bh_Aw = 0
@@ -189,26 +194,73 @@ for plotID, row in inputDF.iterrows():
         #print SC_Aw, SC_Sw, SC_Sb, SC_Pl
         
 
-        #print BasalAreaIncrementNonSpatialAw (sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, bhage_Aw, BA_AwT )
+        #print BasalAreaIncrementNonSpatialAw (sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_AwT )
 
         #print BAinc_AwT, BA_AwT, SC_Aw, SI_bh_Aw, N_bh_Aw, bhage_Aw
+
+        '''
+        I implicitly assume here that, if there are no plants of a given species in the stand at time t, then the Basal area is zero and it was zero in the previous years,
+        it might be the case that the species got locally extinct, i.e., it existed before in the stand but died along the years. It is hard (but still possible) to 
+        predict this part existence.
+        
+        '''
        
-        if bhage_Aw >= 0:
+        if bhage_Aw >= 0 and N_bh_Aw >0:
             BA_Aw = BAincIter_Aw (sp_Aw, BAinc_AwT, BA_AwT, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, printWarnings = True)
+            BA_AwT = BA_Aw[0]
+            BAinc_AwT = BA_Aw[1]            
         else:
             BA_AwT = 0
             BAinc_AwT = 0
         
+               
         
-        print startTage, BA_AwT, BAinc_AwT,  N_bh_Aw, SC_AwT
+        
+      
+        if bhage_Sb >= 0 and N_bh_Sb>0:
+            BA_Sb = BAincIter_Sb (sp_Sb, BAinc_SbT, BA_SbT, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, printWarnings = True)
+            BA_SbT = BA_Sb [0]
+            BAinc_SbT = BA_Sb[1]           
+        else:
+            BA_SbT = 0
+            BAinc_SbT = 0
         
         
-        N_bh_AwT = N_bh_Aw
-        BA_AwT = BA_Aw[0]
-        BAinc_AwT = BA_Aw[1]
-        SC_AwT = SC_Aw
- 
- 
+               
+       
+       
+        if bhage_Sw >= 0 and N_bh_Sw>0:
+            BA_Sw = BAincIter_Sw (sp_Sw, BAinc_SwT, BA_SwT, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, printWarnings = True)
+            BA_SwT = BA_Sw [0]
+            BAinc_SwT = BA_Sw[1]           
+        else:
+            BA_SwT = 0
+            BAinc_SwT = 0
+        
+        
+        
+        
+        
+        
+        if bhage_Pl >= 0 and N_bh_Pl>0:
+            BA_Pl = BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, printWarnings = True)
+            BA_PlT = BA_Pl [0]         
+        else:
+            BA_PlT = 0
+            BAinc_PlT = 0
+        
+
+        
+        
+        
+        #print startTage, BA_PlT, BAinc_PlT,  N_bh_Pl, SC_PlT
+        
+        
+        print startTage, N_bh_Aw,  N_bh_Sb, N_bh_Sw, N_bh_Pl
+        
+        #print startTage, BA_PlT, BA_AwT, BA_SwT, BA_SbT
+        
+        #print startTage, SC_Pl, SC_Aw, SC_Sw, SC_Sb
        
         startTage = startTage - 1
         startTageAw = startTageAw - 1
@@ -216,5 +268,7 @@ for plotID, row in inputDF.iterrows():
         startTagePl = startTagePl - 1 
         startTageSb = startTageSb -1
         
+        
+    while startTage_forward <250:
         
  

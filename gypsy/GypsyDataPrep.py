@@ -446,29 +446,29 @@ def dataPrepGypsy (data):
         
         
         y_Aw=densityNonSpatialAw (sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings = True)
-        SDF_Aw = y_Aw[1]
+        SDF_Aw0 = y_Aw[1]
         N_bh_Aw=y_Aw[0]
         
                 
         y_Sb=densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb)
-        SDF_Sb = y_Sb[1]
+        SDF_Sb0 = y_Sb[1]
         N_bh_Sb=y_Sb[0]
         
-        y_Sw= densityNonSpatialSw (sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw, N_Sw)
-        SDF_Sw = y_Sw[1]
+        y_Sw= densityNonSpatialSw (sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw)
+        SDF_Sw0 = y_Sw[1]
         N_bh_Sw=y_Sw[0]
         
-        y_Pl =densityNonSpatialPl (sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw, SDF_Sw, SDF_Sb, N_Pl)
-        SDF_Pl = y_Pl[1]
+        y_Pl =densityNonSpatialPl (sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, N_Pl)
+        SDF_Pl0 = y_Pl[1]
         N_bh_Pl = y_Pl[0]
         
         #print 'N_aw' , N_Aw, bhage_Aw, SI_bh_Aw
                 
         
-        N0_Aw = densityAw (SDF_Aw, 0, SI_bh_Aw)
-        N0_Sb = densitySb (SDF_Sb, 0, SI_bh_Sb)
-        N0_Sw = densitySw (SDF_Sw, SDF_Aw, 0, SI_bh_Sw) 
-        N0_Pl = densityPl (SDF_Aw, SDF_Sw, SDF_Sb, SDF_Pl, 0, SI_bh_Pl)
+        N0_Aw = densityAw (SDF_Aw0, 0, SI_bh_Aw)
+        N0_Sb = densitySb (SDF_Sb0, 0, SI_bh_Sb)
+        N0_Sw = densitySw (SDF_Sw0, SDF_Aw0, 0, SI_bh_Sw) 
+        N0_Pl = densityPl (SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, 0, SI_bh_Pl)
         
         
         
@@ -496,9 +496,9 @@ def dataPrepGypsy (data):
         
         BAinc_Sb = BasalAreaIncrementNonSpatialSb (sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, BA_Sb)
         
-        BAinc_Sw = BasalAreaIncrementNonSpatialSw (sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw, SDF_Pl, SDF_Sb, BA_Sw)
+        BAinc_Sw = BasalAreaIncrementNonSpatialSw (sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw)
         
-        BAinc_Pl = BasalAreaIncrementNonSpatialPl (sp_Pl, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage_Pl, SDF_Aw, SDF_Sw, SDF_Sb, BA_Pl) 
+        BAinc_Pl = BasalAreaIncrementNonSpatialPl (sp_Pl, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl) 
         
         
         
@@ -512,7 +512,7 @@ def dataPrepGypsy (data):
                               'tage_Aw': tage_Aw, 'tage_Sw': tage_Sw, 'tage_Pl': tage_Pl, 'tage_Sb': tage_Sb,
                               'BA_Aw': BA_Aw, 'BA_Sw': BA_Sw, 'BA_Pl': BA_Pl, 'BA_Sb': BA_Sb,
                               'BAinc_Aw': BAinc_Aw, 'BAinc_Sw': BAinc_Sw, 'BAinc_Pl': BAinc_Pl, 'BAinc_Sb': BAinc_Sb,
-                              'SDF_Aw': SDF_Aw, 'SDF_Sw': SDF_Sw, 'SDF_Pl': SDF_Pl, 'SDF_Sb': SDF_Sb, 
+                              'SDF_Aw': SDF_Aw0, 'SDF_Sw': SDF_Sw0, 'SDF_Pl': SDF_Pl0, 'SDF_Sb': SDF_Sb0, 
                               'N0_Aw': N0_Aw, 'N0_Sb': N0_Sb, 'N0_Sw': N0_Sw, 'N0_Pl': N0_Pl
                               }
         

@@ -16,16 +16,16 @@ from GYPSYNonSpatial import densityNonSpatialPl
 
 from GYPSYNonSpatial import densityAw
 
-import matplotlib.pyplot as plt
+import matpRE: GYPSYlotlib.pyplot as plt
 
 
 sp_Aw=['Aw', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 
 sp_Sb=['Sb', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 
-N_Aw =  25.0
+N_Aw =  30.0
 SI_bh_Aw = 4.46875150435
-bhage_Aw = 30.0
+bhage_Aw = 10.0
 
 
 
@@ -36,11 +36,11 @@ N_bh_Aw=y_Aw[0]
 print  'N_bh_Aw = ', N_bh_Aw
 
 
+'''
 
 x = numpy.arange(5.0, 200, 5.0)
 print x
-
-'''    
+    
 
 N_Sb =  136.87753732
 SI_bh_Sb = 7.36406861253
