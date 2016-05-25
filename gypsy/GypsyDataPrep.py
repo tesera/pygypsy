@@ -532,38 +532,19 @@ def dataPrepGypsy (data):
         Tvol_Sw = Tvol[2]
         Tvol_Pl = Tvol[3]
         
-        
-        
-        if N_Aw >0:
-            k_Aw = (BA_Aw * 10000 / N_Aw)**0.5
-        else:
-            k_Aw = 0
-            
-        if N_Sb >0:
-            k_Sb=(BA_Sb * 10000 / N_Sb)**0.5
-        else:
-            k_Sb = 0
-        
-        if N_Sw >0:
-            k_Sw=(BA_Sw * 10000 / N_Sw)**0.5
-        else: 
-            k_Sw= 0
-            
-        if N_Pl > 0:
-            k_Pl=(BA_Pl * 10000 / N_Pl)**0.5
-        else:
-            k_Pl= 0
-            
+               
             
         estimating merchantable volume 
+        
+        MVol_Aw = MerchantableVolumeAw(N_bh_Aw, BA_Aw, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw)   
+        
+        MVol_Sb = MerchantableVolumeSb(N_bh_Sb, BA_Sb, topHeight_Sb, StumpDOB_Sb, StumpHeight_Sb , TopDib_Sb, Tvol_Sb) 
+        
+        MVol_Sw = MerchantableVolumeSw(N_bh_Sw, BA_Sw, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw)
+        
+        MVol_Pl = MerchantableVolumePl(N_bh_Pl, BA_Pl, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl)
             
-        MVol_Aw = MerchantableVolumeAw(k_Aw, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw)   
-        
-        MVol_Sb = MerchantableVolumeSb(k_Sb, topHeight_Sb, StumpDOB_Sb, StumpHeight_Sb , TopDib_Sb, Tvol_Sb) 
-        
-        MVol_Sw = MerchantableVolumeSw(k_Sw, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw)
-        
-        MVol_Pl = MerchantableVolumePl(k_Pl, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl)
+     
         
         '''
         
@@ -582,31 +563,7 @@ def dataPrepGypsy (data):
 
         
         
-        
-        '''
-        print 'Gross total volume Aw class  ', Tvol[0]
-        print 'Gross total volume Sw class  ', Tvol[2]
-        print 'Gross total volume Pl class  ', Tvol[3]
-        print 'Gross total volume Sb class  ', Tvol[1]
-        
        
-        print 'BA Aw class  ', BA_Aw
-        print 'BA Sw class  ', BA_Sw
-        print 'BA Pl class  ', BA_Pl
-        print 'BA Sb class  ', BA_Sb 
-        
-        
-        print 'Basal area increment Aw class  ', BAinc_Aw
-        print 'Basal area increment Sw class  ', BAinc_Sw
-        print 'Basal area increment Pl class  ', BAinc_Pl
-        print 'Basal area increment Sb class  ', BAinc_Sb
-
-    
-        print 'years to breast height age Aw class   ', y2bh_Aw
-        print 'years to breast height age Sw class   ', y2bh_Sw
-        print 'years to breast height age Pl class   ', y2bh_Pl
-        print 'years to breast height age Sb class   ', y2bh_Sb
-        '''
       
     return plotDict
     

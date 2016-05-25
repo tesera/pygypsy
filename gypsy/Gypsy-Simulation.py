@@ -8,6 +8,8 @@ Created on Fri Apr 29 16:06:29 2016
 import csv
 import pandas as pd
 import numpy 
+import matplotlib.pyplot as plt
+
 from asaCompileAgeGivenSpSiHt import computeTreeAge
 from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
 from asaCompileAgeGivenSpSiHt import ComputeGypsySiteIndex
@@ -121,6 +123,11 @@ for plotID, row in inputDF.iterrows():
     BAinc_PlT  = inputDF.loc[plotID,'BAinc_Pl']
     BAinc_SbT  = inputDF.loc[plotID,'BAinc_Sb']
     
+    BAinc_AwB = BAinc_AwT  
+    BAinc_SwB = BAinc_SwT 
+    BAinc_PlB = BAinc_PlT  
+    BAinc_SbB = BAinc_SbT  
+    
     SDF_Aw0  = inputDF.loc[plotID,'SDF_Aw']
     SDF_Sw0  = inputDF.loc[plotID,'SDF_Sw']
     SDF_Pl0  = inputDF.loc[plotID,'SDF_Pl']
@@ -165,12 +172,13 @@ for plotID, row in inputDF.iterrows():
 
     startTage = tageData[0]-1
     
-    startTage_forward = tageData[0] 
+    startTage_forward = tageData[0] + 1
     
     #print 'ages',  tageData[0], startTage, startTage_forward
   
  # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
     
+    '''simulating growth backwards in time starting from the time at which data was taken minus 1 '''
     
     while startTage>0:
         
@@ -238,7 +246,7 @@ for plotID, row in inputDF.iterrows():
         '''
        
         if bhage_Aw >= 0 and N_bh_Aw >0:
-            BA_Aw = BAincIter_Aw ('Aw', BAinc_AwT, BA_AwB, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, printWarnings = True)
+            BA_Aw = BAincIter_Aw ('Aw', BAinc_AwB, BA_AwB, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, printWarnings = True)
             BA_AwB = BA_Aw[0]
             BAinc_AwB = BA_Aw[1]   
             topHeight_Aw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Aw',  SI_bh_Aw,  tage_Aw)
@@ -249,7 +257,7 @@ for plotID, row in inputDF.iterrows():
               
       
         if bhage_Sb >= 0 and N_bh_Sb>0:
-            BA_Sb = BAincIter_Sb ('Sb', BAinc_SbT, BA_SbB, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, printWarnings = True)
+            BA_Sb = BAincIter_Sb ('Sb', BAinc_SbB, BA_SbB, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, printWarnings = True)
             BA_SbB = BA_Sb [0]
             BAinc_SbB = BA_Sb[1]   
             topHeight_Sb=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Sb',  SI_bh_Sb,  tage_Sb)
@@ -260,7 +268,7 @@ for plotID, row in inputDF.iterrows():
        
        
         if bhage_Sw >= 0 and N_bh_Sw>0:
-            BA_Sw = BAincIter_Sw ('Sw', BAinc_SwT, BA_SwB, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, printWarnings = True)
+            BA_Sw = BAincIter_Sw ('Sw', BAinc_SwB, BA_SwB, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, printWarnings = True)
             BA_SwB = BA_Sw [0]
             BAinc_SwB = BA_Sw[1]  
             topHeight_Sw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Sw',  SI_bh_Sw,  tage_Sw)
@@ -271,7 +279,7 @@ for plotID, row in inputDF.iterrows():
         
         
         if bhage_Pl >= 0 and N_bh_Pl>0:
-            BA_Pl = BAincIter_Pl ('Pl', BAinc_PlT, BA_PlB, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, printWarnings = True)
+            BA_Pl = BAincIter_Pl ('Pl', BAinc_PlB, BA_PlB, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, printWarnings = True)
             BA_PlB = BA_Pl [0]  
             BAinc_PlB = BA_Pl[1]
             topHeight_Pl=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Pl',  SI_bh_Pl,  tage_Pl)
@@ -282,7 +290,7 @@ for plotID, row in inputDF.iterrows():
             
         
 
-        Tvol = GrossTotalVolume( BA_AwT, BA_SbT, BA_SwT, BA_PlT, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl)
+        Tvol = GrossTotalVolume( BA_AwB, BA_SbB, BA_SwB, BA_PlB, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl)
 
         Tvol_Aw = Tvol[0]
         Tvol_Sb = Tvol[1]
@@ -290,34 +298,13 @@ for plotID, row in inputDF.iterrows():
         Tvol_Pl = Tvol[3]
         
         
-        if N_bh_Aw >0:
-            k_Aw = (BA_AwB * 10000 / N_bh_Aw)**0.5
-        else:
-            k_Aw = 0
-            
-        if N_bh_Sb >0:
-            k_Sb=(BA_SbB * 10000 / N_bh_Sb)**0.5
-        else:
-            k_Sb = 0
+        MVol_Aw = MerchantableVolumeAw(N_bh_Aw, BA_AwB, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw)   
         
-        if N_bh_Sw >0:
-            k_Sw=(BA_SwB * 10000 / N_bh_Sw)**0.5
-        else: 
-            k_Sw= 0
-            
-        if N_bh_Pl > 0:
-            k_Pl=(BA_PlB * 10000 / N_bh_Pl)**0.5
-        else:
-            k_Pl= 0
+        MVol_Sb = MerchantableVolumeSb(N_bh_Sb, BA_SbB, topHeight_Sb, StumpDOB_Sb, StumpHeight_Sb , TopDib_Sb, Tvol_Sb) 
         
+        MVol_Sw = MerchantableVolumeSw(N_bh_Sw, BA_SwB, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw)
         
-        MVol_Aw = MerchantableVolumeAw(k_Aw, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw)   
-        
-        MVol_Sb = MerchantableVolumeSb(k_Sb, topHeight_Sb, StumpDOB_Sb, StumpHeight_Sb , TopDib_Sb, Tvol_Sb) 
-        
-        MVol_Sw = MerchantableVolumeSw(k_Sw, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw)
-        
-        MVol_Pl = MerchantableVolumePl(k_Pl, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl)
+        MVol_Pl = MerchantableVolumePl(N_bh_Pl, BA_PlB, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl)
         
         #print startTage, BA_PlT, BAinc_PlT,  N_bh_Pl, SC_PlT
         
@@ -341,7 +328,11 @@ for plotID, row in inputDF.iterrows():
         startTageSb = startTageSb -1
         
         
-    while startTage_forward <251:
+        
+        
+    '''simulating growth forwards in time starting from the time at which data was taken '''
+        
+    while startTage_forward < 251:
         '''Ages at time T + 1''' 
         
         bhage_AwF = startTageAwF  - y2bh_Aw 
@@ -387,8 +378,7 @@ for plotID, row in inputDF.iterrows():
         SC_SbF = SC_F[2]
         SC_PlF = SC_F[3]
         
-        #print SC_AwF, SC_SwF, SC_SbF, SC_PlF
-        
+                
         if N_bh_AwT>0:
             BA_AwT = BA_AwT + BasalAreaIncrementNonSpatialAw('Aw', SC_AwF, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_AwF, BA_AwT)
             topHeight_Aw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Aw',  SI_bh_Aw,  tage_AwF)
@@ -424,34 +414,14 @@ for plotID, row in inputDF.iterrows():
         Tvol_Sw = Tvol[2]
         Tvol_Pl = Tvol[3]
         
-        if N_bh_AwT >0:
-            k_Aw = (BA_AwT * 10000 / N_bh_AwT)**0.5
-        else:
-            k_Aw = 0
-            
-        if N_bh_SbT >0:
-            k_Sb=(BA_SbT * 10000 / N_bh_SbT)**0.5
-        else:
-            k_Sb = 0
         
-        if N_bh_SwT >0:
-            k_Sw=(BA_SwT * 10000 / N_bh_SwT)**0.5
-        else: 
-            k_Sw= 0
-            
-        if N_bh_PlT > 0:
-            k_Pl=(BA_PlT * 10000 / N_bh_PlT)**0.5
-        else:
-            k_Pl= 0
+        MVol_Aw = MerchantableVolumeAw(N_bh_AwT, BA_AwT, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw)   
         
+        MVol_Sb = MerchantableVolumeSb(N_bh_SbT, BA_SbT, topHeight_Sb, StumpDOB_Sb, StumpHeight_Sb , TopDib_Sb, Tvol_Sb) 
         
-        MVol_Aw = MerchantableVolumeAw(k_Aw, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw)   
+        MVol_Sw = MerchantableVolumeSw(N_bh_SwT, BA_SwT, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw)
         
-        MVol_Sb = MerchantableVolumeSb(k_Sb, topHeight_Sb, StumpDOB_Sb, StumpHeight_Sb , TopDib_Sb, Tvol_Sb) 
-        
-        MVol_Sw = MerchantableVolumeSw(k_Sw, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw)
-        
-        MVol_Pl = MerchantableVolumePl(k_Pl, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl)
+        MVol_Pl = MerchantableVolumePl(N_bh_PlT, BA_PlT, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl)
         
         #print startTage_forward, N_bh_PlT, N_bh_AwT,  N_bh_SwT, N_bh_SbT 
         

@@ -762,7 +762,11 @@ I used this if here to avoid division by zero when density is zero, i.e., when t
 
 
 
-def MerchantableVolumeAw(k_Aw, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw):
+def MerchantableVolumeAw(N_bh_Aw, BA_Aw, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw):
+    if N_bh_Aw >0:
+            k_Aw = (BA_Aw * 10000 / N_bh_Aw)**0.5
+    else:
+        k_Aw = 0
     if k_Aw > 0 and  topHeight_Aw>0:
         b0    =         0.993673 
         b1    =         923.5825 
@@ -785,7 +789,11 @@ def MerchantableVolumeAw(k_Aw, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDi
    
    
 
-def MerchantableVolumeSb(k_Sb, topHeight_Sb, StumpDOB_Sb, StumpHeight_Sb , TopDib_Sb, Tvol_Sb):    
+def MerchantableVolumeSb(N_bh_Sb, BA_Sb, topHeight_Sb, StumpDOB_Sb, StumpHeight_Sb , TopDib_Sb, Tvol_Sb):   
+    if N_bh_Sb >0:
+            k_Sb=(BA_Sb * 10000 / N_bh_Sb)**0.5
+    else:
+        k_Sb = 0
     if k_Sb > 0 and  topHeight_Sb>0:
         if sp_Sb[0] == 'Sb' or \
            sp_Sb[0] == 'Lt' or \
@@ -812,7 +820,11 @@ def MerchantableVolumeSb(k_Sb, topHeight_Sb, StumpDOB_Sb, StumpHeight_Sb , TopDi
 
 
 
-def MerchantableVolumeSw(k_Sw, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw):               
+def MerchantableVolumeSw(N_bh_Sw, BA_Sw, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw):    
+    if N_bh_Sw >0:
+            k_Sw=(BA_Sw * 10000 / N_bh_Sw)**0.5
+    else: 
+        k_Sw= 0          
     if k_Sw > 0 and  topHeight_Sw>0:
         if sp_Sw[0] == 'Sw' or \
            sp_Sw[0] == 'Se' or \
@@ -836,7 +848,11 @@ def MerchantableVolumeSw(k_Sw, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib
 
 
 
-def MerchantableVolumePl (k_Pl, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl):           
+def MerchantableVolumePl (N_bh_Pl, BA_Pl, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl):  
+    if N_bh_Pl > 0:
+            k_Pl=(BA_Pl * 10000 / N_bh_Pl)**0.5
+    else:
+        k_Pl= 0         
     if k_Pl > 0 and  topHeight_Pl>0:
         if sp_Pl[0] == 'P' or \
            sp_Pl[0] == 'Pl' or \
