@@ -29,16 +29,20 @@ from GYPSYNonSpatial import (densityAw, densitySw, densitySb, densityPl)
 
 from GYPSYNonSpatial import SCestimate
 
+from GYPSYNonSpatial import GrossTotalVolume
+
 from GYPSYNonSpatial import BAincIter_Aw
 from GYPSYNonSpatial import BAincIter_Sw
 from GYPSYNonSpatial import BAincIter_Sb
-#from GYPSYNonSpatial import BAincIter_Pl
+from GYPSYNonSpatial import BAincIter_Pl
+
+from GYPSYNonSpatial import MerchantableVolumeAw
+from GYPSYNonSpatial import MerchantableVolumeSw
+from GYPSYNonSpatial import MerchantableVolumeSb
+from GYPSYNonSpatial import MerchantableVolumePl
 
 # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
-sp_Aw=['Aw', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
-sp_Sb=['Sb', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
-sp_Pl=['Pl', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
-sp_Sw=['Sw', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
+
 
 data1 = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/Inputs/LCR_join10b_x_julianno_1row.csv')
 
@@ -105,6 +109,11 @@ for plotID, row in inputDF.iterrows():
     BA_PlT  = inputDF.loc[plotID,'BA_Pl']
     BA_SbT  = inputDF.loc[plotID,'BA_Sb']
     
+    BA_AwB = BA_AwT  
+    BA_SwB = BA_SwT 
+    BA_PlB = BA_PlT  
+    BA_SbB = BA_SbT  
+    
     #print 'kkkk', BA_PlT
     
     BAinc_AwT  = inputDF.loc[plotID,'BAinc_Aw']
@@ -123,6 +132,22 @@ for plotID, row in inputDF.iterrows():
     N0_Pl  = inputDF.loc[plotID,'N0_Pl']
     N0_Sb  = inputDF.loc[plotID,'N0_Sb']
     
+    StumpDOB_Aw = inputDF.loc[plotID,'StumpDOB_Aw']
+    StumpHeight_Aw = inputDF.loc[plotID,'StumpHeight_Aw']
+    TopDib_Aw = inputDF.loc[plotID,'TopDib_Aw']
+    
+    StumpDOB_Sb = inputDF.loc[plotID,'StumpDOB_Sb']
+    StumpHeight_Sb = inputDF.loc[plotID,'StumpHeight_Sb']
+    TopDib_Sb = inputDF.loc[plotID,'TopDib_Sb']
+    
+    StumpDOB_Sw = inputDF.loc[plotID,'StumpDOB_Sw']
+    StumpHeight_Sw = inputDF.loc[plotID,'StumpHeight_Sw']
+    TopDib_Sw = inputDF.loc[plotID,'TopDib_Sw']
+    
+    StumpDOB_Pl = inputDF.loc[plotID,'StumpDOB_Pl']
+    StumpHeight_Pl  = inputDF.loc[plotID,'StumpHeight_Pl']
+    TopDib_Pl = inputDF.loc[plotID,'TopDib_Pl']
+    
     #print N0_Aw, N0_Sw, N0_Pl, N0_Sb
     
     tageData = [ tage_AwT, tage_SwT, tage_PlT, tage_SbT ]
@@ -131,11 +156,18 @@ for plotID, row in inputDF.iterrows():
     startTagePl = tageData[2]-1
     startTageSb = tageData[3]-1
     
+    startTageAwF = tageData[0]
+    startTageSwF = tageData[1]
+    startTagePlF = tageData[2]
+    startTageSbF = tageData[3]
+    
     tageData = sorted (tageData, reverse=True)
 
     startTage = tageData[0]-1
     
-    startTage_forward = tageData[0] + 1
+    startTage_forward = tageData[0] 
+    
+    #print 'ages',  tageData[0], startTage, startTage_forward
   
  # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
     
@@ -206,61 +238,101 @@ for plotID, row in inputDF.iterrows():
         '''
        
         if bhage_Aw >= 0 and N_bh_Aw >0:
-            BA_Aw = BAincIter_Aw (sp_Aw, BAinc_AwT, BA_AwT, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, printWarnings = True)
-            BA_AwT = BA_Aw[0]
-            BAinc_AwT = BA_Aw[1]            
+            BA_Aw = BAincIter_Aw ('Aw', BAinc_AwT, BA_AwB, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, printWarnings = True)
+            BA_AwB = BA_Aw[0]
+            BAinc_AwB = BA_Aw[1]   
+            topHeight_Aw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Aw',  SI_bh_Aw,  tage_Aw)
         else:
-            BA_AwT = 0
-            BAinc_AwT = 0
-        
-               
-        
-        
+            BA_AwB = 0
+            BAinc_AwB = 0
+            topHeight_Aw=0
+              
       
         if bhage_Sb >= 0 and N_bh_Sb>0:
-            BA_Sb = BAincIter_Sb (sp_Sb, BAinc_SbT, BA_SbT, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, printWarnings = True)
-            BA_SbT = BA_Sb [0]
-            BAinc_SbT = BA_Sb[1]           
+            BA_Sb = BAincIter_Sb ('Sb', BAinc_SbT, BA_SbB, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, printWarnings = True)
+            BA_SbB = BA_Sb [0]
+            BAinc_SbB = BA_Sb[1]   
+            topHeight_Sb=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Sb',  SI_bh_Sb,  tage_Sb)
         else:
-            BA_SbT = 0
-            BAinc_SbT = 0
-        
-        
-               
+            BA_SbB = 0
+            BAinc_SbB = 0
+            topHeight_Sb = 0                           
        
        
         if bhage_Sw >= 0 and N_bh_Sw>0:
-            BA_Sw = BAincIter_Sw (sp_Sw, BAinc_SwT, BA_SwT, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, printWarnings = True)
-            BA_SwT = BA_Sw [0]
-            BAinc_SwT = BA_Sw[1]           
+            BA_Sw = BAincIter_Sw ('Sw', BAinc_SwT, BA_SwB, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, printWarnings = True)
+            BA_SwB = BA_Sw [0]
+            BAinc_SwB = BA_Sw[1]  
+            topHeight_Sw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Sw',  SI_bh_Sw,  tage_Sw)
         else:
-            BA_SwT = 0
-            BAinc_SwT = 0
-        
-        
-        
-        
+            BA_SwB = 0
+            BAinc_SwB = 0
+            topHeight_Sw = 0
         
         
         if bhage_Pl >= 0 and N_bh_Pl>0:
-            BA_Pl = BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, printWarnings = True)
-            BA_PlT = BA_Pl [0]         
+            BA_Pl = BAincIter_Pl ('Pl', BAinc_PlT, BA_PlB, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, printWarnings = True)
+            BA_PlB = BA_Pl [0]  
+            BAinc_PlB = BA_Pl[1]
+            topHeight_Pl=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Pl',  SI_bh_Pl,  tage_Pl)
         else:
-            BA_PlT = 0
-            BAinc_PlT = 0
+            BA_PlB = 0
+            BAinc_PlB = 0
+            topHeight_Pl = 0
+            
         
 
+        Tvol = GrossTotalVolume( BA_AwT, BA_SbT, BA_SwT, BA_PlT, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl)
+
+        Tvol_Aw = Tvol[0]
+        Tvol_Sb = Tvol[1]
+        Tvol_Sw = Tvol[2]
+        Tvol_Pl = Tvol[3]
         
         
+        if N_bh_Aw >0:
+            k_Aw = (BA_AwB * 10000 / N_bh_Aw)**0.5
+        else:
+            k_Aw = 0
+            
+        if N_bh_Sb >0:
+            k_Sb=(BA_SbB * 10000 / N_bh_Sb)**0.5
+        else:
+            k_Sb = 0
+        
+        if N_bh_Sw >0:
+            k_Sw=(BA_SwB * 10000 / N_bh_Sw)**0.5
+        else: 
+            k_Sw= 0
+            
+        if N_bh_Pl > 0:
+            k_Pl=(BA_PlB * 10000 / N_bh_Pl)**0.5
+        else:
+            k_Pl= 0
+        
+        
+        MVol_Aw = MerchantableVolumeAw(k_Aw, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw)   
+        
+        MVol_Sb = MerchantableVolumeSb(k_Sb, topHeight_Sb, StumpDOB_Sb, StumpHeight_Sb , TopDib_Sb, Tvol_Sb) 
+        
+        MVol_Sw = MerchantableVolumeSw(k_Sw, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw)
+        
+        MVol_Pl = MerchantableVolumePl(k_Pl, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl)
         
         #print startTage, BA_PlT, BAinc_PlT,  N_bh_Pl, SC_PlT
         
         
-        print startTage, N_bh_Aw,  N_bh_Sb, N_bh_Sw, N_bh_Pl
+        #print startTage, N_bh_Pl, N_bh_Aw,  N_bh_Sw, N_bh_Sb 
+        
+        #print startTage, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl
+        
+        #print startTage, Tvol_Aw, Tvol_Sb, Tvol_Sw, Tvol_Pl
         
         #print startTage, BA_PlT, BA_AwT, BA_SwT, BA_SbT
         
         #print startTage, SC_Pl, SC_Aw, SC_Sw, SC_Sb
+        
+        print startTage, MVol_Aw, MVol_Sb, MVol_Sw, MVol_Pl
        
         startTage = startTage - 1
         startTageAw = startTageAw - 1
@@ -269,6 +341,134 @@ for plotID, row in inputDF.iterrows():
         startTageSb = startTageSb -1
         
         
-    while startTage_forward <250:
+    while startTage_forward <251:
+        '''Ages at time T + 1''' 
+        
+        bhage_AwF = startTageAwF  - y2bh_Aw 
+        bhage_SwF = startTageSwF  - y2bh_Sw 
+        bhage_PlF = startTagePlF  - y2bh_Pl
+        bhage_SbF = startTageSbF  - y2bh_Sb
+        
+        tage_AwF = startTageAwF 
+        tage_SwF = startTageSwF  
+        tage_PlF = startTagePlF  
+        tage_SbF = startTageSbF  
+        
+        '''densities at time t+1 '''
+        
+        if N_bh_AwT == 0:
+            N_bh_AwT = 0
+            
+        else:
+            N_bh_AwT = densityAw (SDF_Aw0, bhage_AwF, SI_bh_Aw)
+         
+        if N_bh_SbT == 0:
+            N_bh_SbT = 0
+        else:
+            N_bh_SbT = densitySb (SDF_Sb0, tage_SbF, SI_bh_Sb)
+            
+        if N_bh_SwT == 0:
+            N_bh_SwT = 0
+        else:
+            N_bh_SwT = densitySw (SDF_Sw0, SDF_Aw0, tage_SwF, SI_bh_Sw)
+        
+        if N_bh_PlT == 0:
+            N_bh_PlT = 0
+        else:
+            N_bh_PlT = densityPl (SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_PlF , SI_bh_Pl)
+            
+        #print startTage_forward, N_bh_AwT, N_bh_SbT, N_bh_SwT, N_bh_PlT
+        
+        
+        SC_F = SCestimate (N_bh_AwT,  N_bh_SbT, N_bh_SwT, N_bh_PlT)
+
+        SC_AwF = SC_F[0]
+        SC_SwF = SC_F[1]
+        SC_SbF = SC_F[2]
+        SC_PlF = SC_F[3]
+        
+        #print SC_AwF, SC_SwF, SC_SbF, SC_PlF
+        
+        if N_bh_AwT>0:
+            BA_AwT = BA_AwT + BasalAreaIncrementNonSpatialAw('Aw', SC_AwF, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_AwF, BA_AwT)
+            topHeight_Aw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Aw',  SI_bh_Aw,  tage_AwF)
+        else:
+            BA_AwT = 0
+            topHeight_Aw = 0
+        
+        if N_bh_SbT>0:
+            BA_SbT = BA_SbT + BasalAreaIncrementNonSpatialSb ('Sb', SC_SbF, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_SbF, BA_SbT)
+            topHeight_Sb=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Sb',  SI_bh_Sb,  tage_SbF)
+        else:
+            BA_SbT = 0
+            topHeight_Sb = 0
+            
+        if N_bh_SwT>0:
+            BA_SwT = BA_SwT + BasalAreaIncrementNonSpatialSw ('Sw', SC_SwF, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_SwF, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_SwT)
+            topHeight_Sw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Sw',  SI_bh_Sw,  tage_SwF)
+        else:
+            BA_SwT = 0
+            topHeight_Sw = 0
+            
+        if N_bh_PlT>0:
+            BA_PlT = BA_PlT + BasalAreaIncrementNonSpatialPl('Pl', SC_PlF, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_PlF, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_PlT)
+            topHeight_Pl=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Pl',  SI_bh_Pl,  tage_PlF)
+        else:
+            BA_PlT = 0
+            topHeight_Pl = 0
+            
+        Tvol = GrossTotalVolume( BA_AwT, BA_SbT, BA_SwT, BA_PlT, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl)
+
+        Tvol_Aw = Tvol[0]
+        Tvol_Sb = Tvol[1]
+        Tvol_Sw = Tvol[2]
+        Tvol_Pl = Tvol[3]
+        
+        if N_bh_AwT >0:
+            k_Aw = (BA_AwT * 10000 / N_bh_AwT)**0.5
+        else:
+            k_Aw = 0
+            
+        if N_bh_SbT >0:
+            k_Sb=(BA_SbT * 10000 / N_bh_SbT)**0.5
+        else:
+            k_Sb = 0
+        
+        if N_bh_SwT >0:
+            k_Sw=(BA_SwT * 10000 / N_bh_SwT)**0.5
+        else: 
+            k_Sw= 0
+            
+        if N_bh_PlT > 0:
+            k_Pl=(BA_PlT * 10000 / N_bh_PlT)**0.5
+        else:
+            k_Pl= 0
+        
+        
+        MVol_Aw = MerchantableVolumeAw(k_Aw, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw)   
+        
+        MVol_Sb = MerchantableVolumeSb(k_Sb, topHeight_Sb, StumpDOB_Sb, StumpHeight_Sb , TopDib_Sb, Tvol_Sb) 
+        
+        MVol_Sw = MerchantableVolumeSw(k_Sw, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw)
+        
+        MVol_Pl = MerchantableVolumePl(k_Pl, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl)
+        
+        #print startTage_forward, N_bh_PlT, N_bh_AwT,  N_bh_SwT, N_bh_SbT 
+        
+        #print startTage_forward, SC_PlF, SC_AwF, SC_SwF, SC_SbF
+            
+        #print startTage_forward, Tvol_Aw, Tvol_Sb, Tvol_Sw, Tvol_Pl
+        #print startTage_forward, BA_PlT, BA_AwT, BA_SwT, BA_SbT  
+        
+        #print startTage_forward, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl
+        
+        print startTage_forward, MVol_Aw, MVol_Sb, MVol_Sw, MVol_Pl
+        
+        
+        startTage_forward += 1
+        startTageAwF += 1
+        startTageSwF += 1
+        startTagePlF += 1
+        startTageSbF += 1
         
  

@@ -682,7 +682,7 @@ Gross total volume is estimated only using species specific Basal Area and Top h
 '''
 
         
-def GrossTotalVolume(sp_Aw, sp_Sb, sp_Sw, sp_Pl, BA_Aw, BA_Sb, BA_Sw, BA_Pl, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl):
+def GrossTotalVolume( BA_Aw, BA_Sb, BA_Sw, BA_Pl, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl):
     if topHeight_Aw > 1.3:
         if sp_Aw[0] == 'Aw' or \
            sp_Aw[0] == 'Bw' or \

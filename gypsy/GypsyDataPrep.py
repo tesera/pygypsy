@@ -463,7 +463,8 @@ def dataPrepGypsy (data):
         N_bh_Pl = y_Pl[0]
         
         #print 'N_aw' , N_Aw, bhage_Aw, SI_bh_Aw
-                
+        
+        '''estimating species densities at time zero '''        
         
         N0_Aw = densityAw (SDF_Aw0, 0, SI_bh_Aw)
         N0_Sb = densitySb (SDF_Sb0, 0, SI_bh_Sb)
@@ -504,28 +505,6 @@ def dataPrepGypsy (data):
         
         #print 'kkkk', BA_Aw,  BAinc_Aw, SC_Aw, N0_Aw, N_bh_Aw
          
-       
-        
-        plotDict [PlotID] = { 'SI_Aw': SI_Aw, 'SI_Sw': SI_Sw, 'SI_Pl': SI_Pl, 'SI_Sb': SI_Sb, 
-                              'N_Aw': N_Aw, 'N_Sw': N_Sw, 'N_Pl': N_Pl, 'N_Sb': N_Sb,
-                              'y2bh_Aw': y2bh_Aw, 'y2bh_Sw': y2bh_Sw, 'y2bh_Pl': y2bh_Pl, 'y2bh_Sb': y2bh_Sb,
-                              'tage_Aw': tage_Aw, 'tage_Sw': tage_Sw, 'tage_Pl': tage_Pl, 'tage_Sb': tage_Sb,
-                              'BA_Aw': BA_Aw, 'BA_Sw': BA_Sw, 'BA_Pl': BA_Pl, 'BA_Sb': BA_Sb,
-                              'BAinc_Aw': BAinc_Aw, 'BAinc_Sw': BAinc_Sw, 'BAinc_Pl': BAinc_Pl, 'BAinc_Sb': BAinc_Sb,
-                              'SDF_Aw': SDF_Aw0, 'SDF_Sw': SDF_Sw0, 'SDF_Pl': SDF_Pl0, 'SDF_Sb': SDF_Sb0, 
-                              'N0_Aw': N0_Aw, 'N0_Sb': N0_Sb, 'N0_Sw': N0_Sw, 'N0_Pl': N0_Pl
-                              }
-        
-        
-        '''estimating sp-specific gross total volume '''
-        
-        Tvol = GrossTotalVolume(sp_Aw, sp_Sb, sp_Sw, sp_Pl, BA_Aw, BA_Sb, BA_Sw, BA_Pl, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl)
-
-        Tvol_Aw = Tvol[0]
-        Tvol_Sb = Tvol[1]
-        Tvol_Sw = Tvol[2]
-        Tvol_Pl = Tvol[3]
-        
         StumpDOB_Aw=sp_Aw[7]
         StumpHeight_Aw =sp_Aw[8]
         TopDib_Aw = sp_Aw[9]
@@ -541,6 +520,19 @@ def dataPrepGypsy (data):
         StumpDOB_Pl=sp_Pl[7]
         StumpHeight_Pl =sp_Pl[8]
         TopDib_Pl = sp_Pl[9]
+        
+
+        
+        '''estimating sp-specific gross total volume 
+        
+        Tvol = GrossTotalVolume( BA_Aw, BA_Sb, BA_Sw, BA_Pl, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl)
+
+        Tvol_Aw = Tvol[0]
+        Tvol_Sb = Tvol[1]
+        Tvol_Sw = Tvol[2]
+        Tvol_Pl = Tvol[3]
+        
+        
         
         if N_Aw >0:
             k_Aw = (BA_Aw * 10000 / N_Aw)**0.5
@@ -563,8 +555,7 @@ def dataPrepGypsy (data):
             k_Pl= 0
             
             
-            
-        '''estimating merchantable volume '''
+        estimating merchantable volume 
             
         MVol_Aw = MerchantableVolumeAw(k_Aw, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw)   
         
@@ -573,6 +564,22 @@ def dataPrepGypsy (data):
         MVol_Sw = MerchantableVolumeSw(k_Sw, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw)
         
         MVol_Pl = MerchantableVolumePl(k_Pl, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl)
+        
+        '''
+        
+        plotDict [PlotID] = { 'SI_Aw': SI_Aw, 'SI_Sw': SI_Sw, 'SI_Pl': SI_Pl, 'SI_Sb': SI_Sb, 
+                      'N_Aw': N_Aw, 'N_Sw': N_Sw, 'N_Pl': N_Pl, 'N_Sb': N_Sb,
+                      'y2bh_Aw': y2bh_Aw, 'y2bh_Sw': y2bh_Sw, 'y2bh_Pl': y2bh_Pl, 'y2bh_Sb': y2bh_Sb,
+                      'tage_Aw': tage_Aw, 'tage_Sw': tage_Sw, 'tage_Pl': tage_Pl, 'tage_Sb': tage_Sb,
+                      'BA_Aw': BA_Aw, 'BA_Sw': BA_Sw, 'BA_Pl': BA_Pl, 'BA_Sb': BA_Sb,
+                      'BAinc_Aw': BAinc_Aw, 'BAinc_Sw': BAinc_Sw, 'BAinc_Pl': BAinc_Pl, 'BAinc_Sb': BAinc_Sb,
+                      'SDF_Aw': SDF_Aw0, 'SDF_Sw': SDF_Sw0, 'SDF_Pl': SDF_Pl0, 'SDF_Sb': SDF_Sb0, 
+                      'N0_Aw': N0_Aw, 'N0_Sb': N0_Sb, 'N0_Sw': N0_Sw, 'N0_Pl': N0_Pl, 
+                      'StumpDOB_Aw': StumpDOB_Aw, 'StumpDOB_Sb': StumpDOB_Sb, 'StumpDOB_Sw': StumpDOB_Sw, 'StumpDOB_Pl': StumpDOB_Pl,
+                      'StumpHeight_Aw': StumpHeight_Aw, 'StumpHeight_Sb': StumpHeight_Sb, 'StumpHeight_Sw': StumpHeight_Sw, 'StumpHeight_Pl': StumpHeight_Pl,
+                      'TopDib_Aw': TopDib_Aw, 'TopDib_Sb': TopDib_Sb, 'TopDib_Sw': TopDib_Sw, 'TopDib_Pl': TopDib_Pl
+                      }
+
         
         
         
