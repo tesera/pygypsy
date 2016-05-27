@@ -412,8 +412,8 @@ def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage
     if bhage_Aw< 0 :
         raise ValueError ('bhage cannot be negative: %s' %bhage_Aw)
         
-    if BA_Aw< 0 :
-        raise ValueError ('BA_Aw cannot be negative: %s' %BA_Aw)
+    #if BA_Aw< 0 :
+        #raise ValueError ('BA_Aw cannot be negative: %s' %BA_Aw)
         
 
     elif N_bh_Aw>0 and SI_bh_Aw>0:
@@ -422,10 +422,14 @@ def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage
         a3     =        1.143762 
         a4     =        -0.03475 
         a5     =        0.835189 
+        
+        '''
         k=a4 * numpy.log (0.01+(bhage_Aw/10) )
         k1=(10**(-4)) * a1 * (bhage_Aw**2) * (numpy.exp(-a2*(bhage_Aw**(1/2+a1)))) * (SC_Aw**a5) * ((numpy.log(1+(N0_Aw * numpy.sqrt(1+bhage_Aw) )))**2) * SI_bh_Aw
         k2= ((1+BA_Aw )**a3) * (1+numpy.exp(1 - ((numpy.log(1+SC_Aw**2))/2)    ))
         BAinc_Aw=(k1/k2)+k
+        '''
+        BAinc_Aw=10**(-4)*a1*(0+bhage_Aw)**2*numpy.exp(-a2*bhage_Aw**(1/2+a1))*SC_Aw**a5*(numpy.log(1+N0_Aw*numpy.sqrt(1+bhage_Aw) ))**2*SI_bh_Aw**1/((1+BA_Aw )**a3 *(1+numpy.exp(1 -numpy.log(1+SC_Aw**2)/2    )))+a4*numpy.log(0.01+bhage_Aw/10)
         
     return BAinc_Aw
     
@@ -439,14 +443,14 @@ def BAincIter_Aw(sp_Aw, BAinc_AwT, BA_AwT, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhag
     BADiffFlag = False
     iterCount = 0 
     BA_Aw = BA_AwT - BAinc_AwT # BA_Aw = best estimate of BA  and BAinc_AwT best estimate of decrement to previous year , ie, at time T-1
-    
+    print 'BA_AwT =', BA_AwT, 'BAinc_AwT = ', BAinc_AwT
     while BADiffFlag == False:
         #import pdb; pdb.set_trace()
         BAinc_AwtoT =  BasalAreaIncrementNonSpatialAw (sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw) # based on best estimate of BA at time T-1
         
          
         BA_AwT_est = BA_Aw + BAinc_AwtoT
-        
+        print 'kkk', SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw
         
         
         if abs(BA_AwT_est - BA_AwT) < acceptableDiff:           #BA_AwT is known
@@ -454,8 +458,10 @@ def BAincIter_Aw(sp_Aw, BAinc_AwT, BA_AwT, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhag
             
         else:
             BA_Aw = (1+ ((BA_AwT - BA_AwT_est)/ BA_AwT)) * BA_Aw
+        
+        print BAinc_AwtoT, BA_Aw
             
-            
+        
            
         iterCount = iterCount + 1
             
@@ -475,6 +481,12 @@ def BasalAreaIncrementNonSpatialSb (sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhag
     
     if N_bh_Sb==0:
         BAinc_Sb = 0
+        
+    if bhage_Sb< 0 :
+        raise ValueError ('bhage cannot be negative: %s' %bhage_Sb)
+        
+    #if BA_Sb< 0 :
+        #raise ValueError ('BA_Sb cannot be negative: %s' %BA_Sb)
 
     elif N_bh_Sb>0 and SI_bh_Sb>0:
         a1      =       0.966285 
@@ -529,6 +541,12 @@ def BasalAreaIncrementNonSpatialSw (sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhag
 
     if N_bh_Sw==0:
         BAinc_Sw = 0
+        
+    if bhage_Sw< 0 :
+        raise ValueError ('bhage cannot be negative: %s' %bhage_Sw)
+        
+    if BA_Sw< 0 :
+        raise ValueError ('BA_Sw cannot be negative: %s' %BA_Sw)
         
     if N_bh_Sw>0 and SI_bh_Sw>0:
         a1     =        0.089153
@@ -603,6 +621,12 @@ def BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage
     
     if N_bh_Pl==0:
         BAinc_Pl = 0
+        
+    if bhage_Pl< 0 :
+        raise ValueError ('bhage cannot be negative: %s' %bhage_Pl)
+        
+    if BA_Pl< 0 :
+        raise ValueError ('BA_Pl cannot be negative: %s' %BA_Pl)
         
     if N_bh_Pl>0 and SI_bh_Pl>0:
         a1   =          3.923984
@@ -751,10 +775,7 @@ Merchantable volume only new variables are the stump diameter outside bark, stum
 
 # to declare variable as double if necessary k_Sb= np.asarray(k_Sb, type = np.float64)
 
-'''
-I used this if here to avoid division by zero when density is zero, i.e., when the species is absent in the plot.
 
-'''
 
 
 
@@ -763,6 +784,10 @@ I used this if here to avoid division by zero when density is zero, i.e., when t
 
 
 def MerchantableVolumeAw(N_bh_Aw, BA_Aw, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw):
+    '''
+    I used this if below (and in other functions) to avoid division by zero when density is zero, i.e., when the species is absent in the plot.
+
+    '''
     if N_bh_Aw >0:
             k_Aw = (BA_Aw * 10000 / N_bh_Aw)**0.5
     else:

@@ -35,7 +35,7 @@ from GYPSYNonSpatial import SCestimate
 
 
 
-data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/Inputs/LCR_join10b_x_julianno_1row.csv')
+data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/Inputs/LCR_join10b_x_julianno.csv')
 
 #print data
 
@@ -221,6 +221,10 @@ def dataPrepGypsy (data):
         
         spList = [(sp1, pct1), (sp2, pct2) , (sp3, pct3) , (sp4, pct4), (sp5, pct5)] 
         
+        check_prop = sum(zip(*spList)[1])
+        if check_prop !=100:
+            raise ValueError ('Species proportions not correct: %s' %check_prop)
+        
             
         def sortedSp (spList, spList1 =  { 'Aw':0, 'Pl':0, 'Sw':0, 'Sb':0}):
         
@@ -241,12 +245,17 @@ def dataPrepGypsy (data):
                   
             sorted_spList1.reverse() 
             
+            check_prop1 = sum(spList1.values())
+            if check_prop1 !=100:
+                raise ValueError ('Species proportions after grouping into 4 species is not correct: %s' %check_prop1)
+            
             return sorted_spList1, spList1
             
         sorted_spList1, spList1 = sortedSp (spList)
         
         #print sorted_spList1
         
+       
              
         fplot ['Aw']['PCT'] = spList1['Aw']
         fplot ['Pl']['PCT'] = spList1['Pl']

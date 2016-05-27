@@ -46,7 +46,7 @@ from GYPSYNonSpatial import MerchantableVolumePl
 # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
 
 
-data1 = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/Inputs/LCR_join10b_x_julianno_1row.csv')
+data1 = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/Inputs/LCR_join10b_x_julianno_2row.csv')
 
 
 fplotSim = dataPrepGypsy(data1)
@@ -116,7 +116,6 @@ for plotID, row in inputDF.iterrows():
     BA_PlB = BA_PlT  
     BA_SbB = BA_SbT  
     
-    #print 'kkkk', BA_PlT
     
     BAinc_AwT  = inputDF.loc[plotID,'BAinc_Aw']
     BAinc_SwT  = inputDF.loc[plotID,'BAinc_Sw']
@@ -315,11 +314,11 @@ for plotID, row in inputDF.iterrows():
         
         #print startTage, Tvol_Aw, Tvol_Sb, Tvol_Sw, Tvol_Pl
         
-        #print startTage, BA_PlT, BA_AwT, BA_SwT, BA_SbT
+        print startTage, BA_PlT, BA_AwT, BA_SwT, BA_SbT
         
         #print startTage, SC_Pl, SC_Aw, SC_Sw, SC_Sb
         
-        print startTage, MVol_Aw, MVol_Sb, MVol_Sw, MVol_Pl
+        #print startTage, MVol_Aw, MVol_Sb, MVol_Sw, MVol_Pl
        
         startTage = startTage - 1
         startTageAw = startTageAw - 1
@@ -428,11 +427,11 @@ for plotID, row in inputDF.iterrows():
         #print startTage_forward, SC_PlF, SC_AwF, SC_SwF, SC_SbF
             
         #print startTage_forward, Tvol_Aw, Tvol_Sb, Tvol_Sw, Tvol_Pl
-        #print startTage_forward, BA_PlT, BA_AwT, BA_SwT, BA_SbT  
+        print startTage_forward, BA_PlT, BA_AwT, BA_SwT, BA_SbT  
         
         #print startTage_forward, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl
         
-        print startTage_forward, MVol_Aw, MVol_Sb, MVol_Sw, MVol_Pl
+        #print startTage_forward, MVol_Aw, MVol_Sb, MVol_Sw, MVol_Pl
         
         
         startTage_forward += 1

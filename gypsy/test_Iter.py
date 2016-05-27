@@ -5,6 +5,11 @@ Created on Wed May 11 11:13:53 2016
 @author: juliannosambatti
 """
 import numpy
+
+import matplotlib
+import matplotlib.pyplot as plt
+import pylab
+
 from asaCompileAgeGivenSpSiHt import computeTreeAge
 from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
 from asaCompileAgeGivenSpSiHt import ComputeGypsySiteIndex
@@ -14,19 +19,41 @@ from GYPSYNonSpatial import densityNonSpatialSb
 from GYPSYNonSpatial import densityNonSpatialSw
 from GYPSYNonSpatial import densityNonSpatialPl
 
+from GYPSYNonSpatial import BAincIter_Aw
+from GYPSYNonSpatial import BasalAreaIncrementNonSpatialAw
+from GYPSYNonSpatial import BasalAreaIncrementNonSpatialSw
+from GYPSYNonSpatial import BasalAreaIncrementNonSpatialSb
+
 from GYPSYNonSpatial import densityAw
 
-import matpRE: GYPSYlotlib.pyplot as plt
+
 
 
 sp_Aw=['Aw', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 
 sp_Sb=['Sb', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 
-N_Aw =  30.0
-SI_bh_Aw = 4.46875150435
-bhage_Aw = 10.0
 
+#bhage_Aw = 96
+
+#BAincIter_Aw(sp_Aw, 0.05, 2.53, 37, 13.7, 100, 150, 96, printWarnings = True)
+#sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw
+
+#BA_Aw = numpy.linspace(1,50)
+print BasalAreaIncrementNonSpatialAw('Aw', 0.37, 8.1, 112 ,124, 126, 4.56)
+
+
+'''bhage is the parameter that changes considerably Aspen's BAinc curve '''
+
+
+#pylab.plot(BA_Aw,y)
+
+'''
+BA_Sb = numpy.linspace(1,50)
+y =  BasalAreaIncrementNonSpatialSb('Sb', 0.37, 8.07738602905, 112.98991932, 124.028786646, 126.963637205, BA_Sb)
+
+
+pylab.plot(BA_Sb,y)
 
 
 y_Aw=densityNonSpatialAw (sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings = True)
@@ -36,7 +63,6 @@ N_bh_Aw=y_Aw[0]
 print  'N_bh_Aw = ', N_bh_Aw
 
 
-'''
 
 x = numpy.arange(5.0, 200, 5.0)
 print x
