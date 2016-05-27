@@ -39,21 +39,27 @@ sp_Sb=['Sb', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 #BAincIter_Aw(sp_Aw, 0.05, 2.53, 37, 13.7, 100, 150, 96, printWarnings = True)
 #sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw
 
-#BA_Aw = numpy.linspace(1,50)
-print BasalAreaIncrementNonSpatialAw('Aw', 0.37, 8.1, 112 ,124, 126, 4.56)
+bhage_Aw = numpy.linspace(1,250)
+y = BasalAreaIncrementNonSpatialAw('Aw', 1.0, 18, 112 ,124, bhage_Aw, 30)
 
 
-'''bhage is the parameter that changes considerably Aspen's BAinc curve '''
-
-
-#pylab.plot(BA_Aw,y)
+pylab.plot(bhage_Aw,y)
 
 '''
+
 BA_Sb = numpy.linspace(1,50)
 y =  BasalAreaIncrementNonSpatialSb('Sb', 0.37, 8.07738602905, 112.98991932, 124.028786646, 126.963637205, BA_Sb)
 
-
 pylab.plot(BA_Sb,y)
+
+
+ #sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw
+
+BA_Sw = numpy.linspace(1,250)
+y = BasalAreaIncrementNonSpatialSw('Sw', 0.30 , 16 , 192.083099398 , 20 , BA_Sw, 200, 100.0, 200.0 , 5) 
+
+
+pylab.plot(BA_Sw,y)
 
 
 y_Aw=densityNonSpatialAw (sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings = True)

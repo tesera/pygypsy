@@ -314,7 +314,7 @@ for plotID, row in inputDF.iterrows():
         
         #print startTage, Tvol_Aw, Tvol_Sb, Tvol_Sw, Tvol_Pl
         
-        print startTage, BA_PlT, BA_AwT, BA_SwT, BA_SbT
+        #print startTage, BA_PlT, BA_AwT, BA_SwT, BA_SbT
         
         #print startTage, SC_Pl, SC_Aw, SC_Sw, SC_Sb
         
@@ -427,7 +427,7 @@ for plotID, row in inputDF.iterrows():
         #print startTage_forward, SC_PlF, SC_AwF, SC_SwF, SC_SbF
             
         #print startTage_forward, Tvol_Aw, Tvol_Sb, Tvol_Sw, Tvol_Pl
-        print startTage_forward, BA_PlT, BA_AwT, BA_SwT, BA_SbT  
+        #print startTage_forward, BA_PlT, BA_AwT, BA_SwT, BA_SbT  
         
         #print startTage_forward, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl
         
