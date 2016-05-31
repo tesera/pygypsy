@@ -388,8 +388,8 @@ BA below is the Basal Area measured in the field and it should be data input int
  #                       msDict[msid]['HD'] = round(math.exp(b*msDict[msid]['AGE']),1)
 
 
-def SCestimate (N_bh_Aw,  N_bh_Sb, N_bh_Sw, N_bh_Pl):
-    N_total = N_bh_Aw + N_bh_Sb + N_bh_Sw + N_bh_Pl
+def SCestimate (N_Aw,  N_Sb, N_Sw, N_Pl):
+    N_total = N_Aw + N_Sb + N_Sw + N_Pl
     
     if N_total == 0:
             SC_Aw = 0
@@ -397,10 +397,10 @@ def SCestimate (N_bh_Aw,  N_bh_Sb, N_bh_Sw, N_bh_Pl):
             SC_Sb = 0
             SC_Pl = 0 
     else:
-        SC_Aw = N_bh_Aw/N_total
-        SC_Sw = N_bh_Sw/N_total
-        SC_Sb = N_bh_Sb/N_total
-        SC_Pl = N_bh_Pl/N_total
+        SC_Aw = N_Aw/N_total
+        SC_Sw = N_Sw/N_total
+        SC_Sb = N_Sb/N_total
+        SC_Pl = N_Pl/N_total
     return SC_Aw, SC_Sw, SC_Sb, SC_Pl
 
 
@@ -409,14 +409,17 @@ def SCestimate (N_bh_Aw,  N_bh_Sb, N_bh_Sw, N_bh_Pl):
   
 def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw):
  
-    if N_bh_Aw==0:
-        BAinc_Aw = 0
+    #if N_bh_Aw==0:
+        #BAinc_Aw = 0
         
-    #if bhage_Aw< 0 :
-        #raise ValueError ('bhage cannot be negative: %s' %bhage_Aw)
+    if bhage_Aw< 0 :
+        #bhage_Aw = 0
+        raise ValueError ('bhage cannot be negative: %s' %bhage_Aw)
         
-    #if BA_Aw< 0 :
-      #  raise ValueError ('BA_Aw cannot be negative: %s' %BA_Aw)
+    if BA_Aw< 0 :
+        
+        BA_Aw=0
+        #raise ValueError ('BA_Aw cannot be negative: %s' %BA_Aw)
         
 
     elif N_bh_Aw>0 and SI_bh_Aw>0:
@@ -571,8 +574,8 @@ def BasalAreaIncrementNonSpatialSw (sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhag
     #if bhage_Sw< 0 :
         #raise ValueError ('bhage cannot be negative: %s' %bhage_Sw)
         
-    #if BA_Sw< 0 :
-        #raise ValueError ('BA_Sw cannot be negative: %s' %BA_Sw)
+    if BA_Sw< 0 :
+        raise ValueError ('BA_Sw cannot be negative: %s' %BA_Sw)
         
     if N_bh_Sw>0 and SI_bh_Sw>0:
         a1     =        0.089153
