@@ -413,12 +413,12 @@ def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage
         #BAinc_Aw = 0
         
     if bhage_Aw< 0 :
-        #bhage_Aw = 0
-        raise ValueError ('bhage cannot be negative: %s' %bhage_Aw)
+        bhage_Aw = 0
+        #raise ValueError ('bhage cannot be negative: %s' %bhage_Aw)
         
     if BA_Aw< 0 :
         
-        BA_Aw=0
+        BAinc_Aw=0
         #raise ValueError ('BA_Aw cannot be negative: %s' %BA_Aw)
         
 
@@ -635,7 +635,7 @@ def BAincIter_Sw(sp_Sw, BAinc_SwT, BA_SwT, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhag
         else:
             BA_Sw = (1+ ((BA_SwT - BA_SwT_est)/ BA_SwT)) * BA_Sw
             
-        print BAinc_SwtoT, BA_Sw
+        #print BAinc_SwtoT, BA_Sw
            
         iterCount = iterCount + 1
         
@@ -731,7 +731,172 @@ def BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bha
             return BA_Pl, BAinc_PlT
         
     return BA_Pl, BAinc_PltoT  
+    
+    
+    
+    
+def BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT, printWarnings = True):
+    f_Aw =1.2
+    acceptableDiff= 0.001
+    BADiffFlag = False
+    iterCount = 0 
+    while BADiffFlag == False:
+        BA_AwB = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw)
+        
+        if abs(BA_AwT - BA_AwB) < acceptableDiff:
+            BADiffFlag = True
+        else:
+            if (BA_AwT - BA_AwB) < 0 :
+                f_AwP1 = f_Aw
+                f_AwP = f_Aw  *  (1+(numpy.log10 (BA_AwT) - numpy.log10 (abs(BA_AwB)) )/ (100*numpy.log10 (abs(BA_AwB))) )
+                f_Aw= (f_AwP+f_Aw)/2             
+            elif (BA_AwT - BA_AwB) > 0 :
+                f_AwN = f_Aw * (1+(numpy.log10 (BA_AwT) + numpy.log10(abs(BA_AwB)) )/ (100* numpy.log10 (abs(BA_AwB))) )
+                f_Aw= (f_Aw+f_AwP1)/2
+                print f_Aw
+            
+        print BA_AwT, BA_AwB, f_Aw
+        
+        iterCount = iterCount + 1
+            
+        if iterCount == 1500 and printWarnings == True:
+            print '\n GYPSYNonSpatial.BAfactorFinder_Aw()'
+            print ' Slow convergence'
+            return f_Aw, BA_AwB
+    return f_Aw
 
+    
+def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw):
+    t = 0
+    BA_tempAw = BA_Aw0
+    while t < startTage:
+        tage_Aw = startTageAw - startTage  
+        bhage_Aw = tage_Aw - y2bh_Aw
+        if N0_Aw > 0:
+            if bhage_Aw < 0:
+                pass
+            if bhage_Aw > 0 :
+                SC_Aw = (SC_Aw ) * f_Aw
+                BAinc_Aw = BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_Aw, BA_Aw0)
+                BA_tempAw = BA_tempAw + BAinc_Aw
+                BA_AwB = BA_tempAw
+                
+            else:
+                BA_AwB=0
+            
+        else:
+            BA_tempAw = 0
+            BA_AwB = 0
+        #print BA_Aw0, BA_AwB, BA_tempAw
+        t +=1  
+        startTageAw += 1
+    return BA_AwB
+
+
+def BAfromZeroToDataSb (startTage, startTageSb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_Sb, BA_Sb0):
+    t = 0    
+    while t < startTage:
+        tage_Sb = startTage - startTageSb  
+        bhage_Sb = tage_Sb - y2bh_Sb
+        count_Sb = 0
+        if N0_Sb > 0:
+            if bhage_Sb > 0:
+               SC_Sb = SC_Sb - SC_Sb_drop/startTageSb
+               BAinc_Sb = BasalAreaIncrementNonSpatialSb ('Sb', SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_Sb, BA_Sb0)
+               BA_Sb0 = BA_Sb0 + BAinc_Sb
+               BA_SbB = BA_Sb0
+               count_Sb += 1
+            else:
+                pass
+            
+        else:
+            BA_Sb0 = 0
+            BA_SbB = 0
+    
+    return BA_SbB
+    
+
+def BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw,  SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, BA_SwT, printWarnings = True):
+    f_Sw =1.1
+    BA_SwB=BA_Sw0
+    acceptableDiff= 0.001
+    BADiffFlag = False
+    iterCount = 0 
+    while BADiffFlag == False:
+        BA_SwB = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw)
+         
+        if abs(BA_SwT - BA_SwB) < acceptableDiff:
+            BADiffFlag = True
+        else:
+            if (BA_SwT - BA_SwB) < 0 :
+                f_SwP1 = f_Sw
+                f_SwP = f_Sw  *  (1+(numpy.log10 (BA_SwT) - numpy.log10 (abs(BA_SwB)) )/ (100*numpy.log10 (abs(BA_SwB))) )
+                f_Sw= (f_SwP+f_Sw)/2             
+            elif (BA_SwT - BA_SwB) > 0 :
+                f_SwN = f_Sw * (1+(numpy.log10 (BA_SwT) + numpy.log10(abs(BA_SwB)) )/ (100* numpy.log10 (abs(BA_SwB))) )
+                f_Sw= (f_Sw+f_SwP1)/2
+                print f_Sw
+            print BA_SwB, f_Sw
+             
+        iterCount = iterCount + 1
+            
+        if iterCount == 150 and printWarnings == True:
+            print '\n GYPSYNonSpatial.BAfactorFinder_Sw()'
+            print ' Slow convergence'
+            return f_Sw, BA_SwB
+    return f_Sw
+    
+
+def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw):
+    t = 0
+    BA_tempSw = BA_Sw0
+    while t < startTage:
+        tage_Sw = startTageSw - startTage  
+        bhage_Sw = tage_Sw - y2bh_Sw
+        if N0_Sw > 0:
+            if bhage_Sw < 0:
+                pass
+            if bhage_Sw > 0 :
+               SC_Sw = (SC_Sw ) * f_Sw 
+               BAinc_Sw = BasalAreaIncrementNonSpatialSw ('Sw', SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0)
+               BA_tempSw = BA_tempSw + BAinc_Sw
+               BA_SwB = BA_tempSw
+            else:
+                BA_SwB=0
+            
+        else:
+            BA_tempSw = 0
+            BA_SwB = 0
+        t +=1  
+        startTageSw += 1
+    
+    return BA_SwB
+    
+
+def BAfromZeroToDataPl (startTage, startTagePl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0):
+    t = 0    
+    while t < startTage:
+        tage_Pl = startTagePl - startTage
+        bhage_Pl = tage_Pl - y2bh_Pl
+        count_Pl = 0
+        if N0_Pl > 0:
+            if bhage_Pl > 0:
+               SC_Pl = (SC_Pl - SC_Pl_drop/startTagePl)
+               BAinc_Pl = BasalAreaIncrementNonSpatialPl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0)
+               BA_Pl0 = BA_Pl0 + BAinc_Pl
+               BA_PlB = BA_Pl0
+               count_Pl += 1
+            else:
+                pass
+            
+        else:
+            BA_Pl0 = 0
+            BA_PlB = 0
+        
+    return BA_PlB
+    
+    
+    
 
 '''
 Gross total volume is estimated only using species specific Basal Area and Top height

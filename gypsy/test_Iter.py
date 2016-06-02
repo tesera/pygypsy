@@ -26,6 +26,11 @@ from GYPSYNonSpatial import BasalAreaIncrementNonSpatialSb
 
 from GYPSYNonSpatial import densityAw
 
+from GYPSYNonSpatial import BAfactorFinder_Aw
+from GYPSYNonSpatial import BAfromZeroToDataAw
+from GYPSYNonSpatial import BAfactorFinder_Sw
+from GYPSYNonSpatial import BAfromZeroToDataSw
+
 
 
 
@@ -33,17 +38,25 @@ sp_Aw=['Aw', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 
 sp_Sb=['Sb', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 
+
+
 '''
+
 #bhage_Aw = 96
 
 #BAincIter_Aw(sp_Aw, 0.05, 2.53, 37, 13.7, 100, 150, 96, printWarnings = True)
 #sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw
 
 bhage_Aw = numpy.linspace(1,250)
-y = BasalAreaIncrementNonSpatialAw('Aw', 1.0, 18, 112 ,124, bhage_Aw, 30)
+y = BasalAreaIncrementNonSpatialAw('Aw', 1.0, 18, 112 ,124, 50, 30)
 
 
-pylab.plot(bhage_Aw,y)
+x = BAfactorFinder_Aw (135.882225194, 135.882225194, 7.91858798922, 0.388143801307, 8.07738602905, 112.7773209, 124.028786646, 0.973625975173, 100, printWarnings = True)
+
+#y = BAfromZeroToDataAw (135.882225194, 135.882225194, 7.91858798922, 0.388143801307, 8.07738602905, 112.7773209, 124.028786646, 0.973625975173, 1.02)
+print x
+
+#pylab.plot(bhage_Aw,y)
 
 
 BA_Sb = numpy.linspace(1,50)
@@ -54,15 +67,23 @@ pylab.plot(BA_Sb,y)
 
  #sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw
 
+
+#BA_Sw = numpy.linspace(1,250)
+#y = BasalAreaIncrementNonSpatialSw('Sw', 0.30 , 16 , 192.083099398 , 20 , BA_Sw, 200, 100.0, 200.0 , 5) 
+
 '''
 
-BA_Sw = numpy.linspace(1,250)
-y = BasalAreaIncrementNonSpatialSw('Sw', 0.30 , 16 , 192.083099398 , 20 , BA_Sw, 200, 100.0, 200.0 , 5) 
+#x = BAfromZeroToDataSw (135.882225194, 106.0, 13.1761233942, 0.611856198693, 7.9834026698, 192.0262491, 195.51460482, 123.019252926, 0.0, 0.0, 1.53478964784, 0.956)
 
+BAfactorFinder_Sw (135.882225194, 106.0, 13.1761233942, 0.611856198693, 7.9834026698, 192.0262491, 195.51460482, 123.019252926, 0.0, 0.0, 1.53478964784, printWarnings = True)
+
+print x
+
+'''
 
 pylab.plot(BA_Sw,y)
 
-'''
+
 
 y_Aw=densityNonSpatialAw (sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings = True)
 SDF_Aw0 = y_Aw[1]

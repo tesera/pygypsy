@@ -201,7 +201,10 @@ for plotID, row in inputDF.iterrows():
     
     f_Aw = 1.035
     f_Sw =0.956
-   
+    f_Sb = 1
+    f_Pl = 1
+    print startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw
+  
   
  # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
     
@@ -216,7 +219,9 @@ for plotID, row in inputDF.iterrows():
         tage_Aw = startTageAw - startTage   
         tage_Sw = startTageSw - startTage   
         tage_Pl = startTagePl - startTage  
-        tage_Sb = startTageSb - startTage     
+        tage_Sb = startTageSb - startTage    
+        
+        print startTageAw
        
         
         bhage_Aw = tage_Aw - y2bh_Aw 
@@ -254,18 +259,20 @@ for plotID, row in inputDF.iterrows():
                SC_Sb = SC_Sb - SC_Sb_drop/startTageSb
                BAinc_Sb = BasalAreaIncrementNonSpatialSb ('Sb', SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_Sb, BA_Sb0)
                BA_Sb0 = BA_Sb0 + BAinc_Sb
+               BA_SbB = BA_Sb0
                count_Sb += 1
             else:
                 pass
             
         else:
             BA_Sb0 = 0
+            BA_SbB = 0
             
             
             
         if N0_Sw > 0:
             if bhage_Sw >= 0:
-               SC_Sw = (SC_Sw ) * f_Sw  
+               SC_Sw = SC_Sw  * f_Sw  
                BAinc_Sw = BasalAreaIncrementNonSpatialSw ('Sw', SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0)
                BA_Sw0 = BA_Sw0 + BAinc_Sw
                BA_SwB = BA_Sw0
@@ -283,14 +290,23 @@ for plotID, row in inputDF.iterrows():
                SC_Pl = (SC_Pl - SC_Pl_drop/startTagePl)
                BAinc_Pl = BasalAreaIncrementNonSpatialPl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0)
                BA_Pl0 = BA_Pl0 + BAinc_Pl
+               BA_PlB = BA_Pl0
                count_Pl += 1
             else:
                 pass
             
         else:
             BA_Pl0 = 0
+            BA_PlB = 0
+            
+        if BA_AwB == 0 and  BA_SwB == 0:
+            SCnewAw=0
+            SCnewSw=0
+        else:
+            SCnewAw = BA_AwB / (BA_SwB + BA_AwB + BA_SbB + BA_PlB)
+            SCnewSw = BA_SwB / (BA_SwB + BA_AwB + BA_SbB + BA_PlB)
        
-        print bhage_Aw, bhage_Sw, SC_Aw, SC_Sw, BA_AwT, BA_AwB, BA_SwT, BA_SwB
+        print bhage_Aw, bhage_Sw, BA_AwB,  BA_AwT
             
         #print startTage_forward, N_bh_AwT, N_bh_SbT, N_bh_SwT, N_bh_PlT
      
