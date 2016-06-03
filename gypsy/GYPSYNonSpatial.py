@@ -512,7 +512,8 @@ def BasalAreaIncrementNonSpatialSb (sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhag
         BAinc_Sb = 0
         
     if bhage_Sb< 0 :
-        raise ValueError ('bhage cannot be negative: %s' %bhage_Sb)
+        #raise ValueError ('bhage cannot be negative: %s' %bhage_Sb)
+        bhage_Sb = 0        
         
     #if BA_Sb< 0 :
         #raise ValueError ('BA_Sb cannot be negative: %s' %BA_Sb)
@@ -571,11 +572,13 @@ def BasalAreaIncrementNonSpatialSw (sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhag
     if N_bh_Sw==0:
         BAinc_Sw = 0
         
-    #if bhage_Sw< 0 :
+    if bhage_Sw< 0 :
         #raise ValueError ('bhage cannot be negative: %s' %bhage_Sw)
+        bhage_Sw = 0        
         
     if BA_Sw< 0 :
-        raise ValueError ('BA_Sw cannot be negative: %s' %BA_Sw)
+        #raise ValueError ('BA_Sw cannot be negative: %s' %BA_Sw)
+        BA_Sw = 0
         
     if N_bh_Sw>0 and SI_bh_Sw>0:
         a1     =        0.089153
@@ -656,10 +659,13 @@ def BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage
         BAinc_Pl = 0
         
     if bhage_Pl< 0 :
-        raise ValueError ('bhage cannot be negative: %s' %bhage_Pl)
+        #raise ValueError ('bhage cannot be negative: %s' %bhage_Pl)
+        bhage_Pl= 0
         
     if BA_Pl< 0 :
-        raise ValueError ('BA_Pl cannot be negative: %s' %BA_Pl)
+        #raise ValueError ('BA_Pl cannot be negative: %s' %BA_Pl)
+        BA_Pl = 0 
+        
         
     if N_bh_Pl>0 and SI_bh_Pl>0:
         a1   =          3.923984
@@ -737,7 +743,8 @@ def BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bha
     
 def BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT, printWarnings = True):
     f_Aw =1.2
-    acceptableDiff= 0.001
+    f_AwP1 = 1.5* f_Aw
+    acceptableDiff= 0.01
     BADiffFlag = False
     iterCount = 0 
     while BADiffFlag == False:
@@ -751,7 +758,7 @@ def BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw
                 f_AwP = f_Aw  *  (1+(numpy.log10 (BA_AwT) - numpy.log10 (abs(BA_AwB)) )/ (100*numpy.log10 (abs(BA_AwB))) )
                 f_Aw= (f_AwP+f_Aw)/2             
             elif (BA_AwT - BA_AwB) > 0 :
-                f_AwN = f_Aw * (1+(numpy.log10 (BA_AwT) + numpy.log10(abs(BA_AwB)) )/ (100* numpy.log10 (abs(BA_AwB))) )
+                #f_AwN = f_Aw * (1+(numpy.log10 (BA_AwT) + numpy.log10(abs(BA_AwB)) )/ (100* numpy.log10 (abs(BA_AwB))) )
                 f_Aw= (f_Aw+f_AwP1)/2
                 print f_Aw
             
@@ -777,7 +784,7 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
                 pass
             if bhage_Aw > 0 :
                 SC_Aw = (SC_Aw ) * f_Aw
-                BAinc_Aw = BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_Aw, BA_Aw0)
+                BAinc_Aw = BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_Aw, BA_tempAw)
                 BA_tempAw = BA_tempAw + BAinc_Aw
                 BA_AwB = BA_tempAw
                 
@@ -793,35 +800,70 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
     return BA_AwB
 
 
-def BAfromZeroToDataSb (startTage, startTageSb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_Sb, BA_Sb0):
-    t = 0    
+def BAfactorFinder_Sb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, BA_SbT, printWarnings = True):
+    f_Sb =1.2
+    f_SbP1 = 1.5* f_Sb
+    acceptableDiff= 0.01
+    BADiffFlag = False
+    iterCount = 0 
+    while BADiffFlag == False:
+        BA_SbB = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb)
+        
+        if abs(BA_SbT - BA_SbB) < acceptableDiff:
+            BADiffFlag = True
+        else:
+            if (BA_SbT - BA_SbB) < 0 :
+                f_SbP1 = f_Sb
+                f_SbP = f_Sb  *  (1+(numpy.log10 (BA_SbT) - numpy.log10 (abs(BA_SbB)) )/ (10*numpy.log10 (abs(BA_SbB))) )
+                f_Sb= (f_SbP+f_Sb)/2             
+            elif (BA_SbT - BA_SbB) > 0 :
+                f_Sb= (f_Sb+f_SbP1)/2
+                print f_Sb
+            
+        print BA_SbT, BA_SbB, f_Sb
+        
+        iterCount = iterCount + 1
+            
+        if iterCount == 1500 and printWarnings == True:
+            print '\n GYPSYNonSpatial.BAfactorFinder_Sb()'
+            print ' Slow convergence'
+            return f_Sb, BA_SbB
+    return f_Sb
+
+def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb):
+    t = 0
+    BA_tempSb = BA_Sb0
     while t < startTage:
-        tage_Sb = startTage - startTageSb  
+        tage_Sb = startTageSb - startTage  
         bhage_Sb = tage_Sb - y2bh_Sb
-        count_Sb = 0
         if N0_Sb > 0:
-            if bhage_Sb > 0:
-               SC_Sb = SC_Sb - SC_Sb_drop/startTageSb
-               BAinc_Sb = BasalAreaIncrementNonSpatialSb ('Sb', SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_Sb, BA_Sb0)
-               BA_Sb0 = BA_Sb0 + BAinc_Sb
-               BA_SbB = BA_Sb0
-               count_Sb += 1
-            else:
+            if bhage_Sb < 0:
                 pass
+            if bhage_Sb > 0 :
+                SC_Sb = (SC_Sb ) * f_Sb
+                BAinc_Sb = BasalAreaIncrementNonSpatialSb('Sb', SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_Sb, BA_tempSb)
+                BA_tempSb = BA_tempSb + BAinc_Sb
+                BA_SbB = BA_tempSb
+                
+            else:
+                BA_SbB=0
             
         else:
-            BA_Sb0 = 0
+            BA_tempSb = 0
             BA_SbB = 0
-    
+        #print BA_Aw0, BA_AwB, BA_tempAw
+        t +=1  
+        startTageSb += 1
     return BA_SbB
     
 
 def BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw,  SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, BA_SwT, printWarnings = True):
     f_Sw =1.1
     BA_SwB=BA_Sw0
-    acceptableDiff= 0.001
+    acceptableDiff= 0.01
     BADiffFlag = False
     iterCount = 0 
+    f_SwP1 = 1.5* f_Sw
     while BADiffFlag == False:
         BA_SwB = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw)
          
@@ -830,17 +872,17 @@ def BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_S
         else:
             if (BA_SwT - BA_SwB) < 0 :
                 f_SwP1 = f_Sw
-                f_SwP = f_Sw  *  (1+(numpy.log10 (BA_SwT) - numpy.log10 (abs(BA_SwB)) )/ (100*numpy.log10 (abs(BA_SwB))) )
+                f_SwP = f_Sw  *  (1+(numpy.log10 (BA_SwT) - numpy.log10 (abs(BA_SwB)) )/ (10*numpy.log10 (abs(BA_SwB))) )
                 f_Sw= (f_SwP+f_Sw)/2             
             elif (BA_SwT - BA_SwB) > 0 :
-                f_SwN = f_Sw * (1+(numpy.log10 (BA_SwT) + numpy.log10(abs(BA_SwB)) )/ (100* numpy.log10 (abs(BA_SwB))) )
-                f_Sw= (f_Sw+f_SwP1)/2
+                #f_SwN = f_Sw * (1+(numpy.log10 (BA_SwT) + numpy.log10(abs(BA_SwB)) )/ (10* numpy.log10 (abs(BA_SwB))) )
+                f_Sw= (f_Sw + f_SwP1)/2
                 print f_Sw
             print BA_SwB, f_Sw
              
         iterCount = iterCount + 1
             
-        if iterCount == 150 and printWarnings == True:
+        if iterCount == 1500 and printWarnings == True:
             print '\n GYPSYNonSpatial.BAfactorFinder_Sw()'
             print ' Slow convergence'
             return f_Sw, BA_SwB
@@ -858,7 +900,7 @@ def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_S
                 pass
             if bhage_Sw > 0 :
                SC_Sw = (SC_Sw ) * f_Sw 
-               BAinc_Sw = BasalAreaIncrementNonSpatialSw ('Sw', SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0)
+               BAinc_Sw = BasalAreaIncrementNonSpatialSw ('Sw', SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_tempSw)
                BA_tempSw = BA_tempSw + BAinc_Sw
                BA_SwB = BA_tempSw
             else:
@@ -873,26 +915,59 @@ def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_S
     return BA_SwB
     
 
-def BAfromZeroToDataPl (startTage, startTagePl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0):
-    t = 0    
+def BAfactorFinder_Pl (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,  SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT, printWarnings = True):
+    f_Pl =1.1
+    #BA_PlB=BA_Pl0
+    acceptableDiff= 0.01
+    BADiffFlag = False
+    iterCount = 0 
+    f_PlP1 = 1.5* f_Pl
+    while BADiffFlag == False:
+        BA_PlB = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl)
+         
+        if abs(BA_PlT - BA_PlB) < acceptableDiff:
+            BADiffFlag = True
+        else:
+            if (BA_PlT - BA_PlB) < 0 :
+                f_PlP1 = f_Pl
+                f_PlP = f_Pl  *  ( BA_PlT  / BA_PlB)
+                f_Pl= (f_PlP+f_Pl)/2             
+            elif (BA_PlT - BA_PlB) > 0 :
+                f_Pl= (f_Pl + f_PlP1)/2
+                print f_Pl
+            print BA_PlB, f_Pl
+             
+        iterCount = iterCount + 1
+            
+        if iterCount == 150 and printWarnings == True:
+            print '\n GYPSYNonSpatial.BAfactorFinder_Pl()'
+            print ' Slow convergence'
+            return f_Pl, BA_PlB
+    return f_Pl
+
+def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl):
+    t = 0
+    BA_tempPl = BA_Pl0
     while t < startTage:
-        tage_Pl = startTagePl - startTage
+        tage_Pl = startTagePl - startTage  
         bhage_Pl = tage_Pl - y2bh_Pl
-        count_Pl = 0
         if N0_Pl > 0:
-            if bhage_Pl > 0:
-               SC_Pl = (SC_Pl - SC_Pl_drop/startTagePl)
-               BAinc_Pl = BasalAreaIncrementNonSpatialPl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0)
-               BA_Pl0 = BA_Pl0 + BAinc_Pl
-               BA_PlB = BA_Pl0
-               count_Pl += 1
-            else:
+            if bhage_Pl < 0:
                 pass
+            if bhage_Pl > 0 :
+               SC_Pl = SC_Pl * (f_Pl )
+               BAinc_Pl = BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_tempPl)
+               BA_tempPl = BA_tempPl + BAinc_Pl
+               BA_PlB = BA_tempPl
+            else:
+                BA_PlB=0
             
         else:
-            BA_Pl0 = 0
+            BA_tempPl = 0
             BA_PlB = 0
-        
+        t +=1  
+        startTagePl += 1
+    
     return BA_PlB
     
     
@@ -905,7 +980,7 @@ Gross total volume is estimated only using species specific Basal Area and Top h
 
         
 def GrossTotalVolume( BA_Aw, BA_Sb, BA_Sw, BA_Pl, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl):
-    if topHeight_Aw > 1.3:
+    if topHeight_Aw > 0.8:
         if sp_Aw[0] == 'Aw' or \
            sp_Aw[0] == 'Bw' or \
            sp_Aw[0] == 'Pb' or \
