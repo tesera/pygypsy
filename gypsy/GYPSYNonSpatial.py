@@ -662,9 +662,10 @@ def BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage
         #raise ValueError ('bhage cannot be negative: %s' %bhage_Pl)
         bhage_Pl= 0
         
-    if BA_Pl< 0 :
+    if BA_Pl<= 0 or SC_Pl==0:
         #raise ValueError ('BA_Pl cannot be negative: %s' %BA_Pl)
         BA_Pl = 0 
+        BAinc_Pl = 0
         
         
     if N_bh_Pl>0 and SI_bh_Pl>0:
@@ -744,7 +745,7 @@ def BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bha
 def BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT, printWarnings = True):
     f_Aw =1.2
     f_AwP1 = 1.5* f_Aw
-    acceptableDiff= 0.01
+    acceptableDiff= 0.1
     BADiffFlag = False
     iterCount = 0 
     while BADiffFlag == False:
@@ -784,7 +785,7 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
                 pass
             if bhage_Aw > 0 :
                 SC_Aw = (SC_Aw ) * f_Aw
-                BAinc_Aw = BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_Aw, BA_tempAw)
+                BAinc_Aw = f_Aw * BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_Aw, BA_tempAw)
                 BA_tempAw = BA_tempAw + BAinc_Aw
                 BA_AwB = BA_tempAw
                 
@@ -858,7 +859,7 @@ def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_S
     
 
 def BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw,  SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, BA_SwT, printWarnings = True):
-    f_Sw =1.1
+    f_Sw =1.5
     BA_SwB=BA_Sw0
     acceptableDiff= 0.01
     BADiffFlag = False
@@ -916,7 +917,7 @@ def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_S
     
 
 def BAfactorFinder_Pl (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,  SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT, printWarnings = True):
-    f_Pl =1.1
+    f_Pl =1000
     #BA_PlB=BA_Pl0
     acceptableDiff= 0.01
     BADiffFlag = False
@@ -955,10 +956,11 @@ def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_P
             if bhage_Pl < 0:
                 pass
             if bhage_Pl > 0 :
-               SC_Pl = SC_Pl * (f_Pl )
-               BAinc_Pl = BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_tempPl)
+               #SC_Pl = SC_Pl * (f_Pl )
+               BAinc_Pl = f_Pl * BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_tempPl)
                BA_tempPl = BA_tempPl + BAinc_Pl
                BA_PlB = BA_tempPl
+               #print BA_PlB, BAinc_Pl, f_Pl
             else:
                 BA_PlB=0
             
