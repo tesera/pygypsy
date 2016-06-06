@@ -743,7 +743,7 @@ def BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bha
     
     
 def BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT, printWarnings = True):
-    f_Aw =1.2
+    f_Aw =1.8
     f_AwP1 = 1.5* f_Aw
     acceptableDiff= 0.1
     BADiffFlag = False
@@ -761,9 +761,9 @@ def BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw
             elif (BA_AwT - BA_AwB) > 0 :
                 #f_AwN = f_Aw * (1+(numpy.log10 (BA_AwT) + numpy.log10(abs(BA_AwB)) )/ (100* numpy.log10 (abs(BA_AwB))) )
                 f_Aw= (f_Aw+f_AwP1)/2
-                print f_Aw
+                #print f_Aw
             
-        print BA_AwT, BA_AwB, f_Aw
+        #print BA_AwT, BA_AwB, f_Aw
         
         iterCount = iterCount + 1
             
@@ -819,9 +819,9 @@ def BAfactorFinder_Sb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb
                 f_Sb= (f_SbP+f_Sb)/2             
             elif (BA_SbT - BA_SbB) > 0 :
                 f_Sb= (f_Sb+f_SbP1)/2
-                print f_Sb
+                #print f_Sb
             
-        print BA_SbT, BA_SbB, f_Sb
+        #print BA_SbT, BA_SbB, f_Sb
         
         iterCount = iterCount + 1
             
@@ -878,8 +878,8 @@ def BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_S
             elif (BA_SwT - BA_SwB) > 0 :
                 #f_SwN = f_Sw * (1+(numpy.log10 (BA_SwT) + numpy.log10(abs(BA_SwB)) )/ (10* numpy.log10 (abs(BA_SwB))) )
                 f_Sw= (f_Sw + f_SwP1)/2
-                print f_Sw
-            print BA_SwB, f_Sw
+                #print f_Sw
+            #print BA_SwB, f_Sw
              
         iterCount = iterCount + 1
             
@@ -935,8 +935,8 @@ def BAfactorFinder_Pl (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_P
                 f_Pl= (f_PlP+f_Pl)/2             
             elif (BA_PlT - BA_PlB) > 0 :
                 f_Pl= (f_Pl + f_PlP1)/2
-                print f_Pl
-            print BA_PlB, f_Pl
+                #print f_Pl
+            #print BA_PlB, f_Pl
              
         iterCount = iterCount + 1
             

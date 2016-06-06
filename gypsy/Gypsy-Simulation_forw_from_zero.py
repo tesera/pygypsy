@@ -38,6 +38,15 @@ from GYPSYNonSpatial import BAincIter_Sw
 from GYPSYNonSpatial import BAincIter_Sb
 from GYPSYNonSpatial import BAincIter_Pl
 
+from GYPSYNonSpatial import BAfactorFinder_Aw
+from GYPSYNonSpatial import BAfromZeroToDataAw
+from GYPSYNonSpatial import BAfactorFinder_Sb
+from GYPSYNonSpatial import BAfromZeroToDataSb
+from GYPSYNonSpatial import BAfactorFinder_Sw
+from GYPSYNonSpatial import BAfromZeroToDataSw
+from GYPSYNonSpatial import BAfactorFinder_Pl
+from GYPSYNonSpatial import BAfromZeroToDataPl
+
 from GYPSYNonSpatial import MerchantableVolumeAw
 from GYPSYNonSpatial import MerchantableVolumeSw
 from GYPSYNonSpatial import MerchantableVolumeSb
@@ -203,12 +212,24 @@ for plotID, row in inputDF.iterrows():
     f_Sw =0.956
     f_Sb = 1
     f_Pl = 1
-    print startTage, startTageSw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw
+    #print startTage, startTageSw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw
   
   
  # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
     
-   
+    '''estimating correction factor to fit BA at t0 and BA at t '''
+    
+    f_Aw = BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT, printWarnings = True)
+    print 'f_Aw =  ', f_Aw
+    
+    f_Sb = BAfactorFinder_Sb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, BA_SbT, printWarnings = True)
+    print 'f_Sb =  ', f_Sb
+    
+    f_Sw = BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw,  SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, BA_SwT, printWarnings = True)
+    print 'f_Sw =  ', f_Sw
+    
+    f_Pl = BAfactorFinder_Pl (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,  SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT, printWarnings = True)
+    print 'f_Pl =  ', f_Pl
         
     '''simulating growth forwards in time starting from the time at which data was taken '''
     t = 0    
@@ -306,7 +327,7 @@ for plotID, row in inputDF.iterrows():
             SCnewAw = BA_AwB / (BA_SwB + BA_AwB + BA_SbB + BA_PlB)
             SCnewSw = BA_SwB / (BA_SwB + BA_AwB + BA_SbB + BA_PlB)
        
-        print bhage_Aw, bhage_Sw, BA_AwB,  BA_AwT
+        #print bhage_Aw, bhage_Sw, BA_AwB,  BA_AwT
             
         #print startTage_forward, N_bh_AwT, N_bh_SbT, N_bh_SwT, N_bh_PlT
      
