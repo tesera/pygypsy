@@ -87,7 +87,7 @@ for plotID, row in inputDF.iterrows():
     N_bh_PlT  = inputDF.loc[plotID,'N_Pl']
     N_bh_SbT  = inputDF.loc[plotID,'N_Sb']
     
-    print N_bh_AwT, N_bh_SwT, N_bh_PlT, N_bh_SbT
+    #print N_bh_AwT, N_bh_SwT, N_bh_PlT, N_bh_SbT
       
     
     y2bh_Aw = inputDF.loc[plotID,'y2bh_Aw']
@@ -148,7 +148,7 @@ for plotID, row in inputDF.iterrows():
     BA_Sw0 = N0_Sw * 3.14* (0.1/2.0)**2 
     BA_Sb0 = N0_Pl * 3.14* (0.1/2.0)**2 
     BA_Pl0 = N0_Sb * 3.14* (0.1/2.0)**2 
-    print BA_SwT
+    #print BA_SwT
     
     
     
@@ -163,7 +163,7 @@ for plotID, row in inputDF.iterrows():
     SC_Sb = SC_Sb0
     SC_Pl = SC_Pl0
     
-    print SC_Sw
+    #print SC_Sw
     
     
     SC_AW_drop = abs(SC_AwT - SC_Aw0) 
@@ -201,6 +201,8 @@ for plotID, row in inputDF.iterrows():
     startTageSwF = tageData[1]+1
     startTagePlF = tageData[2]+1
     startTageSbF = tageData[3]+1
+
+    max_Age = 250    
     
     tageData = sorted (tageData, reverse=True)
 
@@ -230,25 +232,32 @@ for plotID, row in inputDF.iterrows():
     
     f_Pl = BAfactorFinder_Pl (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,  SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT, printWarnings = True)
     print 'f_Pl =  ', f_Pl
+    
+    BA_0_to_data_Aw = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw)
+    BA_0_to_data_Sb = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb)
+    BA_0_to_data_Sw = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw)
+    BA_0_to_data_Pl = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl)
+    
+
         
     '''simulating growth forwards in time starting from the time at which data was taken '''
     t = 0    
-    while t < startTage:
+    while t < max_Age:
         #print SC_Sw
         '''Ages at time t + 1'''    
         
-        tage_Aw = startTageAw - startTage   
-        tage_Sw = startTageSw - startTage   
-        tage_Pl = startTagePl - startTage  
-        tage_Sb = startTageSb - startTage    
+        tage_AwF = startTageAwF - startTage   
+        tage_SwF = startTageSwF - startTage   
+        tage_PlF = startTagePlF - startTage  
+        tage_SbF = startTageSbF - startTage    
         
-        print startTageAw
+        #print startTageAw
        
         
-        bhage_Aw = tage_Aw - y2bh_Aw 
-        bhage_Sw = tage_Sw - y2bh_Sw 
-        bhage_Pl = tage_Pl - y2bh_Pl
-        bhage_Sb = tage_Sb - y2bh_Sb
+        bhage_AwF = tage_AwF - y2bh_Aw 
+        bhage_SwF = tage_SwF - y2bh_Sw 
+        bhage_PlF = tage_PlF - y2bh_Pl
+        bhage_SbF = tage_SbF - y2bh_Sb
         
         #print   bhage_Aw, bhage_Sw, bhage_Pl, bhage_Sb
         
@@ -257,81 +266,19 @@ for plotID, row in inputDF.iterrows():
         count_Sb = 0
         count_Pl = 0
         
+        N_bh_AwT = densityAw (SDF_Aw0, bhage_AwF, SI_bh_Aw)
+        N_bh_SbT = densitySb (SDF_Sb0, tage_SbF, SI_bh_Sb)
+        N_bh_SwT = densitySw (SDF_Sw0, SDF_Aw0, tage_SwF, SI_bh_Sw)
+        N_bh_PlT = densityPl (SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_PlF, SI_bh_Pl)
         
-        if N0_Aw > 0:
-            if bhage_Aw > 0 :
-                SC_Aw = (SC_Aw - SC_AW_drop/startTageAw) * f_Aw
-                BAinc_Aw = BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_Aw, BA_Aw0)
-                BA_Aw0 = BA_Aw0 + BAinc_Aw
-                BA_AwB = BA_Aw0
-                count_Aw += 1
-            else:
-                BA_AwB=0
-            
-        else:
-            BA_Aw0 = 0
-            BA_AwB = 0
-            
-            
-        #print bhage_Aw, SC_Aw, BA_Aw0, BAinc_Aw
         
-        if N0_Sb > 0:
-            if bhage_Sb > 0:
-               SC_Sb = SC_Sb - SC_Sb_drop/startTageSb
-               BAinc_Sb = BasalAreaIncrementNonSpatialSb ('Sb', SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_Sb, BA_Sb0)
-               BA_Sb0 = BA_Sb0 + BAinc_Sb
-               BA_SbB = BA_Sb0
-               count_Sb += 1
-            else:
-                pass
-            
-        else:
-            BA_Sb0 = 0
-            BA_SbB = 0
-            
-            
-            
-        if N0_Sw > 0:
-            if bhage_Sw >= 0:
-               SC_Sw = SC_Sw  * f_Sw  
-               BAinc_Sw = BasalAreaIncrementNonSpatialSw ('Sw', SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0)
-               BA_Sw0 = BA_Sw0 + BAinc_Sw
-               BA_SwB = BA_Sw0
-               count_Sw += 1
-            else:
-                BA_SwB=0
-            
-        else:
-            BA_Sw0 = 0
-            BA_SwB = 0
-            
         
-        if N0_Pl > 0:
-            if bhage_Pl > 0:
-               SC_Pl = (SC_Pl - SC_Pl_drop/startTagePl)
-               BAinc_Pl = BasalAreaIncrementNonSpatialPl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0)
-               BA_Pl0 = BA_Pl0 + BAinc_Pl
-               BA_PlB = BA_Pl0
-               count_Pl += 1
-            else:
-                pass
-            
-        else:
-            BA_Pl0 = 0
-            BA_PlB = 0
-            
-        if BA_AwB == 0 and  BA_SwB == 0:
-            SCnewAw=0
-            SCnewSw=0
-        else:
-            SCnewAw = BA_AwB / (BA_SwB + BA_AwB + BA_SbB + BA_PlB)
-            SCnewSw = BA_SwB / (BA_SwB + BA_AwB + BA_SbB + BA_PlB)
        
         #print bhage_Aw, bhage_Sw, BA_AwB,  BA_AwT
             
         #print startTage_forward, N_bh_AwT, N_bh_SbT, N_bh_SwT, N_bh_PlT
      
-        '''
+
         SC_F = SCestimate (N_bh_AwT,  N_bh_SbT, N_bh_SwT, N_bh_PlT)
 
         SC_AwF = SC_F[0]
@@ -395,7 +342,7 @@ for plotID, row in inputDF.iterrows():
         #print startTage_forward, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl
         
         #print startTage_forward, MVol_Aw, MVol_Sb, MVol_Sw, MVol_Pl
-        '''
+
         
         t += 1
         startTageAw += 1
