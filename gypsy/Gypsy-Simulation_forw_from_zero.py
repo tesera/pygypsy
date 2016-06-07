@@ -71,9 +71,6 @@ inputDF=inputDF.transpose()
 #print inputDF
 
 
-
-
-
 for plotID, row in inputDF.iterrows():
           
     
@@ -164,14 +161,7 @@ for plotID, row in inputDF.iterrows():
     SC_Pl = SC_Pl0
     
     #print SC_Sw
-    
-    
-    SC_AW_drop = abs(SC_AwT - SC_Aw0) 
-    SC_Sw_drop = abs(SC_SwT - SC_Sw0) 
-    SC_Sb_drop = abs(SC_SbT - SC_Sb0) 
-    SC_Pl_drop = abs(SC_PlT - SC_Pl0) 
-    
-    
+        
     
     StumpDOB_Aw = inputDF.loc[plotID,'StumpDOB_Aw']
     StumpHeight_Aw = inputDF.loc[plotID,'StumpHeight_Aw']
@@ -219,8 +209,9 @@ for plotID, row in inputDF.iterrows():
   
  # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
     
-    '''estimating correction factor to fit BA at t0 and BA at t '''
-    
+    '''estimating correction factor to fit BA at t0 and BA at t and choosing whether simulating with multiplication factor
+       or starting at t recalculating the densities and SC'''
+
     f_Aw = BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT, printWarnings = True)
     print 'f_Aw =  ', f_Aw
     
@@ -232,26 +223,39 @@ for plotID, row in inputDF.iterrows():
     
     f_Pl = BAfactorFinder_Pl (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,  SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT, printWarnings = True)
     print 'f_Pl =  ', f_Pl
-    
+        
+    simulation_choice = 'yes'
     BA_0_to_data_Aw = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw)
     BA_0_to_data_Sb = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb)
     BA_0_to_data_Sw = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw)
     BA_0_to_data_Pl = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl)
-    
 
+  
+    
+    if simulation_choice == 'no':  
+        startTage = max_Age
+        
+        BA_0_to_data_Aw = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw)
+        BA_0_to_data_Sb = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb)
+        BA_0_to_data_Sw = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw)
+        BA_0_to_data_Pl = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl)
+    
+        
+        continue
+    
+    
         
     '''simulating growth forwards in time starting from the time at which data was taken '''
     t = 0    
-    while t < max_Age:
+    while t < max_Age - startTage:
         #print SC_Sw
         '''Ages at time t + 1'''    
-        
+
+    
         tage_AwF = startTageAwF - startTage   
         tage_SwF = startTageSwF - startTage   
         tage_PlF = startTagePlF - startTage  
         tage_SbF = startTageSbF - startTage    
-        
-        #print startTageAw
        
         
         bhage_AwF = tage_AwF - y2bh_Aw 
@@ -259,7 +263,6 @@ for plotID, row in inputDF.iterrows():
         bhage_PlF = tage_PlF - y2bh_Pl
         bhage_SbF = tage_SbF - y2bh_Sb
         
-        #print   bhage_Aw, bhage_Sw, bhage_Pl, bhage_Sb
         
         count_Aw = 0
         count_Sw = 0
@@ -270,10 +273,8 @@ for plotID, row in inputDF.iterrows():
         N_bh_SbT = densitySb (SDF_Sb0, tage_SbF, SI_bh_Sb)
         N_bh_SwT = densitySw (SDF_Sw0, SDF_Aw0, tage_SwF, SI_bh_Sw)
         N_bh_PlT = densityPl (SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_PlF, SI_bh_Pl)
-        
-        
-        
-       
+
+     
         #print bhage_Aw, bhage_Sw, BA_AwB,  BA_AwT
             
         #print startTage_forward, N_bh_AwT, N_bh_SbT, N_bh_SwT, N_bh_PlT
@@ -291,6 +292,7 @@ for plotID, row in inputDF.iterrows():
             BAinc_Aw = BasalAreaIncrementNonSpatialAw('Aw', SC_AwF, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_AwF, BA_AwT)
             BA_AwT = BA_AwT + BAinc_Aw
             topHeight_Aw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Aw',  SI_bh_Aw,  tage_AwF)
+
         else:
             BA_AwT = 0
             topHeight_Aw = 0
@@ -332,11 +334,11 @@ for plotID, row in inputDF.iterrows():
         
         MVol_Pl = MerchantableVolumePl(N_bh_PlT, BA_PlT, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl)
         
-        #print startTage_forward, N_bh_PlT, N_bh_AwT,  N_bh_SwT, N_bh_SbT 
+        #print startTageAwF, N_bh_PlT, N_bh_AwT,  N_bh_SwT, N_bh_SbT 
         
         #print startTage_forward, SC_PlF, SC_AwF, SC_SwF, SC_SbF
             
-        #print startTage_forward, Tvol_Aw, Tvol_Sb, Tvol_Sw, Tvol_Pl
+        #print startTage, Tvol_Aw, Tvol_Sb, Tvol_Sw, Tvol_Pl
         #print startTage_forward, BA_PlT, BA_AwT, BA_SwT, BA_SbT  
         
         #print startTage_forward, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl
@@ -345,9 +347,9 @@ for plotID, row in inputDF.iterrows():
 
         
         t += 1
-        startTageAw += 1
-        startTageSw += 1
-        startTagePl += 1
-        startTageSb += 1
+        startTageAwF += 1
+        startTageSwF += 1
+        startTagePlF += 1
+        startTageSbF += 1
         
  
