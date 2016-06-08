@@ -743,13 +743,14 @@ def BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bha
     
     
 def BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT, printWarnings = True):
+    simulation_choice = 'yes'
     f_Aw =1.8
     f_AwP1 = 1.5* f_Aw
     acceptableDiff= 0.1
     BADiffFlag = False
     iterCount = 0 
     while BADiffFlag == False:
-        BA_AwB = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw)
+        BA_AwB = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice)
         
         if abs(BA_AwT - BA_AwB) < acceptableDiff:
             BADiffFlag = True
@@ -774,10 +775,15 @@ def BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw
     return f_Aw
 
     
-def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw):
+def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice):
+    if simulation_choice == 'yes':
+        max_age = startTage
+    elif simulation_choice == 'no':
+        max_age = 250
+    
     t = 0
     BA_tempAw = BA_Aw0
-    while t < startTage:
+    while t < max_age:
         tage_Aw = startTageAw - startTage  
         bhage_Aw = tage_Aw - y2bh_Aw
         if N0_Aw > 0:
@@ -788,27 +794,29 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
                 BAinc_Aw = f_Aw * BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_Aw, BA_tempAw)
                 BA_tempAw = BA_tempAw + BAinc_Aw
                 BA_AwB = BA_tempAw
-                
+                #print BA_AwB
             else:
                 BA_AwB=0
             
         else:
             BA_tempAw = 0
             BA_AwB = 0
-        #print BA_Aw0, BA_AwB, BA_tempAw
         t +=1  
         startTageAw += 1
+        print  bhage_Aw, BA_AwB
+        
     return BA_AwB
 
 
 def BAfactorFinder_Sb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, BA_SbT, printWarnings = True):
+    simulation_choice = 'yes'
     f_Sb =1.2
     f_SbP1 = 1.5* f_Sb
     acceptableDiff= 0.01
     BADiffFlag = False
     iterCount = 0 
     while BADiffFlag == False:
-        BA_SbB = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb)
+        BA_SbB = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice )
         
         if abs(BA_SbT - BA_SbB) < acceptableDiff:
             BADiffFlag = True
@@ -831,10 +839,15 @@ def BAfactorFinder_Sb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb
             return f_Sb, BA_SbB
     return f_Sb
 
-def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb):
+def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice):
+    if simulation_choice == 'yes':
+        max_age = startTage
+    elif simulation_choice == 'no':
+        max_age = 250
+    
     t = 0
     BA_tempSb = BA_Sb0
-    while t < startTage:
+    while t < max_age:
         tage_Sb = startTageSb - startTage  
         bhage_Sb = tage_Sb - y2bh_Sb
         if N0_Sb > 0:
@@ -859,6 +872,7 @@ def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_S
     
 
 def BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw,  SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, BA_SwT, printWarnings = True):
+    simulation_choice = 'yes'
     f_Sw =1.5
     BA_SwB=BA_Sw0
     acceptableDiff= 0.01
@@ -866,7 +880,7 @@ def BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_S
     iterCount = 0 
     f_SwP1 = 1.5* f_Sw
     while BADiffFlag == False:
-        BA_SwB = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw)
+        BA_SwB = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice)
          
         if abs(BA_SwT - BA_SwB) < acceptableDiff:
             BADiffFlag = True
@@ -890,10 +904,15 @@ def BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_S
     return f_Sw
     
 
-def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw):
+def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice):
+    if simulation_choice == 'yes':
+        max_age = startTage
+    elif simulation_choice == 'no':
+        max_age = 250
+    
     t = 0
     BA_tempSw = BA_Sw0
-    while t < startTage:
+    while t < max_age:
         tage_Sw = startTageSw - startTage  
         bhage_Sw = tage_Sw - y2bh_Sw
         if N0_Sw > 0:
@@ -912,11 +931,13 @@ def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_S
             BA_SwB = 0
         t +=1  
         startTageSw += 1
+        #print  bhage_Sw, BA_SwB
     
     return BA_SwB
     
 
 def BAfactorFinder_Pl (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,  SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT, printWarnings = True):
+    simulation_choice = 'yes'
     f_Pl =1000
     #BA_PlB=BA_Pl0
     acceptableDiff= 0.01
@@ -924,7 +945,7 @@ def BAfactorFinder_Pl (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_P
     iterCount = 0 
     f_PlP1 = 1.5* f_Pl
     while BADiffFlag == False:
-        BA_PlB = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl)
+        BA_PlB = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice)
          
         if abs(BA_PlT - BA_PlB) < acceptableDiff:
             BADiffFlag = True
@@ -946,10 +967,15 @@ def BAfactorFinder_Pl (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_P
             return f_Pl, BA_PlB
     return f_Pl
 
-def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl):
+def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice):
+    if simulation_choice == 'yes':
+        max_age = startTage
+    elif simulation_choice == 'no':
+        max_age = 250
+        
     t = 0
     BA_tempPl = BA_Pl0
-    while t < startTage:
+    while t < max_age:
         tage_Pl = startTagePl - startTage  
         bhage_Pl = tage_Pl - y2bh_Pl
         if N0_Pl > 0:

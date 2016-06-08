@@ -200,10 +200,7 @@ for plotID, row in inputDF.iterrows():
     
     startTage_forward = tageData[0] + 1
     
-    f_Aw = 1.035
-    f_Sw =0.956
-    f_Sb = 1
-    f_Pl = 1
+
     #print startTage, startTageSw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw
   
   
@@ -212,33 +209,32 @@ for plotID, row in inputDF.iterrows():
     '''estimating correction factor to fit BA at t0 and BA at t and choosing whether simulating with multiplication factor
        or starting at t recalculating the densities and SC'''
 
-    f_Aw = BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT, printWarnings = True)
-    print 'f_Aw =  ', f_Aw
+    f_Aw = BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT,  printWarnings = True)
+    #print 'f_Aw =  ', f_Aw
     
     f_Sb = BAfactorFinder_Sb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, BA_SbT, printWarnings = True)
-    print 'f_Sb =  ', f_Sb
+    #print 'f_Sb =  ', f_Sb
     
     f_Sw = BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw,  SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, BA_SwT, printWarnings = True)
-    print 'f_Sw =  ', f_Sw
+    #print 'f_Sw =  ', f_Sw
     
     f_Pl = BAfactorFinder_Pl (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,  SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT, printWarnings = True)
-    print 'f_Pl =  ', f_Pl
-        
-    simulation_choice = 'yes'
-    BA_0_to_data_Aw = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw)
-    BA_0_to_data_Sb = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb)
-    BA_0_to_data_Sw = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw)
-    BA_0_to_data_Pl = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl)
-
-  
+    #print 'f_Pl =  ', f_Pl
+       
+    simulation_choice = 'no'
+    
+    BA_0_to_data_Aw = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice)
+    BA_0_to_data_Sb = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice)
+    BA_0_to_data_Sw = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice)
+    BA_0_to_data_Pl = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice)
+    
     
     if simulation_choice == 'no':  
-        startTage = max_Age
         
-        BA_0_to_data_Aw = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw)
-        BA_0_to_data_Sb = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb)
-        BA_0_to_data_Sw = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw)
-        BA_0_to_data_Pl = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl)
+        BA_0_to_data_Aw = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice)
+        BA_0_to_data_Sb = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice)
+        BA_0_to_data_Sw = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice)
+        BA_0_to_data_Pl = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice)
     
         
         continue
@@ -246,16 +242,15 @@ for plotID, row in inputDF.iterrows():
     
         
     '''simulating growth forwards in time starting from the time at which data was taken '''
-    t = 0    
-    while t < max_Age - startTage:
-        #print SC_Sw
+    t = startTage    
+    while t < max_Age :
         '''Ages at time t + 1'''    
 
     
-        tage_AwF = startTageAwF - startTage   
-        tage_SwF = startTageSwF - startTage   
-        tage_PlF = startTagePlF - startTage  
-        tage_SbF = startTageSbF - startTage    
+        tage_AwF = startTageAwF    
+        tage_SwF = startTageSwF    
+        tage_PlF = startTagePlF   
+        tage_SbF = startTageSbF    
        
         
         bhage_AwF = tage_AwF - y2bh_Aw 
@@ -264,15 +259,12 @@ for plotID, row in inputDF.iterrows():
         bhage_SbF = tage_SbF - y2bh_Sb
         
         
-        count_Aw = 0
-        count_Sw = 0
-        count_Sb = 0
-        count_Pl = 0
-        
         N_bh_AwT = densityAw (SDF_Aw0, bhage_AwF, SI_bh_Aw)
         N_bh_SbT = densitySb (SDF_Sb0, tage_SbF, SI_bh_Sb)
         N_bh_SwT = densitySw (SDF_Sw0, SDF_Aw0, tage_SwF, SI_bh_Sw)
         N_bh_PlT = densityPl (SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_PlF, SI_bh_Pl)
+        
+        #print N_bh_SwT
 
      
         #print bhage_Aw, bhage_Sw, BA_AwB,  BA_AwT
@@ -292,6 +284,8 @@ for plotID, row in inputDF.iterrows():
             BAinc_Aw = BasalAreaIncrementNonSpatialAw('Aw', SC_AwF, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_AwF, BA_AwT)
             BA_AwT = BA_AwT + BAinc_Aw
             topHeight_Aw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Aw',  SI_bh_Aw,  tage_AwF)
+            print bhage_AwF, BA_AwT
+            
 
         else:
             BA_AwT = 0
@@ -307,6 +301,7 @@ for plotID, row in inputDF.iterrows():
         if N_bh_SwT>0:
             BA_SwT = BA_SwT + BasalAreaIncrementNonSpatialSw ('Sw', SC_SwF, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_SwF, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_SwT)
             topHeight_Sw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Sw',  SI_bh_Sw,  tage_SwF)
+            #print bhage_SwF, BA_SwT
         else:
             BA_SwT = 0
             topHeight_Sw = 0
@@ -324,7 +319,7 @@ for plotID, row in inputDF.iterrows():
         Tvol_Sb = Tvol[1]
         Tvol_Sw = Tvol[2]
         Tvol_Pl = Tvol[3]
-        
+    
         
         MVol_Aw = MerchantableVolumeAw(N_bh_AwT, BA_AwT, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw)   
         
@@ -339,11 +334,11 @@ for plotID, row in inputDF.iterrows():
         #print startTage_forward, SC_PlF, SC_AwF, SC_SwF, SC_SbF
             
         #print startTage, Tvol_Aw, Tvol_Sb, Tvol_Sw, Tvol_Pl
-        #print startTage_forward, BA_PlT, BA_AwT, BA_SwT, BA_SbT  
+        #print startTage, BA_PlT, BA_AwT, BA_SwT, BA_SbT  
         
-        #print startTage_forward, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl
+        #print startTage, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl
         
-        #print startTage_forward, MVol_Aw, MVol_Sb, MVol_Sw, MVol_Pl
+        #print startTage, MVol_Aw, MVol_Sb, MVol_Sw, MVol_Pl
 
         
         t += 1
