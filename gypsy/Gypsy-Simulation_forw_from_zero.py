@@ -55,10 +55,13 @@ from GYPSYNonSpatial import MerchantableVolumePl
 # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
 
 
-data1 = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/Inputs/LCR_join10b_x_julianno_2row.csv')
+data1 = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/Inputs/LCR_join10b_x_julianno_5row.csv')
 
 
-fplotSim = dataPrepGypsy(data1)
+fplotSim = dataPrepGypsy(data1)[0]
+
+spList = dataPrepGypsy(data1)[1]
+
 #print fplotSim
 
 
@@ -146,7 +149,6 @@ for plotID, row in inputDF.iterrows():
     BA_Sb0 = N0_Pl * 3.14* (0.1/2.0)**2 
     BA_Pl0 = N0_Sb * 3.14* (0.1/2.0)**2 
     #print BA_SwT
-    
     
     
     SC_0 = SCestimate (N0_Aw, N0_Sb, N0_Sw, N0_Pl )
@@ -284,8 +286,7 @@ for plotID, row in inputDF.iterrows():
             BAinc_Aw = BasalAreaIncrementNonSpatialAw('Aw', SC_AwF, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_AwF, BA_AwT)
             BA_AwT = BA_AwT + BAinc_Aw
             topHeight_Aw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Aw',  SI_bh_Aw,  tage_AwF)
-            print bhage_AwF, BA_AwT
-            
+            #print bhage_AwF, BA_AwT
 
         else:
             BA_AwT = 0
@@ -294,9 +295,11 @@ for plotID, row in inputDF.iterrows():
         if N_bh_SbT>0:
             BA_SbT = BA_SbT + BasalAreaIncrementNonSpatialSb ('Sb', SC_SbF, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_SbF, BA_SbT)
             topHeight_Sb=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Sb',  SI_bh_Sb,  tage_SbF)
+            #print bhage_SbF, BA_SbT
         else:
             BA_SbT = 0
             topHeight_Sb = 0
+            
             
         if N_bh_SwT>0:
             BA_SwT = BA_SwT + BasalAreaIncrementNonSpatialSw ('Sw', SC_SwF, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_SwF, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_SwT)
@@ -309,11 +312,12 @@ for plotID, row in inputDF.iterrows():
         if N_bh_PlT>0:
             BA_PlT = BA_PlT + BasalAreaIncrementNonSpatialPl('Pl', SC_PlF, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_PlF, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_PlT)
             topHeight_Pl=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Pl',  SI_bh_Pl,  tage_PlF)
+            print bhage_PlF, BA_PlT
         else:
             BA_PlT = 0
             topHeight_Pl = 0
             
-        Tvol = GrossTotalVolume( BA_AwT, BA_SbT, BA_SwT, BA_PlT, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl)
+        Tvol = GrossTotalVolume ( BA_AwT, BA_SbT, BA_SwT, BA_PlT, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl)
 
         Tvol_Aw = Tvol[0]
         Tvol_Sb = Tvol[1]

@@ -409,8 +409,8 @@ def SCestimate (N_Aw,  N_Sb, N_Sw, N_Pl):
   
 def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw):
  
-    #if N_bh_Aw==0:
-        #BAinc_Aw = 0
+    if N_bh_Aw==0:
+        BAinc_Aw = 0
         
     if bhage_Aw< 0 :
         bhage_Aw = 0
@@ -803,7 +803,7 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
             BA_AwB = 0
         t +=1  
         startTageAw += 1
-        print  bhage_Aw, BA_AwB
+        #print  bhage_Aw, BA_AwB
         
     return BA_AwB
 
@@ -868,6 +868,7 @@ def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_S
         #print BA_Aw0, BA_AwB, BA_tempAw
         t +=1  
         startTageSb += 1
+        #print  bhage_Sb, BA_SbB
     return BA_SbB
     
 
@@ -995,6 +996,7 @@ def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_P
             BA_PlB = 0
         t +=1  
         startTagePl += 1
+        print  bhage_Pl, BA_PlB
     
     return BA_PlB
     

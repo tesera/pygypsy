@@ -35,7 +35,7 @@ from GYPSYNonSpatial import SCestimate
 
 
 
-data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/Inputs/LCR_join10b_x_julianno_2row.csv')
+data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/Inputs/LCR_join10b_x_julianno_5row.csv')
 
 #print data
 
@@ -571,11 +571,11 @@ def dataPrepGypsy (data):
                       }
 
         
-        
+    print spList
        
       
-    return plotDict
+    return plotDict, spList
     
     
-#print dataPrepGypsy (data)
+print dataPrepGypsy (data)
     
