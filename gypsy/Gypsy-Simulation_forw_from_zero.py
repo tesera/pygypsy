@@ -55,7 +55,7 @@ from GYPSYNonSpatial import MerchantableVolumePl
 # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
 
 
-data1 = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/Inputs/LCR_join10b_x_julianno_5row.csv')
+data1 = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/Inputs/bhage142_1.csv')
 
 
 fplotSim = dataPrepGypsy(data1)[0]
@@ -203,7 +203,7 @@ for plotID, row in inputDF.iterrows():
     startTage_forward = tageData[0] + 1
     
 
-    #print startTage, startTageSw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw
+    print startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw,  SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, BA_SwT
   
   
  # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
@@ -222,8 +222,15 @@ for plotID, row in inputDF.iterrows():
     
     f_Pl = BAfactorFinder_Pl (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,  SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT, printWarnings = True)
     #print 'f_Pl =  ', f_Pl
-       
-    simulation_choice = 'no'
+    
+    #print startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, BA_Sw0, f_Sw
+    
+    '''choosing no implies in simulating forward after time t using the same factor estimated and used to simulate until time t
+       choosing yes, implies in simulating forward ignoring the factor estimated and used until time t and estimate, at every cycle, densities,
+       SCs etc
+    ''' 
+    
+    simulation_choice = 'yes'
     
     BA_0_to_data_Aw = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice)
     BA_0_to_data_Sb = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice)
@@ -271,7 +278,7 @@ for plotID, row in inputDF.iterrows():
      
         #print bhage_Aw, bhage_Sw, BA_AwB,  BA_AwT
             
-        #print startTage_forward, N_bh_AwT, N_bh_SbT, N_bh_SwT, N_bh_PlT
+        #print  N_bh_AwT, N_bh_SbT, N_bh_SwT, N_bh_PlT
      
 
         SC_F = SCestimate (N_bh_AwT,  N_bh_SbT, N_bh_SwT, N_bh_PlT)
@@ -286,7 +293,7 @@ for plotID, row in inputDF.iterrows():
             BAinc_Aw = BasalAreaIncrementNonSpatialAw('Aw', SC_AwF, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_AwF, BA_AwT)
             BA_AwT = BA_AwT + BAinc_Aw
             topHeight_Aw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Aw',  SI_bh_Aw,  tage_AwF)
-            #print bhage_AwF, BA_AwT
+            #print  'bhage Aw ', bhage_AwF, 'BA Aw ', BA_AwT
 
         else:
             BA_AwT = 0
@@ -295,7 +302,7 @@ for plotID, row in inputDF.iterrows():
         if N_bh_SbT>0:
             BA_SbT = BA_SbT + BasalAreaIncrementNonSpatialSb ('Sb', SC_SbF, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_SbF, BA_SbT)
             topHeight_Sb=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Sb',  SI_bh_Sb,  tage_SbF)
-            #print bhage_SbF, BA_SbT
+            #print 'bhageSb ',  bhage_SbF, 'BA Sb ',  BA_SbT
         else:
             BA_SbT = 0
             topHeight_Sb = 0
@@ -304,7 +311,7 @@ for plotID, row in inputDF.iterrows():
         if N_bh_SwT>0:
             BA_SwT = BA_SwT + BasalAreaIncrementNonSpatialSw ('Sw', SC_SwF, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_SwF, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_SwT)
             topHeight_Sw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Sw',  SI_bh_Sw,  tage_SwF)
-            #print bhage_SwF, BA_SwT
+            print 'bhageSw ', bhage_SwF, 'BA Sw ', BA_SwT
         else:
             BA_SwT = 0
             topHeight_Sw = 0
@@ -312,7 +319,7 @@ for plotID, row in inputDF.iterrows():
         if N_bh_PlT>0:
             BA_PlT = BA_PlT + BasalAreaIncrementNonSpatialPl('Pl', SC_PlF, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_PlF, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_PlT)
             topHeight_Pl=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Pl',  SI_bh_Pl,  tage_PlF)
-            print bhage_PlF, BA_PlT
+            #print 'bhagePl ', bhage_PlF, 'BA Pl', BA_PlT
         else:
             BA_PlT = 0
             topHeight_Pl = 0

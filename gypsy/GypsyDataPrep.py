@@ -35,7 +35,7 @@ from GYPSYNonSpatial import SCestimate
 
 
 
-data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/Inputs/LCR_join10b_x_julianno_5row.csv')
+data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/Inputs/bhage142_1.csv')
 
 #print data
 
@@ -167,13 +167,21 @@ def dataPrepGypsy (data):
 
         SI = domSpSI_estim(tempDomSp, domTage, domHT)
         
+        '''WHY NOT USE THE DATA SIs ????? I prefer using the height and age to estimate SI usign Gypsy equations. After all, SI from inventory is already an estimate. 
+        And we know that height and age have been directly measured. By using the SI from the inventory we may be propagating errors'''
+        
+        #SI = data.loc[i,'SI']
+        
+        
+        
         SI_x = SIfromDomSp (initSI_estimation (tempDomSp), SI)
+
         
     
     
         '''fill the dictionary with estimated SIs - I filled all the SIs to avoid IFs and loops. Some of them will not be used. '''
         
-        '''WHY NOT USE THE DATA SIs ?????'''
+        
         
         def otherSpSIs (SI, tempDomSp):
             if tempDomSp == 'Aw':
@@ -451,9 +459,7 @@ def dataPrepGypsy (data):
         N_Sw = sp_Sw[4]
         N_Pl = sp_Pl[4]
         
-        
-        
-        
+       
         y_Aw=densityNonSpatialAw (sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings = True)
         SDF_Aw0 = y_Aw[1]
         N_bh_Aw=y_Aw[0]
@@ -480,8 +486,7 @@ def dataPrepGypsy (data):
         N0_Sw = densitySw (SDF_Sw0, SDF_Aw0, 0, SI_bh_Sw) 
         N0_Pl = densityPl (SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, 0, SI_bh_Pl)
         
-        
-        
+
                
         '''estimating sp-specific Basal area increment from Densities '''        
         

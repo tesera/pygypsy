@@ -803,7 +803,7 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
             BA_AwB = 0
         t +=1  
         startTageAw += 1
-        #print  bhage_Aw, BA_AwB
+        #print  'bhageAw ', bhage_Aw, 'BA Aw ',  BA_AwB
         
     return BA_AwB
 
@@ -868,15 +868,15 @@ def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_S
         #print BA_Aw0, BA_AwB, BA_tempAw
         t +=1  
         startTageSb += 1
-        #print  bhage_Sb, BA_SbB
+        #print  'bhageSb ', bhage_Sb, 'BA Sb',  BA_SbB
     return BA_SbB
     
 
 def BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw,  SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, BA_SwT, printWarnings = True):
     simulation_choice = 'yes'
-    f_Sw =1.5
+    f_Sw =2.5
     BA_SwB=BA_Sw0
-    acceptableDiff= 0.01
+    acceptableDiff= 0.1
     BADiffFlag = False
     iterCount = 0 
     f_SwP1 = 1.5* f_Sw
@@ -894,7 +894,7 @@ def BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_S
                 #f_SwN = f_Sw * (1+(numpy.log10 (BA_SwT) + numpy.log10(abs(BA_SwB)) )/ (10* numpy.log10 (abs(BA_SwB))) )
                 f_Sw= (f_Sw + f_SwP1)/2
                 #print f_Sw
-            #print BA_SwB, f_Sw
+            print BA_SwB, f_Sw
              
         iterCount = iterCount + 1
             
@@ -932,7 +932,7 @@ def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_S
             BA_SwB = 0
         t +=1  
         startTageSw += 1
-        #print  bhage_Sw, BA_SwB
+        print 'bhageSw ',  bhage_Sw, 'BA Sw ', BA_SwB
     
     return BA_SwB
     
@@ -996,7 +996,7 @@ def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_P
             BA_PlB = 0
         t +=1  
         startTagePl += 1
-        print  bhage_Pl, BA_PlB
+        #print  'bhagePl ', bhage_Pl, 'BA Pl ', BA_PlB
     
     return BA_PlB
     
