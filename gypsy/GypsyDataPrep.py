@@ -39,37 +39,7 @@ from GYPSYNonSpatial import SCestimate
 data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands_for_GYPSY_comparisons.csv')
 
 
-def WriteDictToCSV(csv_file,csv_columns,dict_data):
-    try:
-        with open(csv_file, 'w') as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
-            writer.writeheader()
-            for data in dict_data:
-                writer.writerow(data)
-    except IOError as (errno, strerror):
-            print("I/O error({0}): {1}".format(errno, strerror))    
-    return            
 
-csv_columns = ['PlotID', 'SI_Aw', 'SI_Sw', 'SI_Pl', 'SI_Sb', 
-                      'N_Aw', 'N_Sw', 'N_Pl', 'N_Sb',
-                      'y2bh_Aw', 'y2bh_Sw', 'y2bh_Pl', 'y2bh_Sb',
-                      'tage_Aw', 'tage_Sw', 'tage_Pl', 'tage_Sb',
-                      'BA_Aw', 'BA_Sw', 'BA_Pl', 'BA_Sb',
-                      'BAinc_Aw', 'BAinc_Sw', 'BAinc_Pl', 'BAinc_Sb',
-                      'SDF_Aw', 'SDF_Sw', 'SDF_Pl', 'SDF_Sb', 
-                      'N0_Aw', 'N0_Sb', 'N0_Sw', 'N0_Pl', 
-                      'StumpDOB_Aw', 'StumpDOB_Sb', 'StumpDOB_Sw', 'StumpDOB_Pl',
-                      'StumpHeight_Aw', 'StumpHeight_Sb', 'StumpHeight_Sw', 'StumpHeight_Pl',
-                      'TopDib_Aw', 'TopDib_Sb', 'TopDib_Sw', 'TopDib_Pl']
-
-dict_data = []
-    
-
-
-
-csv_file = "/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv"
-
-WriteDictToCSV(csv_file,csv_columns,dict_data)
 
 #print data
 
@@ -615,7 +585,7 @@ def dataPrepGypsy (data):
         
         '''
         
-        plotDict [PlotID] = { 'PlotID': PlotID, 'SI_Aw': SI_Aw, 'SI_Sw': SI_Sw, 'SI_Pl': SI_Pl, 'SI_Sb': SI_Sb, 
+        plotDict = { 'PlotID': PlotID, 'SI_Aw': SI_Aw, 'SI_Sw': SI_Sw, 'SI_Pl': SI_Pl, 'SI_Sb': SI_Sb, 
                       'N_Aw': N_Aw, 'N_Sw': N_Sw, 'N_Pl': N_Pl, 'N_Sb': N_Sb,
                       'y2bh_Aw': y2bh_Aw, 'y2bh_Sw': y2bh_Sw, 'y2bh_Pl': y2bh_Pl, 'y2bh_Sb': y2bh_Sb,
                       'tage_Aw': tage_Aw, 'tage_Sw': tage_Sw, 'tage_Pl': tage_Pl, 'tage_Sb': tage_Sb,
@@ -627,14 +597,16 @@ def dataPrepGypsy (data):
                       'StumpHeight_Aw': StumpHeight_Aw, 'StumpHeight_Sb': StumpHeight_Sb, 'StumpHeight_Sw': StumpHeight_Sw, 'StumpHeight_Pl': StumpHeight_Pl,
                       'TopDib_Aw': TopDib_Aw, 'TopDib_Sb': TopDib_Sb, 'TopDib_Sw': TopDib_Sw, 'TopDib_Pl': TopDib_Pl
                       }
+        print plotDict
                       
         # with open ("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv", 'a') as f:
         #     f_csv = csv.DictWriter(f, csv_columns)
         #     f_csv.writeheader()
         #     f_csv.writerows(plotDict)
-
-        plotDF = pd.DataFrame(plotDict)
-        plotDF.to_csv("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv", mode='a', header=False)
+        
+        writeheader = True if i==0 else False 
+        plotDF = pd.DataFrame(plotDict, index = [PlotID])
+        plotDF.to_csv("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv", mode='a', header = writeheader)
         # make sure that column names aren't written each time
 
 
@@ -644,7 +616,7 @@ def dataPrepGypsy (data):
 
 
         
-    #print spList
+    
        
       
     return plotDict
