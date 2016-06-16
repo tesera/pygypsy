@@ -628,11 +628,19 @@ def dataPrepGypsy (data):
                       'TopDib_Aw': TopDib_Aw, 'TopDib_Sb': TopDib_Sb, 'TopDib_Sw': TopDib_Sw, 'TopDib_Pl': TopDib_Pl
                       }
                       
-        with open ("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv", 'a') as f:
-            f_csv = csv.DictWriter(f, csv_columns)
-            f_csv.writeheader()
-            f_csv.writerows(plotDict)
-            
+        # with open ("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv", 'a') as f:
+        #     f_csv = csv.DictWriter(f, csv_columns)
+        #     f_csv.writeheader()
+        #     f_csv.writerows(plotDict)
+
+        plotDF = pd.DataFrame(plotDict)
+        plotDF.to_csv("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv", mode='a', header=False)
+        # make sure that column names aren't written each time
+
+
+# plotDF = pd.DataFrame(plotDict)
+# plotDF.to_csv("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv")
+
 
 
         
