@@ -55,7 +55,7 @@ from GYPSYNonSpatial import MerchantableVolumePl
 # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
 
 
-data1 = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/Inputs/bhage142_1.csv')
+data1 = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands_for_GYPSY_comparisons.csv')
 
 
 fplotSim = dataPrepGypsy(data1)[0]

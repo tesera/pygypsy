@@ -86,7 +86,7 @@ def densityNonSpatialAw (sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings = True):
                    #print 'Aw',  N_est_Aw, SDF_Aw0
                                       
                iterCount = iterCount + 1
-               if iterCount == 150 and printWarnings == True:
+               if iterCount == 1500 and printWarnings == True:
                    print '\n GYPSYNonSpatial.densityNonSpatialAw()'
                    print ' Slow convergence'
                    return N_est_Aw, SDF_Aw0
@@ -515,7 +515,8 @@ def BasalAreaIncrementNonSpatialSb (sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhag
         #raise ValueError ('bhage cannot be negative: %s' %bhage_Sb)
         bhage_Sb = 0        
         
-    #if BA_Sb< 0 :
+    if BA_Sb< 0 :
+        BA_Sb = 0
         #raise ValueError ('BA_Sb cannot be negative: %s' %BA_Sb)
 
     elif N_bh_Sb>0 and SI_bh_Sb>0:

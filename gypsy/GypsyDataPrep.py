@@ -6,6 +6,7 @@ Created on Tue Apr 19 11:15:44 2016
 """
 
 import csv
+import os
 import pandas as pd
 import numpy as np
 from asaCompileAgeGivenSpSiHt import computeTreeAge
@@ -35,7 +36,40 @@ from GYPSYNonSpatial import SCestimate
 
 
 
-data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/Inputs/bhage142_1.csv')
+data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands_for_GYPSY_comparisons.csv')
+
+
+def WriteDictToCSV(csv_file,csv_columns,dict_data):
+    try:
+        with open(csv_file, 'w') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
+            writer.writeheader()
+            for data in dict_data:
+                writer.writerow(data)
+    except IOError as (errno, strerror):
+            print("I/O error({0}): {1}".format(errno, strerror))    
+    return            
+
+csv_columns = ['PlotID', 'SI_Aw', 'SI_Sw', 'SI_Pl', 'SI_Sb', 
+                      'N_Aw', 'N_Sw', 'N_Pl', 'N_Sb',
+                      'y2bh_Aw', 'y2bh_Sw', 'y2bh_Pl', 'y2bh_Sb',
+                      'tage_Aw', 'tage_Sw', 'tage_Pl', 'tage_Sb',
+                      'BA_Aw', 'BA_Sw', 'BA_Pl', 'BA_Sb',
+                      'BAinc_Aw', 'BAinc_Sw', 'BAinc_Pl', 'BAinc_Sb',
+                      'SDF_Aw', 'SDF_Sw', 'SDF_Pl', 'SDF_Sb', 
+                      'N0_Aw', 'N0_Sb', 'N0_Sw', 'N0_Pl', 
+                      'StumpDOB_Aw', 'StumpDOB_Sb', 'StumpDOB_Sw', 'StumpDOB_Pl',
+                      'StumpHeight_Aw', 'StumpHeight_Sb', 'StumpHeight_Sw', 'StumpHeight_Pl',
+                      'TopDib_Aw', 'TopDib_Sb', 'TopDib_Sw', 'TopDib_Pl']
+
+dict_data = []
+    
+
+
+
+csv_file = "/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv"
+
+WriteDictToCSV(csv_file,csv_columns,dict_data)
 
 #print data
 
@@ -136,6 +170,8 @@ def dataPrepGypsy (data):
         PlotID = data.loc[i,'id_l1']
         
         tempDomSp = data.loc[i,'SP1']
+        
+        #print tempDomSp
     
         def initSI_estimation (tempDomSp) :    
             if tempDomSp == 'Pb':
@@ -156,6 +192,7 @@ def dataPrepGypsy (data):
         domTage = data.loc[i,'AGE']
         domHT = data.loc[i,'HD']
         
+        
         def domSpSI_estim (tempDomSp, domTage, domHT):
             domSI = ComputeGypsySiteIndex(tempDomSp, domHT, 0, domTage)
             SI = domSI [2] 
@@ -167,16 +204,18 @@ def dataPrepGypsy (data):
 
         SI = domSpSI_estim(tempDomSp, domTage, domHT)
         
+        #print 'kkk',tempDomSp,  SI
         '''WHY NOT USE THE DATA SIs ????? I prefer using the height and age to estimate SI usign Gypsy equations. After all, SI from inventory is already an estimate. 
         And we know that height and age have been directly measured. By using the SI from the inventory we may be propagating errors'''
         
         #SI = data.loc[i,'SI']
         
         
+        DomSp = initSI_estimation (tempDomSp)
         
-        SI_x = SIfromDomSp (initSI_estimation (tempDomSp), SI)
+        SI_x = SIfromDomSp (DomSp, SI)
 
-        
+        #print SI_x
     
     
         '''fill the dictionary with estimated SIs - I filled all the SIs to avoid IFs and loops. Some of them will not be used. '''
@@ -184,25 +223,25 @@ def dataPrepGypsy (data):
         
         
         def otherSpSIs (SI, tempDomSp):
-            if tempDomSp == 'Aw':
+            if DomSp == 'Aw':
                 fplot ['Aw']['SI'] = SI
                 fplot ['Pl']['SI'] = SI_x[1]
                 fplot ['Sw']['SI'] = SI_x[2]
                 fplot ['Sb']['SI'] = SI_x[3]
             
-            elif tempDomSp == 'Sw':
+            elif DomSp == 'Sw':
                 fplot ['Aw']['SI'] = SI_x[0]
                 fplot ['Pl']['SI'] = SI_x[1]
                 fplot ['Sw']['SI'] = SI
                 fplot ['Sb']['SI'] = SI_x[3]
                 
-            elif tempDomSp == 'Pl':
+            elif DomSp == 'Pl':
                 fplot ['Aw']['SI'] = SI_x[0]
                 fplot ['Pl']['SI'] = SI
                 fplot ['Sw']['SI'] = SI_x[2]
                 fplot ['Sb']['SI'] = SI_x[3]
                 
-            elif tempDomSp == 'Sb':
+            elif DomSp == 'Sb':
                 fplot ['Aw']['SI'] = SI_x[0]
                 fplot ['Pl']['SI'] = SI_x[1]
                 fplot ['Sw']['SI'] = SI_x[2]
@@ -210,8 +249,11 @@ def dataPrepGypsy (data):
             
             return fplot
         
-        fplot = otherSpSIs (SI, tempDomSp)
+        fplot = otherSpSIs (SI, DomSp)
         
+        #print SI, DomSp , fplot ['Sw']['SI']
+        #print '----\n'
+       
                 
         sp1 = data.loc[i,'SP1']
         sp2 = data.loc[i,'SP2']
@@ -261,7 +303,7 @@ def dataPrepGypsy (data):
             
         sorted_spList1, spList1 = sortedSp (spList)
         
-        #print sorted_spList1
+        print sorted_spList1
         
        
              
@@ -271,7 +313,7 @@ def dataPrepGypsy (data):
         fplot ['Sb']['PCT'] = spList1['Sb']
        
             
-        #print fplot
+        #print spList1['Sw']
         
         domSp = sorted_spList1[0]
         
@@ -326,6 +368,7 @@ def dataPrepGypsy (data):
                 fplot [sp[0]] ['bhage'] = x_Si [0]
                  
         #print fplot
+
          
        # print '-------------------------------'
         #print 'Plot ID    ', Plot_Id
@@ -345,6 +388,9 @@ def dataPrepGypsy (data):
         N_Pl = fplot ['Pl']['N'] 
         N_Sb = fplot ['Sb']['N'] 
         
+        #print 'NNN', N_Aw, N_Sw, N_Sb, N_Pl
+        '''sometimes these values are zero because TPH is zero...WHY TPH IS ZERO????'''
+        
         y2bh_Aw = fplot ['Aw']['tage'] - fplot ['Aw']['bhage'] 
         y2bh_Sw = fplot ['Sw']['tage'] - fplot ['Sw']['bhage']
         y2bh_Pl = fplot ['Pl']['tage'] - fplot ['Pl']['bhage']
@@ -354,7 +400,8 @@ def dataPrepGypsy (data):
         tage_Sw = fplot ['Sw']['tage']
         tage_Pl = fplot ['Pl']['tage']
         tage_Sb = fplot ['Sb']['tage'] 
-
+        
+        #print tage_Sw
         
         
         
@@ -363,7 +410,7 @@ def dataPrepGypsy (data):
         sp_Sw=['Sw', fplot ['Sw'] ['topHeight'], fplot ['Sw'] ['tage'], fplot ['Sw'] ['bhage'], fplot ['Sw'] ['N'], fplot ['Sw'] ['BA'], fplot ['Sw'] ['PS'], fplot ['Sw'] ['StumpDOB'], fplot ['Sw'] ['StumpHeight'], fplot ['Sw'] ['TopDib'], fplot ['Sw'] ['SI'], fplot ['Sw'] ['PCT']]
         sp_Sb=['Sb', fplot ['Sb'] ['topHeight'], fplot ['Sb'] ['tage'], fplot ['Sb'] ['bhage'], fplot ['Sb'] ['N'], fplot ['Sb'] ['BA'], fplot ['Sb'] ['PS'], fplot ['Sb'] ['StumpDOB'], fplot ['Sb'] ['StumpHeight'], fplot ['Sb'] ['TopDib'], fplot ['Sb'] ['SI'], fplot ['Sb'] ['PCT']]
         
-
+        
         
         bhage_Aw=sp_Aw[3]
         tage_Aw=sp_Aw[2]
@@ -430,8 +477,12 @@ def dataPrepGypsy (data):
         y2bh_Sw = tage_Sw - bhage_Sw
         SI_bh_Sw=sp_Sw[10]
         
+        
+        
         '''treeHeight is the Top Height or Htop in the paper'''
         topHeight_Sw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(sp_Sw[0],  si_Sw,  tage_Sw)
+        
+        
         '''
         print ' estimated Site Index for species Sw is:  ', si_Sw
         print ' estimated Top Height for species Sw is:  ', topHeight_Sw
@@ -450,7 +501,8 @@ def dataPrepGypsy (data):
         the paper says current or inital density
         
         '''
-        
+        #print 'kkkk', tage_Aw, tage_Sw, tage_Sb, tage_Pl
+        #print 'bhage', bhage_Aw, bhage_Sw, bhage_Sb, bhage_Pl
         
         '''estimating species densities from, SI and data '''
         
@@ -458,6 +510,7 @@ def dataPrepGypsy (data):
         N_Sb = sp_Sb[4]
         N_Sw = sp_Sw[4]
         N_Pl = sp_Pl[4]
+        
         
        
         y_Aw=densityNonSpatialAw (sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings = True)
@@ -477,7 +530,7 @@ def dataPrepGypsy (data):
         SDF_Pl0 = y_Pl[1]
         N_bh_Pl = y_Pl[0]
         
-        #print 'N_aw' , N_Aw, bhage_Aw, SI_bh_Aw
+        #print 'N_Sw' , N_Sw, bhage_Sw, SI_bh_Sw, N_bh_Sw, SDF_Sw0
         
         '''estimating species densities at time zero '''        
         
@@ -562,7 +615,7 @@ def dataPrepGypsy (data):
         
         '''
         
-        plotDict [PlotID] = { 'SI_Aw': SI_Aw, 'SI_Sw': SI_Sw, 'SI_Pl': SI_Pl, 'SI_Sb': SI_Sb, 
+        plotDict [PlotID] = { 'PlotID': PlotID, 'SI_Aw': SI_Aw, 'SI_Sw': SI_Sw, 'SI_Pl': SI_Pl, 'SI_Sb': SI_Sb, 
                       'N_Aw': N_Aw, 'N_Sw': N_Sw, 'N_Pl': N_Pl, 'N_Sb': N_Sb,
                       'y2bh_Aw': y2bh_Aw, 'y2bh_Sw': y2bh_Sw, 'y2bh_Pl': y2bh_Pl, 'y2bh_Sb': y2bh_Sb,
                       'tage_Aw': tage_Aw, 'tage_Sw': tage_Sw, 'tage_Pl': tage_Pl, 'tage_Sb': tage_Sb,
@@ -574,13 +627,21 @@ def dataPrepGypsy (data):
                       'StumpHeight_Aw': StumpHeight_Aw, 'StumpHeight_Sb': StumpHeight_Sb, 'StumpHeight_Sw': StumpHeight_Sw, 'StumpHeight_Pl': StumpHeight_Pl,
                       'TopDib_Aw': TopDib_Aw, 'TopDib_Sb': TopDib_Sb, 'TopDib_Sw': TopDib_Sw, 'TopDib_Pl': TopDib_Pl
                       }
+                      
+        with open ("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv", 'a') as f:
+            f_csv = csv.DictWriter(f, csv_columns)
+            f_csv.writeheader()
+            f_csv.writerows(plotDict)
+            
+
 
         
-    print spList
+    #print spList
        
       
-    return plotDict, spList
+    return plotDict
     
     
 print dataPrepGypsy (data)
+
     
