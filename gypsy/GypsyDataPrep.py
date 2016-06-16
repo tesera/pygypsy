@@ -604,9 +604,10 @@ def dataPrepGypsy (data):
         #     f_csv.writeheader()
         #     f_csv.writerows(plotDict)
         
-        writeheader = True if i==0 else False 
+        writeheader = True if i==0 else False
+        mode = 'a' if i > 0 else 'w'
         plotDF = pd.DataFrame(plotDict, index = [PlotID])
-        plotDF.to_csv("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv", mode='a', header = writeheader)
+        plotDF.to_csv("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv", mode=mode, header = writeheader)
         # make sure that column names aren't written each time
 
 
