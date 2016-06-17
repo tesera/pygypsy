@@ -36,7 +36,7 @@ from GYPSYNonSpatial import SCestimate
 
 
 
-data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands_for_GYPSY_comparisons.csv')
+data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands4.csv')
 
 
 
@@ -585,7 +585,7 @@ def dataPrepGypsy (data):
         
         '''
         
-        plotDict = { 'PlotID': PlotID, 'SI_Aw': SI_Aw, 'SI_Sw': SI_Sw, 'SI_Pl': SI_Pl, 'SI_Sb': SI_Sb, 
+        plotDict [PlotID]= { 'PlotID': PlotID, 'SI_Aw': SI_Aw, 'SI_Sw': SI_Sw, 'SI_Pl': SI_Pl, 'SI_Sb': SI_Sb, 
                       'N_Aw': N_Aw, 'N_Sw': N_Sw, 'N_Pl': N_Pl, 'N_Sb': N_Sb,
                       'y2bh_Aw': y2bh_Aw, 'y2bh_Sw': y2bh_Sw, 'y2bh_Pl': y2bh_Pl, 'y2bh_Sb': y2bh_Sb,
                       'tage_Aw': tage_Aw, 'tage_Sw': tage_Sw, 'tage_Pl': tage_Pl, 'tage_Sb': tage_Sb,
@@ -603,11 +603,13 @@ def dataPrepGypsy (data):
         #     f_csv = csv.DictWriter(f, csv_columns)
         #     f_csv.writeheader()
         #     f_csv.writerows(plotDict)
-        
+        '''
         writeheader = True if i==0 else False
         mode = 'a' if i > 0 else 'w'
         plotDF = pd.DataFrame(plotDict, index = [PlotID])
         plotDF.to_csv("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv", mode=mode, header = writeheader)
+        
+        '''
         # make sure that column names aren't written each time
 
 
@@ -615,12 +617,10 @@ def dataPrepGypsy (data):
 # plotDF.to_csv("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv")
 
 
-
-        
     
        
       
-    return plotDict
+    return plotDict, spList
     
     
 print dataPrepGypsy (data)

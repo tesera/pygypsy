@@ -745,9 +745,9 @@ def BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bha
     
 def BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT, printWarnings = True):
     simulation_choice = 'yes'
-    f_Aw =1.8
+    f_Aw =2.8
     f_AwP1 = 1.5* f_Aw
-    acceptableDiff= 0.1
+    acceptableDiff= 0.05 * BA_AwT
     BADiffFlag = False
     iterCount = 0 
     while BADiffFlag == False:
@@ -765,7 +765,7 @@ def BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw
                 f_Aw= (f_Aw+f_AwP1)/2
                 #print f_Aw
             
-        #print BA_AwT, BA_AwB, f_Aw
+        #print BA_Aw0, BA_AwT, BA_AwB, f_Aw
         
         iterCount = iterCount + 1
             
@@ -792,10 +792,10 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
                 pass
             if bhage_Aw > 0 :
                 SC_Aw = (SC_Aw ) * f_Aw
-                BAinc_Aw = f_Aw * BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_Aw, BA_tempAw)
+                BAinc_Aw =  BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_Aw, BA_tempAw)
                 BA_tempAw = BA_tempAw + BAinc_Aw
                 BA_AwB = BA_tempAw
-                #print BA_AwB
+                print BA_AwB
             else:
                 BA_AwB=0
             
@@ -895,7 +895,7 @@ def BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_S
                 #f_SwN = f_Sw * (1+(numpy.log10 (BA_SwT) + numpy.log10(abs(BA_SwB)) )/ (10* numpy.log10 (abs(BA_SwB))) )
                 f_Sw= (f_Sw + f_SwP1)/2
                 #print f_Sw
-            print BA_SwB, f_Sw
+            #print BA_SwB, f_Sw
              
         iterCount = iterCount + 1
             
@@ -933,7 +933,7 @@ def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_S
             BA_SwB = 0
         t +=1  
         startTageSw += 1
-        print 'bhageSw ',  bhage_Sw, 'BA Sw ', BA_SwB
+        #print 'bhageSw ',  bhage_Sw, 'BA Sw ', BA_SwB
     
     return BA_SwB
     
@@ -997,7 +997,7 @@ def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_P
             BA_PlB = 0
         t +=1  
         startTagePl += 1
-        #print  'bhagePl ', bhage_Pl, 'BA Pl ', BA_PlB
+        print  'bhagePl ', bhage_Pl, 'BA Pl ', BA_PlB
     
     return BA_PlB
     
