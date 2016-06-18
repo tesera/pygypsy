@@ -55,7 +55,7 @@ from GYPSYNonSpatial import MerchantableVolumePl
 # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
 
 
-data1 = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands4.csv')
+data1 = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands8.csv')
 
 
 fplotSim = dataPrepGypsy(data1)[0]
@@ -323,7 +323,7 @@ for plotID, row in inputDF.iterrows():
         if N_bh_SwT>0:
             BA_SwT = BA_SwT + BasalAreaIncrementNonSpatialSw ('Sw', SC_SwF, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_SwF, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_SwT)
             topHeight_Sw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Sw',  SI_bh_Sw,  tage_SwF)
-            #print 'bhageSw ', bhage_SwF, 'BA Sw ', BA_SwT
+            print 'bhageSw ', bhage_SwF, 'BA Sw ', BA_SwT
         else:
             BA_SwT = 0
             topHeight_Sw = 0
@@ -331,7 +331,7 @@ for plotID, row in inputDF.iterrows():
         if N_bh_PlT>0:
             BA_PlT = BA_PlT + BasalAreaIncrementNonSpatialPl('Pl', SC_PlF, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_PlF, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_PlT)
             topHeight_Pl=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Pl',  SI_bh_Pl,  tage_PlF)
-            print 'bhagePl ', bhage_PlF, 'BA Pl', BA_PlT
+            #print 'bhagePl ', bhage_PlF, 'BA Pl', BA_PlT
         else:
             BA_PlT = 0
             topHeight_Pl = 0

@@ -36,7 +36,7 @@ from GYPSYNonSpatial import SCestimate
 
 
 
-data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands4.csv')
+data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands8.csv')
 
 
 

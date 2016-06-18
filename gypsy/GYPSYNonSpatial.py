@@ -933,7 +933,7 @@ def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_S
             BA_SwB = 0
         t +=1  
         startTageSw += 1
-        #print 'bhageSw ',  bhage_Sw, 'BA Sw ', BA_SwB
+        print 'bhageSw ',  bhage_Sw, 'BA Sw ', BA_SwB
     
     return BA_SwB
     
@@ -997,7 +997,7 @@ def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_P
             BA_PlB = 0
         t +=1  
         startTagePl += 1
-        print  'bhagePl ', bhage_Pl, 'BA Pl ', BA_PlB
+        #print  'bhagePl ', bhage_Pl, 'BA Pl ', BA_PlB
     
     return BA_PlB
     
