@@ -55,7 +55,7 @@ from GYPSYNonSpatial import MerchantableVolumePl
 # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
 
 
-data1 = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands8.csv')
+data1 = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands2.csv')
 
 
 fplotSim = dataPrepGypsy(data1)[0]
@@ -143,13 +143,63 @@ for plotID, row in inputDF.iterrows():
     SC_SbT = SCT[2]
     SC_PlT = SCT[3]
    
+    DB_BhageAw = 0.1
+    DB_BhageSw = 0.1
+    DB_BhageSb = 0.1
+    DB_BhagePl = 0.1
+       
+    BA_Aw0 = N0_Aw * 3.14* (DB_BhageAw/2.0)**2 
+    BA_Sw0 = N0_Sw * 3.14* (DB_BhageSw/2.0)**2 
+    BA_Sb0 = N0_Sb * 3.14* (DB_BhageSb/2.0)**2 
+    BA_Pl0 = N0_Pl * 3.14* (DB_BhagePl/2.0)**2 
+  
     
-    BA_Aw0 = N0_Aw * 3.14* (0.1/2.0)**2 
-    BA_Sw0 = N0_Sw * 3.14* (0.1/2.0)**2 
-    BA_Sb0 = N0_Pl * 3.14* (0.1/2.0)**2 
-    BA_Pl0 = N0_Sb * 3.14* (0.1/2.0)**2 
-    #print BA_Aw0
     
+    def BA_zeroAw (BA_Aw0, BA_AwT, DB_BhageAw):
+        while BA_Aw0 >BA_AwT:
+            DB_BhageAw = DB_BhageAw*0.95
+            BA_Aw0 = N0_Aw * 3.14* (DB_BhageAw/2.0)**2 
+        return BA_Aw0
+    
+    def BA_zeroSw (BA_Sw0, BA_SwT, DB_BhageSw):
+        while BA_Sw0 > BA_SwT:
+            DB_BhageSw = DB_BhageSw*0.95
+            BA_Sw0 = N0_Sw * 3.14* (DB_BhageSw/2.0)**2 
+        return BA_Sw0
+        
+    def BA_zeroSb (BA_Sb0, BA_SbT, DB_BhageSb):
+        while BA_Sb0 > BA_SbT:
+            DB_BhageSb = DB_BhageSb*0.95
+            BA_Sb0 = N0_Sb * 3.14* (DB_BhageSb/2.0)**2 
+        return BA_Sb0
+    
+    def BA_zeroPl (BA_Pl0, BA_PlT, DB_BhagePl):
+        while BA_Pl0 > BA_PlT:
+            DB_BhagePl = DB_BhagePl*0.95
+            BA_Pl0 = N0_Pl * 3.14* (DB_BhagePl/2.0)**2 
+        return BA_Pl0
+    
+    if BA_Aw0 > BA_AwT:
+        BA_Aw0 = BA_zeroAw (BA_Aw0, BA_AwT, DB_BhageAw)
+    else:
+        pass
+    
+    if BA_Sw0 > BA_SwT:
+        BA_Sw0 = BA_zeroSw (BA_Sw0, BA_SwT, DB_BhageSw)
+    else:
+        pass
+    
+    if BA_Sb0 > BA_SbT:
+        BA_Sb0 = BA_zeroSb (BA_Sb0, BA_SbT, DB_BhageSb)
+    else:
+        pass
+    
+    if BA_Pl0 > BA_PlT:
+        BA_Pl0 = BA_zeroPl (BA_Pl0, BA_PlT, DB_BhagePl)
+    else:
+        pass
+        
+    print BA_Aw0, BA_AwT
     
     SC_0 = SCestimate (N0_Aw, N0_Sb, N0_Sw, N0_Pl )
     SC_Aw0 = SC_0[0]
@@ -305,7 +355,7 @@ for plotID, row in inputDF.iterrows():
             BAinc_Aw = BasalAreaIncrementNonSpatialAw('Aw', SC_AwF, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_AwF, BA_AwT)
             BA_AwT = BA_AwT + BAinc_Aw
             topHeight_Aw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Aw',  SI_bh_Aw,  tage_AwF)
-            #print  'bhage Aw ', bhage_AwF, 'BA Aw ', BA_AwT
+            print  'bhage Aw ', bhage_AwF, 'BA Aw ', BA_AwT
 
         else:
             BA_AwT = 0
@@ -323,7 +373,7 @@ for plotID, row in inputDF.iterrows():
         if N_bh_SwT>0:
             BA_SwT = BA_SwT + BasalAreaIncrementNonSpatialSw ('Sw', SC_SwF, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_SwF, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_SwT)
             topHeight_Sw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Sw',  SI_bh_Sw,  tage_SwF)
-            print 'bhageSw ', bhage_SwF, 'BA Sw ', BA_SwT
+            #print 'bhageSw ', bhage_SwF, 'BA Sw ', BA_SwT
         else:
             BA_SwT = 0
             topHeight_Sw = 0

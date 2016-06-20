@@ -36,7 +36,7 @@ from GYPSYNonSpatial import SCestimate
 
 
 
-data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands8.csv')
+data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands2.csv')
 
 
 
@@ -595,7 +595,8 @@ def dataPrepGypsy (data):
                       'N0_Aw': N0_Aw, 'N0_Sb': N0_Sb, 'N0_Sw': N0_Sw, 'N0_Pl': N0_Pl, 
                       'StumpDOB_Aw': StumpDOB_Aw, 'StumpDOB_Sb': StumpDOB_Sb, 'StumpDOB_Sw': StumpDOB_Sw, 'StumpDOB_Pl': StumpDOB_Pl,
                       'StumpHeight_Aw': StumpHeight_Aw, 'StumpHeight_Sb': StumpHeight_Sb, 'StumpHeight_Sw': StumpHeight_Sw, 'StumpHeight_Pl': StumpHeight_Pl,
-                      'TopDib_Aw': TopDib_Aw, 'TopDib_Sb': TopDib_Sb, 'TopDib_Sw': TopDib_Sw, 'TopDib_Pl': TopDib_Pl
+                      'TopDib_Aw': TopDib_Aw, 'TopDib_Sb': TopDib_Sb, 'TopDib_Sw': TopDib_Sw, 'TopDib_Pl': TopDib_Pl,
+                      'topHeight_Aw': topHeight_Aw, 'topHeight_Sw': topHeight_Sw, 'topHeight_Sb': topHeight_Sb, 'topHeight_Pl': topHeight_Pl
                       }
         print plotDict
                       

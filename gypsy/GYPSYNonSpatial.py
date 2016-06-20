@@ -747,7 +747,7 @@ def BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw
     simulation_choice = 'yes'
     f_Aw =2.8
     f_AwP1 = 1.5* f_Aw
-    acceptableDiff= 0.05 * BA_AwT
+    acceptableDiff= 0.1
     BADiffFlag = False
     iterCount = 0 
     while BADiffFlag == False:
@@ -804,7 +804,7 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
             BA_AwB = 0
         t +=1  
         startTageAw += 1
-        #print  'bhageAw ', bhage_Aw, 'BA Aw ',  BA_AwB
+        print  'bhageAw ', bhage_Aw, 'BA Aw ',  BA_AwB
         
     return BA_AwB
 
@@ -933,7 +933,7 @@ def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_S
             BA_SwB = 0
         t +=1  
         startTageSw += 1
-        print 'bhageSw ',  bhage_Sw, 'BA Sw ', BA_SwB
+        #print 'bhageSw ',  bhage_Sw, 'BA Sw ', BA_SwB
     
     return BA_SwB
     
@@ -942,7 +942,7 @@ def BAfactorFinder_Pl (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_P
     simulation_choice = 'yes'
     f_Pl =1000
     #BA_PlB=BA_Pl0
-    acceptableDiff= 0.01
+    acceptableDiff= 0.1
     BADiffFlag = False
     iterCount = 0 
     f_PlP1 = 1.5* f_Pl
