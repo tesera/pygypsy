@@ -5,52 +5,31 @@ Created on Fri Apr 29 16:06:29 2016
 @author: juliannosambatti
 """
 
-import csv
 import pandas as pd
-import numpy 
-import matplotlib.pyplot as plt
 
-from asaCompileAgeGivenSpSiHt import computeTreeAge
 from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
-from asaCompileAgeGivenSpSiHt import ComputeGypsySiteIndex
 
 from GypsyDataPrep import dataPrepGypsy
-from GYPSYNonSpatial import densityNonSpatialAw
-from GYPSYNonSpatial import BasalAreaIncrementNonSpatialAw
+from GYPSYNonSpatial import (BasalAreaIncrementNonSpatialAw,
+                             BasalAreaIncrementNonSpatialSw,
+                             BasalAreaIncrementNonSpatialSb,
+                             BasalAreaIncrementNonSpatialPl,
+                             densityAw, densitySw,
+                             densitySb, densityPl,
+                             SCestimate, GrossTotalVolume,
+                             BAfactorFinder_Aw,
+                             BAfromZeroToDataAw,
+                             BAfactorFinder_Sb,
+                             BAfromZeroToDataSb,
+                             BAfactorFinder_Sw,
+                             BAfromZeroToDataSw,
+                             BAfactorFinder_Pl,
+                             BAfromZeroToDataPl,
+                             MerchantableVolumeAw,
+                             MerchantableVolumeSw,
+                             MerchantableVolumeSb,
+                             MerchantableVolumePl)
 
-from GYPSYNonSpatial import densityNonSpatialSw
-from GYPSYNonSpatial import BasalAreaIncrementNonSpatialSw
-
-from GYPSYNonSpatial import densityNonSpatialSb
-from GYPSYNonSpatial import BasalAreaIncrementNonSpatialSb
-
-from GYPSYNonSpatial import densityNonSpatialPl
-from GYPSYNonSpatial import BasalAreaIncrementNonSpatialPl
-
-from GYPSYNonSpatial import (densityAw, densitySw, densitySb, densityPl)
-
-from GYPSYNonSpatial import SCestimate
-
-from GYPSYNonSpatial import GrossTotalVolume
-
-from GYPSYNonSpatial import BAincIter_Aw
-from GYPSYNonSpatial import BAincIter_Sw
-from GYPSYNonSpatial import BAincIter_Sb
-from GYPSYNonSpatial import BAincIter_Pl
-
-from GYPSYNonSpatial import BAfactorFinder_Aw
-from GYPSYNonSpatial import BAfromZeroToDataAw
-from GYPSYNonSpatial import BAfactorFinder_Sb
-from GYPSYNonSpatial import BAfromZeroToDataSb
-from GYPSYNonSpatial import BAfactorFinder_Sw
-from GYPSYNonSpatial import BAfromZeroToDataSw
-from GYPSYNonSpatial import BAfactorFinder_Pl
-from GYPSYNonSpatial import BAfromZeroToDataPl
-
-from GYPSYNonSpatial import MerchantableVolumeAw
-from GYPSYNonSpatial import MerchantableVolumeSw
-from GYPSYNonSpatial import MerchantableVolumeSb
-from GYPSYNonSpatial import MerchantableVolumePl
 
 # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
 
@@ -86,34 +65,36 @@ fplotSim = dataPrepGypsy(data1)[0]
 
 spList = dataPrepGypsy(data1)[1]
 
-#print fplotSim
-
-
 inputDF = pd.DataFrame (fplotSim)
+inputDF = inputDF.transpose()
 
 
+def simulate_forwards_df(plot_df):
+    """Run forwards simulation
 
-inputDF=inputDF.transpose()
+    Keyword Arguments:
+    plot_df -- pandas.DataFrame with plot data
 
-#print inputDF
-
+    Return:
+    !TODO!
+    """
 
 for plotID, row in inputDF.iterrows():
-          
-    
+
+
     SI_bh_Aw = inputDF.loc[plotID,'SI_Aw']
     SI_bh_Sw = inputDF.loc[plotID,'SI_Sw']
     SI_bh_Pl = inputDF.loc[plotID,'SI_Pl']
     SI_bh_Sb = inputDF.loc[plotID,'SI_Sb']
-    
+
     N_bh_AwT  = inputDF.loc[plotID,'N_Aw']
     N_bh_SwT  = inputDF.loc[plotID,'N_Sw']
     N_bh_PlT  = inputDF.loc[plotID,'N_Pl']
     N_bh_SbT  = inputDF.loc[plotID,'N_Sb']
-    
+
     #print N_bh_AwT, N_bh_SwT, N_bh_PlT, N_bh_SbT
-      
-    
+
+
     y2bh_Aw = inputDF.loc[plotID,'y2bh_Aw']
     y2bh_Sw = inputDF.loc[plotID,'y2bh_Sw']
     y2bh_Sb = inputDF.loc[plotID,'y2bh_Sb']
