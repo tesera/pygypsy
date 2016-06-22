@@ -35,8 +35,10 @@ from GYPSYNonSpatial import MerchantableVolumeSb
 from GYPSYNonSpatial import SCestimate
 
 
-
-data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands4.csv')
+# TODO: remove this; we should only read data from a separate script or in a test
+# or put 1 data variable at the top level of the package (in __init__.py) so it's used
+# in all modules
+# data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands4.csv')
 
 
 
