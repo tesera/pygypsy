@@ -195,7 +195,7 @@ for plotID, row in inputDF.iterrows():
     else:
         pass
         
-    print BA_Aw0, BA_AwT
+    #print BA_Aw0, BA_AwT
     
     SC_0 = SCestimate (N0_Aw, N0_Sb, N0_Sw, N0_Pl )
     SC_Aw0 = SC_0[0]

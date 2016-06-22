@@ -789,7 +789,6 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
             if bhage_Aw < 0:
                 pass
             if bhage_Aw > 0 :
-                print BA_AwB
                 SC_Aw = (SC_Aw ) * f_Aw
                 BAinc_Aw =  BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_Aw, BA_tempAw)
                 BA_tempAw = BA_tempAw + BAinc_Aw
@@ -862,8 +861,7 @@ def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_S
                 BA_SbB = BA_tempSb
                 if BA_SbB < 0:
                     BA_SbB = 0 
-                    
-                
+ 
             else:
                 BA_SbB=0
             
