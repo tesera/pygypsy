@@ -403,7 +403,7 @@ def SCestimate (N_Aw,  N_Sb, N_Sw, N_Pl):
         SC_Pl = N_Pl/N_total
     return SC_Aw, SC_Sw, SC_Sb, SC_Pl
 
-
+''' SC_Aw + SC_Sw + SC_Sb + SC_Pl ~1'''
 
     
   
@@ -416,8 +416,7 @@ def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage
         bhage_Aw = 0
         #raise ValueError ('bhage cannot be negative: %s' %bhage_Aw)
         
-    if BA_Aw< 0 :
-        
+    if BA_Aw< 0 :       
         BAinc_Aw=0
         #raise ValueError ('BA_Aw cannot be negative: %s' %BA_Aw)
         
@@ -505,8 +504,6 @@ def BAincIter_Aw(sp_Aw, BAinc_AwT, BA_AwT, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhag
         
         
 def BasalAreaIncrementNonSpatialSb (sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, BA_Sb):
-    
-    
     
     if N_bh_Sb==0:
         BAinc_Sb = 0
@@ -741,7 +738,8 @@ def BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bha
     return BA_Pl, BAinc_PltoT  
     
     
-    
+
+'''ADD MESSAGE TO SHOW INFO ABOUT WHERE AND HOW IT FAILED TO CONVERGE IN THE FILES BELOW'''
     
 def BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT, printWarnings = True):
     simulation_choice = 'yes'
@@ -791,11 +789,14 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
             if bhage_Aw < 0:
                 pass
             if bhage_Aw > 0 :
+                print BA_AwB
                 SC_Aw = (SC_Aw ) * f_Aw
                 BAinc_Aw =  BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_Aw, BA_tempAw)
                 BA_tempAw = BA_tempAw + BAinc_Aw
                 BA_AwB = BA_tempAw
-                print BA_AwB
+                if BA_AwB < 0:
+                    BA_AwB = 0 
+                    
             else:
                 BA_AwB=0
             
@@ -859,6 +860,9 @@ def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_S
                 BAinc_Sb = BasalAreaIncrementNonSpatialSb('Sb', SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_Sb, BA_tempSb)
                 BA_tempSb = BA_tempSb + BAinc_Sb
                 BA_SbB = BA_tempSb
+                if BA_SbB < 0:
+                    BA_SbB = 0 
+                    
                 
             else:
                 BA_SbB=0
@@ -925,6 +929,9 @@ def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_S
                BAinc_Sw = BasalAreaIncrementNonSpatialSw ('Sw', SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_tempSw)
                BA_tempSw = BA_tempSw + BAinc_Sw
                BA_SwB = BA_tempSw
+               if BA_SwB < 0:
+                    BA_SwB = 0 
+                    
             else:
                 BA_SwB=0
             
@@ -988,6 +995,9 @@ def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_P
                BAinc_Pl = f_Pl * BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_tempPl)
                BA_tempPl = BA_tempPl + BAinc_Pl
                BA_PlB = BA_tempPl
+               if BA_PlB < 0:
+                    BA_PlB = 0 
+                    
                #print BA_PlB, BAinc_Pl, f_Pl
             else:
                 BA_PlB=0

@@ -36,7 +36,7 @@ from GYPSYNonSpatial import SCestimate
 
 
 
-data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands2.csv')
+data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands4.csv')
 
 
 
@@ -366,6 +366,8 @@ def dataPrepGypsy (data):
         y2bh_Pl = fplot ['Pl']['tage'] - fplot ['Pl']['bhage']
         y2bh_Sb = fplot ['Sb']['tage'] - fplot ['Sb']['bhage']
         
+        '''y2bh CANNOT BE NEGATIVE'''        
+        
         tage_Aw = fplot ['Aw']['tage'] 
         tage_Sw = fplot ['Sw']['tage']
         tage_Pl = fplot ['Pl']['tage']
@@ -430,7 +432,8 @@ def dataPrepGypsy (data):
         
         '''treeHeight is the Top Height or Htop in the paper'''
         topHeight_Pl=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(sp_Pl[0],  si_Pl,  tage_Pl)
-        '''
+        print topHeight_Pl
+        
         print ' estimated Site Index for species Pl is:  ', si_Pl
         print ' estimated Top Height for species Pl is:  ', topHeight_Pl
         print ' estimated Total age for species Pl is:  ', tage_Pl
@@ -438,7 +441,7 @@ def dataPrepGypsy (data):
         print ' estimated Site Index BH for species Pl is:  ', SI_bh_Pl
         print ' estimated number of years until measuring BH becomes possible:  ', y2bh_Pl
         print '----------------------'
-        '''
+        
         #x_Sw=ComputeGypsySiteIndex(sp_Sw[0],  sp_Sw[1],  sp_Sw[2], sp_Sw[3])
         
         bhage_Sw=sp_Sw[3]
@@ -451,6 +454,7 @@ def dataPrepGypsy (data):
         
         '''treeHeight is the Top Height or Htop in the paper'''
         topHeight_Sw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(sp_Sw[0],  si_Sw,  tage_Sw)
+        print topHeight_Sw
         
         
         '''
@@ -508,6 +512,8 @@ def dataPrepGypsy (data):
         N0_Sb = densitySb (SDF_Sb0, 0, SI_bh_Sb)
         N0_Sw = densitySw (SDF_Sw0, SDF_Aw0, 0, SI_bh_Sw) 
         N0_Pl = densityPl (SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, 0, SI_bh_Pl)
+        
+        '''N0 CANNOT BE NEGATIVE'''
         
 
                
@@ -584,6 +590,19 @@ def dataPrepGypsy (data):
      
         
         '''
+        plotPrint = { 'PlotID': PlotID, 'SI_Aw': SI_Aw, 'SI_Sw': SI_Sw, 'SI_Pl': SI_Pl, 'SI_Sb': SI_Sb, 
+                      'N_Aw': N_Aw, 'N_Sw': N_Sw, 'N_Pl': N_Pl, 'N_Sb': N_Sb,
+                      'y2bh_Aw': y2bh_Aw, 'y2bh_Sw': y2bh_Sw, 'y2bh_Pl': y2bh_Pl, 'y2bh_Sb': y2bh_Sb,
+                      'tage_Aw': tage_Aw, 'tage_Sw': tage_Sw, 'tage_Pl': tage_Pl, 'tage_Sb': tage_Sb,
+                      'BA_Aw': BA_Aw, 'BA_Sw': BA_Sw, 'BA_Pl': BA_Pl, 'BA_Sb': BA_Sb,
+                      'BAinc_Aw': BAinc_Aw, 'BAinc_Sw': BAinc_Sw, 'BAinc_Pl': BAinc_Pl, 'BAinc_Sb': BAinc_Sb,
+                      'SDF_Aw': SDF_Aw0, 'SDF_Sw': SDF_Sw0, 'SDF_Pl': SDF_Pl0, 'SDF_Sb': SDF_Sb0, 
+                      'N0_Aw': N0_Aw, 'N0_Sb': N0_Sb, 'N0_Sw': N0_Sw, 'N0_Pl': N0_Pl, 
+                      'StumpDOB_Aw': StumpDOB_Aw, 'StumpDOB_Sb': StumpDOB_Sb, 'StumpDOB_Sw': StumpDOB_Sw, 'StumpDOB_Pl': StumpDOB_Pl,
+                      'StumpHeight_Aw': StumpHeight_Aw, 'StumpHeight_Sb': StumpHeight_Sb, 'StumpHeight_Sw': StumpHeight_Sw, 'StumpHeight_Pl': StumpHeight_Pl,
+                      'TopDib_Aw': TopDib_Aw, 'TopDib_Sb': TopDib_Sb, 'TopDib_Sw': TopDib_Sw, 'TopDib_Pl': TopDib_Pl,
+                      'topHeight_Aw': topHeight_Aw, 'topHeight_Sw': topHeight_Sw, 'topHeight_Sb': topHeight_Sb, 'topHeight_Pl': topHeight_Pl
+                      }        
         
         plotDict [PlotID]= { 'PlotID': PlotID, 'SI_Aw': SI_Aw, 'SI_Sw': SI_Sw, 'SI_Pl': SI_Pl, 'SI_Sb': SI_Sb, 
                       'N_Aw': N_Aw, 'N_Sw': N_Sw, 'N_Pl': N_Pl, 'N_Sb': N_Sb,
@@ -598,7 +617,7 @@ def dataPrepGypsy (data):
                       'TopDib_Aw': TopDib_Aw, 'TopDib_Sb': TopDib_Sb, 'TopDib_Sw': TopDib_Sw, 'TopDib_Pl': TopDib_Pl,
                       'topHeight_Aw': topHeight_Aw, 'topHeight_Sw': topHeight_Sw, 'topHeight_Sb': topHeight_Sb, 'topHeight_Pl': topHeight_Pl
                       }
-        print plotDict
+        #print plotDict
                       
         # with open ("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv", 'a') as f:
         #     f_csv = csv.DictWriter(f, csv_columns)
@@ -607,8 +626,8 @@ def dataPrepGypsy (data):
         '''
         writeheader = True if i==0 else False
         mode = 'a' if i > 0 else 'w'
-        plotDF = pd.DataFrame(plotDict, index = [PlotID])
-        plotDF.to_csv("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv", mode=mode, header = writeheader)
+        plotPrint = pd.DataFrame(plotPrint, index = [PlotID])
+        plotPrint.to_csv("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv", mode=mode, header = writeheader)
         
         '''
         # make sure that column names aren't written each time
