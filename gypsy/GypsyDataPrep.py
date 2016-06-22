@@ -40,6 +40,10 @@ data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands4.csv'
 
 
 
+# TODO: replace acronyms with something more verbose
+# TODO: use pure functions or class instances to avoid mutating global state
+# TODO: formal docstrings so we can generate nice documentation
+# TODO: more subroutines and wrapper functions for easier readability
 
 #print data
 
