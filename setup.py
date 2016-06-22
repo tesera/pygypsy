@@ -23,7 +23,9 @@ setup(name='gypsy',
           'gypsy': ['data/*'],
       },
       install_requires=[
-          'click==6.6'
+          'click==6.6',
+          'pandas==0.18.1',
+          'scipy==0.17.1',
       ],
       extras_require={
           'test': ['pytest==2.9.1'],
