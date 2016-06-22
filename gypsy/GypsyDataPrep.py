@@ -592,9 +592,9 @@ def dataPrepGypsy (data):
         MVol_Sw = MerchantableVolumeSw(N_bh_Sw, BA_Sw, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw)
         
         MVol_Pl = MerchantableVolumePl(N_bh_Pl, BA_Pl, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl)
-            
-     
-        
+
+
+
         '''
         plotPrint = { 'PlotID': PlotID, 'SI_Aw': SI_Aw, 'SI_Sw': SI_Sw, 'SI_Pl': SI_Pl, 'SI_Sb': SI_Sb, 
                       'N_Aw': N_Aw, 'N_Sw': N_Sw, 'N_Pl': N_Pl, 'N_Sb': N_Sb,
@@ -608,9 +608,9 @@ def dataPrepGypsy (data):
                       'StumpHeight_Aw': StumpHeight_Aw, 'StumpHeight_Sb': StumpHeight_Sb, 'StumpHeight_Sw': StumpHeight_Sw, 'StumpHeight_Pl': StumpHeight_Pl,
                       'TopDib_Aw': TopDib_Aw, 'TopDib_Sb': TopDib_Sb, 'TopDib_Sw': TopDib_Sw, 'TopDib_Pl': TopDib_Pl,
                       'topHeight_Aw': topHeight_Aw, 'topHeight_Sw': topHeight_Sw, 'topHeight_Sb': topHeight_Sb, 'topHeight_Pl': topHeight_Pl
-                      }        
-        
-        plotDict [PlotID]= { 'PlotID': PlotID, 'SI_Aw': SI_Aw, 'SI_Sw': SI_Sw, 'SI_Pl': SI_Pl, 'SI_Sb': SI_Sb, 
+                      }
+
+        plotDict [PlotID]= { 'PlotID': PlotID, 'SI_Aw': SI_Aw, 'SI_Sw': SI_Sw, 'SI_Pl': SI_Pl, 'SI_Sb': SI_Sb,
                       'N_Aw': N_Aw, 'N_Sw': N_Sw, 'N_Pl': N_Pl, 'N_Sb': N_Sb,
                       'y2bh_Aw': y2bh_Aw, 'y2bh_Sw': y2bh_Sw, 'y2bh_Pl': y2bh_Pl, 'y2bh_Sb': y2bh_Sb,
                       'tage_Aw': tage_Aw, 'tage_Sw': tage_Sw, 'tage_Pl': tage_Pl, 'tage_Sb': tage_Sb,
@@ -624,7 +624,7 @@ def dataPrepGypsy (data):
                       'topHeight_Aw': topHeight_Aw, 'topHeight_Sw': topHeight_Sw, 'topHeight_Sb': topHeight_Sb, 'topHeight_Pl': topHeight_Pl
                       }
         #print plotDict
-                      
+
         # with open ("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv", 'a') as f:
         #     f_csv = csv.DictWriter(f, csv_columns)
         #     f_csv.writeheader()
@@ -634,7 +634,7 @@ def dataPrepGypsy (data):
         mode = 'a' if i > 0 else 'w'
         plotPrint = pd.DataFrame(plotPrint, index = [PlotID])
         plotPrint.to_csv("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv", mode=mode, header = writeheader)
-        
+
         '''
         # make sure that column names aren't written each time
 
@@ -643,12 +643,7 @@ def dataPrepGypsy (data):
 # plotDF.to_csv("/Users/juliannosambatti/Projects/Gipsy/testData/testOutput.csv")
 
 
-    
-       
-      
-    return plotDict, spList
-    
-    
-print dataPrepGypsy (data)
 
-    
+
+
+    return plotDict, spList
