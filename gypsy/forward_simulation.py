@@ -57,6 +57,31 @@ def BA_zeroPl (BA_Pl0, BA_PlT, DB_BhagePl, N0_Pl):
         BA_Pl0 = N0_Pl * 3.14* (DB_BhagePl/2.0)**2
     return BA_Pl0
 
+def get_factors_for_all_species(**kwargs):
+        pass
+
+        f_Sb = 0
+        f_Aw = 0
+        f_Sw = 0
+        f_Pl = 0
+        if N0_Aw > 0:
+            f_Aw = BAfactorFinder_Aw (**kwargs)
+
+        if N0_Sb > 0:
+            f_Sb = BAfactorFinder_Sb (**kwargs)
+
+        if N0_Sw > 0:
+            f_Sw = BAfactorFinder_Sw (**kwargs)
+
+        if N0_Sw > 0:
+            f_Pl = BAfactorFinder_Pl (**kwargs)
+
+        #print startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, BA_Sw0, f_Sw
+        return {'f_Aw':f_Aw,
+                'f_Sb':f_Sb,
+                'f_Sw':f_Sw,
+                'f_Pl':f_Pl,
+        }
 
 def simulate_forwards_df(plot_df, simulation_choice='no'):
     """Run forwards simulation
@@ -220,31 +245,18 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
         '''estimating correction factor to fit BA at t0 and BA at t and choosing whether simulating with multiplication factor
            or starting at t recalculating the densities and SC'''
 
-        if N0_Aw > 0:
-            f_Aw = BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT,  printWarnings = True)
-        else:
-            f_Aw = 0
-        #print 'f_Aw =  ', f_Aw
+species_factors = get_factors_for_all_species(
+        startTage
+        startTagePl=startTagePl,
+        y2bh_Pl=,
+        SC_Pl=,
+        SI_bh_Pl=,
+        # ... and so on
+        printWarnings=True
+)
 
-        if N0_Sb > 0:
-            f_Sb = BAfactorFinder_Sb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, BA_SbT, printWarnings = True)
-        else:
-            f_Sb = 0
-        #print 'f_Sb =  ', f_Sb
+f_aw = species_factors['f_aw']
 
-        if N0_Sw > 0:
-            f_Sw = BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw,  SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, BA_SwT, printWarnings = True)
-        else:
-            f_Sw = 0
-        #print 'f_Sw =  ', f_Sw
-
-        if N0_Sw > 0:
-            f_Pl = BAfactorFinder_Pl (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,  SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT, printWarnings = True)
-        else:
-            f_Pl = 0
-        #print 'f_Pl =  ', f_Pl
-
-        #print startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, BA_Sw0, f_Sw
 
         '''choosing no implies in simulating forward after time t using the same factor estimated and used to simulate until time t
            choosing yes, implies in simulating forward ignoring the factor estimated and used until time t and estimate, at every cycle, densities,
