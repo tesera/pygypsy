@@ -5,6 +5,11 @@ Created on Wed May 11 11:13:53 2016
 @author: juliannosambatti
 """
 import numpy
+
+import matplotlib
+import matplotlib.pyplot as plt
+import pylab
+
 from asaCompileAgeGivenSpSiHt import computeTreeAge
 from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
 from asaCompileAgeGivenSpSiHt import ComputeGypsySiteIndex
@@ -14,16 +19,89 @@ from GYPSYNonSpatial import densityNonSpatialSb
 from GYPSYNonSpatial import densityNonSpatialSw
 from GYPSYNonSpatial import densityNonSpatialPl
 
+from GYPSYNonSpatial import BAincIter_Aw
+from GYPSYNonSpatial import BasalAreaIncrementNonSpatialAw
+from GYPSYNonSpatial import BasalAreaIncrementNonSpatialSw
+from GYPSYNonSpatial import BasalAreaIncrementNonSpatialSb
+from GYPSYNonSpatial import BasalAreaIncrementNonSpatialPl
+
 from GYPSYNonSpatial import densityAw
+
+from GYPSYNonSpatial import BAfactorFinder_Aw
+from GYPSYNonSpatial import BAfromZeroToDataAw
+from GYPSYNonSpatial import BAfactorFinder_Sw
+from GYPSYNonSpatial import BAfromZeroToDataSw
+
+from GYPSYNonSpatial import BAfactorFinder_Sb
+from GYPSYNonSpatial import BAfromZeroToDataSb
+
+from GYPSYNonSpatial import BAfactorFinder_Pl
+from GYPSYNonSpatial import BAfromZeroToDataPl
+
+
 
 
 sp_Aw=['Aw', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 
+sp_Sb=['Sb', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
+
+
+
+
+
+#bhage_Aw = 96
+
+#BAincIter_Aw(sp_Aw, 0.05, 2.53, 37, 13.7, 100, 150, 96, printWarnings = True)
+#sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw
+'''
+bhage_Aw = numpy.linspace(1,250)
+y = BasalAreaIncrementNonSpatialAw('Aw', 1.0, 18, 112 ,124, 50, 30)
 
 '''
-N_Aw =  136.87753732
-SI_bh_Aw = 4.46875150435
-bhage_Aw = 427.214334144
+x = BAfactorFinder_Aw (45.0750948321, 41.0, 8.67714804702, 0.695823185569, 7.38789213445, 817.46652306, 964.419885613, 7.57069610206, 7.20622386, printWarnings = True)
+
+#y = BAfromZeroToDataAw (45.0750948321, 41.0, 8.67714804702, 0.695823185569, 7.38789213445, 817.46652306, 964.419885613, 7.57069610206, 0.3, simulation_choice)
+print x
+
+'''
+#pylab.plot(bhage_Aw,y)
+
+
+BA_Sb = numpy.linspace(1,50)
+y =  BasalAreaIncrementNonSpatialSb('Sb', 0.37, 8.07738602905, 112.98991932, 124.028786646, 126.963637205, BA_Sb)
+
+pylab.plot(BA_Sb,y)
+
+
+ #sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw
+
+
+#BA_Sw = numpy.linspace(1,250)
+#y = BasalAreaIncrementNonSpatialSw('Sw', 0.30 , 16 , 192.083099398 , 20 , BA_Sw, 200, 100.0, 200.0 , 5) 
+
+
+y = BAfromZeroToDataSw (55.264007984, 55.264007984, 14.3277198745, 0.0466314877955, 15, 47.7763759, 47.779382906, 0.0, 900.756683418, 0.0 ,0.375068155812, 0.33699327622, 'yes' )
+
+#x = BAfactorFinder_Sw (55.264007984, 55.264007984, 14.3277198745, 0.0466314877955, 15, 47.7763759, 47.779382906, 0.0, 900.756683418, 0.0,0.375068155812, 0.43940595, printWarnings = True)
+
+print y
+
+#pylab.plot(BA_Sw,y)
+
+
+
+
+#
+
+f_Pl = numpy.linspace(1,50)
+y = BAfromZeroToDataPl (135.882225194, 106.0, 13.1761233942, 0.611856198693, 7.9834026698, 192.0262491, 195.51460482, 123.019252926, 0.0, 0.0, 0.9, 50)
+
+#pylab.plot(f_Pl,y)
+
+#x = BAfactorFinder_Pl (135.882225194, 106.0, 13.1761233942, 0.611856198693, 7.9834026698, 192.0262491, 195.51460482, 123.019252926, 0.0, 0.0, 0.9, 65, printWarnings = True)
+
+print y
+
 
 
 
@@ -33,107 +111,11 @@ N_bh_Aw=y_Aw[0]
         
 print  'N_bh_Aw = ', N_bh_Aw
 
+
+
 x = numpy.arange(5.0, 200, 5.0)
-#print x
-
-N_Aw = 100.0
-#SDF_Aw0 = 10.0
-SI_bh_Aw = 4.2
-bhage_Aw = 35.0
-
-   
-SDF_Aw0 = N_Aw
-
-c0=0.717966
-c1=6.67468
-b3=(1+c0) * SDF_Aw0**((c1+numpy.log(SDF_Aw0))/SDF_Aw0)
-
-b2=(c0/4)*((SDF_Aw0**0.5)**(1/SDF_Aw0))
-
-b1=( (1/((SDF_Aw0/1000)**(0.5)) ) + (numpy.sqrt(1+numpy.sqrt(50/(numpy.sqrt(SDF_Aw0)*numpy.log(50+1))))) ) * numpy.log(50+1)
-k1=1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(50+1)))
-k2=1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(bhage_Aw)))
-
-#b1=( (1/((SDF_Aw0/1000)**(0.5)) ) + (numpy.sqrt(1+numpy.sqrt(bhage_Aw/(numpy.sqrt(SDF_Aw0)*numpy.log(bhage_Aw+1))))) ) * numpy.log(bhage_Aw+1)
-#k1=1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(bhage_Aw+1)))
-#k2=1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(bhage_Aw)))
-
-SDF_Aw1 = N_Aw * k2/k1
-
-
-N_Aw1 = SDF_Aw1 * k1/k2
-
-
-print SDF_Aw1, N_Aw1
-
-SDF_Aw0 = SDF_Aw1
-
-b3=(1+c0) * SDF_Aw0**((c1+numpy.log(SDF_Aw0))/SDF_Aw0)
-
-b2=(c0/4)*((SDF_Aw0**0.5)**(1/SDF_Aw0))
-
-b1=( (1/((SDF_Aw0/1000)**(0.5)) ) + (numpy.sqrt(1+numpy.sqrt(50/(numpy.sqrt(SDF_Aw0)*numpy.log(50+1))))) ) * numpy.log(50+1)
-k1=1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(50+1)))
-k2=1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(50)))
-
-
-
-N_50 = SDF_Aw0 * k1/k2
-
-print N_50 
-
-SDF_Aw0 = 37.0
-
-c0=0.717966
-c1=6.67468
-b3=(1+c0) * SDF_Aw0**((c1+numpy.log(SDF_Aw0))/SDF_Aw0)
-
-b2=(c0/4)*((SDF_Aw0**0.5)**(1/SDF_Aw0))
-
-b1=( (1/((SDF_Aw0/1000)**(0.5)) ) + (numpy.sqrt(1+numpy.sqrt(50/(numpy.sqrt(SDF_Aw0)*numpy.log(50+1))))) ) * numpy.log(50+1)
-k1=1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(50+1)))
-k2=1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(bhage_Aw)))
-
-
-
-N_20 = SDF_Aw0 * k1/k2
-
-print N_20 
-
-'''
-
-from scipy.optimize import fmin
-
-N_Aw = 100.0
-#SDF_Aw0 = 10.0
-SI_bh_Aw = 4.2
-bhage_Aw = 35.0
-
-y_Aw = densityAw  (69.0, bhage_Aw, SI_bh_Aw)
-
-
-x0 = [200.0]
-
-#print y_Aw
-
-
-
-optimize = fmin (densityAw, x0, args = (bhage_Aw, SI_bh_Aw))
-
-'''
-
-print densityAw  (N, bhage_Aw, SI_bh_Aw)
-
-for i in x:
-    N_Aw = 136
-    #SDF_Aw0 = 10.0
-    SI_bh_Aw = 4.2
-    bhage_Aw = 21
+print x
     
-    y_Aw=densityAw  (i, bhage_Aw, SI_bh_Aw)
-    print i, y_Aw
-    
-       
 
 N_Sb =  136.87753732
 SI_bh_Sb = 7.36406861253
@@ -143,8 +125,8 @@ y_Sb=densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb)
 SDF_Sb0 = y_Sb[1]
 N_bh_Sb=y_Sb[0]
 
-#print  'N_bh_Sb = ', N_bh_Sb
-#print 'SDF_Sb =  ', SDF_Sb0
+print  'N_bh_Sb = ', N_bh_Sb
+print 'SDF_Sb =  ', SDF_Sb0
 
 
 N_Sw =  51.919065879999998
@@ -178,4 +160,4 @@ x_Pl = densityPl  (SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl , SI_bh_Pl)
 
 Age_Aw = computeTreeAge(siSp='',treeHt = 20, treeSi=SI_bh_Aw, maxTreeAge = 450, rowIndex = 0, printWarnings = True)
 
-'''
+''' 

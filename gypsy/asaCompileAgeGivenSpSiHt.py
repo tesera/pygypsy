@@ -1646,3 +1646,81 @@ def ComputeAviSiteIndex(species = 'Aw', bhage = 1, treeHeight = 2):
                             - 0.102076*(newTreeHeight)*numpy.log(newTreeHeight)
     return siteIndex
 
+def ComputeGypsyBhageGivenSiteIndex(species = 'Aw', siteIndex = 15):
+    '''
+    Total age is unknown
+    Breast height age is known
+    Total height is known
+    
+    Equations and logic derived from:
+    Huang, S., Meng, S.X., and Yang, Y. 2009. A growth and yield projection system (GYPSY) for natural and
+    post-harvest stands in Alberta. Technical Report Pb. No.:T/216. Forest Management Branch, Alberta Sustainable
+    Resource Development, Edmonton, AB, CAN.  Appendix I. Pp. 21,22.
+
+    Error in white spruce equation discovered Dec 5 2014
+    
+    '''
+   
+   
+    if species == 'P' or \
+       species == 'Pl' or \
+       species == 'Pj' or \
+       species == 'Pa' or \
+       species == 'Pf':
+        b1 = 12.84571
+        b2 = -5.73936
+        b3 = -0.91312
+        b4 = 0.150668
+                         
+        k1 = numpy.exp(b1+b2*(numpy.log(50+1)**0.5) + b3*numpy.log(siteIndex)+b4*(50**0.5))
+        k2 = siteIndex**b3
+        k3 = ((siteIndex)*(1+k1)/1.3-1)/(numpy.exp(b1)*numpy.exp(b4*(50**0.5))*k2)
+        y2bh = numpy.exp((numpy.log(k3)/b2)**2)-1
+        
+                    
+    if species == 'Sw' or \
+       species == 'Se' or \
+       species == 'Fd' or \
+       species == 'Fb' or \
+       species == 'Fa':
+        b1 = 12.14943
+        b2 = -3.77051
+        b3 = -0.28534
+        b4 = 0.165483
+        
+        k1 = numpy.exp(b1+b2*(numpy.log(50**2+1)**0.5) + b3*(numpy.log(siteIndex)**2)+b4*(50**0.5))
+        k2 = siteIndex**(b3*numpy.log(siteIndex))
+        k3 = ((siteIndex)*(1+k1)/1.3-1)/(numpy.exp(b1)*numpy.exp(b4*(50**0.5))*k2)
+        y2bh = (numpy.exp((numpy.log(k3)/b2)**2)-1)**0.5
+                    
+    if species == 'Sb' or \
+       species == 'Lt' or \
+       species == 'La' or \
+       species == 'Lw' or \
+       species == 'L':
+        b1 = 14.56236
+        b2 = -6.04705
+        b3 = -1.53715
+        b4 = 0.240174
+        
+        k1 = numpy.exp(b1+b2*(numpy.log(50+1)**0.5) + b3*numpy.log(siteIndex)+b4*(50**0.5))
+        k2 = siteIndex**b3
+        k3 = ((siteIndex)*(1+k1)/1.3-1)/(numpy.exp(b1)*numpy.exp(b4*(50**0.5))*k2)
+        y2bh = numpy.exp((numpy.log(k3)/b2)**2)-1
+        
+                    
+    if species == 'Aw' or \
+       species == 'Bw' or \
+       species == 'Pb' or \
+       species == 'A' or \
+       species == 'H':
+        b1 = 9.908888
+        b2 = -3.92451
+        b3 = -0.32778
+        b4 = 0.134376
+        
+        k1 = numpy.exp(b1+b2*(numpy.log(50+1)**0.5) + b3*(numpy.log(siteIndex)**2)+b4*(50**0.5))
+        k2 = siteIndex**(b3*numpy.log(siteIndex))
+        k3 = ((siteIndex)*(1+k1)/1.3-1)/(numpy.exp(b1)*numpy.exp(b4*(50**0.5))*k2)
+        y2bh = numpy.exp((numpy.log(k3)/b2)**2)-1
+    return y2bh
