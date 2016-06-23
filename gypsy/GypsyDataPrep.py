@@ -574,7 +574,7 @@ def dataPrepGypsy (data):
         
         '''estimating sp-specific gross total volume 
         
-        Tvol = GrossTotalVolume( BA_Aw, BA_Sb, BA_Sw, BA_Pl, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl)
+        Tvol = GrossTotalVolume( BA_Aw, BA_Sb, BA_Sw, BA_Pl,! topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl)
 
         Tvol_Aw = Tvol[0]
         Tvol_Sb = Tvol[1]
