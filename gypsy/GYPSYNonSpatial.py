@@ -1121,10 +1121,7 @@ def MerchantableVolumeAw(N_bh_Aw, BA_Aw, topHeight_Aw, StumpDOB_Aw, StumpHeight_
     return MVol_Aw
     
 
-    
-
-   
-   
+  
 
 def MerchantableVolumeSb(N_bh_Sb, BA_Sb, topHeight_Sb, StumpDOB_Sb, StumpHeight_Sb , TopDib_Sb, Tvol_Sb):   
     if N_bh_Sb >0:
