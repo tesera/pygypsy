@@ -812,7 +812,7 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
             BA_AwB = 0
         t +=1  
         startTageAw += 1
-        print  'bhageAw ', bhage_Aw, 'BA Aw ',  BA_AwB
+        #print  'bhageAw ', bhage_Aw, 'BA Aw ',  BA_AwB
         
     return BA_AwB
 
