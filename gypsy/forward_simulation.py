@@ -89,16 +89,16 @@ def get_factors_for_all_species(**kwargs):
         f_Aw = 0
         f_Sw = 0
         f_Pl = 0
-        if N0_Aw > 0:
+        if kwargs['N0_Aw'] > 0:
             f_Aw = BAfactorFinder_Aw (**kwargs)
 
-        if N0_Sb > 0:
+        if kwargs['N0_Sb'] > 0:
             f_Sb = BAfactorFinder_Sb (**kwargs)
 
-        if N0_Sw > 0:
+        if kwargs['N0_Sw'] > 0:
             f_Sw = BAfactorFinder_Sw (**kwargs)
 
-        if N0_Sw > 0:
+        if kwargs['N0_Sw'] > 0:
             f_Pl = BAfactorFinder_Pl (**kwargs)
 
         #print startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, BA_Sw0, f_Sw
