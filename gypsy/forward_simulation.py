@@ -359,7 +359,7 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
                 if BA_AwT < 0:
                     BA_AwT=0
                 topHeight_Aw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Aw',  SI_bh_Aw,  tage_AwF)
-                print  'bhage Aw ', bhage_AwF, 'BA Aw ', BA_AwT
+                #print  'bhage Aw ', bhage_AwF, 'BA Aw ', BA_AwT
 
             else:
                 BA_AwT = 0
@@ -415,5 +415,5 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
             startTageSwF += 1
             startTagePlF += 1
             startTageSbF += 1
-
+            
     return True
