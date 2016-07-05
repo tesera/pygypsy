@@ -5,6 +5,7 @@ Created on Wed Apr  6 08:20:38 2016
 @author: juliannosambatti
 """
 
+# TODO: make all factor find functions use kwargs in the manner of AW
 import numpy
 from asaCompileAgeGivenSpSiHt import ComputeGypsySiteIndex
 from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
@@ -473,7 +474,6 @@ def BAincIter_Aw(sp_Aw, BAinc_AwT, BA_AwT, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhag
     BA_Aw = BA_AwT - BAinc_AwT # BA_Aw = best estimate of BA  and BAinc_AwT best estimate of decrement to previous year , ie, at time T-1
     #print 'BA_AwT =', BA_AwT, 'BAinc_AwT = ', BAinc_AwT
     while BADiffFlag == False:
-        #import pdb; pdb.set_trace()
         BAinc_AwtoT =  BasalAreaIncrementNonSpatialAw (sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw) # based on best estimate of BA at time T-1
         
          
@@ -538,7 +538,6 @@ def BAincIter_Sb(sp_Sb, BAinc_SbT, BA_SbT, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhag
     BA_Sb = BA_SbT - BAinc_SbT # BA_Sb = best estimate of BA  and BAinc_AwT best estimate of decrement to previous year , ie, at time T-1
     
     while BADiffFlag == False:
-        #import pdb; pdb.set_trace()
         BAinc_SbtoT =  BasalAreaIncrementNonSpatialSb (sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, BA_Sb) # based on best estimate of BA at time T-1
         
          
@@ -622,7 +621,6 @@ def BAincIter_Sw(sp_Sw, BAinc_SwT, BA_SwT, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhag
     
     
     while BADiffFlag == False:
-        #import pdb; pdb.set_trace()
         BAinc_SwtoT =  BasalAreaIncrementNonSpatialSw (sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw) # based on best estimate of BA at time T-1
         
          
@@ -712,7 +710,6 @@ def BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bha
     BA_Pl = BA_PlT - BAinc_PlT # BA_Pl = best estimate of BA  and BAinc_AwT best estimate of decrement to previous year , ie, at time T-1
     
     while BADiffFlag == False:
-        #import pdb; pdb.set_trace()
         BAinc_PltoT =  BasalAreaIncrementNonSpatialPl (sp_Pl, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl) # based on best estimate of BA at time T-1
         
          
@@ -741,7 +738,18 @@ def BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bha
 
 '''ADD MESSAGE TO SHOW INFO ABOUT WHERE AND HOW IT FAILED TO CONVERGE IN THE FILES BELOW'''
     
-def BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT, printWarnings = True):
+def BAfactorFinder_Aw (**kwargs):
+    startTage = kwargs['startTage']
+    startTageAw = kwargs['startTageAw']
+    y2bh_Aw = kwargs['y2bh_Aw']
+    SC_Aw = kwargs['SC_Aw']
+    SI_bh_Aw = kwargs['SI_bh_Aw']
+    N_bh_AwT = kwargs['N_bh_AwT']
+    N0_Aw = kwargs['N0_Aw']
+    BA_Aw0 = kwargs['BA_Aw0']
+    BA_AwT = kwargs['BA_AwT']
+    printWarnings = False
+
     simulation_choice = 'yes'
     f_Aw =2.8
     f_AwP1 = 1.5* f_Aw
