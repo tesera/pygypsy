@@ -9,35 +9,33 @@ import csv
 import os
 import pandas as pd
 import numpy as np
-from asaCompileAgeGivenSpSiHt import computeTreeAge
-from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
-from asaCompileAgeGivenSpSiHt import ComputeGypsySiteIndex
+from asaCompileAgeGivenSpSiHt import (computeTreeAge, 
+                                      ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge, 
+                                      ComputeGypsySiteIndex)
 
-from GYPSYNonSpatial import densityNonSpatialAw
-from GYPSYNonSpatial import densityNonSpatialSb
-from GYPSYNonSpatial import densityNonSpatialSw
-from GYPSYNonSpatial import densityNonSpatialPl
-
-from GYPSYNonSpatial import (densityAw, densitySw, densitySb, densityPl)
-
-from GYPSYNonSpatial import BasalAreaIncrementNonSpatialAw
-from GYPSYNonSpatial import BasalAreaIncrementNonSpatialSw
-from GYPSYNonSpatial import BasalAreaIncrementNonSpatialPl
-from GYPSYNonSpatial import BasalAreaIncrementNonSpatialSb
-
-from GYPSYNonSpatial import GrossTotalVolume
-
-from GYPSYNonSpatial import MerchantableVolumeAw
-from GYPSYNonSpatial import MerchantableVolumeSw
-from GYPSYNonSpatial import MerchantableVolumePl
-from GYPSYNonSpatial import MerchantableVolumeSb
-
-from GYPSYNonSpatial import SCestimate
+from GYPSYNonSpatial import (densityNonSpatialAw,
+                             densityNonSpatialSb,
+                             densityNonSpatialSw,
+                             densityNonSpatialPl,
+                             densityAw, 
+                             densitySw, 
+                             densitySb, 
+                             densityPl,
+                             BasalAreaIncrementNonSpatialAw,
+                             BasalAreaIncrementNonSpatialSw,
+                             BasalAreaIncrementNonSpatialPl,
+                             BasalAreaIncrementNonSpatialSb,    
+                             GrossTotalVolume,
+                             MerchantableVolumeAw,
+                             MerchantableVolumeSw,
+                             MerchantableVolumePl,
+                             MerchantableVolumeSb,
+                             SCestimate)
 
 
 # TODO: remove this; we should only read data from a separate script or in a test
 # or put 1 data variable at the top level of the package (in __init__.py) so it's used
-# in all modules
+# in all modules 
 # data = pd.read_csv('/Users/juliannosambatti/Projects/Gipsy/testData/stands4.csv')
 
 

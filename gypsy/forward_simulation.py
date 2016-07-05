@@ -189,9 +189,6 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
         BA_Sb0 = N0_Sb * 3.14* (DB_BhageSb/2.0)**2
         BA_Pl0 = N0_Pl * 3.14* (DB_BhagePl/2.0)**2
 
-
-        
-
         BA0_lower_BAT_Aw (BA_Aw0, BA_AwT, DB_BhageAw, N0_Aw)
         BA0_lower_BAT_Sw (BA_Sw0, BA_SwT, DB_BhageSw, N0_Sw)
         BA0_lower_BAT_Sb (BA_Sb0, BA_SbT, DB_BhageSb, N0_Sb)
@@ -408,11 +405,8 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
 
 
             MVol_Aw = MerchantableVolumeAw(N_bh_AwT, BA_AwT, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw)
-
             MVol_Sb = MerchantableVolumeSb(N_bh_SbT, BA_SbT, topHeight_Sb, StumpDOB_Sb, StumpHeight_Sb , TopDib_Sb, Tvol_Sb)
-
             MVol_Sw = MerchantableVolumeSw(N_bh_SwT, BA_SwT, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw)
-
             MVol_Pl = MerchantableVolumePl(N_bh_PlT, BA_PlT, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl)
 
 
