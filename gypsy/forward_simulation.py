@@ -121,25 +121,25 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
     for plotID, row in inputDF.iterrows():
         # TODO: use row
         # SI_bh_Aw = row['SI_Aw']
-        SI_bh_Aw = inputDF.loc[plotID,'SI_Aw']
-        SI_bh_Sw = inputDF.loc[plotID,'SI_Sw']
-        SI_bh_Pl = inputDF.loc[plotID,'SI_Pl']
-        SI_bh_Sb = inputDF.loc[plotID,'SI_Sb']
+        SI_bh_Aw = row['SI_Aw']
+        SI_bh_Sw = row['SI_Sw']
+        SI_bh_Pl = row['SI_Pl']
+        SI_bh_Sb = row['SI_Sb']
 
-        N_bh_AwT  = inputDF.loc[plotID,'N_Aw']
-        N_bh_SwT  = inputDF.loc[plotID,'N_Sw']
-        N_bh_PlT  = inputDF.loc[plotID,'N_Pl']
-        N_bh_SbT  = inputDF.loc[plotID,'N_Sb']
+        N_bh_AwT  = row['N_Aw']
+        N_bh_SwT  = row['N_Sw']
+        N_bh_PlT  = row['N_Pl']
+        N_bh_SbT  = row['N_Sb']
 
-        y2bh_Aw = inputDF.loc[plotID,'y2bh_Aw']
-        y2bh_Sw = inputDF.loc[plotID,'y2bh_Sw']
-        y2bh_Sb = inputDF.loc[plotID,'y2bh_Sb']
-        y2bh_Pl = inputDF.loc[plotID,'y2bh_Pl']
+        y2bh_Aw = row['y2bh_Aw']
+        y2bh_Sw = row['y2bh_Sw']
+        y2bh_Sb = row['y2bh_Sb']
+        y2bh_Pl = row['y2bh_Pl']
 
-        tage_AwT  = inputDF.loc[plotID,'tage_Aw']
-        tage_SwT  = inputDF.loc[plotID,'tage_Sw']
-        tage_PlT  = inputDF.loc[plotID,'tage_Pl']
-        tage_SbT  = inputDF.loc[plotID,'tage_Sb']
+        tage_AwT  = row['tage_Aw']
+        tage_SwT  = row['tage_Sw']
+        tage_PlT  = row['tage_Pl']
+        tage_SbT  = row['tage_Sb']
 
         bhage_AwT = tage_AwT  - y2bh_Aw
         bhage_SwT = tage_SwT  - y2bh_Sw
@@ -147,30 +147,30 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
         bhage_SbT = tage_SbT  - y2bh_Sb
 
 
-        BA_AwT  = inputDF.loc[plotID,'BA_Aw']
-        BA_SwT  = inputDF.loc[plotID,'BA_Sw']
-        BA_PlT  = inputDF.loc[plotID,'BA_Pl']
-        BA_SbT  = inputDF.loc[plotID,'BA_Sb']
+        BA_AwT  = row['BA_Aw']
+        BA_SwT  = row['BA_Sw']
+        BA_PlT  = row['BA_Pl']
+        BA_SbT  = row['BA_Sb']
 
-        BAinc_AwT  = inputDF.loc[plotID,'BAinc_Aw']
-        BAinc_SwT  = inputDF.loc[plotID,'BAinc_Sw']
-        BAinc_PlT  = inputDF.loc[plotID,'BAinc_Pl']
-        BAinc_SbT  = inputDF.loc[plotID,'BAinc_Sb']
+        BAinc_AwT  = row['BAinc_Aw']
+        BAinc_SwT  = row['BAinc_Sw']
+        BAinc_PlT  = row['BAinc_Pl']
+        BAinc_SbT  = row['BAinc_Sb']
 
         BAinc_AwB = BAinc_AwT
         BAinc_SwB = BAinc_SwT
         BAinc_PlB = BAinc_PlT
         BAinc_SbB = BAinc_SbT
 
-        SDF_Aw0  = inputDF.loc[plotID,'SDF_Aw']
-        SDF_Sw0  = inputDF.loc[plotID,'SDF_Sw']
-        SDF_Pl0  = inputDF.loc[plotID,'SDF_Pl']
-        SDF_Sb0  = inputDF.loc[plotID,'SDF_Sb']
+        SDF_Aw0  = row['SDF_Aw']
+        SDF_Sw0  = row['SDF_Sw']
+        SDF_Pl0  = row['SDF_Pl']
+        SDF_Sb0  = row['SDF_Sb']
 
-        N0_Aw  = inputDF.loc[plotID,'N0_Aw']
-        N0_Sw  = inputDF.loc[plotID,'N0_Sw']
-        N0_Pl  = inputDF.loc[plotID,'N0_Pl']
-        N0_Sb  = inputDF.loc[plotID,'N0_Sb']
+        N0_Aw  = row['N0_Aw']
+        N0_Sw  = row['N0_Sw']
+        N0_Pl  = row['N0_Pl']
+        N0_Sb  = row['N0_Sb']
 
         SCT = SCestimate (N_bh_AwT,  N_bh_SbT, N_bh_SwT, N_bh_PlT)
 
@@ -206,21 +206,21 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
         SC_Pl = SC_Pl0
 
 
-        StumpDOB_Aw = inputDF.loc[plotID,'StumpDOB_Aw']
-        StumpHeight_Aw = inputDF.loc[plotID,'StumpHeight_Aw']
-        TopDib_Aw = inputDF.loc[plotID,'TopDib_Aw']
+        StumpDOB_Aw = row['StumpDOB_Aw']
+        StumpHeight_Aw = row['StumpHeight_Aw']
+        TopDib_Aw = row['TopDib_Aw']
 
-        StumpDOB_Sb = inputDF.loc[plotID,'StumpDOB_Sb']
-        StumpHeight_Sb = inputDF.loc[plotID,'StumpHeight_Sb']
-        TopDib_Sb = inputDF.loc[plotID,'TopDib_Sb']
+        StumpDOB_Sb = row['StumpDOB_Sb']
+        StumpHeight_Sb = row['StumpHeight_Sb']
+        TopDib_Sb = row['TopDib_Sb']
 
-        StumpDOB_Sw = inputDF.loc[plotID,'StumpDOB_Sw']
-        StumpHeight_Sw = inputDF.loc[plotID,'StumpHeight_Sw']
-        TopDib_Sw = inputDF.loc[plotID,'TopDib_Sw']
+        StumpDOB_Sw = row['StumpDOB_Sw']
+        StumpHeight_Sw = row['StumpHeight_Sw']
+        TopDib_Sw = row['TopDib_Sw']
 
-        StumpDOB_Pl = inputDF.loc[plotID,'StumpDOB_Pl']
-        StumpHeight_Pl  = inputDF.loc[plotID,'StumpHeight_Pl']
-        TopDib_Pl = inputDF.loc[plotID,'TopDib_Pl']
+        StumpDOB_Pl = row['StumpDOB_Pl']
+        StumpHeight_Pl  = row['StumpHeight_Pl']
+        TopDib_Pl = row['TopDib_Pl']
 
         #print N0_Aw, N0_Sw, N0_Pl, N0_Sb
 
@@ -304,12 +304,10 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
            SCs etc
         '''
                 
-        
         BA_0_to_data_Aw = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice)
         BA_0_to_data_Sb = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice)
         BA_0_to_data_Sw = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice)
         BA_0_to_data_Pl = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice)
-
 
         if simulation_choice == 'no':
             continue
@@ -415,5 +413,5 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
             startTageSwF += 1
             startTagePlF += 1
             startTageSbF += 1
-            
+
     return True
