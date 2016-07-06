@@ -817,7 +817,18 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
     return BA_AwB
 
 
-def BAfactorFinder_Sb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, BA_SbT, printWarnings = True):
+def BAfactorFinder_Sb (**kwargs):
+    startTage = kwargs['startTage']
+    startTageSb = kwargs['startTageSb']
+    y2bh_Sb = kwargs['y2bh_Sb'] 
+    SC_Sb = kwargs['SC_Sb']
+    SI_bh_Sb = kwargs['SI_bh_Sb']
+    N_bh_SbT = kwargs['N_bh_SbT']
+    N0_Sb = kwargs['N0_Sb']
+    BA_Sb0 = kwargs['BA_Sb0']
+    BA_SbT = kwargs['BA_SbT'] 
+    printWarnings = False
+    
     simulation_choice = 'yes'
     f_Sb =1.2
     f_SbP1 = 1.5* f_Sb
@@ -883,7 +894,21 @@ def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_S
     return BA_SbB
     
 
-def BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw,  SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, BA_SwT, printWarnings = True):
+def BAfactorFinder_Sw (**kwargs):
+    startTage = kwargs['startTage']
+    startTageSw = kwargs['startTageSw'] 
+    y2bh_Sw = kwargs['y2bh_Sw']  
+    SC_Sw = kwargs['SC_Sw'] 
+    SI_bh_Sw = kwargs['SI_bh_Sw'] 
+    N_bh_SwT = kwargs['N_bh_SwT'] 
+    N0_Sw = kwargs['N0_Sw']  
+    SDF_Aw0 = kwargs['SDF_Aw0'] 
+    SDF_Pl0 = kwargs['SDF_Pl0'] 
+    SDF_Sb0 = kwargs['SDF_Sb0'] 
+    BA_Sw0 = kwargs['BA_Sw0'] 
+    BA_SwT = kwargs['BA_SwT'] 
+    printWarnings = False
+    
     simulation_choice = 'yes'
     f_Sw =2.5
     BA_SwB=BA_Sw0
@@ -951,7 +976,21 @@ def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_S
     return BA_SwB
     
 
-def BAfactorFinder_Pl (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,  SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT, printWarnings = True):
+def BAfactorFinder_Pl (**kwargs):
+    startTage = kwargs['startTage']
+    startTagePl = kwargs['startTagePl'] 
+    y2bh_Pl = kwargs['y2bh_Pl']  
+    SC_Pl = kwargs['SC_Pl'] 
+    SI_bh_Pl = kwargs['SI_bh_Pl'] 
+    N_bh_PlT = kwargs['N_bh_PlT'] 
+    N0_Pl = kwargs['N0_Pl']  
+    SDF_Aw0 = kwargs['SDF_Aw0']
+    SDF_Sw0 = kwargs['SDF_Sw0'] 
+    SDF_Sb0 = kwargs['SDF_Sb0'] 
+    BA_Pl0 = kwargs['BA_Pl0'] 
+    BA_PlT = kwargs['BA_PlT'] 
+    printWarnings = False
+    
     simulation_choice = 'yes'
     f_Pl =1000
     #BA_PlB=BA_Pl0
