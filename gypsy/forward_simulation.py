@@ -251,7 +251,7 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
 
         '''estimating correction factor to fit BA at t0 and BA at t and choosing whether simulating with multiplication factor
            or starting at t recalculating the densities and SC'''
-
+        
         species_factors = get_factors_for_all_species(
                 startTage = startTage,
                 startTageAw = startTageAw, 
@@ -290,8 +290,10 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
                 SDF_Sw0 = SDF_Sw0,  
                 BA_Pl0 = BA_Pl0, 
                 BA_PlT = BA_PlT,
-                printWarnings=True
-                                                    )
+                printWarnings=True,
+                )
+        
+        output_DF = pd.DataFrame (columns=['BA_Aw', 'BA_Sw', 'BA_Sb', 'BA_Pl'])        
         
         f_Aw = species_factors['f_Aw']
         f_Sw = species_factors['f_Sw']
@@ -303,7 +305,7 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
            choosing yes, implies in simulating forward ignoring the factor estimated and used until time t and estimate, at every cycle, densities,
            SCs etc
         '''
-        output_DF = pd.DataFrame (columns=['BA_Aw', 'BA_Sw', 'BA_Sb', 'BA_Pl'])
+        
         
         BA_0_to_data_Aw = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice)
         BA_0_to_data_Sb = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice)
