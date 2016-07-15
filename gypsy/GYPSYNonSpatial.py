@@ -7,6 +7,7 @@ Created on Wed Apr  6 08:20:38 2016
 
 # TODO: make all factor find functions use kwargs in the manner of AW
 import numpy
+import pandas as pd
 from asaCompileAgeGivenSpSiHt import ComputeGypsySiteIndex
 from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
 
@@ -753,11 +754,11 @@ def BAfactorFinder_Aw (**kwargs):
     simulation_choice = 'yes'
     f_Aw =2.8
     f_AwP1 = 1.5* f_Aw
-    acceptableDiff= 0.1
+    acceptableDiff= 0.01
     BADiffFlag = False
     iterCount = 0 
     while BADiffFlag == False:
-        BA_AwB = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice)
+        BA_AwB = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice, simulation = True)[0]
         
         if abs(BA_AwT - BA_AwB) < acceptableDiff:
             BADiffFlag = True
@@ -782,12 +783,13 @@ def BAfactorFinder_Aw (**kwargs):
     return f_Aw
 
     
-def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice):
+def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice, simulation = True):
     if simulation_choice == 'yes':
         max_age = startTage
     elif simulation_choice == 'no':
         max_age = 250
-    
+    BA_Aw_DF =   pd.DataFrame (columns=['BA_Aw']) 
+
     t = 0
     BA_tempAw = BA_Aw0
     while t < max_age:
@@ -811,11 +813,13 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
         else:
             BA_tempAw = 0
             BA_AwB = 0
+        if simulation == False:
+            BA_Aw_DF = BA_Aw_DF.append ({'BA_Aw':BA_AwB}, ignore_index=True)
         t +=1  
         startTageAw += 1
         #print  'bhageAw ', bhage_Aw, 'BA Aw ',  BA_AwB
         
-    return BA_AwB
+    return BA_AwB, BA_Aw_DF
 
 
 def BAfactorFinder_Sb (**kwargs):
@@ -837,7 +841,7 @@ def BAfactorFinder_Sb (**kwargs):
     BADiffFlag = False
     iterCount = 0 
     while BADiffFlag == False:
-        BA_SbB = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice )
+        BA_SbB = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice, simulation = True )
         
         if abs(BA_SbT - BA_SbB) < acceptableDiff:
             BADiffFlag = True
@@ -860,12 +864,14 @@ def BAfactorFinder_Sb (**kwargs):
             return f_Sb, BA_SbB
     return f_Sb
 
-def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice):
+def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice, simulation = True):
     if simulation_choice == 'yes':
         max_age = startTage
     elif simulation_choice == 'no':
         max_age = 250
-    
+        
+    BA_Sb_DF = pd.DataFrame (columns=[ 'BA_Sb'])
+
     t = 0
     BA_tempSb = BA_Sb0
     while t < max_age:
@@ -889,11 +895,12 @@ def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_S
         else:
             BA_tempSb = 0
             BA_SbB = 0
-        #print BA_Aw0, BA_AwB, BA_tempAw
+        if simulation == False:
+            BA_Sb_DF = BA_Sb_DF.append ( {'BA_Sb': BA_SbB}, ignore_index=True)
         t +=1  
         startTageSb += 1
         #print  'bhageSb ', bhage_Sb, 'BA Sb',  BA_SbB
-    return BA_SbB
+    return BA_SbB, BA_Sb_DF
     
 
 def BAfactorFinder_Sw (**kwargs):
@@ -919,7 +926,7 @@ def BAfactorFinder_Sw (**kwargs):
     iterCount = 0 
     f_SwP1 = 1.5* f_Sw
     while BADiffFlag == False:
-        BA_SwB = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice)
+        BA_SwB = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice, simulation = True)
          
         if abs(BA_SwT - BA_SwB) < acceptableDiff:
             BADiffFlag = True
@@ -943,12 +950,13 @@ def BAfactorFinder_Sw (**kwargs):
     return f_Sw
     
 
-def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice):
+def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice, simulation = True):
     if simulation_choice == 'yes':
         max_age = startTage
     elif simulation_choice == 'no':
         max_age = 250
     
+    BA_Sw_DF =  pd.DataFrame (columns=[ 'BA_Sw'])
     t = 0
     BA_tempSw = BA_Sw0
     while t < max_age:
@@ -972,11 +980,14 @@ def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_S
         else:
             BA_tempSw = 0
             BA_SwB = 0
+
+        if simulation == False:
+            BA_Sw_DF = BA_Sw_DF.append ( {'BA_Sw': BA_SwB}, ignore_index=True)        
         t +=1  
         startTageSw += 1
         #print 'bhageSw ',  bhage_Sw, 'BA Sw ', BA_SwB
     
-    return BA_SwB
+    return BA_SwB, BA_Sw_DF
     
 
 def BAfactorFinder_Pl (**kwargs):
@@ -1002,7 +1013,7 @@ def BAfactorFinder_Pl (**kwargs):
     iterCount = 0 
     f_PlP1 = 1.5* f_Pl
     while BADiffFlag == False:
-        BA_PlB = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice)
+        BA_PlB = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice, simulation = True)
          
         if abs(BA_PlT - BA_PlB) < acceptableDiff:
             BADiffFlag = True
@@ -1024,12 +1035,13 @@ def BAfactorFinder_Pl (**kwargs):
             return f_Pl, BA_PlB
     return f_Pl
 
-def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice):
+def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice, simulation = True):
     if simulation_choice == 'yes':
         max_age = startTage
     elif simulation_choice == 'no':
         max_age = 250
-        
+    
+    BA_Pl_DF =  pd.DataFrame (columns=[ 'BA_Pl'])
     t = 0
     BA_tempPl = BA_Pl0
     while t < max_age:
@@ -1054,11 +1066,14 @@ def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_P
         else:
             BA_tempPl = 0
             BA_PlB = 0
+        
+        if simulation == False:
+            BA_Pl_DF = BA_Pl_DF.append ( {'BA_Pl': BA_PlB}, ignore_index=True)  
         t +=1  
         startTagePl += 1
         #print  'bhagePl ', bhage_Pl, 'BA Pl ', BA_PlB
     
-    return BA_PlB
+    return BA_PlB, BA_Pl_DF
     
     
     
@@ -1137,13 +1152,6 @@ Merchantable volume only new variables are the stump diameter outside bark, stum
 '''
 
 # to declare variable as double if necessary k_Sb= np.asarray(k_Sb, type = np.float64)
-
-
-
-
-
-
-
 
 
 def MerchantableVolumeAw(N_bh_Aw, BA_Aw, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw):

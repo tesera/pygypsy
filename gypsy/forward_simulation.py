@@ -108,7 +108,7 @@ def get_factors_for_all_species(**kwargs):
                 'f_Pl':f_Pl,
                             }
 
-def simulate_forwards_df(plot_df, simulation_choice='no'):
+def simulate_forwards_df(plot_df, simulation_choice='yes'):
     """Run forwards simulation
 
     Keyword Arguments:
@@ -307,12 +307,14 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
         '''
         
         
-        BA_0_to_data_Aw = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice)
-        BA_0_to_data_Sb = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice)
-        BA_0_to_data_Sw = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice)
-        BA_0_to_data_Pl = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice)
+        BA_0_to_data_Aw = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice, simulation = False)
+        BA_0_to_data_Sb = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice,  simulation = False)
+        BA_0_to_data_Sw = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice, simulation = False)
+        BA_0_to_data_Pl = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice, simulation = False)
         
-        output_DF = output_DF.append ({'BA_Aw':BA_0_to_data_Aw, 'BA_Sw':BA_0_to_data_Sw, 'BA_Sb':BA_0_to_data_Sb, 'BA_Pl':BA_0_to_data_Pl}, ignore_index=True) 
+        output_DF = pd.concat([BA_0_to_data_Aw[1], BA_0_to_data_Sb[1], BA_0_to_data_Sw[1], BA_0_to_data_Pl[1] ], axis=1)
+        
+        #output_DF = output_DF.append ({'BA_Aw':BA_0_to_data_Aw[0], 'BA_Sw':BA_0_to_data_Sw, 'BA_Sb':BA_0_to_data_Sb, 'BA_Pl':BA_0_to_data_Pl}, ignore_index=True) 
 
         if simulation_choice == 'no':
             continue
@@ -412,7 +414,7 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
             MVol_Sw = MerchantableVolumeSw(N_bh_SwT, BA_SwT, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw)
             MVol_Pl = MerchantableVolumePl(N_bh_PlT, BA_PlT, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl)
             
-            output_DF = output_DF.append({'BA_Aw':BA_AwT, 'BA_Sw':BA_SwT, 'BA_Sb':BA_SbT, 'BA_Pl':BA_PlT}, ignore_index=True)
+            output_DF = output_DF.append({ 'BA_Aw':BA_AwT, 'BA_Sw':BA_SwT, 'BA_Sb':BA_SbT, 'BA_Pl':BA_PlT}, ignore_index=True)
 
             t += 1
             startTageAwF += 1
