@@ -35,8 +35,8 @@ from GYPSYNonSpatial import BAfromZeroToDataSw
 from GYPSYNonSpatial import BAfactorFinder_Sb
 from GYPSYNonSpatial import BAfromZeroToDataSb
 
-from GYPSYNonSpatial import BAfactorFinder_Pl
-from GYPSYNonSpatial import BAfromZeroToDataPl
+from GYPSYNonSpatial import BAfactorFinder_Pl1
+from GYPSYNonSpatial import BAfromZeroToDataPl1
 
 
 
@@ -57,13 +57,11 @@ sp_Sb=['Sb', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 bhage_Aw = numpy.linspace(1,250)
 y = BasalAreaIncrementNonSpatialAw('Aw', 1.0, 18, 112 ,124, 50, 30)
 
-'''
 x = BAfactorFinder_Aw (45.0750948321, 41.0, 8.67714804702, 0.695823185569, 7.38789213445, 817.46652306, 964.419885613, 7.57069610206, 7.20622386, printWarnings = True)
 
 #y = BAfromZeroToDataAw (45.0750948321, 41.0, 8.67714804702, 0.695823185569, 7.38789213445, 817.46652306, 964.419885613, 7.57069610206, 0.3, simulation_choice)
 print x
 
-'''
 #pylab.plot(bhage_Aw,y)
 
 
@@ -91,17 +89,19 @@ print y
 
 
 
-#
+
 
 f_Pl = numpy.linspace(1,50)
-y = BAfromZeroToDataPl (135.882225194, 106.0, 13.1761233942, 0.611856198693, 7.9834026698, 192.0262491, 195.51460482, 123.019252926, 0.0, 0.0, 0.9, 50)
+
+'''
+#y = BAfromZeroToDataPl1 (37.59, 24, 14.42, 0.89, 6.38, 1294, 1322, 159, 0.0, 0.0, 10.38, 4.26)
 
 #pylab.plot(f_Pl,y)
 
-#x = BAfactorFinder_Pl (135.882225194, 106.0, 13.1761233942, 0.611856198693, 7.9834026698, 192.0262491, 195.51460482, 123.019252926, 0.0, 0.0, 0.9, 65, printWarnings = True)
+x = BAfactorFinder_Pl1 (37.59, 24, 14.42, 0.89, 6.38, 1294, 1322, 159, 0.0, 0.0, 10.38, 14.78, printWarnings = True)
 
-print y
-
+print x
+'''
 
 
 

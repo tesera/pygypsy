@@ -841,7 +841,7 @@ def BAfactorFinder_Sb (**kwargs):
     BADiffFlag = False
     iterCount = 0 
     while BADiffFlag == False:
-        BA_SbB = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice, simulation = True )
+        BA_SbB = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice, simulation = True )[0]
         
         if abs(BA_SbT - BA_SbB) < acceptableDiff:
             BADiffFlag = True
@@ -926,7 +926,7 @@ def BAfactorFinder_Sw (**kwargs):
     iterCount = 0 
     f_SwP1 = 1.5* f_Sw
     while BADiffFlag == False:
-        BA_SwB = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice, simulation = True)
+        BA_SwB = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice, simulation = True)[0]
          
         if abs(BA_SwT - BA_SwB) < acceptableDiff:
             BADiffFlag = True
@@ -988,7 +988,37 @@ def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_S
         #print 'bhageSw ',  bhage_Sw, 'BA Sw ', BA_SwB
     
     return BA_SwB, BA_Sw_DF
-    
+
+
+def BAfactorFinder_Pl1 (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,  SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT, printWarnings = True):
+    f_Pl =1000
+    #BA_PlB=BA_Pl0
+    acceptableDiff= 0.01
+    BADiffFlag = False
+    iterCount = 0 
+    f_PlP1 = 1.5* f_Pl
+    while BADiffFlag == False:
+        BA_PlB = BAfromZeroToDataPl1 (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl)
+         
+        if abs(BA_PlT - BA_PlB) < acceptableDiff:
+            BADiffFlag = True
+        else:
+            if (BA_PlT - BA_PlB) < 0 :
+                f_PlP1 = f_Pl
+                f_PlP = f_Pl  *  ( BA_PlT  / BA_PlB)
+                f_Pl = (f_PlP+f_Pl)/2             
+            elif (BA_PlT - BA_PlB) > 0 :
+                f_Pl = (f_Pl + f_PlP1)/2
+                #print f_Pl
+            print BA_PlB, f_Pl
+             
+        iterCount = iterCount + 1
+            
+        if iterCount == 150 and printWarnings == True:
+            print '\n GYPSYNonSpatial.BAfactorFinder_Pl1()'
+            print ' Slow convergence'
+            return f_Pl, BA_PlB
+    return f_Pl
 
 def BAfactorFinder_Pl (**kwargs):
     startTage = kwargs['startTage']
@@ -1006,24 +1036,25 @@ def BAfactorFinder_Pl (**kwargs):
     printWarnings = False
     
     simulation_choice = 'yes'
+    
     f_Pl =1000
     #BA_PlB=BA_Pl0
-    acceptableDiff= 0.1
+    acceptableDiff= 0.01
     BADiffFlag = False
     iterCount = 0 
     f_PlP1 = 1.5* f_Pl
     while BADiffFlag == False:
-        BA_PlB = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice, simulation = True)
-         
+        BA_PlB = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice, simulation = True)[0]
+
         if abs(BA_PlT - BA_PlB) < acceptableDiff:
             BADiffFlag = True
         else:
             if (BA_PlT - BA_PlB) < 0 :
                 f_PlP1 = f_Pl
                 f_PlP = f_Pl  *  ( BA_PlT  / BA_PlB)
-                f_Pl= (f_PlP+f_Pl)/2             
+                f_Pl = (f_PlP+f_Pl)/2             
             elif (BA_PlT - BA_PlB) > 0 :
-                f_Pl= (f_Pl + f_PlP1)/2
+                f_Pl = (f_Pl + f_PlP1)/2
                 #print f_Pl
             #print BA_PlB, f_Pl
              
@@ -1034,6 +1065,40 @@ def BAfactorFinder_Pl (**kwargs):
             print ' Slow convergence'
             return f_Pl, BA_PlB
     return f_Pl
+
+def BAfromZeroToDataPl1 (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl):
+
+    t = 0
+    BA_tempPl = BA_Pl0
+    while t < startTage:
+        tage_Pl = startTagePl - startTage  
+        bhage_Pl = tage_Pl - y2bh_Pl
+        if N0_Pl > 0:
+            if bhage_Pl < 0:
+                BA_PlB = 0
+                pass
+            if bhage_Pl > 0 :
+               #SC_Pl = SC_Pl * (f_Pl )
+               BAinc_Pl = f_Pl * BasalAreaIncrementNonSpatialPl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_tempPl)
+               BA_tempPl = BA_tempPl + BAinc_Pl
+               BA_PlB = BA_tempPl
+               if BA_PlB < 0:
+                    BA_PlB = 0 
+                    
+               #print BA_PlB, BAinc_Pl, f_Pl
+            else:
+                BA_PlB=0
+            
+        else:
+            BA_tempPl = 0
+            BA_PlB = 0
+ 
+        t +=1  
+        startTagePl += 1
+        print  'bhagePl ', bhage_Pl, 'BA Pl ', BA_PlB
+    
+    return BA_PlB
+    
 
 def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice, simulation = True):
     if simulation_choice == 'yes':
@@ -1053,7 +1118,7 @@ def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_P
                 pass
             if bhage_Pl > 0 :
                #SC_Pl = SC_Pl * (f_Pl )
-               BAinc_Pl = f_Pl * BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_tempPl)
+               BAinc_Pl = f_Pl * BasalAreaIncrementNonSpatialPl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_tempPl)
                BA_tempPl = BA_tempPl + BAinc_Pl
                BA_PlB = BA_tempPl
                if BA_PlB < 0:

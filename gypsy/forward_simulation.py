@@ -98,7 +98,7 @@ def get_factors_for_all_species(**kwargs):
         if kwargs['N0_Sw'] > 0:
             f_Sw = BAfactorFinder_Sw (**kwargs)
 
-        if kwargs['N0_Sw'] > 0:
+        if kwargs['N0_Pl'] > 0:
             f_Pl = BAfactorFinder_Pl (**kwargs)
 
         #print startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, BA_Sw0, f_Sw
@@ -108,7 +108,7 @@ def get_factors_for_all_species(**kwargs):
                 'f_Pl':f_Pl,
                             }
 
-def simulate_forwards_df(plot_df, simulation_choice='yes'):
+def simulate_forwards_df(plot_df, simulation_choice='no'):
     """Run forwards simulation
 
     Keyword Arguments:
@@ -305,7 +305,7 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
            choosing yes, implies in simulating forward ignoring the factor estimated and used until time t and estimate, at every cycle, densities,
            SCs etc
         '''
-        
+
         
         BA_0_to_data_Aw = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice, simulation = False)
         BA_0_to_data_Sb = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice,  simulation = False)
