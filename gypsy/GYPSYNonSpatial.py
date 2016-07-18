@@ -751,7 +751,6 @@ def BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bha
 '''ADD MESSAGE TO SHOW INFO ABOUT WHERE AND HOW IT FAILED TO CONVERGE IN THE FILES BELOW'''
     
 def BAfactorFinder_Aw (**kwargs):
-    logger.debug('Getting basal area factor for aspen')
     startTage = kwargs['startTage']
     startTageAw = kwargs['startTageAw']
     y2bh_Aw = kwargs['y2bh_Aw']
@@ -788,10 +787,14 @@ def BAfactorFinder_Aw (**kwargs):
         
         iterCount = iterCount + 1
             
-        if iterCount == 1500 and printWarnings == True:
-            print '\n GYPSYNonSpatial.BAfactorFinder_Aw()'
-            print ' Slow convergence'
-            return f_Aw, BA_AwB
+        if iterCount == 1500:
+            if printWarnings:
+                logging.warning(
+                    ('GYPSYNonSpatial.BAfactorFinder_Aw()'
+                     ' Slow convergence with Basal Area: %s'
+                     ' and factor: '), BA_AwB, f_aw
+                )
+            return f_aw
     return f_Aw
 
     
