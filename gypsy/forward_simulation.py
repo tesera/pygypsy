@@ -4,7 +4,7 @@ Created on Fri Apr 29 16:06:29 2016
 
 @author: juliannosambatti
 """
-
+import logging
 import pandas as pd
 import os
 
@@ -29,7 +29,7 @@ from GYPSYNonSpatial import (BasalAreaIncrementNonSpatialAw,
                              MerchantableVolumeSw,
                              MerchantableVolumeSb,
                              MerchantableVolumePl)
-
+logger = logging.getLogger(__name__)
 
 # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
 
@@ -83,7 +83,7 @@ def BA0_lower_BAT_Pl (BA_Pl0, BA_PlT, DB_BhagePl, N0_Pl):
 
 
 def get_factors_for_all_species(**kwargs):
-        pass
+        logger.debug('Getting factors for all species')
 
         f_Sb = 0
         f_Aw = 0
@@ -117,6 +117,7 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
     Return:
     !TODO!
     """
+    logger.debug('Starting forwards simulation')
     inputDF=plot_df
     for plotID, row in inputDF.iterrows():
         # TODO: use row
@@ -251,7 +252,6 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
 
         '''estimating correction factor to fit BA at t0 and BA at t and choosing whether simulating with multiplication factor
            or starting at t recalculating the densities and SC'''
-        
         species_factors = get_factors_for_all_species(
                 startTage = startTage,
                 startTageAw = startTageAw, 
@@ -306,7 +306,7 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
            SCs etc
         '''
 
-        
+        logger.debug('Getting basal area from time 0 to time of data')
         BA_0_to_data_Aw = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice, simulation = False)
         BA_0_to_data_Sb = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice,  simulation = False)
         BA_0_to_data_Sw = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice, simulation = False)
@@ -321,8 +321,10 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
 
         '''simulating growth forwards in time starting from the time at which data was taken '''
         t = startTage
+        logger.debug('Starting main simulation')
         while t < max_Age :
             '''Ages at time t + 1'''
+            logger.debug('Simulating year %d', time)
 
 
             tage_AwF = startTageAwF
