@@ -766,7 +766,7 @@ def BAfactorFinder_Aw (**kwargs):
     simulation_choice = 'yes'
     f_Aw =2.8
     f_AwP1 = 1.5* f_Aw
-    acceptableDiff= 0.01
+    acceptableDiff= 0.1
     BADiffFlag = False
     iterCount = 0 
     while BADiffFlag == False:
