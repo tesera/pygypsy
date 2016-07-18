@@ -22,11 +22,17 @@ from gypsy.GypsyDataPrep import dataPrepGypsy
     #assert simulate_forwards_df(inputDF, simulation_choice='no')
     #assert simulate_forwards_df(inputDF, simulation_choice='yes')
 
+test_files = os.listdir(os.path.join(DATA_DIR, 'forward_simulation_files'))
+test_files = [(item) for item in test_files]
 
-def test_compare_forward_simulation():
-    data_file_name = '508159.csv'
-    inputDF = pd.read_csv(os.path.join(DATA_DIR, data_file_name))
-    
+@pytest.mark.parametrize("test_file", test_files)
+def test_compare_forward_simulation(test_file):
+    data_file_name = test_file
+    inputDF = pd.read_csv(os.path.join(DATA_DIR, 'forward_simulation_files',
+                                       data_file_name))
+
     result = simulate_forwards_df(inputDF, simulation_choice='no')
     assert type(result) == pd.DataFrame
-    result.to_csv (os.path.join(DATA_DIR, 'output', 'comparisons.csv' ))
+
+    result.to_csv(os.path.join(DATA_DIR, 'output',
+                               'comparisons_{}'.format(test_file)))
