@@ -792,9 +792,9 @@ def BAfactorFinder_Aw (**kwargs):
                 logging.warning(
                     ('GYPSYNonSpatial.BAfactorFinder_Aw()'
                      ' Slow convergence with Basal Area: %s'
-                     ' and factor: '), BA_AwB, f_aw
+                     ' and factor: '), BA_AwB, f_Aw
                 )
-            return f_aw
+            return f_Aw
     return f_Aw
 
     
