@@ -788,12 +788,11 @@ def BAfactorFinder_Aw (**kwargs):
         iterCount = iterCount + 1
             
         if iterCount == 1500:
-            if printWarnings:
-                logging.warning(
-                    ('GYPSYNonSpatial.BAfactorFinder_Aw()'
-                     ' Slow convergence with Basal Area: %s'
-                     ' and factor: '), BA_AwB, f_Aw
-                )
+            logging.warning(
+                ('GYPSYNonSpatial.BAfactorFinder_Aw()'
+                 ' Slow convergence with Basal Area: %s'
+                 ' and factor:%s '), BA_AwB, f_Aw
+            )
             return f_Aw
     return f_Aw
 
@@ -1054,13 +1053,13 @@ def BAfactorFinder_Pl (**kwargs):
     SDF_Sb0 = kwargs['SDF_Sb0'] 
     BA_Pl0 = kwargs['BA_Pl0'] 
     BA_PlT = kwargs['BA_PlT'] 
-    printWarnings = False
+    printWarnings = True
     
     simulation_choice = 'yes'
     
     f_Pl =1000
     #BA_PlB=BA_Pl0
-    acceptableDiff= 0.01
+    acceptableDiff= 0.1
     BADiffFlag = False
     iterCount = 0 
     f_PlP1 = 1.5* f_Pl
@@ -1082,10 +1081,12 @@ def BAfactorFinder_Pl (**kwargs):
         iterCount = iterCount + 1
             
         if iterCount == 150:
-            if printWarnings:
-                print '\n GYPSYNonSpatial.BAfactorFinder_Pl()'
-                print ' Slow convergence'
-            return f_Pl, BA_PlB
+            logging.warning(
+                ('GYPSYNonSpatial.BAfactorFinder_Pl()'
+                 ' Slow convergence with Basal Area: %s'
+                 ' and factor:%s '), BA_PlB, f_Pl
+            )
+            return f_Pl
     return f_Pl
 
 def BAfromZeroToDataPl1 (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl):
