@@ -142,9 +142,10 @@ def densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings = True):
                            #print 'Sb', N_est_Sb, SDF_Sb0
                                               
                        iterCount = iterCount + 1
-                       if iterCount == 150 and printWarnings == True:
-                           print '\n GYPSYNonSpatial.densityNonSpatialSb()'
-                           print ' Slow convergence'
+                       if iterCount == 150:
+                           if printWarnings:
+                               print '\n GYPSYNonSpatial.densityNonSpatialSb()'
+                               print ' Slow convergence'
                            return N_est_Sb, SDF_Sb0
                            
                    
@@ -795,6 +796,7 @@ def BAfactorFinder_Aw (**kwargs):
 
     
 def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice, simulation = True):
+    logger.debug('getting basal area from time zero to time of data for aspen')
     if simulation_choice == 'yes':
         max_age = startTage
     elif simulation_choice == 'no':
