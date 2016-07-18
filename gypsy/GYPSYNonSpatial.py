@@ -6,6 +6,7 @@ Created on Wed Apr  6 08:20:38 2016
 """
 
 # TODO: make all factor find functions use kwargs in the manner of AW
+import logging
 import numpy
 import pandas as pd
 from asaCompileAgeGivenSpSiHt import ComputeGypsySiteIndex
@@ -13,6 +14,8 @@ from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTota
 
 from scipy.optimize import fmin
 
+
+logger = logging.getLogger(__name__)
 
 """
 estimating Sit, total age, and bhage using asaCompileAgeGivenSpSiHt functions
@@ -88,9 +91,10 @@ def densityNonSpatialAw (sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings = True):
                    #print 'Aw',  N_est_Aw, SDF_Aw0
                                       
                iterCount = iterCount + 1
-               if iterCount == 1500 and printWarnings == True:
-                   print '\n GYPSYNonSpatial.densityNonSpatialAw()'
-                   print ' Slow convergence'
+               if iterCount == 1500:
+                   if printWarnings:
+                       print '\n GYPSYNonSpatial.densityNonSpatialAw()'
+                       print ' Slow convergence'
                    return N_est_Aw, SDF_Aw0
  
                    
@@ -192,9 +196,10 @@ def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings =
                            #print 'Sw', N_est_Sw, SDF_Sw0
                            
                        iterCount = iterCount + 1
-                       if iterCount == 150 and printWarnings == True:
-                           print '\n GYPSYNonSpatial.densityNonSpatialSw()'
-                           print ' Slow convergence'
+                       if iterCount == 150:
+                           if printWarnings:
+                               print '\n GYPSYNonSpatial.densityNonSpatialSw()'
+                               print ' Slow convergence'
                            return N_est_Sw, SDF_Sw0
                        
                        
@@ -259,9 +264,10 @@ def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, N_P
                            #print 'Pl', N_est_Pl, SDF_Pl0
                            
                        iterCount = iterCount + 1
-                       if iterCount == 150 and printWarnings == True:
-                           print '\n GYPSYNonSpatial.densityNonSpatialSw()'
-                           print ' Slow convergence'
+                       if iterCount == 150:
+                           if printWarnings:
+                               print '\n GYPSYNonSpatial.densityNonSpatialSw()'
+                               print ' Slow convergence'
                            return N_est_Pl, SDF_Pl0
             
                    
@@ -494,9 +500,10 @@ def BAincIter_Aw(sp_Aw, BAinc_AwT, BA_AwT, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhag
            
         iterCount = iterCount + 1
             
-        if iterCount == 150 and printWarnings == True:
-            print '\n GYPSYNonSpatial.BAincIter_Aw()'
-            print ' Slow convergence'
+        if iterCount == 150:
+            if printWarnings:
+                print '\n GYPSYNonSpatial.BAincIter_Aw()'
+                print ' Slow convergence'
             return BA_Aw, BAinc_AwT
         
     return BA_Aw, BAinc_AwtoT
@@ -556,9 +563,10 @@ def BAincIter_Sb(sp_Sb, BAinc_SbT, BA_SbT, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhag
            
         iterCount = iterCount + 1
             
-        if iterCount == 150 and printWarnings == True:
-            print '\n GYPSYNonSpatial.BAincIter_Aw()'
-            print ' Slow convergence'
+        if iterCount == 150:
+            if printWarnings:
+                print '\n GYPSYNonSpatial.BAincIter_Aw()'
+                print ' Slow convergence'
             return BA_Sb, BAinc_SbT
         
     return BA_Sb, BAinc_SbtoT
@@ -640,9 +648,10 @@ def BAincIter_Sw(sp_Sw, BAinc_SwT, BA_SwT, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhag
         iterCount = iterCount + 1
         
                     
-        if iterCount == 150 and printWarnings == True:
-            print '\n GYPSYNonSpatial.BAincIter_Aw()'
-            print ' Slow convergence'
+        if iterCount == 150:
+            if printWarnings:
+                print '\n GYPSYNonSpatial.BAincIter_Aw()'
+                print ' Slow convergence'
             return BA_Sw, BAinc_SwT
     #print 'BA_SwT =', BA_SwT, 'BAinc_SwT = ', BAinc_SwT
     #print BAinc_SwT, BA_SwT, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0
@@ -728,9 +737,10 @@ def BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bha
            
         iterCount = iterCount + 1
             
-        if iterCount == 150 and printWarnings == True:
-            print '\n GYPSYNonSpatial.BAincIter_Aw()'
-            print ' Slow convergence'
+        if iterCount == 150:
+            if printWarnings:
+                print '\n GYPSYNonSpatial.BAincIter_Aw()'
+                print ' Slow convergence'
             return BA_Pl, BAinc_PlT
         
     return BA_Pl, BAinc_PltoT  
@@ -740,6 +750,7 @@ def BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bha
 '''ADD MESSAGE TO SHOW INFO ABOUT WHERE AND HOW IT FAILED TO CONVERGE IN THE FILES BELOW'''
     
 def BAfactorFinder_Aw (**kwargs):
+    logger.debug('Getting basal area factor for aspen')
     startTage = kwargs['startTage']
     startTageAw = kwargs['startTageAw']
     y2bh_Aw = kwargs['y2bh_Aw']
@@ -823,6 +834,7 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
 
 
 def BAfactorFinder_Sb (**kwargs):
+    logger.debug('Getting basal area factor for black spruce')
     startTage = kwargs['startTage']
     startTageSb = kwargs['startTageSb']
     y2bh_Sb = kwargs['y2bh_Sb'] 
@@ -858,9 +870,10 @@ def BAfactorFinder_Sb (**kwargs):
         
         iterCount = iterCount + 1
             
-        if iterCount == 1500 and printWarnings == True:
-            print '\n GYPSYNonSpatial.BAfactorFinder_Sb()'
-            print ' Slow convergence'
+        if iterCount == 1500:
+            if printWarnings:
+                print '\n GYPSYNonSpatial.BAfactorFinder_Sb()'
+                print ' Slow convergence'
             return f_Sb, BA_SbB
     return f_Sb
 
@@ -904,6 +917,7 @@ def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_S
     
 
 def BAfactorFinder_Sw (**kwargs):
+    logger.debug('Getting basal area factor for white spruce')
     startTage = kwargs['startTage']
     startTageSw = kwargs['startTageSw'] 
     y2bh_Sw = kwargs['y2bh_Sw']  
@@ -943,9 +957,10 @@ def BAfactorFinder_Sw (**kwargs):
              
         iterCount = iterCount + 1
             
-        if iterCount == 1500 and printWarnings == True:
-            print '\n GYPSYNonSpatial.BAfactorFinder_Sw()'
-            print ' Slow convergence'
+        if iterCount == 1500:
+            if printWarnings:
+                print '\n GYPSYNonSpatial.BAfactorFinder_Sw()'
+                print ' Slow convergence'
             return f_Sw, BA_SwB
     return f_Sw
     
@@ -1014,9 +1029,10 @@ def BAfactorFinder_Pl1 (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_
              
         iterCount = iterCount + 1
             
-        if iterCount == 150 and printWarnings == True:
-            print '\n GYPSYNonSpatial.BAfactorFinder_Pl1()'
-            print ' Slow convergence'
+        if iterCount == 150:
+            if printWarnings:
+                print '\n GYPSYNonSpatial.BAfactorFinder_Pl1()'
+                print ' Slow convergence'
             return f_Pl, BA_PlB
     return f_Pl
 
@@ -1060,9 +1076,10 @@ def BAfactorFinder_Pl (**kwargs):
              
         iterCount = iterCount + 1
             
-        if iterCount == 150 and printWarnings == True:
-            print '\n GYPSYNonSpatial.BAfactorFinder_Pl()'
-            print ' Slow convergence'
+        if iterCount == 150:
+            if printWarnings:
+                print '\n GYPSYNonSpatial.BAfactorFinder_Pl()'
+                print ' Slow convergence'
             return f_Pl, BA_PlB
     return f_Pl
 
