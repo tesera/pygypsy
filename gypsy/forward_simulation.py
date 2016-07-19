@@ -34,53 +34,60 @@ logger = logging.getLogger(__name__)
 # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
 
 def BA_zeroAw (BA_Aw0, BA_AwT, DB_BhageAw, N0_Aw):
-        while BA_Aw0 >BA_AwT:
-            DB_BhageAw = DB_BhageAw*0.95
-            BA_Aw0 = N0_Aw * 3.14* (DB_BhageAw/2.0)**2
-        return BA_Aw0
+    while BA_Aw0 >BA_AwT * 0.5:
+        DB_BhageAw = DB_BhageAw*0.95
+        BA_Aw0 = N0_Aw * 3.14* (DB_BhageAw/2.0)**2
+    return BA_Aw0
 
 def BA_zeroSw (BA_Sw0, BA_SwT, DB_BhageSw, N0_Sw):
-    while BA_Sw0 > BA_SwT:
+    while BA_Sw0 > BA_SwT * 0.5:
         DB_BhageSw = DB_BhageSw*0.95
         BA_Sw0 = N0_Sw * 3.14* (DB_BhageSw/2.0)**2
     return BA_Sw0
 
 def BA_zeroSb (BA_Sb0, BA_SbT, DB_BhageSb, N0_Sb):
-    while BA_Sb0 > BA_SbT:
+    while BA_Sb0 > BA_SbT * 0.5:
         DB_BhageSb = DB_BhageSb*0.95
         BA_Sb0 = N0_Sb * 3.14* (DB_BhageSb/2.0)**2
     return BA_Sb0
 
 def BA_zeroPl (BA_Pl0, BA_PlT, DB_BhagePl, N0_Pl):
-    while BA_Pl0 > BA_PlT:
+    while BA_Pl0 > BA_PlT * 0.5:
         DB_BhagePl = DB_BhagePl*0.95
         BA_Pl0 = N0_Pl * 3.14* (DB_BhagePl/2.0)**2
     return BA_Pl0
     
-def BA0_lower_BAT_Aw (BA_Aw0, BA_AwT, DB_BhageAw, N0_Aw):
+def BA0_lower_BAT_Aw (BA_AwT, DB_BhageAw, N0_Aw):
+    BA_Aw0 = N0_Aw * 3.14* (DB_BhageAw/2.0)**2
     if BA_Aw0 > BA_AwT:
             BA_Aw0 = BA_zeroAw (BA_Aw0, BA_AwT, DB_BhageAw, N0_Aw)
     else:
         pass
+    return BA_Aw0
     
-def BA0_lower_BAT_Sw (BA_Sw0, BA_SwT, DB_BhageSw, N0_Sw):
+def BA0_lower_BAT_Sw (BA_SwT, DB_BhageSw, N0_Sw):
+    BA_Sw0 = N0_Sw * 3.14* (DB_BhageSw/2.0)**2
     if BA_Sw0 > BA_SwT:
             BA_Sw0 = BA_zeroSw (BA_Sw0, BA_SwT, DB_BhageSw, N0_Sw)
     else:
         pass
+    return BA_Sw0
 
-def BA0_lower_BAT_Sb (BA_Sb0, BA_SbT, DB_BhageSb, N0_Sb):
+def BA0_lower_BAT_Sb (BA_SbT, DB_BhageSb, N0_Sb):
+    BA_Sb0 = N0_Sb * 3.14* (DB_BhageSb/2.0)**2
     if BA_Sb0 > BA_SbT:
             BA_Sb0 = BA_zeroSb (BA_Sb0, BA_SbT, DB_BhageSb, N0_Sb)
     else:
         pass
+    return BA_Sb0
 
-def BA0_lower_BAT_Pl (BA_Pl0, BA_PlT, DB_BhagePl, N0_Pl):
+def BA0_lower_BAT_Pl (BA_PlT, DB_BhagePl, N0_Pl):
+    BA_Pl0 = N0_Pl * 3.14* (DB_BhagePl/2.0)**2
     if BA_Pl0 > BA_PlT:
             BA_Pl0 = BA_zeroPl (BA_Pl0, BA_PlT, DB_BhagePl, N0_Pl)
     else:
         pass
-
+    return BA_Pl0
 
 def get_factors_for_all_species(**kwargs):
         logger.debug('Getting factors for all species')
@@ -185,15 +192,11 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
         DB_BhageSb = 0.1
         DB_BhagePl = 0.1
 
-        BA_Aw0 = N0_Aw * 3.14* (DB_BhageAw/2.0)**2
-        BA_Sw0 = N0_Sw * 3.14* (DB_BhageSw/2.0)**2
-        BA_Sb0 = N0_Sb * 3.14* (DB_BhageSb/2.0)**2
-        BA_Pl0 = N0_Pl * 3.14* (DB_BhagePl/2.0)**2
 
-        BA0_lower_BAT_Aw (BA_Aw0, BA_AwT, DB_BhageAw, N0_Aw)
-        BA0_lower_BAT_Sw (BA_Sw0, BA_SwT, DB_BhageSw, N0_Sw)
-        BA0_lower_BAT_Sb (BA_Sb0, BA_SbT, DB_BhageSb, N0_Sb)
-        BA0_lower_BAT_Pl (BA_Pl0, BA_PlT, DB_BhagePl, N0_Pl)
+        BA_Aw0 = BA0_lower_BAT_Aw (BA_AwT, DB_BhageAw, N0_Aw)
+        BA_Sw0 = BA0_lower_BAT_Sw (BA_SwT, DB_BhageSw, N0_Sw)
+        BA_Sb0 = BA0_lower_BAT_Sb (BA_SbT, DB_BhageSb, N0_Sb)
+        BA_Pl0 = BA0_lower_BAT_Pl (BA_PlT, DB_BhagePl, N0_Pl)
 
         SC_0 = SCestimate (N0_Aw, N0_Sb, N0_Sw, N0_Pl )
         SC_Aw0 = SC_0[0]
@@ -311,6 +314,8 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
         BA_0_to_data_Sb = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice,  simulation = False)
         BA_0_to_data_Sw = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice, simulation = False)
         BA_0_to_data_Pl = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice, simulation = False)
+        
+        print startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT, simulation_choice
         
         output_DF = pd.concat([BA_0_to_data_Aw[1], BA_0_to_data_Sb[1], BA_0_to_data_Sw[1], BA_0_to_data_Pl[1] ], axis=1)
         

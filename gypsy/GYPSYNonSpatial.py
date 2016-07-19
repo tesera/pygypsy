@@ -749,7 +749,44 @@ def BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bha
     
 
 '''ADD MESSAGE TO SHOW INFO ABOUT WHERE AND HOW IT FAILED TO CONVERGE IN THE FILES BELOW'''
-    
+
+def BAfactorFinder_Aw1 (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0,BA_AwT, printWarnings = True):
+
+    simulation_choice = 'yes'
+    f_Aw =2.8
+    f_AwP1 = 1.5* f_Aw
+    acceptableDiff= 0.1
+    BADiffFlag = False
+    iterCount = 0 
+    while BADiffFlag == False:
+        BA_AwB = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice, simulation = True)[0]
+        
+        if abs(BA_AwT - BA_AwB) < acceptableDiff:
+            BADiffFlag = True
+        else:
+            if (BA_AwT - BA_AwB) < 0 :
+                f_AwP1 = f_Aw
+                f_AwP = f_Aw  *  (1+(numpy.log10 (BA_AwT) - numpy.log10 (abs(BA_AwB)) )/ (100*numpy.log10 (abs(BA_AwB))) )
+                f_Aw= (f_AwP+f_Aw)/2             
+            elif (BA_AwT - BA_AwB) > 0 :
+                #f_AwN = f_Aw * (1+(numpy.log10 (BA_AwT) + numpy.log10(abs(BA_AwB)) )/ (100* numpy.log10 (abs(BA_AwB))) )
+                f_Aw= (f_Aw+f_AwP1)/2
+                #print f_Aw
+            
+        print BA_AwT, BA_AwB, f_Aw
+        
+        iterCount = iterCount + 1
+            
+        if iterCount == 1500:
+            logging.warning(
+                ('GYPSYNonSpatial.BAfactorFinder_Aw()'
+                 ' Slow convergence with Basal Area: %s'
+                 ' and factor:%s '), BA_AwB, f_Aw
+            )
+            return f_Aw
+    return f_Aw
+
+
 def BAfactorFinder_Aw (**kwargs):
     startTage = kwargs['startTage']
     startTageAw = kwargs['startTageAw']
@@ -853,7 +890,7 @@ def BAfactorFinder_Sb (**kwargs):
     simulation_choice = 'yes'
     f_Sb =1.2
     f_SbP1 = 1.5* f_Sb
-    acceptableDiff= 0.01
+    acceptableDiff= 0.1
     BADiffFlag = False
     iterCount = 0 
     while BADiffFlag == False:
