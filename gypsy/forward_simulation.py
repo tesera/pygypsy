@@ -330,7 +330,7 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
         logger.debug('Starting main simulation')
         while t < max_Age :
             '''Ages at time t + 1'''
-            logger.debug('Simulating year %d', time)
+            logger.debug('Simulating year %d', t)
 
 
             tage_AwF = startTageAwF
