@@ -749,7 +749,7 @@ def BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bha
     
 
 '''ADD MESSAGE TO SHOW INFO ABOUT WHERE AND HOW IT FAILED TO CONVERGE IN THE FILES BELOW'''
-
+# this code just below is to be use by the test_iter.py 
 def BAfactorFinder_Aw1 (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0,BA_AwT, printWarnings = True):
 
     simulation_choice = 'yes'
@@ -797,7 +797,7 @@ def BAfactorFinder_Aw (**kwargs):
     N0_Aw = kwargs['N0_Aw']
     BA_Aw0 = kwargs['BA_Aw0']
     BA_AwT = kwargs['BA_AwT']
-    printWarnings = False
+
 
     simulation_choice = 'yes'
     f_Aw =2.8
@@ -885,7 +885,7 @@ def BAfactorFinder_Sb (**kwargs):
     N0_Sb = kwargs['N0_Sb']
     BA_Sb0 = kwargs['BA_Sb0']
     BA_SbT = kwargs['BA_SbT'] 
-    printWarnings = False
+
     
     simulation_choice = 'yes'
     f_Sb =1.2
@@ -973,7 +973,7 @@ def BAfactorFinder_Sw (**kwargs):
     SDF_Sb0 = kwargs['SDF_Sb0'] 
     BA_Sw0 = kwargs['BA_Sw0'] 
     BA_SwT = kwargs['BA_SwT'] 
-    printWarnings = False
+
     
     simulation_choice = 'yes'
     f_Sw =2.5
@@ -1051,7 +1051,7 @@ def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_S
 
 
 def BAfactorFinder_Pl1 (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,  SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT, printWarnings = True):
-    f_Pl =1000
+    f_Pl =100
     #BA_PlB=BA_Pl0
     acceptableDiff= 0.01
     BADiffFlag = False
@@ -1070,7 +1070,7 @@ def BAfactorFinder_Pl1 (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_
             elif (BA_PlT - BA_PlB) > 0 :
                 f_Pl = (f_Pl + f_PlP1)/2
                 #print f_Pl
-            print BA_PlB, f_Pl
+            print BA_PlT,  BA_PlB, f_Pl
              
         iterCount = iterCount + 1
             
@@ -1096,11 +1096,11 @@ def BAfactorFinder_Pl (**kwargs):
     SDF_Sb0 = kwargs['SDF_Sb0'] 
     BA_Pl0 = kwargs['BA_Pl0'] 
     BA_PlT = kwargs['BA_PlT'] 
-    printWarnings = True
+
     
     simulation_choice = 'yes'
-    
-    f_Pl =1000
+    # the start guess is critical. If it is too large, it may crash before the simulation. 100 worked for a sample os stands. 1000 failed
+    f_Pl =100
     #BA_PlB=BA_Pl0
     acceptableDiff= 0.1
     BADiffFlag = False
@@ -1127,7 +1127,7 @@ def BAfactorFinder_Pl (**kwargs):
             logging.warning(
                 ('GYPSYNonSpatial.BAfactorFinder_Pl()'
                  ' Slow convergence with Basal Area: %s'
-                 ' and factor:%s '), BA_PlB, f_Pl
+                 ' and factor:%s '), BA_Pl0, BA_PlB, f_Pl
             )
             return f_Pl
     return f_Pl
@@ -1148,8 +1148,8 @@ def BAfromZeroToDataPl1 (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_
                BAinc_Pl = f_Pl * BasalAreaIncrementNonSpatialPl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_tempPl)
                BA_tempPl = BA_tempPl + BAinc_Pl
                BA_PlB = BA_tempPl
-               if BA_PlB < 0:
-                    BA_PlB = 0 
+#               if BA_PlB < 0:
+#                    BA_PlB = 0 
                     
                #print BA_PlB, BAinc_Pl, f_Pl
             else:
@@ -1161,7 +1161,7 @@ def BAfromZeroToDataPl1 (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_
  
         t +=1  
         startTagePl += 1
-        print  'bhagePl ', bhage_Pl, 'BA Pl ', BA_PlB
+        #print  'bhagePl ', bhage_Pl, 'BA Pl ', BA_PlB
     
     return BA_PlB
     
