@@ -31,7 +31,7 @@ def test_compare_forward_simulation(test_file):
     inputDF = pd.read_csv(os.path.join(DATA_DIR, 'forward_simulation_files',
                                        data_file_name))
 
-    result = simulate_forwards_df(inputDF, simulation_choice='no')
+    result = simulate_forwards_df(inputDF, simulation_choice='yes')
     assert type(result) == pd.DataFrame
 
     result.to_csv(os.path.join(DATA_DIR, 'output',
