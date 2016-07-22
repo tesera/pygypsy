@@ -1,10 +1,17 @@
 # gypsy
 
-TODO!
+TODO! - JS
 
 ## Installation
 
-Docker and (host machine) virtualenv installation are incompatible!
+The package should be installed using docker or virtualenv.
+
+If you will be contributing to the code, please carefully review the
+"Development" further below in this README.
+
+Docker and (host machine) virtualenv installation are incompatible! Packages
+installed in a docker virtualenvironment will probably not be compatible with
+your local system, and vice versa.
 
 ### Virtualenv
 ```
@@ -12,7 +19,7 @@ git clone git@github.com:tesera/gypsy.git
 cd gypsy
 virtualenv venv
 . venv/bin/activate
-pip install . # regular users
+pip install -e . # regular users
 ```
 
 ### Docker
@@ -49,19 +56,6 @@ False
 ```
 
 ## Development
-### dev.env
-
-A file, `dev.env` is required for some tasks
-
-It should have the following
-
-```
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-AWS_REGION=
-GITHUB_TOKEN=
-```
-
 ### docker-compose
 
 Several development tasks are defined in `docker-compose.yml`
@@ -99,8 +93,36 @@ Run the tests as follows
 docker-compose run test
 
 # or, if set up with virtualenv outside of container
-py.test tests/
+py.test -s -v tests/
 ```
+
+### Code Linting
+
+A linter [linter](https://en.wikipedia.org/wiki/Lint_%28software%29) is a
+program that checks code for errors.
+
+Linting is an effective way to improve code quality with little expenditure of
+effort on behalf of the developer.
+
+Make sure your contributions to gypsy meet common python conventions. This is
+enforced with a 'pre-commit hook'. When you commit, pylint will run and check
+that style is followed before you commit. If it does not pass linting, the
+commit will be rejected.
+
+For the pylint commit hook to run successfully, you will have to make sure some
+packages are installed and that the hook is in the git hooks directory as shown
+below:
+
+Install pylint and git-pylint-commit hooks globally
+
+    pip install pylint
+    pip install git-pylint-commit-hook==2.0.7
+
+Link the commit hook to where git expects it
+
+    ln -s "${PWD}/hooks/pre-commit.sh .git/hooks/pre-commit
+    chmod +x .git/hooks/pre-commit
+
 
 ### Documentation
 
