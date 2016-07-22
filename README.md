@@ -124,6 +124,11 @@ Link the commit hook to where git expects it
     ln -s "${PWD}/hooks/pre-commit.sh .git/hooks/pre-commit
     chmod +x .git/hooks/pre-commit
 
+Presently, the lint commit hook doesn't provide the lint report. You can run
+the linter manually to get the full report as follows
+
+    pylint gypsy/ tests/ setup.py              # output to console
+    pylint gypsy/ tests/ setup.py > report.txt # output to file
 
 ### Documentation
 
