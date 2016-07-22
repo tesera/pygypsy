@@ -99,7 +99,7 @@ py.test -s -v tests/
 ### Code Linting
 
 A linter [linter](https://en.wikipedia.org/wiki/Lint_%28software%29) is a
-program that checks code for errors.
+program that checks code for errors. They have many [benefits](https://raygun.com/blog/2015/07/using-linters-for-faster-safer-coding-with-less-javascript-errors/).
 
 Linting is an effective way to improve code quality with little expenditure of
 effort on behalf of the developer.
@@ -107,7 +107,8 @@ effort on behalf of the developer.
 Make sure your contributions to gypsy meet common python conventions. This is
 enforced with a 'pre-commit hook'. When you commit, pylint will run and check
 that style is followed before you commit. If it does not pass linting, the
-commit will be rejected.
+commit will be rejected. Familiarize with pylint
+[here](https://www.pylint.org/).
 
 For the pylint commit hook to run successfully, you will have to make sure some
 packages are installed and that the hook is in the git hooks directory as shown
