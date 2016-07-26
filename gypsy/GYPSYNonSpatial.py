@@ -797,6 +797,8 @@ def BAfactorFinder_Aw (**kwargs):
     N0_Aw = kwargs['N0_Aw']
     BA_Aw0 = kwargs['BA_Aw0']
     BA_AwT = kwargs['BA_AwT']
+    SDF_Aw0 = kwargs['SDF_Aw0']
+
 
 
     simulation_choice = 'yes'
@@ -806,7 +808,7 @@ def BAfactorFinder_Aw (**kwargs):
     BADiffFlag = False
     iterCount = 0 
     while BADiffFlag == False:
-        BA_AwB = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice, simulation = True)[0]
+        BA_AwB = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, SDF_Aw0, simulation_choice, simulation = True)[0]
         
         if abs(BA_AwT - BA_AwB) < acceptableDiff:
             BADiffFlag = True
@@ -834,7 +836,7 @@ def BAfactorFinder_Aw (**kwargs):
     return f_Aw
 
     
-def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice, simulation = True):
+def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, SDF_Aw0, simulation_choice, simulation = True):
     logger.debug('getting basal area from time zero to time of data for aspen')
     if simulation_choice == 'yes':
         max_age = startTage
@@ -847,6 +849,7 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
     while t < max_age:
         tage_Aw = startTageAw - startTage  
         bhage_Aw = tage_Aw - y2bh_Aw
+        N_bh_AwT = densityAw (SDF_Aw0, bhage_Aw, SI_bh_Aw)
         if N0_Aw > 0:
             if bhage_Aw < 0:
                 BA_AwB = 0 
@@ -858,6 +861,7 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
                 BA_AwB = BA_tempAw
                 if BA_AwB < 0:
                     BA_AwB = 0 
+                
                     
             else:
                 BA_AwB=0
