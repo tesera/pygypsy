@@ -834,7 +834,86 @@ def BAfactorFinder_Aw (**kwargs):
             )
             return f_Aw
     return f_Aw
+    
 
+def densities_and_SCs_to_250 (**kwargs):
+    startTage = kwargs['startTage']
+    startTageAw = kwargs['startTageAw']
+    y2bh_Aw = kwargs['y2bh_Aw']
+    startTageSw = kwargs['startTageSw']
+    y2bh_Sw = kwargs['y2bh_Sw']
+    startTageSb = kwargs['startTageSb']
+    y2bh_Sb = kwargs['y2bh_Sb']
+    startTagePl = kwargs['startTagePl']
+    y2bh_Pl = kwargs['y2bh_Pl']
+    SDF_Aw0 = kwargs['SDF_Aw0']
+    SDF_Pl0 = kwargs['SDF_Pl0']
+    SDF_Sb0 = kwargs['SDF_Sb0']
+    SI_bh_Aw = kwargs['SI_bh_Aw']
+    SI_bh_Sw = kwargs['SI_bh_Sw']
+    SI_bh_Sb = kwargs['SI_bh_Sb']
+    SI_bh_Pl = kwargs['SI_bh_Pl']
+    
+    densities_along_time = {'year': {'densityAw': 0, 'densitySw': 0, 'densitySb': 0, 'densityPl': 0, 'SC_AwF': 0, 'SC_SwF': 0, 'SC_SbF':0, 'SC_PlF': 0} }
+    startTageAwB = startTageAw
+    startTageSwB = startTageSw
+    startTagePlB = startTagePl
+    startTageSbB = startTageSb
+    
+    while t < 250:    
+        t = 1    
+        
+        tage_AwB = startTageAwB - startTage
+        tage_SwB = startTageSwB - startTage
+        tage_PlB = startTagePlB - startTage
+        tage_SbB = startTageSbB - startTage
+    
+    
+        bhage_AwB = tage_AwB - y2bh_Aw
+        bhage_SwB = tage_SwB - y2bh_Sw
+        bhage_PlB = tage_PlB - y2bh_Pl
+        bhage_SbB = tage_SbB - y2bh_Sb
+        
+        if bhage_AwB < 0:
+            N_bh_AwT = 0
+        else:
+            N_bh_AwT = densityAw (SDF_Aw0, bhage_AwB, SI_bh_Aw)
+        
+        if tage_SbB < 0:
+            N_bh_SbT = 0
+        else:
+            N_bh_SbT = densitySb (SDF_Sb0, tage_SbB, SI_bh_Sb)
+            
+        if tage_SwB < 0:
+            N_bh_SwT = 0
+        else:
+            N_bh_SwT = densitySw (SDF_Sw0, SDF_Aw0, tage_SwB, SI_bh_Sw)
+            
+        if tage_PlB < 0:
+            N_bh_PlT = 0
+        else:
+            N_bh_PlT = densityPl (SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_PlB, SI_bh_Pl)
+        
+        SC_F = SCestimate (N_bh_AwT,  N_bh_SbT, N_bh_SwT, N_bh_PlT)
+    
+        SC_AwF = SC_F[0]
+        SC_SwF = SC_F[1]
+        SC_SbF = SC_F[2]
+        SC_PlF = SC_F[3]
+        
+        # JUST NEED TO APPEND NEW DENSITIES SC AND YEAR TO THE DICTIONARY
+        densities_along_time =          
+        
+        t += 1
+        startTageAwB += 1
+        startTageSwB += 1
+        startTagePlB += 1
+        startTageSbB += 1
+        
+        return densities_along_time
+
+
+    
     
 def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, SDF_Aw0, simulation_choice, simulation = True):
     logger.debug('getting basal area from time zero to time of data for aspen')
@@ -843,6 +922,11 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
     elif simulation_choice == 'no':
         max_age = 250
     BA_Aw_DF =   pd.DataFrame (columns=['BA_Aw']) 
+    
+    #BIG PROBLEM - SC_AW MUST BE UPDATED AND SO THE SIMULATION HAS TO SIMULATE THE DENSITIES OF ALL SPECIES AND SIMULTANEOUSLY RECALCULATE THE SC AT EVERY TIME!!!!!
+    #FOR THAT I WILL NEED TO COUNT THE AGES OF ALL DIFFERENT SPECIES AT EVERY SIMULATION
+    
+    # create a dictionary containing year (plot) densities and SCs for each species
 
     t = 0
     BA_tempAw = BA_Aw0
@@ -850,6 +934,7 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
         tage_Aw = startTageAw - startTage  
         bhage_Aw = tage_Aw - y2bh_Aw
         N_bh_AwT = densityAw (SDF_Aw0, bhage_Aw, SI_bh_Aw)
+        #SC_Aw
         if N0_Aw > 0:
             if bhage_Aw < 0:
                 BA_AwB = 0 

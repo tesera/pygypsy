@@ -245,7 +245,7 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
 
         startTage = tageData[0]
 
-        startTage_forward = tageData[0] + 1
+        startTage_forward = tageData[0] - 1
 
 
         #print startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0
@@ -333,10 +333,10 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
             logger.debug('Simulating year %d', t)
 
 
-            tage_AwF = startTageAwF
-            tage_SwF = startTageSwF
-            tage_PlF = startTagePlF
-            tage_SbF = startTageSbF
+            tage_AwF = startTageAwF 
+            tage_SwF = startTageSwF 
+            tage_PlF = startTagePlF 
+            tage_SbF = startTageSbF 
 
 
             bhage_AwF = tage_AwF - y2bh_Aw
