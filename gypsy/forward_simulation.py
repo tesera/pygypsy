@@ -28,63 +28,62 @@ from GYPSYNonSpatial import (BasalAreaIncrementNonSpatialAw,
                              MerchantableVolumeAw,
                              MerchantableVolumeSw,
                              MerchantableVolumeSb,
-                             MerchantableVolumePl)
+                             MerchantableVolumePl,
+                             densities_and_SCs_to_250,
+                             BAfromZeroToDataAw_test,
+                             BAfactorFinder_Aw1)
 logger = logging.getLogger(__name__)
 
 # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
 
-def BA_zeroAw (BA_Aw0, BA_AwT, DB_BhageAw, N0_Aw):
-    while BA_Aw0 >BA_AwT * 0.5:
-        DB_BhageAw = DB_BhageAw*0.95
-        BA_Aw0 = N0_Aw * 3.14* (DB_BhageAw/2.0)**2
+def BA_zeroAw (BA_Aw0, BA_AwT):
+    while BA_Aw0 >BA_AwT * 0.5:     
+        BA_Aw0 = BA_Aw0 * 0.5
     return BA_Aw0
 
-def BA_zeroSw (BA_Sw0, BA_SwT, DB_BhageSw, N0_Sw):
+def BA_zeroSw (BA_Sw0, BA_SwT):
     while BA_Sw0 > BA_SwT * 0.5:
-        DB_BhageSw = DB_BhageSw*0.95
-        BA_Sw0 = N0_Sw * 3.14* (DB_BhageSw/2.0)**2
+        BA_Sw0 = BA_Sw0 * 0.5
     return BA_Sw0
 
-def BA_zeroSb (BA_Sb0, BA_SbT, DB_BhageSb, N0_Sb):
+def BA_zeroSb (BA_Sb0, BA_SbT):
     while BA_Sb0 > BA_SbT * 0.5:
-        DB_BhageSb = DB_BhageSb*0.95
-        BA_Sb0 = N0_Sb * 3.14* (DB_BhageSb/2.0)**2
+        BA_Sb0 = BA_Sb0 * 0.5
     return BA_Sb0
 
-def BA_zeroPl (BA_Pl0, BA_PlT, DB_BhagePl, N0_Pl):
+def BA_zeroPl (BA_Pl0, BA_PlT):
     while BA_Pl0 > BA_PlT * 0.5:
-        DB_BhagePl = DB_BhagePl*0.95
-        BA_Pl0 = N0_Pl * 3.14* (DB_BhagePl/2.0)**2
+        BA_Pl0 = BA_Pl0 * 0.5
     return BA_Pl0
     
-def BA0_lower_BAT_Aw (BA_AwT, DB_BhageAw, N0_Aw):
-    BA_Aw0 = N0_Aw * 3.14* (DB_BhageAw/2.0)**2
+def BA0_lower_BAT_Aw (BA_AwT):
+    BA_Aw0 = 0.001
     if BA_Aw0 > BA_AwT:
-            BA_Aw0 = BA_zeroAw (BA_Aw0, BA_AwT, DB_BhageAw, N0_Aw)
+            BA_Aw0 = BA_zeroAw (BA_Aw0, BA_AwT)
     else:
         pass
     return BA_Aw0
     
-def BA0_lower_BAT_Sw (BA_SwT, DB_BhageSw, N0_Sw):
-    BA_Sw0 = N0_Sw * 3.14* (DB_BhageSw/2.0)**2
+def BA0_lower_BAT_Sw (BA_SwT):
+    BA_Sw0 = 0.001
     if BA_Sw0 > BA_SwT:
-            BA_Sw0 = BA_zeroSw (BA_Sw0, BA_SwT, DB_BhageSw, N0_Sw)
+            BA_Sw0 = BA_zeroSw (BA_Sw0, BA_SwT)
     else:
         pass
     return BA_Sw0
 
-def BA0_lower_BAT_Sb (BA_SbT, DB_BhageSb, N0_Sb):
-    BA_Sb0 = N0_Sb * 3.14* (DB_BhageSb/2.0)**2
+def BA0_lower_BAT_Sb (BA_SbT):
+    BA_Sb0 = 0.001
     if BA_Sb0 > BA_SbT:
-            BA_Sb0 = BA_zeroSb (BA_Sb0, BA_SbT, DB_BhageSb, N0_Sb)
+            BA_Sb0 = BA_zeroSb (BA_Sb0, BA_SbT)
     else:
         pass
     return BA_Sb0
 
-def BA0_lower_BAT_Pl (BA_PlT, DB_BhagePl, N0_Pl):
-    BA_Pl0 = N0_Pl * 3.14* (DB_BhagePl/2.0)**2
+def BA0_lower_BAT_Pl (BA_PlT):
+    BA_Pl0 = 0.001
     if BA_Pl0 > BA_PlT:
-            BA_Pl0 = BA_zeroPl (BA_Pl0, BA_PlT, DB_BhagePl, N0_Pl)
+            BA_Pl0 = BA_zeroPl (BA_Pl0, BA_PlT)
     else:
         pass
     return BA_Pl0
@@ -96,8 +95,11 @@ def get_factors_for_all_species(**kwargs):
         f_Aw = 0
         f_Sw = 0
         f_Pl = 0
+#        if kwargs['N0_Aw'] > 0:
+#            f_Aw = BAfactorFinder_Aw (**kwargs)
+            
         if kwargs['N0_Aw'] > 0:
-            f_Aw = BAfactorFinder_Aw (**kwargs)
+            f_Aw = BAfactorFinder_Aw1 (**kwargs)
 
         if kwargs['N0_Sb'] > 0:
             f_Sb = BAfactorFinder_Sb (**kwargs)
@@ -115,7 +117,7 @@ def get_factors_for_all_species(**kwargs):
                 'f_Pl':f_Pl,
                             }
 
-def simulate_forwards_df(plot_df, simulation_choice='no'):
+def simulate_forwards_df(plot_df, simulation_choice='yes'):
     """Run forwards simulation
 
     Keyword Arguments:
@@ -193,10 +195,11 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
         DB_BhagePl = 0.1
 
 
-        BA_Aw0 = BA0_lower_BAT_Aw (BA_AwT, DB_BhageAw, N0_Aw)
-        BA_Sw0 = BA0_lower_BAT_Sw (BA_SwT, DB_BhageSw, N0_Sw)
-        BA_Sb0 = BA0_lower_BAT_Sb (BA_SbT, DB_BhageSb, N0_Sb)
-        BA_Pl0 = BA0_lower_BAT_Pl (BA_PlT, DB_BhagePl, N0_Pl)
+
+        BA_Aw0 = BA0_lower_BAT_Aw (BA_AwT)
+        BA_Sw0 = BA0_lower_BAT_Sw (BA_SwT)
+        BA_Sb0 = BA0_lower_BAT_Sb (BA_SbT)
+        BA_Pl0 = BA0_lower_BAT_Pl (BA_PlT)
 
         SC_0 = SCestimate (N0_Aw, N0_Sb, N0_Sw, N0_Pl )
         SC_Aw0 = SC_0[0]
@@ -243,15 +246,34 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
 
         tageData = sorted (tageData, reverse=True)
 
-        startTage = tageData[0]
+        startTage = int(tageData[0])
 
         startTage_forward = tageData[0] - 1
 
-
+        densities = densities_and_SCs_to_250 (
+                                startTage = startTage,
+                                startTageAw = startTageAw,
+                                y2bh_Aw = y2bh_Aw,
+                                startTageSw = startTageSw,
+                                y2bh_Sw = y2bh_Sw,
+                                startTageSb = startTageSb,
+                                y2bh_Sb = y2bh_Sb,
+                                startTagePl = startTagePl,
+                                y2bh_Pl = y2bh_Pl,
+                                SDF_Aw0 = SDF_Aw0,
+                                SDF_Sw0 = SDF_Sw0,
+                                SDF_Pl0 = SDF_Pl0,
+                                SDF_Sb0 = SDF_Sb0,
+                                SI_bh_Aw = SI_bh_Aw,
+                                SI_bh_Sw = SI_bh_Sw,
+                                SI_bh_Sb = SI_bh_Sb,
+                                SI_bh_Pl = SI_bh_Pl)
         #print startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0
-
+        #print densities
 
      # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
+  
+        
 
         '''estimating correction factor to fit BA at t0 and BA at t and choosing whether simulating with multiplication factor
            or starting at t recalculating the densities and SC'''
@@ -293,8 +315,8 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
                 SDF_Sw0 = SDF_Sw0,  
                 BA_Pl0 = BA_Pl0, 
                 BA_PlT = BA_PlT,
-                printWarnings=True,
-                )
+                densities= densities,
+                printWarnings=True)
         
         output_DF = pd.DataFrame (columns=['BA_Aw', 'BA_Sw', 'BA_Sb', 'BA_Pl'])        
         
@@ -302,7 +324,7 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
         f_Sw = species_factors['f_Sw']
         f_Sb = species_factors['f_Sb']
         f_Pl = species_factors['f_Pl']
-
+        
 
         '''choosing no implies in simulating forward after time t using the same factor estimated and used to simulate until time t
            choosing yes, implies in simulating forward ignoring the factor estimated and used until time t and estimate, at every cycle, densities,
@@ -316,7 +338,7 @@ def simulate_forwards_df(plot_df, simulation_choice='no'):
         BA_0_to_data_Pl = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice, simulation = False)
         
         #print startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT, simulation_choice
-        print startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT
+        #print startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT
         
         output_DF = pd.concat([BA_0_to_data_Aw[1], BA_0_to_data_Sb[1], BA_0_to_data_Sw[1], BA_0_to_data_Pl[1] ], axis=1)
         
