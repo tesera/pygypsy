@@ -5,12 +5,17 @@ Created on Wed Apr  6 08:20:38 2016
 @author: juliannosambatti
 """
 
+# TODO: make all factor find functions use kwargs in the manner of AW
+import logging
 import numpy
+import pandas as pd
 from asaCompileAgeGivenSpSiHt import ComputeGypsySiteIndex
 from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
 
 from scipy.optimize import fmin
 
+
+logger = logging.getLogger(__name__)
 
 """
 estimating Sit, total age, and bhage using asaCompileAgeGivenSpSiHt functions
@@ -86,9 +91,10 @@ def densityNonSpatialAw (sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings = True):
                    #print 'Aw',  N_est_Aw, SDF_Aw0
                                       
                iterCount = iterCount + 1
-               if iterCount == 1500 and printWarnings == True:
-                   print '\n GYPSYNonSpatial.densityNonSpatialAw()'
-                   print ' Slow convergence'
+               if iterCount == 1500:
+                   if printWarnings:
+                       print '\n GYPSYNonSpatial.densityNonSpatialAw()'
+                       print ' Slow convergence'
                    return N_est_Aw, SDF_Aw0
  
                    
@@ -136,9 +142,10 @@ def densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings = True):
                            #print 'Sb', N_est_Sb, SDF_Sb0
                                               
                        iterCount = iterCount + 1
-                       if iterCount == 150 and printWarnings == True:
-                           print '\n GYPSYNonSpatial.densityNonSpatialSb()'
-                           print ' Slow convergence'
+                       if iterCount == 150:
+                           if printWarnings:
+                               print '\n GYPSYNonSpatial.densityNonSpatialSb()'
+                               print ' Slow convergence'
                            return N_est_Sb, SDF_Sb0
                            
                    
@@ -190,9 +197,10 @@ def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings =
                            #print 'Sw', N_est_Sw, SDF_Sw0
                            
                        iterCount = iterCount + 1
-                       if iterCount == 150 and printWarnings == True:
-                           print '\n GYPSYNonSpatial.densityNonSpatialSw()'
-                           print ' Slow convergence'
+                       if iterCount == 150:
+                           if printWarnings:
+                               print '\n GYPSYNonSpatial.densityNonSpatialSw()'
+                               print ' Slow convergence'
                            return N_est_Sw, SDF_Sw0
                        
                        
@@ -257,9 +265,10 @@ def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, N_P
                            #print 'Pl', N_est_Pl, SDF_Pl0
                            
                        iterCount = iterCount + 1
-                       if iterCount == 150 and printWarnings == True:
-                           print '\n GYPSYNonSpatial.densityNonSpatialSw()'
-                           print ' Slow convergence'
+                       if iterCount == 150:
+                           if printWarnings:
+                               print '\n GYPSYNonSpatial.densityNonSpatialSw()'
+                               print ' Slow convergence'
                            return N_est_Pl, SDF_Pl0
             
                    
@@ -473,7 +482,6 @@ def BAincIter_Aw(sp_Aw, BAinc_AwT, BA_AwT, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhag
     BA_Aw = BA_AwT - BAinc_AwT # BA_Aw = best estimate of BA  and BAinc_AwT best estimate of decrement to previous year , ie, at time T-1
     #print 'BA_AwT =', BA_AwT, 'BAinc_AwT = ', BAinc_AwT
     while BADiffFlag == False:
-        #import pdb; pdb.set_trace()
         BAinc_AwtoT =  BasalAreaIncrementNonSpatialAw (sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw) # based on best estimate of BA at time T-1
         
          
@@ -493,9 +501,10 @@ def BAincIter_Aw(sp_Aw, BAinc_AwT, BA_AwT, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhag
            
         iterCount = iterCount + 1
             
-        if iterCount == 150 and printWarnings == True:
-            print '\n GYPSYNonSpatial.BAincIter_Aw()'
-            print ' Slow convergence'
+        if iterCount == 150:
+            if printWarnings:
+                print '\n GYPSYNonSpatial.BAincIter_Aw()'
+                print ' Slow convergence'
             return BA_Aw, BAinc_AwT
         
     return BA_Aw, BAinc_AwtoT
@@ -538,7 +547,6 @@ def BAincIter_Sb(sp_Sb, BAinc_SbT, BA_SbT, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhag
     BA_Sb = BA_SbT - BAinc_SbT # BA_Sb = best estimate of BA  and BAinc_AwT best estimate of decrement to previous year , ie, at time T-1
     
     while BADiffFlag == False:
-        #import pdb; pdb.set_trace()
         BAinc_SbtoT =  BasalAreaIncrementNonSpatialSb (sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, BA_Sb) # based on best estimate of BA at time T-1
         
          
@@ -556,9 +564,10 @@ def BAincIter_Sb(sp_Sb, BAinc_SbT, BA_SbT, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhag
            
         iterCount = iterCount + 1
             
-        if iterCount == 150 and printWarnings == True:
-            print '\n GYPSYNonSpatial.BAincIter_Aw()'
-            print ' Slow convergence'
+        if iterCount == 150:
+            if printWarnings:
+                print '\n GYPSYNonSpatial.BAincIter_Aw()'
+                print ' Slow convergence'
             return BA_Sb, BAinc_SbT
         
     return BA_Sb, BAinc_SbtoT
@@ -622,7 +631,6 @@ def BAincIter_Sw(sp_Sw, BAinc_SwT, BA_SwT, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhag
     
     
     while BADiffFlag == False:
-        #import pdb; pdb.set_trace()
         BAinc_SwtoT =  BasalAreaIncrementNonSpatialSw (sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw) # based on best estimate of BA at time T-1
         
          
@@ -641,9 +649,10 @@ def BAincIter_Sw(sp_Sw, BAinc_SwT, BA_SwT, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhag
         iterCount = iterCount + 1
         
                     
-        if iterCount == 150 and printWarnings == True:
-            print '\n GYPSYNonSpatial.BAincIter_Aw()'
-            print ' Slow convergence'
+        if iterCount == 150:
+            if printWarnings:
+                print '\n GYPSYNonSpatial.BAincIter_Aw()'
+                print ' Slow convergence'
             return BA_Sw, BAinc_SwT
     #print 'BA_SwT =', BA_SwT, 'BAinc_SwT = ', BAinc_SwT
     #print BAinc_SwT, BA_SwT, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0
@@ -712,7 +721,6 @@ def BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bha
     BA_Pl = BA_PlT - BAinc_PlT # BA_Pl = best estimate of BA  and BAinc_AwT best estimate of decrement to previous year , ie, at time T-1
     
     while BADiffFlag == False:
-        #import pdb; pdb.set_trace()
         BAinc_PltoT =  BasalAreaIncrementNonSpatialPl (sp_Pl, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl) # based on best estimate of BA at time T-1
         
          
@@ -730,18 +738,160 @@ def BAincIter_Pl (sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl, bha
            
         iterCount = iterCount + 1
             
-        if iterCount == 150 and printWarnings == True:
-            print '\n GYPSYNonSpatial.BAincIter_Aw()'
-            print ' Slow convergence'
+        if iterCount == 150:
+            if printWarnings:
+                print '\n GYPSYNonSpatial.BAincIter_Aw()'
+                print ' Slow convergence'
             return BA_Pl, BAinc_PlT
         
     return BA_Pl, BAinc_PltoT  
     
     
-
-'''ADD MESSAGE TO SHOW INFO ABOUT WHERE AND HOW IT FAILED TO CONVERGE IN THE FILES BELOW'''
+def densities_and_SCs_to_250 (**kwargs):
+    startTage = kwargs['startTage']
+    startTageAw = kwargs['startTageAw']
+    y2bh_Aw = kwargs['y2bh_Aw']
+    startTageSw = kwargs['startTageSw']
+    y2bh_Sw = kwargs['y2bh_Sw']
+    startTageSb = kwargs['startTageSb']
+    y2bh_Sb = kwargs['y2bh_Sb']
+    startTagePl = kwargs['startTagePl']
+    y2bh_Pl = kwargs['y2bh_Pl']
+    SDF_Aw0 = kwargs['SDF_Aw0']
+    SDF_Sw0 = kwargs['SDF_Sw0']
+    SDF_Pl0 = kwargs['SDF_Pl0']
+    SDF_Sb0 = kwargs['SDF_Sb0']
+    SI_bh_Aw = kwargs['SI_bh_Aw']
+    SI_bh_Sw = kwargs['SI_bh_Sw']
+    SI_bh_Sb = kwargs['SI_bh_Sb']
+    SI_bh_Pl = kwargs['SI_bh_Pl']
     
-def BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT, printWarnings = True):
+    densities_along_time = []
+    
+    startTageAwB = startTageAw
+    startTageSwB = startTageSw
+    startTagePlB = startTagePl
+    startTageSbB = startTageSb
+    
+    t = 1   
+    #print startTage, startTageAwB    
+    
+    while t < 250:    
+          
+        
+        tage_Aw = startTageAwB - startTage
+        tage_Sw = startTageSwB - startTage
+        tage_Pl = startTagePlB - startTage
+        tage_Sb = startTageSbB - startTage
+    
+    
+        bhage_Aw = tage_Aw - y2bh_Aw
+        bhage_Sw = tage_Sw - y2bh_Sw
+        bhage_Pl = tage_Pl - y2bh_Pl
+        bhage_Sb = tage_Sb - y2bh_Sb
+        
+        if bhage_Aw < 0:
+            N_bh_AwT = 0
+        else:
+            N_bh_AwT = densityAw (SDF_Aw0, bhage_Aw, SI_bh_Aw)
+        
+        if tage_Sb < 0:
+            N_bh_SbT = 0
+        else:
+            N_bh_SbT = densitySb (SDF_Sb0, tage_Sb, SI_bh_Sb)
+            
+        if tage_Sw < 0:
+            N_bh_SwT = 0
+        else:
+            N_bh_SwT = densitySw (SDF_Sw0, SDF_Aw0, tage_Sw, SI_bh_Sw)
+            
+        if tage_Pl < 0:
+            N_bh_PlT = 0
+        else:
+            N_bh_PlT = densityPl (SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl, SI_bh_Pl)
+        
+        SC_F = SCestimate (N_bh_AwT,  N_bh_SbT, N_bh_SwT, N_bh_PlT)
+    
+        SC_Aw = SC_F[0]
+        SC_Sw = SC_F[1]
+        SC_Sb = SC_F[2]
+        SC_Pl = SC_F[3]
+        
+
+        # JUST NEED TO APPEND NEW DENSITIES SC AND YEAR TO THE DICTIONARY
+        densities_along_time.append ( {'N_bh_AwT': N_bh_AwT, 'N_bh_SwT': N_bh_SwT, 'N_bh_SbT': N_bh_SbT, 'N_bh_PlT': N_bh_PlT, 
+                                              'SC_Aw': SC_Aw, 'SC_Sw': SC_Sw, 'SC_Sb':SC_Sb, 'SC_Pl': SC_Pl,
+                                              'tage_Aw': tage_Aw, 'tage_Sw': tage_Sw, 'tage_Sb': tage_Sb, 'tage_Pl': tage_Pl,
+                                              'bhage_Aw': bhage_Aw, 'bhage_Sw': bhage_Sw, 'bhage_Sb': bhage_Sb, 'bhage_Pl': bhage_Pl} )
+        
+        t += 1
+        startTageAwB += 1
+        startTageSwB += 1
+        startTagePlB += 1
+        startTageSbB += 1
+        
+    return densities_along_time
+# this code just below is to be use by the test_iter.py 
+def BAfactorFinder_Aw1 (**kwargs):
+    startTage = kwargs['startTage']
+    SI_bh_Aw = kwargs['SI_bh_Aw']
+    N_bh_AwT = kwargs['N_bh_AwT']
+    BA_Aw0 = kwargs['BA_Aw0']
+    BA_AwT = kwargs['BA_AwT']
+    SDF_Aw0 = kwargs['SDF_Aw0']
+    N0_Aw = kwargs['N0_Aw']
+    densities = kwargs['densities']
+
+    simulation_choice = 'yes'
+    f_Aw =100
+    f_AwP1 = 100* f_Aw
+    acceptableDiff= 0.01
+    BADiffFlag = False
+    iterCount = 0 
+    while BADiffFlag == False:
+        BA_AwB = BAfromZeroToDataAw_test (startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice, simulation = True)[0]
+        
+        if abs(BA_AwT - BA_AwB) < acceptableDiff:
+            BADiffFlag = True
+        else:
+            if (BA_AwT - BA_AwB) < 0 :
+                f_AwP1 = f_Aw
+                f_AwP = f_Aw  *  (1+(numpy.log10 (BA_AwT) - numpy.log10 (abs(BA_AwB)) )/ (100*numpy.log10 (abs(BA_AwB))) )
+                f_Aw= (f_AwP+f_Aw)/2             
+            elif (BA_AwT - BA_AwB) > 0 :
+                f_AwN = f_Aw * (1+(numpy.log10 (BA_AwT) + numpy.log10(abs(BA_AwB)) )/ (100* numpy.log10 (abs(BA_AwB))) )
+                f_Aw= (f_Aw+f_AwP1)/2
+                #print f_Aw
+            
+        print BA_AwT, BA_AwB, f_Aw
+        
+        iterCount = iterCount + 1
+            
+        if iterCount == 10000:
+            logging.warning(
+                ('GYPSYNonSpatial.BAfactorFinder_Aw()'
+                 ' Slow convergence with Basal Area: %s'
+                 ' and factor:%s '), BA_AwB, f_Aw
+            )
+            return f_Aw
+    #f_Aw = 1
+    return f_Aw
+
+
+def BAfactorFinder_Aw (**kwargs):
+    startTage = kwargs['startTage']
+    startTageAw = kwargs['startTageAw']
+    y2bh_Aw = kwargs['y2bh_Aw']
+    SC_Aw = kwargs['SC_Aw']
+    SI_bh_Aw = kwargs['SI_bh_Aw']
+    N_bh_AwT = kwargs['N_bh_AwT']
+    N0_Aw = kwargs['N0_Aw']
+    BA_Aw0 = kwargs['BA_Aw0']
+    BA_AwT = kwargs['BA_AwT']
+    SDF_Aw0 = kwargs['SDF_Aw0']
+
+
+
     simulation_choice = 'yes'
     f_Aw =2.8
     f_AwP1 = 1.5* f_Aw
@@ -749,7 +899,7 @@ def BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw
     BADiffFlag = False
     iterCount = 0 
     while BADiffFlag == False:
-        BA_AwB = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice)
+        BA_AwB = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, SDF_Aw0, simulation_choice, simulation = True)[0]
         
         if abs(BA_AwT - BA_AwB) < acceptableDiff:
             BADiffFlag = True
@@ -767,26 +917,38 @@ def BAfactorFinder_Aw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw
         
         iterCount = iterCount + 1
             
-        if iterCount == 1500 and printWarnings == True:
-            print '\n GYPSYNonSpatial.BAfactorFinder_Aw()'
-            print ' Slow convergence'
-            return f_Aw, BA_AwB
+        if iterCount == 1500:
+            logging.warning(
+                ('GYPSYNonSpatial.BAfactorFinder_Aw()'
+                 ' Slow convergence with Basal Area: %s'
+                 ' and factor:%s '), BA_AwB, f_Aw
+            )
+            return f_Aw
     return f_Aw
-
     
-def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, simulation_choice):
+
+
+
+def BAfromZeroToDataAw_test (startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice, simulation = True):
+    logger.debug('getting basal area from time zero to time of data for aspen')
     if simulation_choice == 'yes':
         max_age = startTage
     elif simulation_choice == 'no':
         max_age = 250
-    
+    BA_Aw_DF =   pd.DataFrame (columns=['BA_Aw']) 
+
+
     t = 0
     BA_tempAw = BA_Aw0
-    while t < max_age:
-        tage_Aw = startTageAw - startTage  
-        bhage_Aw = tage_Aw - y2bh_Aw
+    for SC_Dict in densities [0: max_age]:
+        tage_Aw = SC_Dict ['tage_Aw']  
+        bhage_Aw = SC_Dict ['bhage_Aw']
+        SC_Aw = SC_Dict ['SC_Aw']
+        N_bh_AwT = SC_Dict ['N_bh_AwT']
+        
         if N0_Aw > 0:
             if bhage_Aw < 0:
+                BA_AwB = 0 
                 pass
             if bhage_Aw > 0 :
                 SC_Aw = (SC_Aw ) * f_Aw
@@ -795,6 +957,7 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
                 BA_AwB = BA_tempAw
                 if BA_AwB < 0:
                     BA_AwB = 0 
+                
                     
             else:
                 BA_AwB=0
@@ -802,22 +965,82 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
         else:
             BA_tempAw = 0
             BA_AwB = 0
+        if simulation == False:
+            BA_Aw_DF = BA_Aw_DF.append ({'BA_Aw':BA_AwB}, ignore_index=True)
+        t +=1  
+        #print  'bhageAw ', bhage_Aw, 'BA Aw ',  BA_AwB
+        
+    return BA_AwB, BA_Aw_DF
+    
+def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, SDF_Aw0, simulation_choice, simulation = True):
+    logger.debug('getting basal area from time zero to time of data for aspen')
+    if simulation_choice == 'yes':
+        max_age = startTage
+    elif simulation_choice == 'no':
+        max_age = 250
+    BA_Aw_DF =   pd.DataFrame (columns=['BA_Aw']) 
+    
+    #BIG PROBLEM - SC_AW MUST BE UPDATED AND SO THE SIMULATION HAS TO SIMULATE THE DENSITIES OF ALL SPECIES AND SIMULTANEOUSLY RECALCULATE THE SC AT EVERY TIME!!!!!
+    #FOR THAT I WILL NEED TO COUNT THE AGES OF ALL DIFFERENT SPECIES AT EVERY SIMULATION
+    
+    # create a dictionary containing year (plot) densities and SCs for each species
+
+    t = 0
+    BA_tempAw = BA_Aw0
+    while t < max_age:
+        tage_Aw = startTageAw - startTage  
+        bhage_Aw = tage_Aw - y2bh_Aw
+        N_bh_AwT = densityAw (SDF_Aw0, bhage_Aw, SI_bh_Aw)
+        #SC_Aw
+        if N0_Aw > 0:
+            if bhage_Aw < 0:
+                BA_AwB = 0 
+                pass
+            if bhage_Aw > 0 :
+                SC_Aw = (SC_Aw ) * f_Aw/N_bh_AwT
+                BAinc_Aw =  BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_Aw, BA_tempAw)
+                BA_tempAw = BA_tempAw + BAinc_Aw
+                BA_AwB = BA_tempAw
+                if BA_AwB < 0:
+                    BA_AwB = 0 
+                
+                    
+            else:
+                BA_AwB=0
+            
+        else:
+            BA_tempAw = 0
+            BA_AwB = 0
+        if simulation == False:
+            BA_Aw_DF = BA_Aw_DF.append ({'BA_Aw':BA_AwB}, ignore_index=True)
         t +=1  
         startTageAw += 1
-        print  'bhageAw ', bhage_Aw, 'BA Aw ',  BA_AwB
+        #print  'bhageAw ', bhage_Aw, 'BA Aw ',  BA_AwB
         
-    return BA_AwB
+    return BA_AwB, BA_Aw_DF
 
 
-def BAfactorFinder_Sb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, BA_SbT, printWarnings = True):
+def BAfactorFinder_Sb (**kwargs):
+    logger.debug('Getting basal area factor for black spruce')
+    startTage = kwargs['startTage']
+    startTageSb = kwargs['startTageSb']
+    y2bh_Sb = kwargs['y2bh_Sb'] 
+    SC_Sb = kwargs['SC_Sb']
+    SI_bh_Sb = kwargs['SI_bh_Sb']
+    N_bh_SbT = kwargs['N_bh_SbT']
+    N0_Sb = kwargs['N0_Sb']
+    BA_Sb0 = kwargs['BA_Sb0']
+    BA_SbT = kwargs['BA_SbT'] 
+
+    
     simulation_choice = 'yes'
     f_Sb =1.2
     f_SbP1 = 1.5* f_Sb
-    acceptableDiff= 0.01
+    acceptableDiff= 0.1
     BADiffFlag = False
     iterCount = 0 
     while BADiffFlag == False:
-        BA_SbB = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice )
+        BA_SbB = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice, simulation = True )[0]
         
         if abs(BA_SbT - BA_SbB) < acceptableDiff:
             BADiffFlag = True
@@ -834,18 +1057,23 @@ def BAfactorFinder_Sb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb
         
         iterCount = iterCount + 1
             
-        if iterCount == 1500 and printWarnings == True:
-            print '\n GYPSYNonSpatial.BAfactorFinder_Sb()'
-            print ' Slow convergence'
-            return f_Sb, BA_SbB
+        if iterCount == 1500:
+            logging.warning(
+                ('GYPSYNonSpatial.BAfactorFinder_Sb()'
+                 ' Slow convergence with Basal Area: %s'
+                 ' and factor:%s '), BA_SbB, f_Sb
+            )
+            return f_Sb
     return f_Sb
 
-def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice):
+def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice, simulation = True):
     if simulation_choice == 'yes':
         max_age = startTage
     elif simulation_choice == 'no':
         max_age = 250
-    
+        
+    BA_Sb_DF = pd.DataFrame (columns=[ 'BA_Sb'])
+
     t = 0
     BA_tempSb = BA_Sb0
     while t < max_age:
@@ -853,6 +1081,7 @@ def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_S
         bhage_Sb = tage_Sb - y2bh_Sb
         if N0_Sb > 0:
             if bhage_Sb < 0:
+                BA_SbB = 0
                 pass
             if bhage_Sb > 0 :
                 SC_Sb = (SC_Sb ) * f_Sb
@@ -868,14 +1097,30 @@ def BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_S
         else:
             BA_tempSb = 0
             BA_SbB = 0
-        #print BA_Aw0, BA_AwB, BA_tempAw
+        if simulation == False:
+            BA_Sb_DF = BA_Sb_DF.append ( {'BA_Sb': BA_SbB}, ignore_index=True)
         t +=1  
         startTageSb += 1
         #print  'bhageSb ', bhage_Sb, 'BA Sb',  BA_SbB
-    return BA_SbB
+    return BA_SbB, BA_Sb_DF
     
 
-def BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw,  SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, BA_SwT, printWarnings = True):
+def BAfactorFinder_Sw (**kwargs):
+    logger.debug('Getting basal area factor for white spruce')
+    startTage = kwargs['startTage']
+    startTageSw = kwargs['startTageSw'] 
+    y2bh_Sw = kwargs['y2bh_Sw']  
+    SC_Sw = kwargs['SC_Sw'] 
+    SI_bh_Sw = kwargs['SI_bh_Sw'] 
+    N_bh_SwT = kwargs['N_bh_SwT'] 
+    N0_Sw = kwargs['N0_Sw']  
+    SDF_Aw0 = kwargs['SDF_Aw0'] 
+    SDF_Pl0 = kwargs['SDF_Pl0'] 
+    SDF_Sb0 = kwargs['SDF_Sb0'] 
+    BA_Sw0 = kwargs['BA_Sw0'] 
+    BA_SwT = kwargs['BA_SwT'] 
+
+    
     simulation_choice = 'yes'
     f_Sw =2.5
     BA_SwB=BA_Sw0
@@ -884,7 +1129,7 @@ def BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_S
     iterCount = 0 
     f_SwP1 = 1.5* f_Sw
     while BADiffFlag == False:
-        BA_SwB = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice)
+        BA_SwB = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice, simulation = True)[0]
          
         if abs(BA_SwT - BA_SwB) < acceptableDiff:
             BADiffFlag = True
@@ -901,19 +1146,23 @@ def BAfactorFinder_Sw (startTage, startTageSw, y2bh_Sw,  SC_Sw, SI_bh_Sw, N_bh_S
              
         iterCount = iterCount + 1
             
-        if iterCount == 1500 and printWarnings == True:
-            print '\n GYPSYNonSpatial.BAfactorFinder_Sw()'
-            print ' Slow convergence'
-            return f_Sw, BA_SwB
+        if iterCount == 1500:
+            logging.warning(
+                ('GYPSYNonSpatial.BAfactorFinder_Sw()'
+                 ' Slow convergence with Basal Area: %s'
+                 ' and factor:%s '), BA_SwB, f_Sw
+            )
+            return f_Sw
     return f_Sw
     
 
-def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice):
+def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice, simulation = True):
     if simulation_choice == 'yes':
         max_age = startTage
     elif simulation_choice == 'no':
         max_age = 250
     
+    BA_Sw_DF =  pd.DataFrame (columns=[ 'BA_Sw'])
     t = 0
     BA_tempSw = BA_Sw0
     while t < max_age:
@@ -921,6 +1170,7 @@ def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_S
         bhage_Sw = tage_Sw - y2bh_Sw
         if N0_Sw > 0:
             if bhage_Sw < 0:
+                BA_SwB = 0
                 pass
             if bhage_Sw > 0 :
                SC_Sw = (SC_Sw ) * f_Sw 
@@ -936,23 +1186,25 @@ def BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_S
         else:
             BA_tempSw = 0
             BA_SwB = 0
+
+        if simulation == False:
+            BA_Sw_DF = BA_Sw_DF.append ( {'BA_Sw': BA_SwB}, ignore_index=True)        
         t +=1  
         startTageSw += 1
         #print 'bhageSw ',  bhage_Sw, 'BA Sw ', BA_SwB
     
-    return BA_SwB
-    
+    return BA_SwB, BA_Sw_DF
 
-def BAfactorFinder_Pl (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,  SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT, printWarnings = True):
-    simulation_choice = 'yes'
-    f_Pl =1000
+
+def BAfactorFinder_Pl1 (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,  SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT, printWarnings = True):
+    f_Pl =100
     #BA_PlB=BA_Pl0
-    acceptableDiff= 0.1
+    acceptableDiff= 0.01
     BADiffFlag = False
     iterCount = 0 
     f_PlP1 = 1.5* f_Pl
     while BADiffFlag == False:
-        BA_PlB = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice)
+        BA_PlB = BAfromZeroToDataPl1 (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl)
          
         if abs(BA_PlT - BA_PlB) < acceptableDiff:
             BADiffFlag = True
@@ -960,26 +1212,113 @@ def BAfactorFinder_Pl (startTage, startTagePl, y2bh_Pl,  SC_Pl, SI_bh_Pl, N_bh_P
             if (BA_PlT - BA_PlB) < 0 :
                 f_PlP1 = f_Pl
                 f_PlP = f_Pl  *  ( BA_PlT  / BA_PlB)
-                f_Pl= (f_PlP+f_Pl)/2             
+                f_Pl = (f_PlP+f_Pl)/2             
             elif (BA_PlT - BA_PlB) > 0 :
-                f_Pl= (f_Pl + f_PlP1)/2
+                f_Pl = (f_Pl + f_PlP1)/2
+                #print f_Pl
+            print BA_PlT,  BA_PlB, f_Pl
+             
+        iterCount = iterCount + 1
+            
+        if iterCount == 150:
+            logging.warning(
+                ('GYPSYNonSpatial.BAfactorFinder_Pl()'
+                 ' Slow convergence with Basal Area: %s'
+                 ' and factor:%s '), BA_PlB, f_Pl
+            )
+            return f_Pl
+    return f_Pl
+
+def BAfactorFinder_Pl (**kwargs):
+    startTage = kwargs['startTage']
+    startTagePl = kwargs['startTagePl'] 
+    y2bh_Pl = kwargs['y2bh_Pl']  
+    SC_Pl = kwargs['SC_Pl'] 
+    SI_bh_Pl = kwargs['SI_bh_Pl'] 
+    N_bh_PlT = kwargs['N_bh_PlT'] 
+    N0_Pl = kwargs['N0_Pl']  
+    SDF_Aw0 = kwargs['SDF_Aw0']
+    SDF_Sw0 = kwargs['SDF_Sw0'] 
+    SDF_Sb0 = kwargs['SDF_Sb0'] 
+    BA_Pl0 = kwargs['BA_Pl0'] 
+    BA_PlT = kwargs['BA_PlT'] 
+
+    
+    simulation_choice = 'yes'
+    # the start guess is critical. If it is too large, it may crash before the simulation. 100 worked for a sample os stands. 1000 failed
+    f_Pl =100
+    #BA_PlB=BA_Pl0
+    acceptableDiff= 0.1
+    BADiffFlag = False
+    iterCount = 0 
+    f_PlP1 = 1.5* f_Pl
+    while BADiffFlag == False:
+        BA_PlB = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice, simulation = True)[0]
+
+        if abs(BA_PlT - BA_PlB) < acceptableDiff:
+            BADiffFlag = True
+        else:
+            if (BA_PlT - BA_PlB) < 0 :
+                f_PlP1 = f_Pl
+                f_PlP = f_Pl  *  ( BA_PlT  / BA_PlB)
+                f_Pl = (f_PlP+f_Pl)/2             
+            elif (BA_PlT - BA_PlB) > 0 :
+                f_Pl = (f_Pl + f_PlP1)/2
                 #print f_Pl
             #print BA_PlB, f_Pl
              
         iterCount = iterCount + 1
             
-        if iterCount == 150 and printWarnings == True:
-            print '\n GYPSYNonSpatial.BAfactorFinder_Pl()'
-            print ' Slow convergence'
-            return f_Pl, BA_PlB
+        if iterCount == 150:
+            logging.warning(
+                ('GYPSYNonSpatial.BAfactorFinder_Pl()'
+                 ' Slow convergence with Basal Area: %s'
+                 ' and factor:%s '), BA_Pl0, BA_PlB, f_Pl
+            )
+            return f_Pl
     return f_Pl
 
-def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice):
+def BAfromZeroToDataPl1 (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl):
+
+    t = 0
+    BA_tempPl = BA_Pl0
+    while t < startTage:
+        tage_Pl = startTagePl - startTage  
+        bhage_Pl = tage_Pl - y2bh_Pl
+        if N0_Pl > 0:
+            if bhage_Pl < 0:
+                BA_PlB = 0
+                pass
+            if bhage_Pl > 0 :
+               #SC_Pl = SC_Pl * (f_Pl )
+               BAinc_Pl = f_Pl * BasalAreaIncrementNonSpatialPl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_tempPl)
+               BA_tempPl = BA_tempPl + BAinc_Pl
+               BA_PlB = BA_tempPl
+#               if BA_PlB < 0:
+#                    BA_PlB = 0 
+                    
+               #print BA_PlB, BAinc_Pl, f_Pl
+            else:
+                BA_PlB=0
+            
+        else:
+            BA_tempPl = 0
+            BA_PlB = 0
+ 
+        t +=1  
+        startTagePl += 1
+        #print  'bhagePl ', bhage_Pl, 'BA Pl ', BA_PlB
+    
+    return BA_PlB
+    
+
+def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice, simulation = True):
     if simulation_choice == 'yes':
         max_age = startTage
     elif simulation_choice == 'no':
         max_age = 250
-        
+    
+    BA_Pl_DF =  pd.DataFrame (columns=[ 'BA_Pl'])
     t = 0
     BA_tempPl = BA_Pl0
     while t < max_age:
@@ -987,10 +1326,11 @@ def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_P
         bhage_Pl = tage_Pl - y2bh_Pl
         if N0_Pl > 0:
             if bhage_Pl < 0:
+                BA_PlB = 0
                 pass
             if bhage_Pl > 0 :
                #SC_Pl = SC_Pl * (f_Pl )
-               BAinc_Pl = f_Pl * BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_tempPl)
+               BAinc_Pl = f_Pl * BasalAreaIncrementNonSpatialPl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_tempPl)
                BA_tempPl = BA_tempPl + BAinc_Pl
                BA_PlB = BA_tempPl
                if BA_PlB < 0:
@@ -1003,11 +1343,14 @@ def BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_P
         else:
             BA_tempPl = 0
             BA_PlB = 0
+        
+        if simulation == False:
+            BA_Pl_DF = BA_Pl_DF.append ( {'BA_Pl': BA_PlB}, ignore_index=True)  
         t +=1  
         startTagePl += 1
         #print  'bhagePl ', bhage_Pl, 'BA Pl ', BA_PlB
     
-    return BA_PlB
+    return BA_PlB, BA_Pl_DF
     
     
     
@@ -1088,13 +1431,6 @@ Merchantable volume only new variables are the stump diameter outside bark, stum
 # to declare variable as double if necessary k_Sb= np.asarray(k_Sb, type = np.float64)
 
 
-
-
-
-
-
-
-
 def MerchantableVolumeAw(N_bh_Aw, BA_Aw, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw):
     '''
     I used this if below (and in other functions) to avoid division by zero when density is zero, i.e., when the species is absent in the plot.
@@ -1121,10 +1457,7 @@ def MerchantableVolumeAw(N_bh_Aw, BA_Aw, topHeight_Aw, StumpDOB_Aw, StumpHeight_
     return MVol_Aw
     
 
-    
-
-   
-   
+  
 
 def MerchantableVolumeSb(N_bh_Sb, BA_Sb, topHeight_Sb, StumpDOB_Sb, StumpHeight_Sb , TopDib_Sb, Tvol_Sb):   
     if N_bh_Sb >0:

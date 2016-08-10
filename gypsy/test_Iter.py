@@ -27,7 +27,7 @@ from GYPSYNonSpatial import BasalAreaIncrementNonSpatialPl
 
 from GYPSYNonSpatial import densityAw
 
-from GYPSYNonSpatial import BAfactorFinder_Aw
+from GYPSYNonSpatial import BAfactorFinder_Aw1
 from GYPSYNonSpatial import BAfromZeroToDataAw
 from GYPSYNonSpatial import BAfactorFinder_Sw
 from GYPSYNonSpatial import BAfromZeroToDataSw
@@ -35,11 +35,11 @@ from GYPSYNonSpatial import BAfromZeroToDataSw
 from GYPSYNonSpatial import BAfactorFinder_Sb
 from GYPSYNonSpatial import BAfromZeroToDataSb
 
-from GYPSYNonSpatial import BAfactorFinder_Pl
-from GYPSYNonSpatial import BAfromZeroToDataPl
+from GYPSYNonSpatial import BAfactorFinder_Pl1
+from GYPSYNonSpatial import BAfromZeroToDataPl1
 
 
-
+'''
 
 sp_Aw=['Aw', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 
@@ -53,19 +53,19 @@ sp_Sb=['Sb', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 
 #BAincIter_Aw(sp_Aw, 0.05, 2.53, 37, 13.7, 100, 150, 96, printWarnings = True)
 #sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw
-'''
+
 bhage_Aw = numpy.linspace(1,250)
 y = BasalAreaIncrementNonSpatialAw('Aw', 1.0, 18, 112 ,124, 50, 30)
-
 '''
-x = BAfactorFinder_Aw (45.0750948321, 41.0, 8.67714804702, 0.695823185569, 7.38789213445, 817.46652306, 964.419885613, 7.57069610206, 7.20622386, printWarnings = True)
+
+x = BAfactorFinder_Aw1 (22.69440976, 22.69440976, 17.67132362, 0.0590343581173, 3.599599399, 108.126896, 108.1275845, 0.5, 0.78688416, printWarnings = True)
 
 #y = BAfromZeroToDataAw (45.0750948321, 41.0, 8.67714804702, 0.695823185569, 7.38789213445, 817.46652306, 964.419885613, 7.57069610206, 0.3, simulation_choice)
 print x
 
-'''
 #pylab.plot(bhage_Aw,y)
 
+'''
 
 BA_Sb = numpy.linspace(1,50)
 y =  BasalAreaIncrementNonSpatialSb('Sb', 0.37, 8.07738602905, 112.98991932, 124.028786646, 126.963637205, BA_Sb)
@@ -91,17 +91,18 @@ print y
 
 
 
-#
+
 
 f_Pl = numpy.linspace(1,50)
-y = BAfromZeroToDataPl (135.882225194, 106.0, 13.1761233942, 0.611856198693, 7.9834026698, 192.0262491, 195.51460482, 123.019252926, 0.0, 0.0, 0.9, 50)
+
+
+#y = BAfromZeroToDataPl1 (250.0, 250.0, 10.6788402737, 1.0, 9.25433945701, 25.69, 106.398796334, 0.0, 0.0, 0.0, 0.835230551222, 2)
 
 #pylab.plot(f_Pl,y)
 
-#x = BAfactorFinder_Pl (135.882225194, 106.0, 13.1761233942, 0.611856198693, 7.9834026698, 192.0262491, 195.51460482, 123.019252926, 0.0, 0.0, 0.9, 65, printWarnings = True)
+x = BAfactorFinder_Pl1 (250.0, 250.0, 10.6788402737, 1.0, 9.25433945701, 25.69, 106.398796334, 0.0, 0.0, 0.0, 0.835230551222, 3.45, printWarnings = True)
 
-print y
-
+print x
 
 
 

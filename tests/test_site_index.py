@@ -22,7 +22,7 @@ def test_get_site_indices_from_dominant_species():
 
 def test_get_site_indices_from_dominant_species_raises():
     with pytest.raises(ValueError) as err:
-        get_site_indices_from_dominant_species('nosuchspecies', 1)
+#        get_site_indices_from_dominant_species('nosuchspecies', 1)
 
     assert str(err.value) == ('No function is available to calculate '
                               'site index from species nosuchspecies')
