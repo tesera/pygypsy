@@ -843,38 +843,38 @@ def BAfactorFinder_Aw1 (**kwargs):
     densities = kwargs['densities']
 
     simulation_choice = 'yes'
-#    f_Aw =10
-#    f_AwP1 = 1.5* f_Aw
-#    acceptableDiff= 0.1
-#    BADiffFlag = False
-#    iterCount = 0 
-#    while BADiffFlag == False:
-#        BA_AwB = BAfromZeroToDataAw_test (startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice, simulation = True)[0]
-#        
-#        if abs(BA_AwT - BA_AwB) < acceptableDiff:
-#            BADiffFlag = True
-#        else:
-#            if (BA_AwT - BA_AwB) < 0 :
-#                f_AwP1 = f_Aw
-#                f_AwP = f_Aw  *  (1+(numpy.log10 (BA_AwT) - numpy.log10 (abs(BA_AwB)) )/ (100*numpy.log10 (abs(BA_AwB))) )
-#                f_Aw= (f_AwP+f_Aw)/2             
-#            elif (BA_AwT - BA_AwB) > 0 :
-#                #f_AwN = f_Aw * (1+(numpy.log10 (BA_AwT) + numpy.log10(abs(BA_AwB)) )/ (100* numpy.log10 (abs(BA_AwB))) )
-#                f_Aw= (f_Aw+f_AwP1)/2
-#                #print f_Aw
-#            
-#        print BA_AwT, BA_AwB, f_Aw
-#        
-#        iterCount = iterCount + 1
-#            
-#        if iterCount == 1500:
-#            logging.warning(
-#                ('GYPSYNonSpatial.BAfactorFinder_Aw()'
-#                 ' Slow convergence with Basal Area: %s'
-#                 ' and factor:%s '), BA_AwB, f_Aw
-#            )
-#            return f_Aw
-    f_Aw = 1
+    f_Aw =100
+    f_AwP1 = 100* f_Aw
+    acceptableDiff= 0.01
+    BADiffFlag = False
+    iterCount = 0 
+    while BADiffFlag == False:
+        BA_AwB = BAfromZeroToDataAw_test (startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice, simulation = True)[0]
+        
+        if abs(BA_AwT - BA_AwB) < acceptableDiff:
+            BADiffFlag = True
+        else:
+            if (BA_AwT - BA_AwB) < 0 :
+                f_AwP1 = f_Aw
+                f_AwP = f_Aw  *  (1+(numpy.log10 (BA_AwT) - numpy.log10 (abs(BA_AwB)) )/ (100*numpy.log10 (abs(BA_AwB))) )
+                f_Aw= (f_AwP+f_Aw)/2             
+            elif (BA_AwT - BA_AwB) > 0 :
+                f_AwN = f_Aw * (1+(numpy.log10 (BA_AwT) + numpy.log10(abs(BA_AwB)) )/ (100* numpy.log10 (abs(BA_AwB))) )
+                f_Aw= (f_Aw+f_AwP1)/2
+                #print f_Aw
+            
+        print BA_AwT, BA_AwB, f_Aw
+        
+        iterCount = iterCount + 1
+            
+        if iterCount == 10000:
+            logging.warning(
+                ('GYPSYNonSpatial.BAfactorFinder_Aw()'
+                 ' Slow convergence with Basal Area: %s'
+                 ' and factor:%s '), BA_AwB, f_Aw
+            )
+            return f_Aw
+    #f_Aw = 1
     return f_Aw
 
 
@@ -951,8 +951,8 @@ def BAfromZeroToDataAw_test (startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, 
                 BA_AwB = 0 
                 pass
             if bhage_Aw > 0 :
-                #SC_Aw = (SC_Aw ) * f_Aw
-                BAinc_Aw =  f_Aw * BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_Aw, BA_tempAw)
+                SC_Aw = (SC_Aw ) * f_Aw
+                BAinc_Aw =  BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_Aw, BA_tempAw)
                 BA_tempAw = BA_tempAw + BAinc_Aw
                 BA_AwB = BA_tempAw
                 if BA_AwB < 0:
@@ -997,7 +997,7 @@ def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_A
                 BA_AwB = 0 
                 pass
             if bhage_Aw > 0 :
-                SC_Aw = (SC_Aw ) * f_Aw
+                SC_Aw = (SC_Aw ) * f_Aw/N_bh_AwT
                 BAinc_Aw =  BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_Aw, BA_tempAw)
                 BA_tempAw = BA_tempAw + BAinc_Aw
                 BA_AwB = BA_tempAw
