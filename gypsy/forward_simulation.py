@@ -17,8 +17,8 @@ from GYPSYNonSpatial import (BasalAreaIncrementNonSpatialAw,
                              densityAw, densitySw,
                              densitySb, densityPl,
                              SCestimate, GrossTotalVolume,
-                             BAfactorFinder_Aw,
-                             BAfromZeroToDataAw,
+                             #BAfactorFinder_Aw,
+                             #BAfromZeroToDataAw,
                              BAfactorFinder_Sb,
                              BAfromZeroToDataSb,
                              BAfactorFinder_Sw,
@@ -194,8 +194,6 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         DB_BhageSb = 0.1
         DB_BhagePl = 0.1
 
-
-
         BA_Aw0 = BA0_lower_BAT_Aw (BA_AwT)
         BA_Sw0 = BA0_lower_BAT_Sw (BA_SwT)
         BA_Sb0 = BA0_lower_BAT_Sb (BA_SbT)
@@ -351,59 +349,28 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         '''simulating growth forwards in time starting from the time at which data was taken '''
         t = startTage
         logger.debug('Starting main simulation')
-        while t < max_Age :
+        for SC_Dict in densities [t: max_age]:
+            tage_SwF = SC_Dict ['tage_Sw']  
+            bhage_SwF = SC_Dict ['bhage_Sw']
+            SC_SwF = SC_Dict ['SC_Sw']
+            N_bh_SwT = SC_Dict ['N_bh_SwT']
+            
+            tage_SbF = SC_Dict ['tage_Sb']  
+            bhage_SbF = SC_Dict ['bhage_Sb']
+            SC_SbF = SC_Dict ['SC_Sb']        
+            N_bh_SbT = SC_Dict ['N_bh_SbT']
+            
+            tage_PlF = SC_Dict ['tage_Pl']  
+            bhage_PlF = SC_Dict ['bhage_Pl']
+            SC_PlF = SC_Dict ['SC_Pl']
+            N_bh_PlT = SC_Dict ['N_bh_PlT']
             '''Ages at time t + 1'''
             logger.debug('Simulating year %d', t)
 
 
-            tage_AwF = startTageAwF 
-            tage_SwF = startTageSwF 
-            tage_PlF = startTagePlF 
-            tage_SbF = startTageSbF 
-
-
-            bhage_AwF = tage_AwF - y2bh_Aw
-            bhage_SwF = tage_SwF - y2bh_Sw
-            bhage_PlF = tage_PlF - y2bh_Pl
-            bhage_SbF = tage_SbF - y2bh_Sb
-
-
-            N_bh_AwT = densityAw (SDF_Aw0, bhage_AwF, SI_bh_Aw)
-            N_bh_SbT = densitySb (SDF_Sb0, tage_SbF, SI_bh_Sb)
-            N_bh_SwT = densitySw (SDF_Sw0, SDF_Aw0, tage_SwF, SI_bh_Sw)
-            N_bh_PlT = densityPl (SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_PlF, SI_bh_Pl)
-
-            #print N_bh_SwT
-
-
-            #print bhage_Aw, bhage_Sw, BA_AwB,  BA_AwT
-
-            #print  N_bh_AwT, N_bh_SbT, N_bh_SwT, N_bh_PlT
-
-
-            SC_F = SCestimate (N_bh_AwT,  N_bh_SbT, N_bh_SwT, N_bh_PlT)
-
-            SC_AwF = SC_F[0]
-            SC_SwF = SC_F[1]
-            SC_SbF = SC_F[2]
-            SC_PlF = SC_F[3]
-
-
-            if N_bh_AwT>0:
-                BAinc_Aw = BasalAreaIncrementNonSpatialAw('Aw', SC_AwF, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_AwF, BA_AwT)
-                BA_AwT = BA_AwT + BAinc_Aw
-                if BA_AwT < 0:
-                    BA_AwT=0
-                topHeight_Aw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Aw',  SI_bh_Aw,  tage_AwF)
-                #print  'bhage Aw ', bhage_AwF, 'BA Aw ', BA_AwT
-
-            else:
-                BA_AwT = 0
-                topHeight_Aw = 0
 
             if N_bh_SbT>0:
                 BA_SbT = BA_SbT + BasalAreaIncrementNonSpatialSb ('Sb', SC_SbF, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_SbF, BA_SbT)
-                topHeight_Sb=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Sb',  SI_bh_Sb,  tage_SbF)
                 if BA_SbT < 0:
                     BA_SbT=0
                 #print 'bhageSb ',  bhage_SbF, 'BA Sb ',  BA_SbT
@@ -414,7 +381,6 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
 
             if N_bh_SwT>0:
                 BA_SwT = BA_SwT + BasalAreaIncrementNonSpatialSw ('Sw', SC_SwF, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_SwF, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_SwT)
-                topHeight_Sw=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Sw',  SI_bh_Sw,  tage_SwF)
                 if BA_SwT < 0:
                     BA_SwT=0
                 #print 'bhageSw ', bhage_SwF, 'BA Sw ', BA_SwT
@@ -424,7 +390,6 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
 
             if N_bh_PlT>0:
                 BA_PlT = BA_PlT + BasalAreaIncrementNonSpatialPl('Pl', SC_PlF, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_PlF, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_PlT)
-                topHeight_Pl=ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Pl',  SI_bh_Pl,  tage_PlF)
                 if BA_PlT < 0:
                     BA_PlT=0
                 #print 'bhagePl ', bhage_PlF, 'BA Pl', BA_PlT
@@ -432,18 +397,18 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
                 BA_PlT = 0
                 topHeight_Pl = 0
 
-            Tvol = GrossTotalVolume ( BA_AwT, BA_SbT, BA_SwT, BA_PlT, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl)
-
-            Tvol_Aw = Tvol[0]
-            Tvol_Sb = Tvol[1]
-            Tvol_Sw = Tvol[2]
-            Tvol_Pl = Tvol[3]
-
-
-            MVol_Aw = MerchantableVolumeAw(N_bh_AwT, BA_AwT, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw)
-            MVol_Sb = MerchantableVolumeSb(N_bh_SbT, BA_SbT, topHeight_Sb, StumpDOB_Sb, StumpHeight_Sb , TopDib_Sb, Tvol_Sb)
-            MVol_Sw = MerchantableVolumeSw(N_bh_SwT, BA_SwT, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw)
-            MVol_Pl = MerchantableVolumePl(N_bh_PlT, BA_PlT, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl)
+#            Tvol = GrossTotalVolume ( BA_AwT, BA_SbT, BA_SwT, BA_PlT, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl)
+#
+#            Tvol_Aw = Tvol[0]
+#            Tvol_Sb = Tvol[1]
+#            Tvol_Sw = Tvol[2]
+#            Tvol_Pl = Tvol[3]
+#
+#
+#            MVol_Aw = MerchantableVolumeAw(N_bh_AwT, BA_AwT, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw)
+#            MVol_Sb = MerchantableVolumeSb(N_bh_SbT, BA_SbT, topHeight_Sb, StumpDOB_Sb, StumpHeight_Sb , TopDib_Sb, Tvol_Sb)
+#            MVol_Sw = MerchantableVolumeSw(N_bh_SwT, BA_SwT, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw)
+#            MVol_Pl = MerchantableVolumePl(N_bh_PlT, BA_PlT, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl)
             
             output_DF = output_DF.append({ 'BA_Aw':BA_AwT, 'BA_Sw':BA_SwT, 'BA_Sb':BA_SbT, 'BA_Pl':BA_PlT}, ignore_index=True)
 
