@@ -316,7 +316,10 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
                 densities= densities,
                 printWarnings=True)
         
-        output_DF = pd.DataFrame (columns=['BA_Aw', 'BA_Sw', 'BA_Sb', 'BA_Pl'])        
+        output_DF_Aw = pd.DataFrame (columns=['BA_Aw'])      
+        output_DF_Sw = pd.DataFrame (columns=['BA_Sw'])   
+        output_DF_Sb = pd.DataFrame (columns=['BA_Sb'])   
+        output_DF_Pl = pd.DataFrame (columns=['BA_Pl'])   
         
         f_Aw = species_factors['f_Aw']
         f_Sw = species_factors['f_Sw']
@@ -330,7 +333,7 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         '''
 
         logger.debug('Getting basal area from time 0 to time of data')
-        BA_0_to_data_Aw = BAfromZeroToDataAw_test (startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice, simulation = False)
+        BA_0_to_data_Aw = BAfromZeroToDataAw_test (startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice = 'no', simulation = False)
         #BA_0_to_data_Aw = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, SDF_Aw0, simulation_choice, simulation = False)
         BA_0_to_data_Sb = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice,  simulation = False)
         BA_0_to_data_Sw = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice, simulation = False)
@@ -339,7 +342,10 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         #print startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT, simulation_choice
         #print startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT
         
-        output_DF = pd.concat([BA_0_to_data_Aw[1], BA_0_to_data_Sb[1], BA_0_to_data_Sw[1], BA_0_to_data_Pl[1] ], axis=1)
+        output_DF_Aw = pd.concat([BA_0_to_data_Aw[1] ], axis=1)
+        output_DF_Sw = pd.concat([BA_0_to_data_Sw[1] ], axis=1)
+        output_DF_Sb = pd.concat([BA_0_to_data_Sb[1] ], axis=1)
+        output_DF_Pl = pd.concat([BA_0_to_data_Pl[1] ], axis=1)
         
         #output_DF = output_DF.append ({'BA_Aw':BA_0_to_data_Aw[0], 'BA_Sw':BA_0_to_data_Sw, 'BA_Sb':BA_0_to_data_Sb, 'BA_Pl':BA_0_to_data_Pl}, ignore_index=True) 
 
@@ -348,8 +354,9 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
 
         '''simulating growth forwards in time starting from the time at which data was taken '''
         t = startTage
+
         logger.debug('Starting main simulation')
-        for SC_Dict in densities [t: max_age]:
+        for SC_Dict in densities [t-1: ]:
             tage_SwF = SC_Dict ['tage_Sw']  
             bhage_SwF = SC_Dict ['bhage_Sw']
             SC_SwF = SC_Dict ['SC_Sw']
@@ -410,12 +417,16 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
 #            MVol_Sw = MerchantableVolumeSw(N_bh_SwT, BA_SwT, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw)
 #            MVol_Pl = MerchantableVolumePl(N_bh_PlT, BA_PlT, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl)
             
-            output_DF = output_DF.append({ 'BA_Aw':BA_AwT, 'BA_Sw':BA_SwT, 'BA_Sb':BA_SbT, 'BA_Pl':BA_PlT}, ignore_index=True)
+            output_DF_Sw = output_DF_Sw.append({ 'BA_Sw':BA_SwT}, ignore_index=True)
+            output_DF_Sb = output_DF_Sb.append({ 'BA_Sb':BA_SbT}, ignore_index=True)
+            output_DF_Pl = output_DF_Pl.append({ 'BA_Pl':BA_PlT}, ignore_index=True)
 
             t += 1
             startTageAwF += 1
             startTageSwF += 1
             startTagePlF += 1
             startTageSbF += 1
+            
+        output_DF = pd.concat([output_DF_Aw, output_DF_Sw, output_DF_Sb, output_DF_Pl ], axis=1)
 
     return output_DF

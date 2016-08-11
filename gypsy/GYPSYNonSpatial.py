@@ -870,7 +870,7 @@ def BAfactorFinder_Aw1 (**kwargs):
     simulation_choice = 'yes'
     f_Aw =100
     f_AwP1 = 100* f_Aw
-    acceptableDiff= 0.01
+    acceptableDiff= 0.01 * BA_AwT
     BADiffFlag = False
     iterCount = 0 
     while BADiffFlag == False:
@@ -956,10 +956,10 @@ def BAfactorFinder_Aw1 (**kwargs):
 
 def BAfromZeroToDataAw_test (startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice, simulation = True):
     logger.debug('getting basal area from time zero to time of data for aspen')
-#    if simulation_choice == 'yes':
-#        max_age = startTage
-#    elif simulation_choice == 'no':
-    max_age = 251
+    if simulation_choice == 'yes':
+        max_age = startTage
+    elif simulation_choice == 'no':
+        max_age = 250
     BA_Aw_DF =   pd.DataFrame (columns=['BA_Aw']) 
 
 
