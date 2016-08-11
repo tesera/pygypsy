@@ -427,6 +427,10 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
             startTagePlF += 1
             startTageSbF += 1
             
-        output_DF = pd.concat([output_DF_Aw, output_DF_Sw, output_DF_Sb, output_DF_Pl ], axis=1)
+        densities_DF = pd.DataFrame(densities)
+        output_DF = pd.concat([densities_DF, output_DF_Aw, output_DF_Sw, output_DF_Sb, output_DF_Pl ], axis=1)
+        
+        #output_DF('MVol_Aw') = map ( MerchantableVolumeAw, output_DF.N_bh_AwT, output_DF.BA_Aw, output_DF.topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw)
+        
 
     return output_DF

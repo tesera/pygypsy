@@ -903,56 +903,6 @@ def BAfactorFinder_Aw1 (**kwargs):
     return f_Aw
 
 
-#def BAfactorFinder_Aw (**kwargs):
-#    startTage = kwargs['startTage']
-#    startTageAw = kwargs['startTageAw']
-#    y2bh_Aw = kwargs['y2bh_Aw']
-#    SC_Aw = kwargs['SC_Aw']
-#    SI_bh_Aw = kwargs['SI_bh_Aw']
-#    N_bh_AwT = kwargs['N_bh_AwT']
-#    N0_Aw = kwargs['N0_Aw']
-#    BA_Aw0 = kwargs['BA_Aw0']
-#    BA_AwT = kwargs['BA_AwT']
-#    SDF_Aw0 = kwargs['SDF_Aw0']
-#
-#
-#
-#    simulation_choice = 'yes'
-#    f_Aw =2.8
-#    f_AwP1 = 1.5* f_Aw
-#    acceptableDiff= 0.1
-#    BADiffFlag = False
-#    iterCount = 0 
-#    while BADiffFlag == False:
-#        BA_AwB = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, SDF_Aw0, simulation_choice, simulation = True)[0]
-#        
-#        if abs(BA_AwT - BA_AwB) < acceptableDiff:
-#            BADiffFlag = True
-#        else:
-#            if (BA_AwT - BA_AwB) < 0 :
-#                f_AwP1 = f_Aw
-#                f_AwP = f_Aw  *  (1+(numpy.log10 (BA_AwT) - numpy.log10 (abs(BA_AwB)) )/ (100*numpy.log10 (abs(BA_AwB))) )
-#                f_Aw= (f_AwP+f_Aw)/2             
-#            elif (BA_AwT - BA_AwB) > 0 :
-#                #f_AwN = f_Aw * (1+(numpy.log10 (BA_AwT) + numpy.log10(abs(BA_AwB)) )/ (100* numpy.log10 (abs(BA_AwB))) )
-#                f_Aw= (f_Aw+f_AwP1)/2
-#                #print f_Aw
-#            
-#        #print BA_Aw0, BA_AwT, BA_AwB, f_Aw
-#        
-#        iterCount = iterCount + 1
-#            
-#        if iterCount == 1500:
-#            logging.warning(
-#                ('GYPSYNonSpatial.BAfactorFinder_Aw()'
-#                 ' Slow convergence with Basal Area: %s'
-#                 ' and factor:%s '), BA_AwB, f_Aw
-#            )
-#            return f_Aw
-#    return f_Aw
-#    
-
-
 
 def BAfromZeroToDataAw_test (startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice, simulation = True):
     logger.debug('getting basal area from time zero to time of data for aspen')
@@ -996,53 +946,6 @@ def BAfromZeroToDataAw_test (startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, 
         #print  'bhageAw ', bhage_Aw, 'BA Aw ',  BA_AwB
         
     return BA_AwB, BA_Aw_DF
-    
-#def BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, SDF_Aw0, simulation_choice, simulation = True):
-#    logger.debug('getting basal area from time zero to time of data for aspen')
-#    if simulation_choice == 'yes':
-#        max_age = startTage
-#    elif simulation_choice == 'no':
-#        max_age = 250
-#    BA_Aw_DF =   pd.DataFrame (columns=['BA_Aw']) 
-#    
-#    #BIG PROBLEM - SC_AW MUST BE UPDATED AND SO THE SIMULATION HAS TO SIMULATE THE DENSITIES OF ALL SPECIES AND SIMULTANEOUSLY RECALCULATE THE SC AT EVERY TIME!!!!!
-#    #FOR THAT I WILL NEED TO COUNT THE AGES OF ALL DIFFERENT SPECIES AT EVERY SIMULATION
-#    
-#    # create a dictionary containing year (plot) densities and SCs for each species
-#
-#    t = 0
-#    BA_tempAw = BA_Aw0
-#    while t < max_age:
-#        tage_Aw = startTageAw - startTage  
-#        bhage_Aw = tage_Aw - y2bh_Aw
-#        N_bh_AwT = densityAw (SDF_Aw0, bhage_Aw, SI_bh_Aw)
-#        #SC_Aw
-#        if N0_Aw > 0:
-#            if bhage_Aw < 0:
-#                BA_AwB = 0 
-#                pass
-#            if bhage_Aw > 0 :
-#                SC_Aw = (SC_Aw ) * f_Aw/N_bh_AwT
-#                BAinc_Aw =  BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, bhage_Aw, BA_tempAw)
-#                BA_tempAw = BA_tempAw + BAinc_Aw
-#                BA_AwB = BA_tempAw
-#                if BA_AwB < 0:
-#                    BA_AwB = 0 
-#                
-#                    
-#            else:
-#                BA_AwB=0
-#            
-#        else:
-#            BA_tempAw = 0
-#            BA_AwB = 0
-#        if simulation == False:
-#            BA_Aw_DF = BA_Aw_DF.append ({'BA_Aw':BA_AwB}, ignore_index=True)
-#        t +=1  
-#        startTageAw += 1
-#        #print  'bhageAw ', bhage_Aw, 'BA Aw ',  BA_AwB
-#        
-#    return BA_AwB, BA_Aw_DF
 
 
 def BAfactorFinder_Sb (**kwargs):
