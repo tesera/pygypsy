@@ -17,8 +17,8 @@ from GYPSYNonSpatial import (BasalAreaIncrementNonSpatialAw,
                              densityAw, densitySw,
                              densitySb, densityPl,
                              SCestimate,
-                             #BAfactorFinder_Aw,
-                             #BAfromZeroToDataAw,
+                             BAfactorFinder_Aw,
+                             BAfromZeroToDataAw,
                              BAfactorFinder_Sb,
                              BAfromZeroToDataSb,
                              BAfactorFinder_Sw,
@@ -30,8 +30,6 @@ from GYPSYNonSpatial import (BasalAreaIncrementNonSpatialAw,
                              MerchantableVolumeSb,
                              MerchantableVolumePl,
                              densities_and_SCs_to_250,
-                             BAfromZeroToDataAw_test,
-                             BAfactorFinder_Aw1,
                              GrossTotalVolume_Aw,
                              GrossTotalVolume_Sw,
                              GrossTotalVolume_Sb,
@@ -103,7 +101,7 @@ def get_factors_for_all_species(**kwargs):
 #            f_Aw = BAfactorFinder_Aw (**kwargs)
             
         if kwargs['N0_Aw'] > 0:
-            f_Aw = BAfactorFinder_Aw1 (**kwargs)
+            f_Aw = BAfactorFinder_Aw (**kwargs)
 
         if kwargs['N0_Sb'] > 0:
             f_Sb = BAfactorFinder_Sb (**kwargs)
@@ -337,8 +335,7 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         '''
 
         logger.debug('Getting basal area from time 0 to time of data')
-        BA_0_to_data_Aw = BAfromZeroToDataAw_test (startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice = 'no', simulation = False)
-        #BA_0_to_data_Aw = BAfromZeroToDataAw (startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, f_Aw, SDF_Aw0, simulation_choice, simulation = False)
+        BA_0_to_data_Aw = BAfromZeroToDataAw (startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice = 'no', simulation = False)
         BA_0_to_data_Sb = BAfromZeroToDataSb (startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice,  simulation = False)
         BA_0_to_data_Sw = BAfromZeroToDataSw (startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice, simulation = False)
         BA_0_to_data_Pl = BAfromZeroToDataPl (startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice, simulation = False)
@@ -408,18 +405,6 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
                 BA_PlT = 0
                 topHeight_Pl = 0
 
-#            Tvol = GrossTotalVolume ( BA_AwT, BA_SbT, BA_SwT, BA_PlT, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl)
-#
-#            Tvol_Aw = Tvol[0]
-#            Tvol_Sb = Tvol[1]
-#            Tvol_Sw = Tvol[2]
-#            Tvol_Pl = Tvol[3]
-#
-#
-#            MVol_Aw = MerchantableVolumeAw(N_bh_AwT, BA_AwT, topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw)
-#            MVol_Sb = MerchantableVolumeSb(N_bh_SbT, BA_SbT, topHeight_Sb, StumpDOB_Sb, StumpHeight_Sb , TopDib_Sb, Tvol_Sb)
-#            MVol_Sw = MerchantableVolumeSw(N_bh_SwT, BA_SwT, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw)
-#            MVol_Pl = MerchantableVolumePl(N_bh_PlT, BA_PlT, topHeight_Pl, StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, Tvol_Pl)
             
             output_DF_Sw = output_DF_Sw.append({ 'BA_Sw':BA_SwT}, ignore_index=True)
             output_DF_Sb = output_DF_Sb.append({ 'BA_Sb':BA_SbT}, ignore_index=True)

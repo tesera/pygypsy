@@ -857,7 +857,7 @@ def densities_and_SCs_to_250 (**kwargs):
         
     return densities_along_time
 # this code just below is to be use by the test_iter.py 
-def BAfactorFinder_Aw1 (**kwargs):
+def BAfactorFinder_Aw (**kwargs):
     startTage = kwargs['startTage']
     SI_bh_Aw = kwargs['SI_bh_Aw']
     N_bh_AwT = kwargs['N_bh_AwT']
@@ -874,7 +874,7 @@ def BAfactorFinder_Aw1 (**kwargs):
     BADiffFlag = False
     iterCount = 0 
     while BADiffFlag == False:
-        BA_AwB = BAfromZeroToDataAw_test (startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice, simulation = True)[0]
+        BA_AwB = BAfromZeroToDataAw (startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice, simulation = True)[0]
         
         if abs(BA_AwT - BA_AwB) < acceptableDiff:
             BADiffFlag = True
@@ -888,7 +888,7 @@ def BAfactorFinder_Aw1 (**kwargs):
                 f_Aw= (f_Aw+f_AwP1)/2
                 #print f_Aw
             
-        print BA_AwT, BA_AwB, f_Aw
+        #print BA_AwT, BA_AwB, f_Aw
         
         iterCount = iterCount + 1
             
@@ -904,7 +904,7 @@ def BAfactorFinder_Aw1 (**kwargs):
 
 
 
-def BAfromZeroToDataAw_test (startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice, simulation = True):
+def BAfromZeroToDataAw (startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice, simulation = True):
     logger.debug('getting basal area from time zero to time of data for aspen')
     if simulation_choice == 'yes':
         max_age = startTage
