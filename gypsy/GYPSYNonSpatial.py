@@ -1288,66 +1288,46 @@ Gross total volume is estimated only using species specific Basal Area and Top h
 
 '''
 
-        
-def GrossTotalVolume( BA_Aw, BA_Sb, BA_Sw, BA_Pl, topHeight_Aw, topHeight_Sb, topHeight_Sw, topHeight_Pl):
-    if topHeight_Aw > 0.8:
-        if sp_Aw[0] == 'Aw' or \
-           sp_Aw[0] == 'Bw' or \
-           sp_Aw[0] == 'Pb' or \
-           sp_Aw[0] == 'A' or \
-           sp_Aw[0] == 'H':
-              a1     =        0.248718 
-              a2     =         0.98568 
-              a3     =        0.857278 
-              a4     =        -24.9961
-              Tvol_Aw = a1* (BA_Aw**a2) * (topHeight_Aw**a3) * numpy.exp(1+(a4/( (topHeight_Aw**2)+1)) )
-    elif topHeight_Aw < 1.3:
-        Tvol_Aw = 0
-        
-              
-    if topHeight_Sb > 1.3:
-        if sp_Sb[0] == 'Sb' or \
-           sp_Sb[0] == 'Lt' or \
-           sp_Sb[0] == 'La' or \
-           sp_Sb[0] == 'Lw' or \
-           sp_Sb[0] == 'L':
-               b1    =          0.48628 
-               b2    =         0.982962 
-               b3    =         0.910603
-               Tvol_Sb = b1 * (BA_Sb**b2) * (topHeight_Sb**b3)
-    elif topHeight_Sb < 1.3:
-        Tvol_Sb = 0
-               
-    if topHeight_Sw > 1.3:
-        if sp_Sw[0] == 'Sw' or \
-           sp_Sw[0] == 'Se' or \
-           sp_Sw[0] == 'Fd' or \
-           sp_Sw[0] == 'Fb' or \
-           sp_Sw[0] == 'Fa':
-               b1    =          0.41104 
-               b2    =         0.983108 
-               b3    =         0.971061
-               Tvol_Sw = b1 * (BA_Sw**b2) *  (topHeight_Sw**b3) 
-    elif topHeight_Sw < 1.3:
-        Tvol_Sw = 0
-               
-    if topHeight_Pl > 1.3:
-        if sp_Pl[0] == 'P' or \
-           sp_Pl[0] == 'Pl' or \
-           sp_Pl[0] == 'Pj' or \
-           sp_Pl[0] == 'Pa' or \
-           sp_Pl[0] == 'Pf':
-               a1     =        0.194086 
-               a2     =        0.988276 
-               a3     =        0.949346 
-               a4     =        -3.39036
-               Tvol_Pl = a1* (BA_Pl**a2) * (topHeight_Pl **a3) * numpy.exp(1+(a4/( (topHeight_Pl**2)+1)) )
-    elif topHeight_Pl < 1.3:
-        Tvol_Pl = 0
-               
-    return Tvol_Aw, Tvol_Sb, Tvol_Sw, Tvol_Pl
-    
+def GrossTotalVolume_Aw (BA_Aw, topHeight_Aw):
+    Tvol_Aw = 0
+    if topHeight_Aw > 0:
+        a1     =        0.248718 
+        a2     =         0.98568 
+        a3     =        0.857278 
+        a4     =        -24.9961
+        Tvol_Aw = a1* (BA_Aw**a2) * (topHeight_Aw**a3) * numpy.exp(1+(a4/( (topHeight_Aw**2)+1)) )
+    return Tvol_Aw
 
+def GrossTotalVolume_Sw ( BA_Sw, topHeight_Sw):
+    Tvol_Sw = 0
+    if topHeight_Sw > 0:
+        b1    =          0.41104 
+        b2    =         0.983108 
+        b3    =         0.971061
+        Tvol_Sw = b1 * (BA_Sw**b2) *  (topHeight_Sw**b3) 
+    return Tvol_Sw
+
+      
+def GrossTotalVolume_Sb (BA_Sb, topHeight_Sb):
+    Tvol_Sb = 0             
+    if topHeight_Sb > 0:
+        b1    =          0.48628 
+        b2    =         0.982962 
+        b3    =         0.910603
+        Tvol_Sb = b1 * (BA_Sb**b2) * (topHeight_Sb**b3)
+    return Tvol_Sb
+       
+               
+def GrossTotalVolume_Pl (BA_Pl, topHeight_Pl): 
+    Tvol_Pl = 0         
+    if topHeight_Pl > 0:
+        a1     =        0.194086 
+        a2     =        0.988276 
+        a3     =        0.949346 
+        a4     =        -3.39036
+        Tvol_Pl = a1* (BA_Pl**a2) * (topHeight_Pl **a3) * numpy.exp(1+(a4/( (topHeight_Pl**2)+1)) )
+    return Tvol_Pl
+    
 
 
 '''
@@ -1416,8 +1396,6 @@ def MerchantableVolumeSb(N_bh_Sb, BA_Sb, topHeight_Sb, StumpDOB_Sb, StumpHeight_
                
 
 
-
-
 def MerchantableVolumeSw(N_bh_Sw, BA_Sw, topHeight_Sw, StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, Tvol_Sw):    
     if N_bh_Sw >0:
             k_Sw=(BA_Sw * 10000.0 / N_bh_Sw)**0.5
@@ -1441,8 +1419,6 @@ def MerchantableVolumeSw(N_bh_Sw, BA_Sw, topHeight_Sw, StumpDOB_Sw, StumpHeight_
         MVol_Sw=0               
                
     return MVol_Sw
-
-
 
 
 

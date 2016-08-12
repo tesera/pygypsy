@@ -16,7 +16,7 @@ from GYPSYNonSpatial import (BasalAreaIncrementNonSpatialAw,
                              BasalAreaIncrementNonSpatialPl,
                              densityAw, densitySw,
                              densitySb, densityPl,
-                             SCestimate, GrossTotalVolume,
+                             SCestimate,
                              #BAfactorFinder_Aw,
                              #BAfromZeroToDataAw,
                              BAfactorFinder_Sb,
@@ -31,7 +31,11 @@ from GYPSYNonSpatial import (BasalAreaIncrementNonSpatialAw,
                              MerchantableVolumePl,
                              densities_and_SCs_to_250,
                              BAfromZeroToDataAw_test,
-                             BAfactorFinder_Aw1)
+                             BAfactorFinder_Aw1,
+                             GrossTotalVolume_Aw,
+                             GrossTotalVolume_Sw,
+                             GrossTotalVolume_Sb,
+                             GrossTotalVolume_Pl)
 logger = logging.getLogger(__name__)
 
 # input - species, top height, total age, BHage (from the function), N (or density), current Basal Area,  Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
@@ -430,7 +434,15 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         densities_DF = pd.DataFrame(densities)
         output_DF = pd.concat([densities_DF, output_DF_Aw, output_DF_Sw, output_DF_Sb, output_DF_Pl ], axis=1)
         
-        #output_DF('MVol_Aw') = map ( MerchantableVolumeAw, output_DF.N_bh_AwT, output_DF.BA_Aw, output_DF.topHeight_Aw, StumpDOB_Aw, StumpHeight_Aw , TopDib_Aw, Tvol_Aw)
+        output_DF ['Gross_Total_Volume_Aw'] = output_DF.apply (lambda x: GrossTotalVolume_Aw (x['BA_Aw'], x['topHeight_Aw']), axis = 1) 
+        output_DF ['Gross_Total_Volume_Sw'] = output_DF.apply (lambda x: GrossTotalVolume_Sw (x['BA_Sw'], x['topHeight_Sw']), axis = 1) 
+        output_DF ['Gross_Total_Volume_Sb'] = output_DF.apply (lambda x: GrossTotalVolume_Sb (x['BA_Sb'], x['topHeight_Sb']), axis = 1) 
+        output_DF ['Gross_Total_Volume_Pl'] = output_DF.apply (lambda x: GrossTotalVolume_Pl (x['BA_Pl'], x['topHeight_Pl']), axis = 1) 
+        
+        output_DF ['MerchantableVolumeAw'] = output_DF.apply (lambda x: MerchantableVolumeAw (x['N_bh_AwT'], x['BA_Aw'], x['topHeight_Aw'], StumpDOB_Aw, StumpHeight_Aw, TopDib_Aw, x['Gross_Total_Volume_Aw']), axis = 1) 
+        output_DF ['MerchantableVolumeSw'] = output_DF.apply (lambda x: MerchantableVolumeSw (x['N_bh_SwT'], x['BA_Sw'], x['topHeight_Sw'], StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, x['Gross_Total_Volume_Sw']), axis = 1) 
+        output_DF ['MerchantableVolumeSb'] = output_DF.apply (lambda x: MerchantableVolumeSb (x['N_bh_SbT'], x['BA_Sb'], x['topHeight_Sb'], StumpDOB_Sb, StumpHeight_Sb, TopDib_Sb, x['Gross_Total_Volume_Sb']), axis = 1) 
+        output_DF ['MerchantableVolumePl'] = output_DF.apply (lambda x: MerchantableVolumePl (x['N_bh_PlT'], x['BA_Pl'], x['topHeight_Pl'], StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, x['Gross_Total_Volume_Pl']), axis = 1)  
         
 
     return output_DF
