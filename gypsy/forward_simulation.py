@@ -7,6 +7,7 @@ Created on Fri Apr 29 16:06:29 2016
 import logging
 import pandas as pd
 import os
+import matplotlib.pyplot as plt
 
 from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
 from GypsyDataPrep import dataPrepGypsy
