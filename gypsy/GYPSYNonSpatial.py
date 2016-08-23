@@ -1454,7 +1454,7 @@ def  plot_merchantableVol(output_DF):
     MerchVol =  output_DF.loc[:,['', 'MerchantableVolumeAw','MerchantableVolumeSw', 'MerchantableVolumeSb','MerchantableVolumePl']]    
 
     MerchVolPlot = MerchVol.plot('')
-    plt.xlabel('Year', fontsize=14)
+    MerchVolPlot.xlabel('Year', fontsize=14)
     
     return MerchVolPlot 
     
@@ -1471,7 +1471,7 @@ def  plot_GrTotVol(output_DF):
     GrTotVol =  output_DF.loc[:,['', 'Gross_Total_Volume_Aw','Gross_Total_Volume_Sw', 'Gross_Total_Volume_Sb','Gross_Total_Volume_Pl']]    
 
     GrTotVolPlot = GrTotVol.plot('')
-    plt.xlabel('Year', fontsize=14)
+    GrTotVolPlot.xlabel('Year', fontsize=14)
     
     return GrTotVolPlot 
 
