@@ -1450,44 +1450,76 @@ def MerchantableVolumePl (N_bh_Pl, BA_Pl, topHeight_Pl, StumpDOB_Pl, StumpHeight
 
 #uncertain if '' will give the column of years
 
-def  plot_merchantableVol(output_DF):
-    MerchVol =  output_DF.loc[:,['', 'MerchantableVolumeAw','MerchantableVolumeSw', 'MerchantableVolumeSb','MerchantableVolumePl']]    
+def  plot_BA(output_DF):
+    BA =  output_DF.loc[:,['BA_Aw','BA_Sw', 'BA_Sb','BA_Pl']]    
+    BAPlot = BA.plot()
+    plt.xlabel('Year', fontsize=14)
+    plt.ylabel('BA (m2)')
+    #plt.savefig(path)
+    return True 
 
-    MerchVolPlot = MerchVol.plot('')
-    MerchVolPlot.xlabel('Year', fontsize=14)
-    
-    return MerchVolPlot 
+def  plot_merchantableVol(output_DF):
+    MerchVol =  output_DF.loc[:,['MerchantableVolumeAw','MerchantableVolumeSw', 'MerchantableVolumeSb','MerchantableVolumePl']]    
+    MerchVolPlot = MerchVol.plot()
+    plt.xlabel('Year', fontsize=14)
+    plt.ylabel('Merc. Vol. (m3)')
+    #plt.savefig(path)
+    return True 
+
     
 def  plot_topHeight(output_DF):
-    topHeight =  output_DF.loc[:,['', 'topHeight_Aw','topHeight_Sw', 'topHeight_Sb','topHeight_Pl']]    
-
-    topHeightPlot = topHeight.plot('')
+    topHeight =  output_DF.loc[:,['topHeight_Aw','topHeight_Sw', 'topHeight_Sb','topHeight_Pl']]    
+    topHeightPlot = topHeight.plot()
     plt.xlabel('Year', fontsize=14)
-    
-    return topHeightPlot 
+    plt.ylabel('Top Height (m)')
+    #plt.savefig(path)
+    return True 
 
 
 def  plot_GrTotVol(output_DF):
-    GrTotVol =  output_DF.loc[:,['', 'Gross_Total_Volume_Aw','Gross_Total_Volume_Sw', 'Gross_Total_Volume_Sb','Gross_Total_Volume_Pl']]    
-
-    GrTotVolPlot = GrTotVol.plot('')
-    GrTotVolPlot.xlabel('Year', fontsize=14)
-    
-    return GrTotVolPlot 
+    GrTotVol =  output_DF.loc[:,['Gross_Total_Volume_Aw','Gross_Total_Volume_Sw', 'Gross_Total_Volume_Sb','Gross_Total_Volume_Pl']]    
+    GrTotVolPlot = GrTotVol.plot()
+    plt.xlabel('Year', fontsize=14)
+    plt.ylabel('Gr. Tot.Vol (m3)')
+    #plt.savefig(path)
+    return True 
 
 
 def  plot_SC(output_DF):
-    SC =  output_DF.loc[:,['', 'SC_Aw','SC_Sw', 'SC_Sb','SC_Pl']]    
-
-    SCPlot = SC.plot('')
+    SC =  output_DF.loc[:,['SC_Aw','SC_Sw', 'SC_Sb','SC_Pl']]    
+    SCPlot = SC.plot()
     plt.xlabel('Year', fontsize=14)
-    
-    return SCPlot 
+    plt.ylabel('Sp Comp.')
+    #plt.savefig(path)
+    return True  
     
 def  plot_N(output_DF):
-    N =  output_DF.loc[:,['', 'N_bh_AwT','N_bh_SwT', 'N_bh_SbT','N_bh_PlT']]    
-
-    NPlot = N.plot('')
+    N =  output_DF.loc[:,['N_bh_AwT','N_bh_SwT', 'N_bh_SbT','N_bh_PlT']]    
+    NPlot = N.plot()
     plt.xlabel('Year', fontsize=14)
+    plt.ylabel('Density')
+    #plt.savefig(path)
+    return True 
     
-    return NPlot 
+def save_plot (output_DF, path = None):
+    fig = plt.figure(1)
+    sub1 = fig.add_subplot(321)
+    plt.plot(plot_BA(output_DF))
+    sub2 = fig.add_subplot(322)
+    sub2.plot(plot_merchantableVol(output_DF))
+    sub3 = fig.add_subplot(323)
+    sub3.plot(plot_topHeight(output_DF))
+    sub4 = fig.add_subplot(324)
+    sub4.plot(plot_GrTotVol(output_DF))
+    sub5 = fig.add_subplot(325)
+    sub5.plot(plot_SC(output_DF))
+    sub6 = fig.add_subplot(326)
+    sub6.plot(plot_N(output_DF))
+    plt.show()
+    #plt.savefig(path)
+
+    
+    return True
+
+    
+  
