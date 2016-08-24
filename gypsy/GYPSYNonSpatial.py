@@ -1504,7 +1504,7 @@ def  plot_N(output_DF):
 def save_plot (output_DF, path = None):
     fig = plt.figure(1)
     sub1 = fig.add_subplot(321)
-    plt.plot(plot_BA(output_DF))
+    sub1.plot(plot_BA(output_DF))
     sub2 = fig.add_subplot(322)
     sub2.plot(plot_merchantableVol(output_DF))
     sub3 = fig.add_subplot(323)
