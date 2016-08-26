@@ -1476,6 +1476,9 @@ def _plot_simulation_variables(simulation_df, ax=None, plot_vars=None, y_lab='')
     plot_vars     -- list of strings identifying variable (column names) to plot
     """
     # TODO: make a default axes so that this works aside from save_plot
+    if ax is None:
+        raise ValueError('Axes cannot be done')
+
     if plot_vars is None:
         raise ValueError('Varialbe to splot must be specified')
 
@@ -1485,13 +1488,10 @@ def _plot_simulation_variables(simulation_df, ax=None, plot_vars=None, y_lab='')
     ax.set_ylabel(y_lab)
 
 
-def  plot_topHeight(output_DF, ax):
-    topHeight =  output_DF.loc[:,['topHeight_Aw','topHeight_Sw', 'topHeight_Sb','topHeight_Pl']]
-    topHeightPlot = topHeight.plot()
-    ax.set_xlabel('Year', fontsize=14)
-    ax.set_ylabel('Top Height (m)')
-    #plt.savefig(path)
-    return True
+def plot_topHeight(output_DF, ax=None):
+    _plot_simulation_variable(output_DF, ax=ax,
+                              plot_vars=['topHeight_Aw','topHeight_Sw', 'topHeight_Sb','topHeight_Pl'],
+                              y_lab='Top Height (m)')
 
 
 def  plot_GrTotVol(output_DF, ax):
