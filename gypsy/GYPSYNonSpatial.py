@@ -1450,24 +1450,6 @@ def MerchantableVolumePl (N_bh_Pl, BA_Pl, topHeight_Pl, StumpDOB_Pl, StumpHeight
 
 #uncertain if '' will give the column of years
 
-def  plot_BA(output_DF, ax):
-    BA =  output_DF.loc[:,['BA_Aw','BA_Sw', 'BA_Sb','BA_Pl']]
-    ax.plot(range(250))
-    BAPlot = BA.plot()
-    ax.set_xlabel('Year', fontsize=14)
-    ax.set_ylabel('BA (m2)')
-    #plt.savefig(path)
-    return True
-
-def  plot_merchantableVol(output_DF, ax):
-    MerchVol =  output_DF.loc[:,['MerchantableVolumeAw','MerchantableVolumeSw', 'MerchantableVolumeSb','MerchantableVolumePl']]
-    ax.plot(range(250))
-    MerchVolPlot = MerchVol.plot()
-    ax.set_xlabel('Year', fontsize=14)
-    ax.set_ylabel('Merc. Vol. (m3)')
-    #plt.savefig(path)
-    return True
-
 def _plot_simulation_variables(simulation_df, ax=None, plot_vars=None, y_lab=''):
     """
     Keyword Arguments:
@@ -1488,36 +1470,38 @@ def _plot_simulation_variables(simulation_df, ax=None, plot_vars=None, y_lab='')
     ax.set_ylabel(y_lab)
 
 
+def plot_BA(output_DF, ax=None):
+    _plot_simulation_variables(output_DF, ax=ax,
+                               plot_vars['BA_Aw','BA_Sw', 'BA_Sb','BA_Pl'],
+                               y_lab='BA (m2)')
+
+def plot_merchantableVol(output_DF, ax):
+    _plot_simulation_variables(output_DF, ax=ax,
+                               plot_vars=['MerchantableVolumeAw','MerchantableVolumeSw',
+                                          'MerchantableVolumeSb','MerchantableVolumePl'],
+                               y_lab='Merc. Vo. (m3)')
+
 def plot_topHeight(output_DF, ax=None):
     _plot_simulation_variable(output_DF, ax=ax,
                               plot_vars=['topHeight_Aw','topHeight_Sw', 'topHeight_Sb','topHeight_Pl'],
                               y_lab='Top Height (m)')
 
 
-def  plot_GrTotVol(output_DF, ax):
-    GrTotVol =  output_DF.loc[:,['Gross_Total_Volume_Aw','Gross_Total_Volume_Sw', 'Gross_Total_Volume_Sb','Gross_Total_Volume_Pl']]
-    GrTotVolPlot = GrTotVol.plot()
-    ax.set_xlabel('Year', fontsize=14)
-    ax.set_ylabel('Gr. Tot.Vol (m3)')
-    #plt.savefig(path)
-    return True
+def plot_GrTotVol(output_DF, ax):
+    _plot_simulation_variable(output_DF, ax=ax,
+                              plot_vars=['Gross_Total_Volume_Aw','Gross_Total_Volume_Sw',
+                                         'Gross_Total_Volume_Sb','Gross_Total_Volume_Pl'],
+                              y_lab='Gr. Tot. Vol. (m3)')
 
+def plot_SC(output_DF, ax):
+    _plot_simulation_variable(output_DF, ax=ax,
+                              plot_vars=['SC_Aw','SC_Sw', 'SC_Sb','SC_Pl'],
+                              y_lab='Sp. Comp.')
 
-def  plot_SC(output_DF, ax):
-    SC =  output_DF.loc[:,['SC_Aw','SC_Sw', 'SC_Sb','SC_Pl']]
-    SCPlot = SC.plot()
-    ax.set_xlabel('Year', fontsize=14)
-    ax.set_ylabel('Sp Comp.')
-    #plt.savefig(path)
-    return True
-
-def  plot_N(output_DF, ax):
-    N =  output_DF.loc[:,['N_bh_AwT','N_bh_SwT', 'N_bh_SbT','N_bh_PlT']]
-    ax.plot(N)
-    ax.set_xlabel('Year', fontsize=14)
-    ax.set_ylabel('Density')
-    #plt.savefig(path)
-    return True
+def plot_N(output_DF, ax):
+    _plot_simulation_variable(output_DF, ax=ax,
+                              plot_vars=['N_bh_AwT','N_bh_SwT', 'N_bh_SbT','N_bh_PlT'],
+                              y_lab='Density')
 
 def save_plot (output_DF, path = None):
     fig = plt.figure(1)
