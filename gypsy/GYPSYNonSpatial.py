@@ -1450,71 +1450,74 @@ def MerchantableVolumePl (N_bh_Pl, BA_Pl, topHeight_Pl, StumpDOB_Pl, StumpHeight
 
 #uncertain if '' will give the column of years
 
-def  plot_BA(output_DF):
+def  plot_BA(output_DF, ax):
     BA =  output_DF.loc[:,['BA_Aw','BA_Sw', 'BA_Sb','BA_Pl']]    
+    ax.plot(range(250))
     BAPlot = BA.plot()
-    plt.xlabel('Year', fontsize=14)
-    plt.ylabel('BA (m2)')
+    ax.set_xlabel('Year', fontsize=14)
+    ax.set_ylabel('BA (m2)')
     #plt.savefig(path)
     return True 
 
-def  plot_merchantableVol(output_DF):
+def  plot_merchantableVol(output_DF, ax):
     MerchVol =  output_DF.loc[:,['MerchantableVolumeAw','MerchantableVolumeSw', 'MerchantableVolumeSb','MerchantableVolumePl']]    
+    ax.plot(range(250))
     MerchVolPlot = MerchVol.plot()
-    plt.xlabel('Year', fontsize=14)
-    plt.ylabel('Merc. Vol. (m3)')
+    ax.set_xlabel('Year', fontsize=14)
+    ax.set_ylabel('Merc. Vol. (m3)')
     #plt.savefig(path)
     return True 
 
     
-def  plot_topHeight(output_DF):
+def  plot_topHeight(output_DF, ax):
     topHeight =  output_DF.loc[:,['topHeight_Aw','topHeight_Sw', 'topHeight_Sb','topHeight_Pl']]    
     topHeightPlot = topHeight.plot()
-    plt.xlabel('Year', fontsize=14)
-    plt.ylabel('Top Height (m)')
+    ax.set_xlabel('Year', fontsize=14)
+    ax.set_ylabel('Top Height (m)')
     #plt.savefig(path)
     return True 
 
 
-def  plot_GrTotVol(output_DF):
+def  plot_GrTotVol(output_DF, ax):
     GrTotVol =  output_DF.loc[:,['Gross_Total_Volume_Aw','Gross_Total_Volume_Sw', 'Gross_Total_Volume_Sb','Gross_Total_Volume_Pl']]    
     GrTotVolPlot = GrTotVol.plot()
-    plt.xlabel('Year', fontsize=14)
-    plt.ylabel('Gr. Tot.Vol (m3)')
+    ax.set_xlabel('Year', fontsize=14)
+    ax.set_ylabel('Gr. Tot.Vol (m3)')
     #plt.savefig(path)
     return True 
 
 
-def  plot_SC(output_DF):
+def  plot_SC(output_DF, ax):
     SC =  output_DF.loc[:,['SC_Aw','SC_Sw', 'SC_Sb','SC_Pl']]    
     SCPlot = SC.plot()
-    plt.xlabel('Year', fontsize=14)
-    plt.ylabel('Sp Comp.')
+    ax.set_xlabel('Year', fontsize=14)
+    ax.set_ylabel('Sp Comp.')
     #plt.savefig(path)
     return True  
     
-def  plot_N(output_DF):
+def  plot_N(output_DF, ax):
     N =  output_DF.loc[:,['N_bh_AwT','N_bh_SwT', 'N_bh_SbT','N_bh_PlT']]    
-    NPlot = N.plot()
-    plt.xlabel('Year', fontsize=14)
-    plt.ylabel('Density')
+    ax.plot(N)
+    ax.set_xlabel('Year', fontsize=14)
+    ax.set_ylabel('Density')
     #plt.savefig(path)
     return True 
     
 def save_plot (output_DF, path = None):
     fig = plt.figure(1)
     sub1 = fig.add_subplot(321)
-    sub1.plot(plot_BA(output_DF))
+    plot_BA(output_DF, sub1)
     sub2 = fig.add_subplot(322)
-    sub2.plot(plot_merchantableVol(output_DF))
+    plot_merchantableVol(output_DF, sub2)
     sub3 = fig.add_subplot(323)
-    sub3.plot(plot_topHeight(output_DF))
+    plot_topHeight(output_DF, sub3)
     sub4 = fig.add_subplot(324)
-    sub4.plot(plot_GrTotVol(output_DF))
+    plot_GrTotVol(output_DF, sub4)
     sub5 = fig.add_subplot(325)
-    sub5.plot(plot_SC(output_DF))
+    plot_SC(output_DF, sub5)
     sub6 = fig.add_subplot(326)
-    sub6.plot(plot_N(output_DF))
+    plot_N(output_DF, sub6)
+    plt.tight_layout()
     plt.show()
     #plt.savefig(path)
 
