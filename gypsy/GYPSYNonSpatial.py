@@ -1457,22 +1457,20 @@ def _plot_simulation_variables(simulation_df, ax=None, plot_vars=None, y_lab='')
     axes          -- axes object ????
     plot_vars     -- list of strings identifying variable (column names) to plot
     """
-    # TODO: make a default axes so that this works aside from save_plot
-    if ax is None:
-        raise ValueError('Axes cannot be done')
-
+   
     if plot_vars is None:
-        raise ValueError('Varialbe to splot must be specified')
+        raise ValueError('Variable to plot must be specified')
 
     simulation_vars = simulation_df.loc[:,plot_vars]
-    ax.plot(simulation_vars)
+    simulation_vars.plot(ax=ax)
     ax.set_xlabel('Year', fontsize=14)
     ax.set_ylabel(y_lab)
+    
 
 
 def plot_BA(output_DF, ax=None):
     _plot_simulation_variables(output_DF, ax=ax,
-                               plot_vars['BA_Aw','BA_Sw', 'BA_Sb','BA_Pl'],
+                               plot_vars=['BA_Aw','BA_Sw', 'BA_Sb','BA_Pl'],
                                y_lab='BA (m2)')
 
 def plot_merchantableVol(output_DF, ax):
@@ -1482,41 +1480,41 @@ def plot_merchantableVol(output_DF, ax):
                                y_lab='Merc. Vo. (m3)')
 
 def plot_topHeight(output_DF, ax=None):
-    _plot_simulation_variable(output_DF, ax=ax,
+    _plot_simulation_variables(output_DF, ax=ax,
                               plot_vars=['topHeight_Aw','topHeight_Sw', 'topHeight_Sb','topHeight_Pl'],
                               y_lab='Top Height (m)')
 
 
 def plot_GrTotVol(output_DF, ax):
-    _plot_simulation_variable(output_DF, ax=ax,
+    _plot_simulation_variables(output_DF, ax=ax,
                               plot_vars=['Gross_Total_Volume_Aw','Gross_Total_Volume_Sw',
                                          'Gross_Total_Volume_Sb','Gross_Total_Volume_Pl'],
                               y_lab='Gr. Tot. Vol. (m3)')
 
 def plot_SC(output_DF, ax):
-    _plot_simulation_variable(output_DF, ax=ax,
+    _plot_simulation_variables(output_DF, ax=ax,
                               plot_vars=['SC_Aw','SC_Sw', 'SC_Sb','SC_Pl'],
                               y_lab='Sp. Comp.')
 
 def plot_N(output_DF, ax):
-    _plot_simulation_variable(output_DF, ax=ax,
+    _plot_simulation_variables(output_DF, ax=ax,
                               plot_vars=['N_bh_AwT','N_bh_SwT', 'N_bh_SbT','N_bh_PlT'],
                               y_lab='Density')
 
 def save_plot (output_DF, path = None):
     fig = plt.figure(1)
     sub1 = fig.add_subplot(321)
-    plot_BA(output_DF, sub1)
+    plot_BA(output_DF, ax=sub1)
     sub2 = fig.add_subplot(322)
-    plot_merchantableVol(output_DF, sub2)
+    plot_merchantableVol(output_DF, ax=sub2)
     sub3 = fig.add_subplot(323)
-    plot_topHeight(output_DF, sub3)
+    plot_topHeight(output_DF, ax=sub3)
     sub4 = fig.add_subplot(324)
-    plot_GrTotVol(output_DF, sub4)
+    plot_GrTotVol(output_DF, ax=sub4)
     sub5 = fig.add_subplot(325)
-    plot_SC(output_DF, sub5)
+    plot_SC(output_DF, ax=sub5)
     sub6 = fig.add_subplot(326)
-    plot_N(output_DF, sub6)
+    plot_N(output_DF, ax=sub6)
     plt.tight_layout()
     plt.show()
     #plt.savefig(path)
