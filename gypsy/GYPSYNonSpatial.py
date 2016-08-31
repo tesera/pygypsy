@@ -1463,8 +1463,11 @@ def _plot_simulation_variables(simulation_df, ax=None, plot_vars=None, y_lab='')
 
     simulation_vars = simulation_df.loc[:,plot_vars]
     simulation_vars.plot(ax=ax)
-    ax.set_xlabel('Year', fontsize=14)
-    ax.set_ylabel(y_lab)
+    ax.set_xlabel('Year', fontsize=10)
+    ax.set_ylabel(y_lab, fontsize=10)
+    #ax.legend(loc='upper left',  handlelength=0.5)
+    ax.legend(loc=2,prop={'size':6})
+    ax.tick_params(axis='both', which='major', labelsize=8)
     
 
 
