@@ -1516,8 +1516,9 @@ def save_plot (output_DF, path = None):
     sub6 = fig.add_subplot(326)
     plot_N(output_DF, ax=sub6)
     plt.tight_layout()
-    plt.show()
-    #plt.savefig(path)
+    #plt.show()
+    plt.savefig(path) #specify page size here to reduce legend size
+    plt.close()
 
 
     return True
