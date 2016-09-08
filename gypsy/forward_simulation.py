@@ -425,10 +425,17 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         output_DF ['Gross_Total_Volume_Sb'] = output_DF.apply (lambda x: GrossTotalVolume_Sb (x['BA_Sb'], x['topHeight_Sb']), axis = 1) 
         output_DF ['Gross_Total_Volume_Pl'] = output_DF.apply (lambda x: GrossTotalVolume_Pl (x['BA_Pl'], x['topHeight_Pl']), axis = 1) 
         
+        output_DF ['Gross_Total_Volume_Con'] = output_DF ['Gross_Total_Volume_Sw']+output_DF ['Gross_Total_Volume_Sb']+output_DF ['Gross_Total_Volume_Pl'] 
+        output_DF ['Gross_Total_Volume_Dec'] = output_DF ['Gross_Total_Volume_Aw']
+        output_DF ['Gross_Total_Volume_Tot'] = output_DF ['Gross_Total_Volume_Con'] + output_DF ['Gross_Total_Volume_Dec']
+        
         output_DF ['MerchantableVolumeAw'] = output_DF.apply (lambda x: MerchantableVolumeAw (x['N_bh_AwT'], x['BA_Aw'], x['topHeight_Aw'], StumpDOB_Aw, StumpHeight_Aw, TopDib_Aw, x['Gross_Total_Volume_Aw']), axis = 1) 
         output_DF ['MerchantableVolumeSw'] = output_DF.apply (lambda x: MerchantableVolumeSw (x['N_bh_SwT'], x['BA_Sw'], x['topHeight_Sw'], StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, x['Gross_Total_Volume_Sw']), axis = 1) 
         output_DF ['MerchantableVolumeSb'] = output_DF.apply (lambda x: MerchantableVolumeSb (x['N_bh_SbT'], x['BA_Sb'], x['topHeight_Sb'], StumpDOB_Sb, StumpHeight_Sb, TopDib_Sb, x['Gross_Total_Volume_Sb']), axis = 1) 
         output_DF ['MerchantableVolumePl'] = output_DF.apply (lambda x: MerchantableVolumePl (x['N_bh_PlT'], x['BA_Pl'], x['topHeight_Pl'], StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, x['Gross_Total_Volume_Pl']), axis = 1)  
         
+        output_DF ['MerchantableVolume_Con'] = output_DF ['MerchantableVolumeSw']+output_DF ['MerchantableVolumeSb']+output_DF ['MerchantableVolumePl'] 
+        output_DF ['MerchantableVolume_Dec'] = output_DF ['MerchantableVolumeAw']
+        output_DF ['MerchantableVolume_Tot'] = output_DF ['MerchantableVolume_Con'] + output_DF ['MerchantableVolume_Dec'] 
 
     return output_DF
