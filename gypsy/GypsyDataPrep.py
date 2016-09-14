@@ -180,10 +180,7 @@ def dataPrepGypsy (data):
         
 
         SI = domSpSI_estim(tempDomSp, domTage, domHT)
-        
-        #print 'kkk',tempDomSp,  SI
-        '''WHY NOT USE THE DATA SIs ????? I prefer using the height and age to estimate SI usign Gypsy equations. After all, SI from inventory is already an estimate. 
-        And we know that height and age have been directly measured. By using the SI from the inventory we may be propagating errors'''
+
         
         #SI = data.loc[i,'SI']
         
