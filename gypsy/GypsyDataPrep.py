@@ -133,7 +133,7 @@ def dataPrepGypsy (data):
     for i, row in data.iterrows():
     
         
-        '''empty dictionary to be filled with below. Except those last three element that seem to be constants defined a priori '''
+        '''empty dictionary to be filled with below. Except those last three elements that seem to be constants defined a priori '''
         
           # input - species, top height, total age, BH age, N (or density), current Basal Area, Measured Percent Stocking, StumpDOB, StumpHeight, TopDib, SI, Proportion of the sp
         

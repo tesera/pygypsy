@@ -6,6 +6,9 @@ FULLY AUTOMATED GIS-BASED INDIVIDUAL TREE CROWN DELINEATION BASED ON CURVATURE V
 @author: R. J. L. Argamosa a,* E.C. Paringit a, K.R. Quinton b, F. A. M. Tandoc a, R. A. G Faelga a, C. A. G. Ibañez a, M. A. V. Posilero a, G. P. Zaragosa a
 
 The International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences, Volume XLI-B8, 2016 XXIII ISPRS Congress, 12–19 July 2016, Prague, Czech Republic
+
+The following texts show the code written in Python language that utilizes several arcpy functions to delineate tree crowns as stated in this paper. 
+The script can only be executed outside the ArcGIS software and requires that the CHM and the arcpy script is contained in the same folder.
 """
 
 import arcpy, os, shutil
@@ -73,7 +76,8 @@ class crown:
         arcpy.RasterToPoint_conversion(self.rc, self.pt, '#') 
         arcpy.Integrate_management(self.pt,self.xy_tol)
     def curv_pts(self):
-        print 'generating negative profile curvature' arcpy.CreateThiessenPolygons_analysis(self.pt, self.thie,"ALL")
+        print 'generating negative profile curvature' 
+        arcpy.CreateThiessenPolygons_analysis(self.pt, self.thie,"ALL")
         arcpy.CheckOutExtension('3D')
         arcpy.Slope_3d(self.ext,self.slope, "DEGREE",1) 
         arcpy.Curvature_3d (self.slope,self.curv, 1, self.prof,"#") 
@@ -93,7 +97,8 @@ class crown:
             x+=1
             row3.getValue(field3) 
             arcpy.MakeFeatureLayer_management(fc3, "lyr") 
-            arcpy.SelectLayerByAttribute_management("lyr","NEW_SELECTION",\ "FID_thie="+str(row3.getValue(field3))) 
+            arcpy.SelectLayerByAttribute_management("lyr","NEW_SELECTION","FID_thie="+str(row3.getValue(field3)))
+ 
             itername=string.zfill(x,5)+'.shp'
             print str(x)+' '+'crowns created!' 
             arcpy.AggregatePoints_cartography('lyr', self.aggre+itername,self.size) 
@@ -102,7 +107,7 @@ class crown:
     def append(self):
         print 'appending shapefiles'
         utm=arcpy.SpatialReference("WGS 1984 UTM Zone 51N")
-        arcpy.CreateFeatureclass_management(ws, "POLYGON", "#", "DISABLED",\"DISABLED", utm) 
+        arcpy.CreateFeatureclass_management(ws, "POLYGON", "#", "DISABLED","DISABLED", utm) 
         env.workspace=self.add 
         listindv=arcpy.ListFeatureClasses() 
         arcpy.Append_management(listindv,"NO_TEST","#","#") 
