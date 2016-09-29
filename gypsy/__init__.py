@@ -1,4 +1,5 @@
-"""teskelypy package
+""" GYPSY
+Huang, S., Meng, S. X., & Yang, Y. (2009). A growth and yield projection system (GYPSY) for natural and post-harvest stands in Alberta. Forestry Division, Alberta Sustainable Resource Development, 25.
 """
 import os
 from .skel import has_legs
