@@ -52,4 +52,4 @@ def test_plot(chart_file):
     figure_path = os.path.join (DATA_DIR, 'figures', 'chartGR_{}'.format(outputfile))
     assert save_plot(chart_DF,  path = figure_path)
    
-    
+ 

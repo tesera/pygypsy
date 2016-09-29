@@ -8,7 +8,7 @@ with codecs_open('README.md', encoding='utf-8') as f:
 
 setup(name='gypsy',
       version='0.0.1',
-      description=u"Preprocessing helper for machine learning on tabular data",
+      description=u"Controlling Gypsy modules, and outputs",
       long_description=long_description,
       classifiers=[],
       keywords='',
