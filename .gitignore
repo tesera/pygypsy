@@ -55,3 +55,8 @@ target/
 # Virtualenv
 venv/
 *dev.env
+
+# temporary files
+*.swo
+*.swp
+*.tmp
