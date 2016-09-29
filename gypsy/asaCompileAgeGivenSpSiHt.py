@@ -239,3 +239,30 @@ def ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(species = 'Aw', siteIndex = 
             treeHeight = 0
 
     return treeHeight
+
+def computeTreeAge(siSp='',treeHt = 20, treeSi=15, maxTreeAge = 450,
+                   rowIndex = 0, printWarnings = True):
+    treeAge = (treeHt/treeSi)*25
+    htDiffFlag = False
+    iterCount = 0
+    acceptableDiff = 0.0001
+    while htDiffFlag == False:
+        newHt = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(siSp, treeSi, treeAge)
+        if abs(treeHt-newHt) < acceptableDiff:
+            htDiffFlag = True
+        else:
+            #print treeHt, newHt, treeAge
+            #treeAge = ((treeHt-newHt)/treeHt)*(treeAge/2) + treeAge
+            treeAge = ((treeHt-newHt)/treeHt)*(treeAge) + treeAge
+        iterCount = iterCount + 1
+
+        if iterCount == 150 and printWarnings == True:
+            print '\n asaCompileAgeGivenSpSiHt.computeTreeAge()'
+            print ' Slow convergence'
+            print ' rowIndex:', rowIndex, 'siSp:', siSp, 'treeHt:', treeHt, 'treeSi:', treeSi, 'current treeAge:', treeAge
+        if treeAge > 1000:
+            htDiffFlag = True
+            if printWarnings == True:
+                print '\n asaCompileAgeGivenSpSiHt.computeTreeAge()'
+                print ' Tree Age Search Routine Terminated; treeAge > 1000'
+                print ' rowIndex:', rowIndex, 'siSp:', siSp, 'treeHt:', treeHt, 'treeSi:', treeSi, 'current treeAge:', treeAge
