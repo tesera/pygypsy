@@ -266,3 +266,4 @@ def computeTreeAge(siSp='',treeHt = 20, treeSi=15, maxTreeAge = 450,
                 print '\n asaCompileAgeGivenSpSiHt.computeTreeAge()'
                 print ' Tree Age Search Routine Terminated; treeAge > 1000'
                 print ' rowIndex:', rowIndex, 'siSp:', siSp, 'treeHt:', treeHt, 'treeSi:', treeSi, 'current treeAge:', treeAge
+    return treeAge
