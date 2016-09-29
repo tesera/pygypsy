@@ -9,8 +9,8 @@ Created on Wed Apr  6 08:20:38 2016
 import logging
 import numpy
 import pandas as pd
-from asaCompileAgeGivenSpSiHt import ComputeGypsySiteIndex
-from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
+from asaCompileAgeGivenSpSiHt import (ComputeGypsySiteIndex,
+                                      ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge)
 import matplotlib.pyplot as plt
 
 from scipy.optimize import fmin
