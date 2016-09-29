@@ -25,7 +25,10 @@ from GYPSYNonSpatial import (densityNonSpatialAw,
                              BasalAreaIncrementNonSpatialSw,
                              BasalAreaIncrementNonSpatialPl,
                              BasalAreaIncrementNonSpatialSb,    
-                             GrossTotalVolume,
+                             GrossTotalVolume_Aw,
+                             GrossTotalVolume_Sw,
+                             GrossTotalVolume_Sb,
+                             GrossTotalVolume_Pl,
                              MerchantableVolumeAw,
                              MerchantableVolumeSw,
                              MerchantableVolumePl,
@@ -130,7 +133,7 @@ def dataPrepGypsy (data):
     for i, row in data.iterrows():
     
         
-        '''empty dictionary to be filled with below. Except those last three element that seem to be constants defined a priori '''
+        '''empty dictionary to be filled with below. Except those last three elements that seem to be constants defined a priori '''
         
           # input - species, top height, total age, BH age, N (or density), current Basal Area, Measured Percent Stocking, StumpDOB, StumpHeight, TopDib, SI, Proportion of the sp
         
@@ -177,10 +180,7 @@ def dataPrepGypsy (data):
         
 
         SI = domSpSI_estim(tempDomSp, domTage, domHT)
-        
-        #print 'kkk',tempDomSp,  SI
-        '''WHY NOT USE THE DATA SIs ????? I prefer using the height and age to estimate SI usign Gypsy equations. After all, SI from inventory is already an estimate. 
-        And we know that height and age have been directly measured. By using the SI from the inventory we may be propagating errors'''
+
         
         #SI = data.loc[i,'SI']
         

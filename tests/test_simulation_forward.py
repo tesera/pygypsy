@@ -4,7 +4,8 @@ import pandas as pd
 
 from gypsy import DATA_DIR
 from gypsy.forward_simulation import simulate_forwards_df
-from gypsy.GypsyDataPrep import dataPrepGypsy
+from gypsy.GYPSYNonSpatial import plot_GrTotVol
+from gypsy.GYPSYNonSpatial import save_plot
 
 
 #def test_forward_simulation():
@@ -31,8 +32,24 @@ def test_compare_forward_simulation(test_file):
     inputDF = pd.read_csv(os.path.join(DATA_DIR, 'forward_simulation_files',
                                        data_file_name))
 
-    result = simulate_forwards_df(inputDF, simulation_choice='no')
+    result = simulate_forwards_df(inputDF, simulation_choice='yes')
     assert type(result) == pd.DataFrame
 
     result.to_csv(os.path.join(DATA_DIR, 'output',
                                'comparisons_{}'.format(test_file)))
+
+
+
+
+chart_files = os.listdir(os.path.join(DATA_DIR, 'output'))
+chart_files = [(item) for item in chart_files]
+@pytest.mark.parametrize("chart_file", chart_files)
+
+def test_plot(chart_file):
+  
+    chart_DF = pd.read_csv (os.path.join(DATA_DIR, 'output', chart_file))
+    outputfile = os.path.splitext (chart_file)[0] + '.png'
+    figure_path = os.path.join (DATA_DIR, 'figures', 'chartGR_{}'.format(outputfile))
+    assert save_plot(chart_DF,  path = figure_path)
+   
+ 
