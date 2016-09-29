@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
-""" Functions 
-Created on Wed Apr  6 08:20:38 2016
+"""Gypsy Spatial
 
-@author: juliannosambatti
+Also does growth and yield simulation, but the formulas and variables are
+different from non spatial. See Huang et al (2009).
+
+Huang, S., Meng, S. X., & Yang, Y. (2009). A growth and yield projection system (GYPSY) for natural and post-harvest stands in Alberta. Forestry Division, Alberta Sustainable Resource Development, 25.
+
 """
 
 import numpy
