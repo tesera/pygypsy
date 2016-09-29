@@ -60,3 +60,8 @@ venv/
 *.swo
 *.swp
 *.tmp
+
+# working data
+*.doc*
+*.ppt*
+*.xls*
