@@ -18,3 +18,15 @@ docs:
   volumes:
     - ./:/opt/gypsy
   command: 'bash bin/make_docs.sh'
+lint:
+  container_name: gypsy
+  build: .
+  volumes:
+    - ./:/opt/gypsy
+  command: 'bash bin/lint.sh'
+pre-commit:
+  container_name: gypsy
+  build: .
+  volumes:
+    - ./:/opt/gypsy
+  command: 'bash bin/run_pylint_commit_hook.sh'
