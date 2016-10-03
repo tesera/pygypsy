@@ -1,14 +1,12 @@
 dev:
   container_name: gypsy
   build: .
-  env_file: env/dev.env
   volumes:
     - ./:/opt/gypsy
   command: ["/bin/bash", "--rcfile", "/opt/gypsy/venv/bin/activate"]
 test:
   container_name: gypsy
   build: .
-  env_file: env/dev.env
   volumes:
     - ./:/opt/gypsy
   command: 'bash bin/run_tests.sh'
@@ -18,3 +16,15 @@ docs:
   volumes:
     - ./:/opt/gypsy
   command: 'bash bin/make_docs.sh'
+lint:
+  container_name: gypsy
+  build: .
+  volumes:
+    - ./:/opt/gypsy
+  command: 'bash bin/lint.sh'
+pre-commit:
+  container_name: gypsy
+  build: .
+  volumes:
+    - ./:/opt/gypsy
+  command: 'bash git-hooks/pre-commit.sh'

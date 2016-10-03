@@ -49,19 +49,6 @@ False
 ```
 
 ## Development
-### dev.env
-
-A file, `dev.env` is required for some tasks
-
-It should have the following
-
-```
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-AWS_REGION=
-GITHUB_TOKEN=
-```
-
 ### docker-compose
 
 Several development tasks are defined in `docker-compose.yml`
@@ -86,6 +73,7 @@ Then it is possible to use the docker-compose tasks
 docker-compose run test # run tests
 docker-compose run docs # build docs
 docker-compose run dev # run bash
+docker-compose run lint # run linter
 ```
 
 ### Tests
@@ -99,8 +87,23 @@ Run the tests as follows
 docker-compose run test
 
 # or, if set up with virtualenv outside of container
-py.test tests/
+py.test -s -v tests/
 ```
+
+### Linting
+
+Linting checks the code for style and bugs.
+
+Run the linter as follows
+
+```
+docker-compose run lint
+
+# or, if set up with virtualenv outside of container
+bash bin/lint.sh
+```
+
+If you are familiar with pylint, you can use the `pylint` command directly.
 
 ### Documentation
 
@@ -119,4 +122,17 @@ cd docs
 sphinx-apidoc -o ./source ../gypsy
 make html
 make coverage
+```
+
+### Commit hooks
+
+Commit hooks run automatically when committing to the repository.
+
+You have to symlink from the commit hooks provided to your local git hooks directory as follows:
+
+You can override the commit hook by using the `-n` option when running `git commit`. This is however discouraged!
+
+```
+# from the root gypsy directory
+ln -s "$(pwd)/git-hooks/pre-commit.sh" .git/hooks/pre-commit
 ```
