@@ -29,7 +29,8 @@ setup(name='gypsy',
       ],
       extras_require={
           'test': ['pytest==2.9.1'],
-          'dev': ['pytest==2.9.1', 'sphinx==1.4.1']
+          'dev': ['pytest==2.9.1', 'sphinx==1.4.1',
+                  'pylint==1.5.4', 'git-pylint-commit-hook==2.1.1']
       },
       entry_points="""
       [console_scripts]

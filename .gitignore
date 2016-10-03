@@ -65,3 +65,6 @@ venv/
 *.doc*
 *.ppt*
 *.xls*
+
+# docker
+/.bash_history
