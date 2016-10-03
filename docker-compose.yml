@@ -27,4 +27,4 @@ pre-commit:
   build: .
   volumes:
     - ./:/opt/gypsy
-  command: 'bash bin/run_pylint_commit_hook.sh'
+  command: 'bash git-hooks/pre-commit.sh'

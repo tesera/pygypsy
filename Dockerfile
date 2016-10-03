@@ -16,4 +16,4 @@ RUN virtualenv -p python2.7 venv
 
 RUN . venv/bin/activate
 RUN pip install --upgrade pip
-RUN pip install --upgrade .[test]
+RUN pip install --upgrade .[dev]
