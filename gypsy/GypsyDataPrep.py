@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """ Data Preparation
 """
+import pandas as pd
 from copy import deepcopy
 from asaCompileAgeGivenSpSiHt import (computeTreeAge,
                                       ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge,
@@ -464,4 +465,7 @@ def dataPrepGypsy(data):
             'topHeight_Aw': topHeight_Aw, 'topHeight_Sw': topHeight_Sw, 'topHeight_Sb': topHeight_Sb, 'topHeight_Pl': topHeight_Pl
         }
 
-    return plot_dict, spList
+        plot_df = pd.DataFrame(plot_dict)
+        plot_df = plot_df.transpose()
+
+    return plot_df, spList
