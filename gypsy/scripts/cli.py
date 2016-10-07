@@ -1,3 +1,4 @@
+import os
 import click
 import pandas as pd
 
@@ -33,7 +34,6 @@ def cli(verbose):
 def prep(standtable, stand_id, id_field, output_path):
     """Prepare stand table for use in GYPSY simulation"""
     log.info('running prep')
-    import ipdb; ipdb.set_trace()
     standtable_df = pd.read_csv(standtable)
 
     # TODO: filter id by stand id
@@ -42,24 +42,37 @@ def prep(standtable, stand_id, id_field, output_path):
     prepped_data.to_csv(output_path)
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
-@click.argument('data', type=int)
+@click.argument('data', type=click.Path(exists=True))
 @click.option('--output-fields', '-f', multiple=True, type=str)
 @click.option('--stand-id', '-n', multiple=True, type=int)
 @click.option('--output-timestep', '-t', type=int)
 @click.option('--id-field', '-i', type=str)
 @click.option('--generate-plots', '-p', is_flag=True)
 @click.option('--write-id', '-w', is_flag=True)
-@click.option('--output-dir', '-o', type=click.Path()) # add a default directory
+@click.option('--output-dir', '-o', type=click.Path(exists=False),
+              default='./gypsy-output')
+@click.option('--output-filename', type=str, default='gypsy-projection.csv')
 def simulate(data, stand_id, generate_plots, output_fields, output_timestep,
-             id_field, write_id):
+             id_field, write_id, output_dir, output_filename):
     """Run GYPSY simulation"""
     log.info('running simulate')
-    # read input data
-    # validate that its had dataprep
-    # filter id by stand id
+
+    if os.path.exists(output_dir):
+        raise click.UsageError('output_dir: %s must not exist!' % output_dir)
+
+    standtable = pd.read_csv(data)
+
+    # TODO: validate that its had dataprep filter id by stand id
+
     # run simulate_df
-    # subset to timestep
-    # add id column to data
+    result = simulate_forwards_df(standtable)
+
+    # TODO: subset to timestep add id column to data
+
     # save data to output dir
-    # generate plot if necessary
+    os.makedirs(output_dir)
+    output_path = os.path.join(output_dir, output_filename)
+    result.to_csv(output_path)
+
+    # TODO: generate plot if necessary
 
