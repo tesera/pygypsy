@@ -18,7 +18,7 @@ def test_compare_forward_simulation(test_file):
     inputDF = pd.read_csv(os.path.join(DATA_DIR, 'forward_simulation_files',
                                        data_file_name))
 
-    plotID = inputDF.loc[0, 'PlotID']
+    plotID = str(int(inputDF.loc[0, 'PlotID']))
     result = simulate_forwards_df(inputDF, simulation_choice='yes')[plotID]
     assert type(result) == pd.DataFrame
 

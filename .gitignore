@@ -69,3 +69,4 @@ venv/
 # docker
 /.bash_history
 gypsy-output/
+/data/raw_standtable.csv.prepped

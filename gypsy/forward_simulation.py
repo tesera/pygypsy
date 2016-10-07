@@ -132,7 +132,7 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
     inputDF = plot_df
     for _, row in inputDF.iterrows():
 
-        plotID = row['PlotID']
+        plotID = str(int(row['PlotID']))
 
         SI_bh_Aw = row['SI_Aw']
         SI_bh_Sw = row['SI_Sw']

@@ -72,7 +72,8 @@ def simulate(data, stand_id, generate_plots, output_fields, output_timestep,
     # save data to output dir
     os.makedirs(output_dir)
     for plot_id, df in result.items():
-        output_path = os.path.join(output_dir, plot_id, '.csv')
+        filename = '%s.csv' % plot_id
+        output_path = os.path.join(output_dir, filename)
         df.to_csv(output_path)
 
     # TODO: generate plot if necessary
