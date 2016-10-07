@@ -468,4 +468,4 @@ def dataPrepGypsy(data):
         plot_df = pd.DataFrame(plot_dict)
         plot_df = plot_df.transpose()
 
-    return plot_df, spList
+    return plot_df
