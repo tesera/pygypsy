@@ -35,6 +35,7 @@ logger = logging.getLogger(__name__)
 
 #https://www.python.org/dev/peps/pep-0008/#naming-conventions
 
+
 def BA_zeroAw(BA_Aw0, BA_AwT):
     while BA_Aw0 > BA_AwT * 0.5:
         BA_Aw0 = BA_Aw0 * 0.5
@@ -124,9 +125,14 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
     Return:
     !TODO!
     """
+
+    output_dict ={}
+
     logger.debug('Starting forwards simulation')
     inputDF = plot_df
     for _, row in inputDF.iterrows():
+
+        plotID = row['PlotID']
 
         SI_bh_Aw = row['SI_Aw']
         SI_bh_Sw = row['SI_Sw']
@@ -401,4 +407,6 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         output_DF['MerchantableVolume_Dec'] = output_DF['MerchantableVolumeAw']
         output_DF['MerchantableVolume_Tot'] = output_DF['MerchantableVolume_Con'] + output_DF['MerchantableVolume_Dec']
 
-    return output_DF
+        output_dict[plotID] = output_DF
+
+    return output_dict

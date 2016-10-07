@@ -18,7 +18,8 @@ def test_compare_forward_simulation(test_file):
     inputDF = pd.read_csv(os.path.join(DATA_DIR, 'forward_simulation_files',
                                        data_file_name))
 
-    result = simulate_forwards_df(inputDF, simulation_choice='yes')
+    plotID = inputDF.loc[0, 'PlotID']
+    result = simulate_forwards_df(inputDF, simulation_choice='yes')[plotID]
     assert type(result) == pd.DataFrame
 
     result.to_csv(os.path.join(DATA_DIR, 'output',
@@ -30,4 +31,3 @@ def test_plot(chart_file):
     outputfile = os.path.splitext(chart_file)[0] + '.png'
     figure_path = os.path.join(DATA_DIR, 'figures', 'chartGR_{}'.format(outputfile))
     assert save_plot(chart_DF, path=figure_path)
-
