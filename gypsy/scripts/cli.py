@@ -3,7 +3,7 @@ import click
 import pandas as pd
 
 from gypsy.forward_simulation import simulate_forwards_df
-from gypsy.GypsyDataPrep import dataPrepGypsy
+from gypsy.data_prep import prep_standtable
 from gypsy.log import log
 
 
@@ -38,7 +38,7 @@ def prep(standtable, stand_id, id_field, output_path):
 
     # TODO: filter id by stand id
 
-    prepped_data = dataPrepGypsy(standtable_df)
+    prepped_data = prep_standtable(standtable_df)
     prepped_data.to_csv(output_path)
 
 @cli.command(context_settings=CONTEXT_SETTINGS)

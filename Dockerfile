@@ -11,6 +11,7 @@ ENV WD=/opt/gypsy
 COPY . /opt/gypsy
 WORKDIR /opt/gypsy
 
+RUN git config --global user.email "docker@gypsy" && git config --global user.name "docker"
 RUN pip install virtualenv
 RUN virtualenv -p python2.7 venv
 

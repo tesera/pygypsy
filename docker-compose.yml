@@ -27,4 +27,4 @@ pre-commit:
   build: .
   volumes:
     - ./:/opt/gypsy
-  command: 'bash git-hooks/pre-commit.sh'
+  command: 'bash bin/pre-commit.sh'
