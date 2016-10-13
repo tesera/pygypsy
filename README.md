@@ -2,11 +2,12 @@
 
 TODO!
 
-## Installation
+## Usage
 
 Docker and (host machine) virtualenv installation are incompatible!
 
-### Virtualenv
+### Installation
+#### Virtualenv
 ```
 git clone git@github.com:tesera/gypsy.git
 cd gypsy
@@ -15,7 +16,7 @@ virtualenv venv
 pip install . # regular users
 ```
 
-### Docker
+#### Docker
 
 Build the gypsy image as follows
 
@@ -49,6 +50,21 @@ False
 ```
 
 ## Development
+### Getting Started
+
+Clone the repository
+
+``` bash
+git clone git@github.com:tesera/gypsy.git
+cd gypsy
+```
+
+Setup the commit hooks
+
+``` bash
+ln -s "$(pwd)/git-hooks/pre-commit.sh" .git/hooks/pre-commit
+```
+
 ### docker-compose
 
 Several development tasks are defined in `docker-compose.yml`
@@ -90,6 +106,16 @@ docker-compose run test
 py.test -s -v tests/
 ```
 
+To save time, it is often convenient only to test the sections of the code you
+are actively working. This can be done as follows
+
+```
+docker-compose run test bash # only run this if you are using docker
+
+py.test -s -v tests/test_data_prep.py # test one file
+py.test -s -v tests/test_data_prep.py::test_prep_standtable # test one function
+```
+
 ### Linting
 
 Linting checks the code for style and bugs.
@@ -105,9 +131,11 @@ bash bin/lint.sh
 
 If you are familiar with pylint, you can use the `pylint` command directly.
 
+All new code must satisfy the linting standards.
+
 ### Documentation
 
-Documentation is build automatically from docstrings
+Documentation is built automatically from docstrings
 
 See http://www.sphinx-doc.org/en/stable/rest.html for the syntax
 
@@ -126,13 +154,13 @@ make coverage
 
 ### Commit hooks
 
-Commit hooks run automatically when committing to the repository.
+Commit hooks run automatically when committing to the repository for the following quality control items:
 
-You have to symlink from the commit hooks provided to your local git hooks directory as follows:
+- debug breakpoints
+- linting
+
+Once the test suite has been sped it, it will also be run as a pre-commit hook.
+
+You have to symlink from the commit hooks provided to your local git hooks directory as described in [Getting Started](Getting-Started):
 
 You can override the commit hook by using the `-n` option when running `git commit`. This is however discouraged!
-
-```
-# from the root gypsy directory
-ln -s "$(pwd)/git-hooks/pre-commit.sh" .git/hooks/pre-commit
-```
