@@ -37,7 +37,6 @@ def test_simulate():
     runner = CliRunner()
     result = runner.invoke(cli, ['simulate', data_path])
 
-    import ipdb; ipdb.set_trace()
     assert result.exit_code == 0
     assert result.output == ""
     assert os.path.exists(expected_output_path)
