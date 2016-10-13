@@ -68,7 +68,10 @@ venv/
 
 # docker
 /.bash_history
+
+# ephemeral test data
 gypsy-output/
 /data/raw_standtable.csv.prepped
 /lint-output.txt
 data/figures/
+/data/private/
