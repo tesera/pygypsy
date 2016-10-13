@@ -91,7 +91,7 @@ def get_species_site_indices(dominant_species, site_index):
 
 
 
-def dataPrepGypsy(data):
+def prep_standtable(data):
     ''' define site_index of all other species given the dominant species
 
     :param data:
