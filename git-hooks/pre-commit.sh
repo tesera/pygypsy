@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
+[ -z "$VIRTUAL_ENV" ] && hash docker-compose 2>/dev/null
+USING_DOCKER=$?
 
-PYLINT_RC_PATH="../.pylintrc"
+echo "Running pre-commit hook"
 
-echo "Running pre-commit hook using ${PYLINT_RC_PATH}"
-
-if [ -z "$VIRTUAL_ENV" ]; then
-    CMD="docker-compose run pre-commit"
+if [ $USING_DOCKER -eq 0 ]; then
+    echo "Assuming you are using docker"
+    docker-compose run pre-commit
 else
-    CMD="git-pylint-commit-hook --pylintrc ${PYLINT_RC_PATH}"
+    bash bin/pre-commit.sh
 fi
