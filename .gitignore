@@ -71,3 +71,4 @@ venv/
 gypsy-output/
 /data/raw_standtable.csv.prepped
 /lint-output.txt
+data/figures/
