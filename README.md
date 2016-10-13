@@ -49,6 +49,41 @@ False
 False
 ```
 
+### CLI
+
+Gypsy provides a command line interface for convenient usage
+
+Prepared your standtable
+
+```
+gyspy prep your_stand_table.csv
+```
+
+Run the gypsy simulation
+
+```
+gyspy simulate your_stand_table.csv
+```
+
+The complete documentation can be accessed with `gypsy -h`, documentation for
+subcommands is available via `gypsy SUBCOMMAND -h`:
+
+
+```
+Usage: gypsy [OPTIONS] COMMAND [ARGS]...
+
+  Growth and Yield Projection System
+
+  Data prep must be run before simulating
+
+  Options:
+    -v, --verbose
+    -h, --help     Show this message and exit.
+
+  Commands:
+    prep      Prepare stand table for use in GYPSY...
+    simulate  Run GYPSY simulation
+```
 ## Development
 ### Getting Started
 
