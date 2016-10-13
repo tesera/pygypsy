@@ -1,12 +1,13 @@
 #!/usr/bin/env sh
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "${DIR}/pre-commit-functions.sh"
 
-PYLINT_RC_PATH="../.pylintrc"
 [ -z "$VIRTUAL_ENV" ] && [ hash docker-compose 2>/dev/null ]
 USING_DOCKER=$?
-
 if [ $USING_DOCKER ]
 then
     . venv/bin/activate
 fi
 
-git-pylint-commit-hook --pylintrc ${PYLINT_RC_PATH}
+run_lint
+check_breakpoint
