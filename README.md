@@ -161,6 +161,6 @@ Commit hooks run automatically when committing to the repository for the followi
 
 Once the test suite has been sped it, it will also be run as a pre-commit hook.
 
-You have to symlink from the commit hooks provided to your local git hooks directory as described in [Getting Started](Getting-Started):
+You have to symlink from the commit hooks provided to your local git hooks directory as described in [Getting Started](#getting-started):
 
 You can override the commit hook by using the `-n` option when running `git commit`. This is however discouraged!
