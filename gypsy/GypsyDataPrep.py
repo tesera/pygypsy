@@ -141,15 +141,26 @@ def dataPrepGypsy(data):
         dominant_species_current_height = row['HD']
 
 
-        def dominant_species_site_index_estim(temporary_dominant_species, dominant_species_current_age, dominant_species_current_height):
-            dom_si = ComputeGypsySiteIndex(temporary_dominant_species, dominant_species_current_height, 0, dominant_species_current_age)
+        def dominant_species_site_index_estim(
+                temporary_dominant_species,
+                dominant_species_current_age,
+                dominant_species_current_height
+            ):
+            dom_si = ComputeGypsySiteIndex(
+                temporary_dominant_species,
+                dominant_species_current_height,
+                0,
+                dominant_species_current_age
+            )
             site_index = dom_si[2]
-            # using site_index = site_index_t , site index based on total age
-            # from the ComputeGypsySiteIndex function
             return site_index
 
 
-        site_index = dominant_species_site_index_estim(temporary_dominant_species, dominant_species_current_age, dominant_species_current_height)
+        site_index = dominant_species_site_index_estim(
+            temporary_dominant_species,
+            dominant_species_current_age,
+            dominant_species_current_height
+        )
         dominant_species = initsite_index_estimation(temporary_dominant_species)
         site_index_x = get_species_site_indices(dominant_species, site_index)
 
@@ -244,14 +255,15 @@ def dataPrepGypsy(data):
 
             return sorted_species_perc_list, species_perc_dict
 
-        outer_sorted_species_perc_list, outer_species_perc_dict = sort_species(species_abbrev_percent_list)
+        outer_sorted_species_perc_list, outer_species_perc_dict = \
+            sort_species(species_abbrev_percent_list)
 
         fplot['Aw']['PCT'] = outer_species_perc_dict['Aw']
         fplot['Pl']['PCT'] = outer_species_perc_dict['Pl']
         fplot['Sw']['PCT'] = outer_species_perc_dict['Sw']
         fplot['Sb']['PCT'] = outer_species_perc_dict['Sb']
 
-        dominant_species =outer_sorted_species_perc_list[0]
+        dominant_species = outer_sorted_species_perc_list[0]
 
 
 
@@ -266,28 +278,25 @@ def dataPrepGypsy(data):
                 fplot[species[0]]['topHeight'] = dominant_species_current_height
                 fplot[species[0]]['N'] = row['TPH'] * species[1] / 100
                 fplot[species[0]]['BA'] = row['BPH'] * species[1] / 100
-                x_Si = ComputeGypsySiteIndex(
+                x_si = ComputeGypsySiteIndex(
                     species[0],
                     fplot[species[0]]['topHeight'],
                     0,
                     fplot[species[0]]['tage']
                 )
-                fplot[species[0]]['bhage'] = x_Si[0]
+                fplot[species[0]]['bhage'] = x_si[0]
                 # if, after re-arranging the proportions, dom species is another
                 # one then we need to re-estimate everything  even for the new
                 # dominant species
 
             else:
-                siSp = fplot[species[0]]['SI']
+                si_sp = fplot[species[0]]['SI']
                 fplot[species[0]]['PCT'] = species[1]
-                # estimate tree age iteratively calling computeTreeAge function
-                # and inputing site_index in the place ot treeSi and dominant_species_current_height as
-                # treeHT or topheight'''
 
                 fplot[species[0]]['tage'] = computeTreeAge(
                     species[0],
                     treeHt=dominant_species_current_height,
-                    treeSi=siSp,
+                    treeSi=si_sp,
                     maxTreeAge=450,
                     rowIndex=0,
                     printWarnings=True
@@ -300,11 +309,11 @@ def dataPrepGypsy(data):
                 fplot[species[0]]['BA'] = row['BPH'] * species[1]/100
 
                 # calling the ComputeGypsySiteIndex function, estimate bhage
-                x_Si = ComputeGypsySiteIndex(
+                x_si = ComputeGypsySiteIndex(
                     species[0], dominant_species_current_height, 0,
                     fplot[species[0]]['tage']
                 )
-                fplot[species[0]]['bhage'] = x_Si[0]
+                fplot[species[0]]['bhage'] = x_si[0]
 
 
         # now we have different lists containing:
@@ -316,21 +325,21 @@ def dataPrepGypsy(data):
         site_index_pl = fplot['Pl']['SI']
         site_index_sb = fplot['Sb']['SI']
 
-        N_Aw = fplot['Aw']['N']
-        N_sw = fplot['Sw']['N']
-        N_pl = fplot['Pl']['N']
-        N_sb = fplot['Sb']['N']
+        density_aw = fplot['Aw']['N']
+        density_sw = fplot['Sw']['N']
+        density_pl = fplot['Pl']['N']
+        density_sb = fplot['Sb']['N']
 
         # TODO: sometimes these values are zero because TPH is zero
         # ...WHY TPH IS ZERO????
-        y2bh_Aw = fplot['Aw']['tage'] - fplot['Aw']['bhage']
+        y2bh_aw = fplot['Aw']['tage'] - fplot['Aw']['bhage']
         y2bh_sw = fplot['Sw']['tage'] - fplot['Sw']['bhage']
         y2bh_pl = fplot['Pl']['tage'] - fplot['Pl']['bhage']
         y2bh_sb = fplot['Sb']['tage'] - fplot['Sb']['bhage']
 
         # y2bh CANNOT BE NEGATIVE
 
-        tage_Aw = fplot['Aw']['tage']
+        tage_aw = fplot['Aw']['tage']
         tage_sw = fplot['Sw']['tage']
         tage_pl = fplot['Pl']['tage']
         tage_sb = fplot['Sb']['tage']
@@ -339,26 +348,78 @@ def dataPrepGypsy(data):
 
 
 
-        sp_Aw = ['Aw', fplot['Aw']['topHeight'], fplot['Aw']['tage'], fplot['Aw']['bhage'], fplot['Aw']['N'], fplot['Aw']['BA'], fplot['Aw']['PS'], fplot['Aw']['StumpDOB'], fplot['Aw']['StumpHeight'], fplot['Aw']['TopDib'], fplot['Aw']['SI'], fplot['Aw']['PCT']]
-        sp_pl = ['Pl', fplot['Pl']['topHeight'], fplot['Pl']['tage'], fplot['Pl']['bhage'], fplot['Pl']['N'], fplot['Pl']['BA'], fplot['Pl']['PS'], fplot['Pl']['StumpDOB'], fplot['Pl']['StumpHeight'], fplot['Pl']['TopDib'], fplot['Pl']['SI'], fplot['Pl']['PCT']]
-        sp_sw = ['Sw', fplot['Sw']['topHeight'], fplot['Sw']['tage'], fplot['Sw']['bhage'], fplot['Sw']['N'], fplot['Sw']['BA'], fplot['Sw']['PS'], fplot['Sw']['StumpDOB'], fplot['Sw']['StumpHeight'], fplot['Sw']['TopDib'], fplot['Sw']['SI'], fplot['Sw']['PCT']]
-        sp_sb = ['Sb', fplot['Sb']['topHeight'], fplot['Sb']['tage'], fplot['Sb']['bhage'], fplot['Sb']['N'], fplot['Sb']['BA'], fplot['Sb']['PS'], fplot['Sb']['StumpDOB'], fplot['Sb']['StumpHeight'], fplot['Sb']['TopDib'], fplot['Sb']['SI'], fplot['Sb']['PCT']]
+        sp_aw = [
+            'Aw',
+            fplot['Aw']['topHeight'],
+            fplot['Aw']['tage'],
+            fplot['Aw']['bhage'],
+            fplot['Aw']['N'],
+            fplot['Aw']['BA'],
+            fplot['Aw']['PS'],
+            fplot['Aw']['StumpDOB'],
+            fplot['Aw']['StumpHeight'],
+            fplot['Aw']['TopDib'],
+            fplot['Aw']['SI'],
+            fplot['Aw']['PCT']
+        ]
+        sp_pl = [
+            'Pl',
+            fplot['Pl']['topHeight'],
+            fplot['Pl']['tage'],
+            fplot['Pl']['bhage'],
+            fplot['Pl']['N'],
+            fplot['Pl']['BA'],
+            fplot['Pl']['PS'],
+            fplot['Pl']['StumpDOB'],
+            fplot['Pl']['StumpHeight'],
+            fplot['Pl']['TopDib'],
+            fplot['Pl']['SI'],
+            fplot['Pl']['PCT']
+        ]
+        sp_sw = [
+            'Sw',
+            fplot['Sw']['topHeight'],
+            fplot['Sw']['tage'],
+            fplot['Sw']['bhage'],
+            fplot['Sw']['N'],
+            fplot['Sw']['BA'],
+            fplot['Sw']['PS'],
+            fplot['Sw']['StumpDOB'],
+            fplot['Sw']['StumpHeight'],
+            fplot['Sw']['TopDib'],
+            fplot['Sw']['SI'],
+            fplot['Sw']['PCT']
+        ]
+        sp_sb = [
+            'Sb',
+            fplot['Sb']['topHeight'],
+            fplot['Sb']['tage'],
+            fplot['Sb']['bhage'],
+            fplot['Sb']['N'],
+            fplot['Sb']['BA'],
+            fplot['Sb']['PS'],
+            fplot['Sb']['StumpDOB'],
+            fplot['Sb']['StumpHeight'],
+            fplot['Sb']['TopDib'],
+            fplot['Sb']['SI'],
+            fplot['Sb']['PCT']
+        ]
 
-        bhage_Aw = sp_Aw[3]
-        tage_Aw = sp_Aw[2]
-        site_index_white_aspen = sp_Aw[10]
-        y2bh_Aw = tage_Aw - bhage_Aw
-        site_index_bh_Aw = sp_Aw[10]
+        bhage_aw = sp_aw[3]
+        tage_aw = sp_aw[2]
+        site_index_white_aspen = sp_aw[10]
+        y2bh_aw = tage_aw - bhage_aw
+        site_index_bh_aw = sp_aw[10]
         # treeHeight is the Top Height or Htop in the paper
-        topHeight_Aw = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(
-            sp_Aw[0], site_index_white_aspen, tage_Aw
+        top_height_aw = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(
+            sp_aw[0], site_index_white_aspen, tage_aw
         )
 
         bhage_sb = sp_sb[3]
         tage_sb = sp_sb[2]
         si_sb = sp_sb[10]
         site_index_bh_sb = sp_sb[10]
-        topHeight_sb = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(
+        top_height_sb = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(
             sp_sb[0], si_sb, tage_sb
         )
 
@@ -367,7 +428,7 @@ def dataPrepGypsy(data):
         si_pl = sp_pl[10]
         y2bh_pl = tage_pl - bhage_pl
         site_index_bh_pl = sp_pl[10]
-        topHeight_pl = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(
+        top_height_pl = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(
             sp_pl[0], si_pl, tage_pl
         )
 
@@ -376,89 +437,143 @@ def dataPrepGypsy(data):
         si_sw = sp_sw[10]
         y2bh_sw = tage_sw - bhage_sw
         site_index_bh_sw = sp_sw[10]
-        topHeight_sw = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(
+        top_height_sw = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(
             sp_sw[0], si_sw, tage_sw
         )
 
         # si, bhage, and tage are passed on from the above.
-        # SDFs estimated iteratively
-        # using N from the original input sp_Aw etc as the input (N_Aw) etc
+        # sdfs estimated iteratively
+        # using N from the original input sp_aw etc as the input (density_aw) etc
         # I think it is suposed to be the density of the species at the bhage = 0, although
         # the paper says current or inital density
-        N_Aw = sp_Aw[4]
-        N_sb = sp_sb[4]
-        N_sw = sp_sw[4]
-        N_pl = sp_pl[4]
+        density_aw = sp_aw[4]
+        density_sb = sp_sb[4]
+        density_sw = sp_sw[4]
+        density_pl = sp_pl[4]
 
-        y_Aw = densityNonSpatialAw(sp_Aw, site_index_bh_Aw, bhage_Aw, N_Aw)
-        SDF_Aw0 = y_Aw[1]
-        N_bh_Aw = y_Aw[0]
+        y_aw = densityNonSpatialAw(sp_aw, site_index_bh_aw, bhage_aw, density_aw)
+        sdf_aw0 = y_aw[1]
+        density_bh_aw = y_aw[0]
 
-        y_sb = densityNonSpatialSb(sp_sb, site_index_bh_sb, tage_sb, N_sb)
-        SDF_sb0 = y_sb[1]
-        N_bh_sb = y_sb[0]
+        y_sb = densityNonSpatialSb(sp_sb, site_index_bh_sb, tage_sb, density_sb)
+        sdf_sb0 = y_sb[1]
+        density_bh_sb = y_sb[0]
 
-        y_sw = densityNonSpatialSw(sp_sw, site_index_bh_sw, tage_sw, SDF_Aw0, N_sw)
-        SDF_sw0 = y_sw[1]
-        N_bh_sw = y_sw[0]
+        y_sw = densityNonSpatialSw(sp_sw, site_index_bh_sw, tage_sw, sdf_aw0, density_sw)
+        sdf_sw0 = y_sw[1]
+        density_bh_sw = y_sw[0]
 
-        y_pl = densityNonSpatialPl(sp_pl, site_index_bh_pl, tage_pl, SDF_Aw0, SDF_sw0, SDF_sb0, N_pl)
-        SDF_pl0 = y_pl[1]
-        N_bh_pl = y_pl[0]
+        y_pl = densityNonSpatialPl(
+            sp_pl, site_index_bh_pl, tage_pl,
+            sdf_aw0, sdf_sw0, sdf_sb0, density_pl
+        )
+        sdf_pl0 = y_pl[1]
+        density_bh_pl = y_pl[0]
 
         # estimating species densities at time zero
-        N0_Aw = densityAw(SDF_Aw0, 0, site_index_bh_Aw)
-        N0_sb = densitySb(SDF_sb0, 0, site_index_bh_sb)
-        N0_sw = densitySw(SDF_sw0, SDF_Aw0, 0, site_index_bh_sw)
-        N0_pl = densityPl(SDF_Aw0, SDF_sw0, SDF_sb0, SDF_pl0, 0, site_index_bh_pl)
+        initial_density_aw = densityAw(sdf_aw0, 0, site_index_bh_aw)
+        initial_density_sb = densitySb(sdf_sb0, 0, site_index_bh_sb)
+        initial_density_sw = densitySw(sdf_sw0, sdf_aw0, 0, site_index_bh_sw)
+        initial_density_pl = densityPl(
+            sdf_aw0, sdf_sw0, sdf_sb0, sdf_pl0, 0, site_index_bh_pl
+        )
 
         # estimating species-specific Basal area increment from Densities
-        SC = SCestimate(N_bh_Aw, N_bh_sb, N_bh_sw, N_bh_pl)
+        species_composition = SCestimate(density_bh_aw, density_bh_sb, density_bh_sw, density_bh_pl)
 
-        SC_Aw = SC[0]
-        SC_sw = SC[1]
-        SC_sb = SC[2]
-        SC_pl = SC[3]
+        species_composition_aw = species_composition[0]
+        species_composition_sw = species_composition[1]
+        species_composition_sb = species_composition[2]
+        species_composition_pl = species_composition[3]
 
-        BA_Aw = sp_Aw[5]
-        BA_sb = sp_sb[5]
-        BA_sw = sp_sw[5]
-        BA_pl = sp_pl[5]
+        basal_area_aw = sp_aw[5]
+        basal_area_sb = sp_sb[5]
+        basal_area_sw = sp_sw[5]
+        basal_area_pl = sp_pl[5]
 
-        BAinc_Aw = BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, site_index_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw)
-        BAinc_sb = BasalAreaIncrementNonSpatialSb(sp_sb, SC_sb, site_index_bh_sb, N_bh_sb, N0_sb, bhage_sb, BA_sb)
-        BAinc_sw = BasalAreaIncrementNonSpatialSw(sp_sw, SC_sw, site_index_bh_sw, N_bh_sw, N0_sw, bhage_sw, SDF_Aw0, SDF_pl0, SDF_sb0, BA_sw)
-        BAinc_pl = BasalAreaIncrementNonSpatialPl(sp_pl, SC_pl, site_index_bh_pl, N_bh_pl, N0_pl, bhage_pl, SDF_Aw0, SDF_sw0, SDF_sb0, BA_pl)
+        basal_area_increment_aw = BasalAreaIncrementNonSpatialAw(
+            sp_aw, species_composition_aw, site_index_bh_aw, density_bh_aw,
+            initial_density_aw, bhage_aw, basal_area_aw
+        )
+        basal_area_increment_sb = BasalAreaIncrementNonSpatialSb(
+            sp_sb, species_composition_sb, site_index_bh_sb, density_bh_sb,
+            initial_density_sb, bhage_sb, basal_area_sb
+        )
+        basal_area_increment_sw = BasalAreaIncrementNonSpatialSw(
+            sp_sw, species_composition_sw, site_index_bh_sw, density_bh_sw,
+            initial_density_sw, bhage_sw, sdf_aw0, sdf_pl0, sdf_sb0, basal_area_sw
+        )
+        basal_area_increment_pl = BasalAreaIncrementNonSpatialPl(
+            sp_pl, species_composition_pl, site_index_bh_pl, density_bh_pl,
+            initial_density_pl, bhage_pl, sdf_aw0, sdf_sw0, sdf_sb0, basal_area_pl
+        )
 
-        StumpDOB_Aw = sp_Aw[7]
-        StumpHeight_Aw = sp_Aw[8]
-        TopDib_Aw = sp_Aw[9]
+        stump_dob_aw = sp_aw[7]
+        stump_height_aw = sp_aw[8]
+        top_dib_aw = sp_aw[9]
 
-        StumpDOB_sb = sp_sb[7]
-        StumpHeight_sb = sp_sb[8]
-        TopDib_sb = sp_sb[9]
+        stump_dob_sb = sp_sb[7]
+        stump_height_sb = sp_sb[8]
+        top_dib_sb = sp_sb[9]
 
-        StumpDOB_sw = sp_sw[7]
-        StumpHeight_sw = sp_sw[8]
-        TopDib_sw = sp_sw[9]
+        stump_dob_sw = sp_sw[7]
+        stump_height_sw = sp_sw[8]
+        top_dib_sw = sp_sw[9]
 
-        StumpDOB_pl = sp_pl[7]
-        StumpHeight_pl = sp_pl[8]
-        TopDib_pl = sp_pl[9]
+        stump_dob_pl = sp_pl[7]
+        stump_height_pl = sp_pl[8]
+        top_dib_pl = sp_pl[9]
 
         PLOT_DICT[plot_id] = {
-            'PlotID': plot_id, 'SI_Aw': site_index_white_aspen, 'SI_sw': site_index_sw, 'SI_pl': site_index_pl, 'SI_sb': site_index_sb,
-            'N_Aw': N_Aw, 'N_sw': N_sw, 'N_pl': N_pl, 'N_sb': N_sb,
-            'y2bh_Aw': y2bh_Aw, 'y2bh_sw': y2bh_sw, 'y2bh_pl': y2bh_pl, 'y2bh_sb': y2bh_sb,
-            'tage_Aw': tage_Aw, 'tage_sw': tage_sw, 'tage_pl': tage_pl, 'tage_sb': tage_sb,
-            'BA_Aw': BA_Aw, 'BA_sw': BA_sw, 'BA_pl': BA_pl, 'BA_sb': BA_sb,
-            'BAinc_Aw': BAinc_Aw, 'BAinc_sw': BAinc_sw, 'BAinc_pl': BAinc_pl, 'BAinc_sb': BAinc_sb,
-            'SDF_Aw': SDF_Aw0, 'SDF_sw': SDF_sw0, 'SDF_pl': SDF_pl0, 'SDF_sb': SDF_sb0,
-            'N0_Aw': N0_Aw, 'N0_sb': N0_sb, 'N0_sw': N0_sw, 'N0_pl': N0_pl,
-            'StumpDOB_Aw': StumpDOB_Aw, 'StumpDOB_sb': StumpDOB_sb, 'StumpDOB_sw': StumpDOB_sw, 'StumpDOB_pl': StumpDOB_pl,
-            'StumpHeight_Aw': StumpHeight_Aw, 'StumpHeight_sb': StumpHeight_sb, 'StumpHeight_sw': StumpHeight_sw, 'StumpHeight_pl': StumpHeight_pl,
-            'TopDib_Aw': TopDib_Aw, 'TopDib_sb': TopDib_sb, 'TopDib_sw': TopDib_sw, 'TopDib_pl': TopDib_pl,
-            'topHeight_Aw': topHeight_Aw, 'topHeight_sw': topHeight_sw, 'topHeight_sb': topHeight_sb, 'topHeight_pl': topHeight_pl
+            'PlotID': plot_id,
+            'SI_Aw': site_index_white_aspen,
+            'SI_sw': site_index_sw,
+            'SI_pl': site_index_pl,
+            'SI_sb': site_index_sb,
+            'N_Aw': density_aw,
+            'N_sw': density_sw,
+            'N_pl': density_pl,
+            'N_sb': density_sb,
+            'y2bh_Aw': y2bh_aw,
+            'y2bh_sw': y2bh_sw,
+            'y2bh_pl': y2bh_pl,
+            'y2bh_sb': y2bh_sb,
+            'tage_Aw': tage_aw,
+            'tage_sw': tage_sw,
+            'tage_pl': tage_pl,
+            'tage_sb': tage_sb,
+            'BA_Aw': basal_area_aw,
+            'BA_sw': basal_area_sw,
+            'BA_pl': basal_area_pl,
+            'BA_sb': basal_area_sb,
+            'BAinc_Aw': basal_area_increment_aw,
+            'BAinc_sw': basal_area_increment_sw,
+            'BAinc_pl': basal_area_increment_pl,
+            'BAinc_sb': basal_area_increment_sb,
+            'SDF_Aw': sdf_aw0,
+            'SDF_sw': sdf_sw0,
+            'SDF_pl': sdf_pl0,
+            'SDF_sb': sdf_sb0,
+            'N0_Aw': initial_density_aw,
+            'N0_sb': initial_density_sb,
+            'N0_sw': initial_density_sw,
+            'N0_pl': initial_density_pl,
+            'StumpDOB_Aw': stump_dob_aw,
+            'StumpDOB_sb': stump_dob_sb,
+            'StumpDOB_sw': stump_dob_sw,
+            'StumpDOB_pl': stump_dob_pl,
+            'StumpHeight_Aw': stump_height_aw,
+            'StumpHeight_sb': stump_height_sb,
+            'StumpHeight_sw': stump_height_sw,
+            'StumpHeight_pl': stump_height_pl,
+            'TopDib_Aw': top_dib_aw,
+            'TopDib_sb': top_dib_sb,
+            'TopDib_sw': top_dib_sw,
+            'TopDib_pl': top_dib_pl,
+            'topHeight_Aw': top_height_aw,
+            'topHeight_sw': top_height_sw,
+            'topHeight_sb': top_height_sb,
+            'topHeight_pl': top_height_pl
         }
 
         plot_df = pd.DataFrame(PLOT_DICT)
