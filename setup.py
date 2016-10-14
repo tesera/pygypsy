@@ -3,16 +3,16 @@ from setuptools import setup, find_packages
 
 
 with codecs_open('README.md', encoding='utf-8') as f:
-    long_description = f.read()
+    LONG_DESCRIPTION = f.read()
 
 
 setup(name='gypsy',
       version='0.0.1',
-      description=u"Controlling Gypsy modules, and outputs",
-      long_description=long_description,
+      description=u"Forestry Growth and Yield Projection System",
+      long_description=LONG_DESCRIPTION,
       classifiers=[],
       keywords='',
-      author=u"Julianno Sambatti",
+      author=u"Julianno Sambatti, Jotham Apaloo",
       author_email='julianno.sambatti@tesera.com',
       url='',
       license='',
@@ -25,16 +25,16 @@ setup(name='gypsy',
       install_requires=[
           'click>=6.6',
           'pandas>=0.18.1',
-          'scipy>=0.17.1',
+          'matplotlib==1.5.2',
       ],
       extras_require={
-          'test': ['pytest>=2.9.1'],
-          'dev': ['pytest>=2.9.1', 'sphinx>=1.4.1',
-                  'pylint>=1.5.4', 'git-pylint-commit-hook>=2.1.1',
-                  'pytest-cov>=2.3.1']
+          'test': ['pytest>=2.9.1', 'pytest-cov'],
+          'lint': ['pylint>=1.5.4'],
+          'docs': ['sphinx>=1.4.1'],
+          'dev': ['git-pylint-commit-hook>=2.1.1'],
       },
       entry_points="""
       [console_scripts]
       gypsy=gypsy.scripts.cli:cli
       """
-      )
+     )

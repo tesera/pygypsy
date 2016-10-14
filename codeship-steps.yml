@@ -1,0 +1,3 @@
+- name: test
+  service: gypsy
+  command: bash ./bin/run_tests.sh

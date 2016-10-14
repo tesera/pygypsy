@@ -132,7 +132,7 @@ local storage but will probably not run on your system!
 docker-compose run dev
 virtualenv venv -p python2.7
 . venv/bin/activate
-pip install -e .[dev]
+pip install -e .[dev,test,lint,docs]
 ```
 
 Then it is possible to use the docker-compose tasks
