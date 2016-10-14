@@ -1,3 +1,5 @@
+[![Codeship Status for tesera/gypsy](https://app.codeship.com/projects/79989040-748f-0134-c8fb-56e5180c42b3/status?branch=master)](https://app.codeship.com/projects/179242)
+
 # gypsy
 
 TODO!
