@@ -1,8 +1,13 @@
-""" GYPSY
-Huang, S., Meng, S. X., & Yang, Y. (2009). A growth and yield projection system (GYPSY) for natural and post-harvest stands in Alberta. Forestry Division, Alberta Sustainable Resource Development, 25.
+"""GYPSY
+
+Based on Hueng et all (2009)
+
+Huang, S., Meng, S. X., & Yang, Y. (2009). A growth and yield projection system
+(GYPSY) for natural and post-harvest stands in Alberta. Forestry Division,
+Alberta Sustainable Resource Development, 25.
+
 """
 import os
-from .skel import has_legs
 import matplotlib
 
 # Force matplotlib to not use any Xwindows backend so that docker works

@@ -12,9 +12,6 @@ import pandas as pd
 from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
 import matplotlib.pyplot as plt
 
-from scipy.optimize import fmin
-
-
 logger = logging.getLogger(__name__)
 
 """
@@ -238,21 +235,6 @@ def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, N_P
 
 
     return N_est_Pl, SDF_Pl0
-
-
-
-
-def minimumN_SDF_Aw(SDF_Aw0, bhage_Aw, SI_bh_Aw):
-    '''
-    The purpose of this function
-    is to etimate N given that SDF
-    have been estimated
-
-    '''
-    x0 = [200.0]
-    optimize = fmin(densityAw, x0, args=(bhage_Aw, SI_bh_Aw))
-
-    return optimize
 
 
 
