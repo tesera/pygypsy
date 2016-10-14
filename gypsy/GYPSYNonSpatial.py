@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-""" Functions
-Created on Wed Apr  6 08:20:38 2016
-
-@author: juliannosambatti
+""" density and increment functions
 """
-
+# TODO: split these functions into appropriate other modules
 # TODO: make all factor find functions use kwargs in the manner of AW
+import os
 import logging
 import numpy
 import pandas as pd
-from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
 import matplotlib.pyplot as plt
+
+from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
+from utils import _mkdir_p
 
 logger = logging.getLogger(__name__)
 
@@ -1522,24 +1522,25 @@ def plot_N(output_DF, ax):
                                plot_vars=['N_bh_AwT', 'N_bh_SwT', 'N_bh_SbT', 'N_bh_PlT'],
                                y_lab='Density')
 
-def save_plot(output_DF, path=None):
+def save_plot(output_DF, path):
+    _mkdir_p(os.path.dirname(path))
     fig = plt.figure(1)
     sub1 = fig.add_subplot(321)
-    plot_BA(output_DF, ax=sub1)
     sub2 = fig.add_subplot(322)
-    plot_merchantableVol_Con_Dec(output_DF, ax=sub2)
     sub3 = fig.add_subplot(323)
-    plot_topHeight(output_DF, ax=sub3)
     sub4 = fig.add_subplot(324)
-    plot_GrTotVol_Con_Dec(output_DF, ax=sub4)
     sub5 = fig.add_subplot(325)
-    plot_SC(output_DF, ax=sub5)
     sub6 = fig.add_subplot(326)
+
+    plot_BA(output_DF, ax=sub1)
+    plot_merchantableVol_Con_Dec(output_DF, ax=sub2)
+    plot_topHeight(output_DF, ax=sub3)
+    plot_GrTotVol_Con_Dec(output_DF, ax=sub4)
+    plot_SC(output_DF, ax=sub5)
+
     plot_N(output_DF, ax=sub6)
     plt.tight_layout()
-    #plt.show()
-    plt.savefig(path) #specify page size here to reduce legend size
+    plt.savefig(path) #TODO: specify page size here to reduce legend size
     plt.close()
-
 
     return True

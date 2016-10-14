@@ -6,7 +6,6 @@ import numpy.testing as npt
 
 from gypsy import DATA_DIR
 from gypsy.forward_simulation import simulate_forwards_df
-from gypsy.GYPSYNonSpatial import save_plot
 
 
 TEST_FILES = glob(os.path.join(DATA_DIR, 'forward_simulation_files', '*.csv'))
@@ -35,12 +34,3 @@ def test_compare_forward_simulation(test_file):
 
     # regenerate output files
     # result.to_csv(expected_data_path)
-
-@pytest.mark.parametrize("chart_file", CHART_FILES)
-def test_plot(chart_file):
-    chart_df = pd.read_csv(chart_file)
-    outputfile = os.path.splitext(chart_file)[0] + '.png'
-    figure_path = os.path.join(
-        DATA_DIR, 'figures', 'chartGR_{}'.format(os.path.basename(outputfile))
-    )
-    assert save_plot(chart_df, path=figure_path)
