@@ -99,6 +99,23 @@ Setup the commit hooks
 ``` bash
 ln -s "$(pwd)/git-hooks/pre-commit.sh" .git/hooks/pre-commit
 ```
+### Development Process Overview
+
+- Fork the repository
+- Create a branch in your fork
+- Make a change: update code (and docs, tests, and README if appropriate)
+  - or update tests
+  - or update and build docs
+  - or update README
+- Submit a pull request against the dev branch of the upstream repository
+- Select a peer reviewer and schedule a review
+- Conduct the review. Please keep comments in the pull request.
+- Revise pull request if necessary and continue reviewing-revising loop until
+  reviewer(s) are satisfied.
+- Code is merged into dev branch
+
+Releases will occur when enough new features or fixes have been merged into the
+development branch. 'Enough' is at the discretion of the mainters.
 
 ### docker-compose
 
