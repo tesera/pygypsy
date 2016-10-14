@@ -11,7 +11,7 @@ __TEST_FILE_PATH__ = os.path.join(DATA_DIR, 'private/large_standtable.csv')
 
 @pytest.mark.skip(reason='Very slow, run manually')
 @pytest.mark.skipif(not os.path.exists(__TEST_FILE_PATH__),
-                    reason="--db was not specified")
+                    reason="large test data was not found")
 def test_forward_simulation():
     input_df = pd.read_csv(__TEST_FILE_PATH__)
 
