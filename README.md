@@ -109,7 +109,7 @@ ln -s "$(pwd)/git-hooks/pre-commit.sh" .git/hooks/pre-commit
   - or update README
 - Submit a pull request against the dev branch of the upstream repository
 - Select a peer reviewer and schedule a review
-- Conduct the review. Please keep comments in the pull request.
+- Conduct the review. Please keep comments in the pull request. An outline of a good review procedure is given [here](http://blog.fogcreek.com/increase-defect-detection-with-our-code-review-checklist-example/).
 - Revise pull request if necessary and continue reviewing-revising loop until
   reviewer(s) are satisfied.
 - Code is merged into dev branch
