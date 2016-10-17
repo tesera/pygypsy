@@ -1,0 +1,5 @@
+gypsy:
+  build:
+    image: gypsy
+    dockerfile_path: Dockerfile
+  cached: true

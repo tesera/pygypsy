@@ -20,4 +20,6 @@ def test_prep_standtable():
     assert npt.assert_almost_equal(
         expected.values, result.values, decimal=3
     ) is None
-    # this numpy function returns None if assertion passes
+
+    # regenerate output files
+    # result.to_csv(expected_data_path)

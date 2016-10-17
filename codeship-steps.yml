@@ -1,0 +1,8 @@
+- type: parallel
+  steps:
+  - name: test
+    service: gypsy
+    command: bash ./bin/run_tests.sh
+  - name: lint
+    service: gypsy
+    command: bash ./bin/lint.sh
