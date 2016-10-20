@@ -74,9 +74,10 @@ have to clone this repository
 git clone git@github.com:tesera/gypsy.git
 ```
 
-Then build the GYPSY image as follows:
+Then enter the cloned directory and build the GYPSY image as follows:
 
 ```
+cd gypsy
 docker build -t gypsy .
 ```
 
@@ -84,12 +85,17 @@ Start a container using the GYPSY image and activate the virtual environment
 inside the container as follows:
 
 ```
-docker run -t -i gypsy /bin/bash
+docker run -t gypsy -v /path/to/your/data/dir:/data -i /bin/bash
 . venv/bin/activate
 ```
 
-That starts an isolated environment where GYPSY can be run. Finally, test that
-GYPSY runs in the container:
+That starts an isolated environment where GYPSY can be run. Note the `-v
+path/to/your/data/dir:/data`, which makes the folder `/path/to/your/data/dir`
+available in the docker image at the `/data` directory. This is required to run
+gypsy in the container on data that you have on your local computer (the docker
+host). The paths should be absolute, not relative.
+
+Finally, test that GYPSY runs in the container:
 
 ```
 root@de6cccb1a217:/opt/gypsy# gypsy --help
