@@ -1,12 +1,70 @@
-import os
-import logging
+import logging.config
 
-log_filename = __name__
-log_path = os.path.join(os.getcwd(), log_filename)
-log_format = '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
-logging.basicConfig(level=logging.DEBUG,
-                    format=log_format,
-                    datefmt='%y-%m-%d %H:%M:%S',
-                    filename=log_path,
-                    filemode='w')
-log = logging.getLogger(__name__)
+CONSOLE_LOGGER_NAME = 'console'
+FILE_LOGGER_NAME = 'file'
+
+def setup_logging():
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'verbose': {
+                'format': '%(levelname)s %(asctime)s %(process)d %(thread)d %(message)s'
+            },
+            'standard': {
+                'format': '%(levelname)s %(asctime)s %(message)s'
+            },
+            'colored': {
+                '()': 'colorlog.ColoredFormatter',
+                'format': "%(log_color)s%(levelname)-8s%(reset)s %(blue)s%(message)s"
+            },
+        },
+        'handlers': {
+            'console':{
+                'level':'INFO',
+                'class':'logging.StreamHandler',
+                'formatter': 'colored'
+            },
+            'file': {
+                'level': 'DEBUG',
+                'formatter': 'standard',
+                'class': 'logging.FileHandler',
+                'filename': './gypsy.log',
+                'mode': 'w',
+            },
+        },
+        'loggers': {
+            'gypsy.forward_simulation': {
+                'handlers':['file'],
+                'level':'DEBUG',
+                'propagate': True,
+            },
+            'gypsy.data_prep': {
+                'handlers':['file'],
+                'level':'DEBUG',
+                'propagate': True,
+            },
+            'gypsy.utils': {
+                'handlers':['file'],
+                'level':'DEBUG',
+                'propagate': True,
+            },
+            'gypsy.GYPSYNonSpatial': {
+                'handlers':['file'],
+                'level':'DEBUG',
+                'propagate': True,
+            },
+            'gypsy.site_index': {
+                'handlers':['file'],
+                'level':'DEBUG',
+                'propagate': True,
+            },
+            CONSOLE_LOGGER_NAME: {
+                'handlers': ['console'],
+                'level': 'INFO',
+                'propagate': True,
+            },
+        }
+    }
+
+    logging.config.dictConfig(LOGGING)

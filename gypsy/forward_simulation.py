@@ -6,6 +6,8 @@ Created on Fri Apr 29 16:06:29 2016
 """
 import logging
 import pandas as pd
+
+from utils import _log_loop_progress
 from GYPSYNonSpatial import (BasalAreaIncrementNonSpatialSw,
                              BasalAreaIncrementNonSpatialSb,
                              BasalAreaIncrementNonSpatialPl,
@@ -27,6 +29,7 @@ from GYPSYNonSpatial import (BasalAreaIncrementNonSpatialSw,
                              GrossTotalVolume_Sw,
                              GrossTotalVolume_Sb,
                              GrossTotalVolume_Pl)
+
 logger = logging.getLogger(__name__)
 
 #input - species, top height, total age, BHage (from the function),
@@ -130,8 +133,9 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
 
     logger.debug('Starting forwards simulation')
     inputDF = plot_df
+    n_rows = inputDF.shape[0]
     for _, row in inputDF.iterrows():
-
+        _log_loop_progress(_, n_rows)
         plotID = str(int(row['PlotID']))
 
         SI_bh_Aw = row['SI_Aw']

@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 """ Data Preparation
 """
+import logging
 import pandas as pd
 from copy import deepcopy
-from asaCompileAgeGivenSpSiHt import (computeTreeAge,
-                                      ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge,
-                                      ComputeGypsySiteIndex)
 
+from utils import _log_loop_progress
 from GYPSYNonSpatial import (densityNonSpatialAw,
                              densityNonSpatialSb,
                              densityNonSpatialSw,
@@ -20,7 +19,9 @@ from GYPSYNonSpatial import (densityNonSpatialAw,
                              BasalAreaIncrementNonSpatialPl,
                              BasalAreaIncrementNonSpatialSb,
                              SCestimate)
-
+from asaCompileAgeGivenSpSiHt import (computeTreeAge,
+                                      ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge,
+                                      ComputeGypsySiteIndex)
 
 # TODO: replace acronyms with something more verbose
 # TODO: use pure functions or class instances to avoid mutating global state
@@ -28,6 +29,7 @@ from GYPSYNonSpatial import (densityNonSpatialAw,
 # TODO: more subroutines and wrapper functions for easier readability
 
 
+LOGGER = logging.getLogger(__name__)
 PLOT_DICT = {}
 
 
@@ -90,18 +92,14 @@ def get_species_site_indices(dominant_species, site_index):
     return site_index_white_aspen, site_index_pl, site_index_sw, site_index_sb
 
 
-
 def prep_standtable(data):
     ''' define site_index of all other species given the dominant species
 
     :param data:
     '''
-    dominant_species = 'Aw'
-    site_index = 1
-    get_species_site_indices(dominant_species, site_index)
-
-    for _, row in data.iterrows():
-
+    n_rows = data.shape[0]
+    for i, row in data.iterrows():
+        _log_loop_progress(i, n_rows)
         # top height, total age, BH age, N (or density), current Basal Area,
         # Measured Percent Stocking, StumpDOB, StumpHeight, TopDib, site_index,
         # Proportion of the species

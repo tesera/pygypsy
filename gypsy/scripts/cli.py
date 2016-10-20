@@ -1,22 +1,18 @@
 import os
 import click
 import logging
-import colorlog
 import pandas as pd
 
+from gypsy.log import setup_logging, CONSOLE_LOGGER_NAME
 from gypsy.forward_simulation import simulate_forwards_df
 from gypsy.data_prep import prep_standtable
-from gypsy.log import log
 
 
-CONSOLE_HANDLER = colorlog.StreamHandler()
-CONSOLE_HANDLER.setFormatter(colorlog.ColoredFormatter(
-    '%(log_color)s%(levelname)s:%(name)s: %(message)s'
-))
-CONSOLE_HANDLER.setLevel(logging.INFO)
-log.addHandler(CONSOLE_HANDLER)
+setup_logging()
+LOGGER = logging.getLogger(CONSOLE_LOGGER_NAME)
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+
 
 def create_output_path(ctx, param, value):
     path = value
@@ -24,6 +20,7 @@ def create_output_path(ctx, param, value):
         path = ctx.params.get('standtable')
         path += '.prepped'
         return path
+
 
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.option('--verbose', '-v', is_flag=True)
@@ -33,7 +30,7 @@ def cli(verbose):
     Data prep must be run before simulating
 
     """
-    log.debug('cli invoked')
+    LOGGER.debug('cli invoked')
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('standtable', type=click.Path(exists=True))
@@ -42,13 +39,14 @@ def cli(verbose):
 @click.option('--output-path', '-o', type=click.Path(), callback=create_output_path)
 def prep(standtable, stand_id, id_field, output_path):
     """Prepare stand data for use in GYPSY simulation"""
-    log.debug('running prep')
+    LOGGER.info('Running prep...')
     standtable_df = pd.read_csv(standtable)
 
     # TODO: filter id by stand id
 
     prepped_data = prep_standtable(standtable_df)
     prepped_data.to_csv(output_path)
+
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('data', type=click.Path(exists=True))
@@ -64,8 +62,6 @@ def prep(standtable, stand_id, id_field, output_path):
 def simulate(data, stand_id, generate_plots, output_fields, output_timestep,
              id_field, write_id, output_dir, output_filename):
     """Run GYPSY simulation"""
-    log.debug('running simulate')
-
     if os.path.exists(output_dir):
         raise click.UsageError('output_dir: %s must not exist!' % output_dir)
 
@@ -73,12 +69,12 @@ def simulate(data, stand_id, generate_plots, output_fields, output_timestep,
 
     # TODO: validate that its had dataprep filter id by stand id
 
-    # run simulate_df
+    LOGGER.info('Running simulation...')
     result = simulate_forwards_df(standtable)
 
     # TODO: subset to timestep add id column to data
 
-    # save data to output dir
+    LOGGER.info('Saving output data')
     os.makedirs(output_dir)
     for plot_id, df in result.items():
         filename = '%s.csv' % plot_id
