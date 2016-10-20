@@ -58,13 +58,13 @@ Gypsy provides a command line interface for convenient usage
 Prepared your standtable
 
 ```
-gyspy prep your_stand_table.csv
+gyspy prep your_stand_data.csv
 ```
 
 Run the gypsy simulation
 
 ```
-gyspy simulate your_stand_table.csv
+gyspy simulate your_stand_data.csv
 ```
 
 The complete documentation can be accessed with `gypsy -h`, documentation for
@@ -83,7 +83,7 @@ Usage: gypsy [OPTIONS] COMMAND [ARGS]...
     -h, --help     Show this message and exit.
 
   Commands:
-    prep      Prepare stand table for use in GYPSY...
+    prep      Prepare stand data for use in GYPSY...
     simulate  Run GYPSY simulation
 ```
 ## Development

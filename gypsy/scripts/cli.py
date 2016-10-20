@@ -32,7 +32,7 @@ def cli(verbose):
 @click.option('--id-field', '-i', type=str)
 @click.option('--output-path', '-o', type=click.Path(), callback=create_output_path)
 def prep(standtable, stand_id, id_field, output_path):
-    """Prepare stand table for use in GYPSY simulation"""
+    """Prepare stand data for use in GYPSY simulation"""
     log.info('running prep')
     standtable_df = pd.read_csv(standtable)
 
