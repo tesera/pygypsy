@@ -1,70 +1,116 @@
 [![Codeship Status for tesera/gypsy](https://app.codeship.com/projects/79989040-748f-0134-c8fb-56e5180c42b3/status?branch=master)](https://app.codeship.com/projects/179242)
 
-# gypsy
+# GYPSY
 
-TODO!
+GYPSY is a Growth and Yield Projection SYstem for trees.
 
 ## Usage
 
-Docker and (host machine) virtualenv installation are incompatible!
-
 ### Installation
-#### Virtualenv
+
+There are two supported options for installation of GYPSY:
+
+1. installation with pip inside of a [virtualenv](#virtualenv)
+2. use of a GYPSY [docker](#docker) image
+
+If an option you are familiar with is missing, please search for it in the
+issue tracker; if it is not there add a new issue if your preferred option.
+
+#### Quick Start
+
+You can get started right away by installing GYPSY as follows:
+
 ```
-git clone git@github.com:tesera/gypsy.git
-cd gypsy
+pip install git+ssh://git@github.com/tesera/gypsy.git@dev # if you have ssh setup with github
+pip install git+https://github.com/tesera/gypsy.git@dev # if you don't have ssh setup with github
+```
+
+However, maintainers may not be able to provide support for issues encountered
+using this method of installation as it does not isolate GYPSY from other
+python packages on the system.
+
+#### Virtualenv
+
+Virtual environments protect system-wide python packages from being clobbered
+by user packages and their dependencies, and vice versa. They also enable
+python projects on the same machine to easily use python2 **or** python3.
+
+If you are not familiar with virtualenv, see the
+[installation](https://virtualenv.pypa.io/en/stable/installation/) and
+[user guide](https://virtualenv.pypa.io/en/stable/userguide/) to get started.
+
+Once you have virtualenv installed on your system, create a project directory
+and virtualenv for your work with GYPSY.
+
+```
+mkdir gypsy-project && cd gypsy-project
 virtualenv venv
 . venv/bin/activate
-pip install . # regular users
 ```
+
+Now you can install gypsy. Note the `@dev` tag at the end - this installs the
+latest development version. To install the latest stable release, leave `@dev`
+out.
+
+```
+pip install git+ssh://git@github.com/tesera/gypsy.git@dev # if you have ssh setup with github
+pip install git+https://github.com/tesera/gypsy.git@dev # if you don't have ssh setup with github
+```
+
+Once the installation is finished, test that GYPSY runs inside the virtualenv.
+
+```
+gypsy --help
+```
+
+The first run will be slow as matplotlib builds a font cache. Subsequent runs are faster.
 
 #### Docker
 
-Build the gypsy image as follows
+Presently, GYPSY is not hosted on a docker image repository, so you will first
+have to clone this repository
+
+```
+git clone git@github.com:tesera/gypsy.git
+```
+
+Then build the GYPSY image as follows:
 
 ```
 docker build -t gypsy .
 ```
 
-That creates an isolated environment where gypsy can be run
-
-Start a container using the gypsy image
+Start a container using the GYPSY image and activate the virtual environment
+inside the container as follows:
 
 ```
 docker run -t -i gypsy /bin/bash
 . venv/bin/activate
 ```
 
-Run gypsy in the container
+That starts an isolated environment where GYPSY can be run. Finally, test that
+GYPSY runs in the container:
 
 ```
-root@de6cccb1a217:/opt/gypsy# gypsy 10
-False
-False
-False
-False
-False
-False
-False
-False
-False
-False
+root@de6cccb1a217:/opt/gypsy# gypsy --help
 ```
+
+The first run will be slow as matplotlib builds a font cache. Subsequent runs are faster.
 
 ### CLI
 
 Gypsy provides a command line interface for convenient usage
 
-Prepared your standtable
+Prepared your stand data:
 
 ```
 gyspy prep your_stand_data.csv
 ```
 
-Run the gypsy simulation
+Run GYPSY on the prepped data from the `gypsy prep` command:
 
 ```
-gyspy simulate your_stand_data.csv
+gyspy simulate your_stand_data.csv.prepped
 ```
 
 The complete documentation can be accessed with `gypsy -h`, documentation for
