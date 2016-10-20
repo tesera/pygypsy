@@ -1,6 +1,7 @@
 import os
 import click
 import logging
+import colorlog
 import pandas as pd
 
 from gypsy.forward_simulation import simulate_forwards_df
@@ -8,9 +9,12 @@ from gypsy.data_prep import prep_standtable
 from gypsy.log import log
 
 
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.INFO)
-log.addHandler(console_handler)
+CONSOLE_HANDLER = colorlog.StreamHandler()
+CONSOLE_HANDLER.setFormatter(colorlog.ColoredFormatter(
+    '%(log_color)s%(levelname)s:%(name)s: %(message)s'
+))
+CONSOLE_HANDLER.setLevel(logging.INFO)
+log.addHandler(CONSOLE_HANDLER)
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
@@ -38,7 +42,7 @@ def cli(verbose):
 @click.option('--output-path', '-o', type=click.Path(), callback=create_output_path)
 def prep(standtable, stand_id, id_field, output_path):
     """Prepare stand data for use in GYPSY simulation"""
-    log.info('running prep')
+    log.debug('running prep')
     standtable_df = pd.read_csv(standtable)
 
     # TODO: filter id by stand id
