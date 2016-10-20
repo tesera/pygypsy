@@ -883,7 +883,7 @@ def BAfactorFinder_Aw(**kwargs):
         iterCount = iterCount + 1
 
         if iterCount == 10000:
-            logging.warning(
+            logger.warning(
                 ('GYPSYNonSpatial.BAfactorFinder_Aw()'
                  ' Slow convergence with Basal Area: %s'
                  ' and factor:%s '), BA_AwB, f_Aw
@@ -979,7 +979,7 @@ def BAfactorFinder_Sb(**kwargs):
         iterCount = iterCount + 1
 
         if iterCount == 1500:
-            logging.warning(
+            logger.warning(
                 ('GYPSYNonSpatial.BAfactorFinder_Sb()'
                  ' Slow convergence with Basal Area: %s'
                  ' and factor:%s '), BA_SbB, f_Sb
@@ -1073,7 +1073,7 @@ def BAfactorFinder_Sw(**kwargs):
         iterCount = iterCount + 1
 
         if iterCount == 1500:
-            logging.warning(
+            logger.warning(
                 ('GYPSYNonSpatial.BAfactorFinder_Sw()'
                  ' Slow convergence with Basal Area: %s'
                  ' and factor:%s '), BA_SwB, f_Sw
@@ -1151,7 +1151,7 @@ def BAfactorFinder_Pl1(startTage, startTagePl, y2bh_Pl,
         iterCount = iterCount + 1
 
         if iterCount == 150:
-            logging.warning(
+            logger.warning(
                 ('GYPSYNonSpatial.BAfactorFinder_Pl()'
                  ' Slow convergence with Basal Area: %s'
                  ' and factor:%s '), BA_PlB, f_Pl
@@ -1205,7 +1205,7 @@ def BAfactorFinder_Pl(**kwargs):
         iterCount = iterCount + 1
 
         if iterCount == 150:
-            logging.warning(
+            logger.warning(
                 ('GYPSYNonSpatial.BAfactorFinder_Pl()'
                  ' Slow convergence with Basal Area: %s'
                  ' and factor:%s '), BA_Pl0, BA_PlB, f_Pl
