@@ -264,3 +264,18 @@ Once the test suite has been sped it, it will also be run as a pre-commit hook.
 You have to symlink from the commit hooks provided to your local git hooks directory as described in [Getting Started](#getting-started):
 
 You can override the commit hook by using the `-n` option when running `git commit`. This is however discouraged!
+
+### Profiling
+
+There are many strategies suitable for profiling.
+
+A good initial strategy is to run `cProfile` on a script as follows:
+
+    python -m cProfile -s cumtime  "$(which gypsy)" simulate data/raw_standtable.csv.prepped > profile.txt
+
+It is very easy to be misled by the profiler, cProfile has 2x overhead, and
+there a multitude of possible solutions to performance issues from internal
+optimizations to better use of library functions.
+
+Do not attempt to optimize unless it is absolutely necessary, and discuss your
+ideas with other developers before trying to implement them.
