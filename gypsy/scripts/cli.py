@@ -1,11 +1,16 @@
 import os
 import click
+import logging
 import pandas as pd
 
 from gypsy.forward_simulation import simulate_forwards_df
 from gypsy.data_prep import prep_standtable
 from gypsy.log import log
 
+
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+log.addHandler(console_handler)
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
@@ -55,7 +60,7 @@ def prep(standtable, stand_id, id_field, output_path):
 def simulate(data, stand_id, generate_plots, output_fields, output_timestep,
              id_field, write_id, output_dir, output_filename):
     """Run GYPSY simulation"""
-    log.info('running simulate')
+    log.debug('running simulate')
 
     if os.path.exists(output_dir):
         raise click.UsageError('output_dir: %s must not exist!' % output_dir)
