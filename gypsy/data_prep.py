@@ -62,7 +62,7 @@ def get_species_site_indices(dominant_species, site_index):
             site_index_sb = 0.64 * site_index_pl + 2.76
             site_index_pb = site_index_white_aspen
 
-        if dominant_species == 'Fd':
+        elif dominant_species == 'Fd':
             site_index_fb = site_index
             site_index_pl = 1.07 * site_index_fb - 0.76
             site_index_white_aspen = 1.18 * site_index_pl  - 4.02
@@ -71,7 +71,7 @@ def get_species_site_indices(dominant_species, site_index):
             site_index_fb = 0.92 * site_index_sw + 1.68
             site_index_sb = 0.64 * site_index_pl + 2.76
 
-        if dominant_species == 'Pl':
+        elif dominant_species == 'Pl':
             site_index_pl = site_index
             site_index_white_aspen = 1.18 * site_index_pl  - 4.02
             site_index_sw = 1.16 * site_index_pl  - 2.47
@@ -80,7 +80,7 @@ def get_species_site_indices(dominant_species, site_index):
             site_index_fb = 0.92 * site_index_sw + 1.68
             site_index_sb = 0.64 * site_index_pl + 2.76
 
-        if dominant_species == 'Pb':
+        elif dominant_species == 'Pb':
             site_index_pb = site_index
             site_index_white_aspen = site_index_pb
             site_index_pl = 0.85 * site_index_white_aspen + 3.4
