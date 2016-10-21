@@ -72,6 +72,15 @@ def simulate(data, stand_id, generate_plots, output_fields, output_timestep,
 
     standtable = pd.read_csv(data)
 
+    # TODO: filter stand data to ages > 25
+    standtable_filter = standtable.query(
+        'AGESB > {%d} or AGESW > {%d} or AGEPL > {%d} or AGEAW > {%d}'.format({d:min_age})
+    )
+    # find the complement of the filtered data and save it somewhere for users to refer to
+    # also print a warning to user that some data was filtered
+    standtable_skipped = standtable - standtable_filter
+    standtable_skipped.to_csv(output_dir, 'skipped_plots.csv')
+
     # TODO: validate that its had dataprep filter id by stand id
 
     LOGGER.info('Running simulation...')
