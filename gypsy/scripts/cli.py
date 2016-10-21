@@ -2,10 +2,13 @@ import os
 import click
 import logging
 import pandas as pd
+from glob import glob
 
 from gypsy.log import setup_logging, CONSOLE_LOGGER_NAME
 from gypsy.forward_simulation import simulate_forwards_df
 from gypsy.data_prep import prep_standtable
+from gypsy.utils import _log_loop_progress
+from gypsy.GYPSYNonSpatial import save_plot
 
 
 setup_logging()
@@ -61,7 +64,9 @@ def prep(standtable, stand_id, id_field, output_path):
 @click.option('--output-filename', type=str, default='gypsy-projection.csv')
 def simulate(data, stand_id, generate_plots, output_fields, output_timestep,
              id_field, write_id, output_dir, output_filename):
-    """Run GYPSY simulation"""
+    """Run GYPSY simulation
+
+    """
     if os.path.exists(output_dir):
         raise click.UsageError('output_dir: %s must not exist!' % output_dir)
 
@@ -82,3 +87,20 @@ def simulate(data, stand_id, generate_plots, output_fields, output_timestep,
         df.to_csv(output_path)
 
     # TODO: generate plot if necessary
+
+@cli.command(context_settings=CONTEXT_SETTINGS)
+@click.argument('simulation-output-dir', type=click.Path(exists=True))
+def plot(simulation_output_dir):
+    """Create charts for all files in gypsy simulation output directory
+
+    """
+    chart_files = glob(os.path.join(simulation_output_dir, '*.csv'))
+    LOGGER.info('Plotting all csv files at %s...', simulation_output_dir)
+
+    for i, chart_file in enumerate(chart_files):
+        _log_loop_progress(i, len(chart_files))
+        chart_df = pd.read_csv(chart_file)
+        output_filename = os.path.splitext(os.path.split(chart_file)[-1])[0] + '.png'
+        figure_path = os.path.join(simulation_output_dir, 'figures', output_filename)
+
+        save_plot(chart_df, path=figure_path)
