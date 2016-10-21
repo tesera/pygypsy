@@ -73,8 +73,9 @@ def simulate(data, stand_id, generate_plots, output_fields, output_timestep,
     standtable = pd.read_csv(data)
 
     # TODO: filter stand data to ages > 25
+    min_age = 25
     standtable_filter = standtable.query(
-        'AGESB > {%d} or AGESW > {%d} or AGEPL > {%d} or AGEAW > {%d}'.format({d:min_age})
+        'tage_Sw > {%d} or tage_Sb > {%d} or tage_Pl > {%d} or tage_Aw > {%d}'.format({d:min_age})
     )
     # find the complement of the filtered data and save it somewhere for users to refer to
     # also print a warning to user that some data was filtered
