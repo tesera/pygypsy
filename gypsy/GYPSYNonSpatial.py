@@ -54,6 +54,10 @@ The main purpose of this step is to estimate SDF that is employed in other formu
 
 
 def densityNonSpatialAw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
+     '''
+    Main purpose of this function is to estimate SDF for the species
+    
+    '''
     N_est_Aw = 0
     SDF_Aw0 = 0
     if N_Aw <= 0:
@@ -96,6 +100,10 @@ def densityNonSpatialAw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
 
 
 def densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings=True):
+    '''
+    Main purpose of this function is to estimate SDF for the species
+
+    '''
     N_est_Sb = 0
     SDF_Sb0 = 0
     if N_Sb > 0:
@@ -129,14 +137,12 @@ def densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings=True):
                         return N_est_Sb, SDF_Sb0
 
 
-
-
     return N_est_Sb, SDF_Sb0
 
 
 def minimum_sdf_aw(bhage_aw, si_bh_aw):
-    """etimate N given that SDF have been estimated
-
+    """
+    estimate N given that SDF have been estimated
     """
     x0 = [200.0]
     optimize = fmin(densityAw, x0, args=(bhage_aw, si_bh_aw))
@@ -145,6 +151,10 @@ def minimum_sdf_aw(bhage_aw, si_bh_aw):
 
 
 def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings=True):
+    '''
+    Main purpose of this function is to estimate SDF for the species
+
+    '''
     N_est_Sw = 0
     SDF_Sw0 = 0
     if N_Sw > 0:
@@ -188,10 +198,11 @@ def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings=T
     return N_est_Sw, SDF_Sw0
 
 
-
-
-
 def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, N_Pl, printWarnings=True):
+    '''
+    Main purpose of this function is to estimate SDF for the species
+
+    '''
     N_est_Pl = 0
     SDF_Pl0 = 0
     if N_Pl > 0:
@@ -247,6 +258,11 @@ def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, N_P
 
 
 def densityAw(SDF_Aw0, bhage_Aw, SI_bh_Aw):
+    '''
+    Main purpose of this function is to project densities
+    forward and backward in time for the species
+
+    '''
 
     if SDF_Aw0 > 0:
         c0 = 0.717966
@@ -267,6 +283,11 @@ def densityAw(SDF_Aw0, bhage_Aw, SI_bh_Aw):
     return N_bh_Aw
 
 def densitySb(SDF_Sb0, tage_Sb, SI_bh_Sb):
+    '''
+    Main purpose of this function is to project densities
+    forward and backward in time for the species
+
+    '''
 
     if SDF_Sb0 > 0:
         c1 = -26.3836
@@ -285,6 +306,11 @@ def densitySb(SDF_Sb0, tage_Sb, SI_bh_Sb):
     return N_bh_Sb
 
 def densitySw(SDF_Sw0, SDF_Aw0, tage_Sw, SI_bh_Sw):
+    '''
+    Main purpose of this function is to project densities
+    forward and backward in time for the species
+
+    '''
 
     if SDF_Sw0 > 0:
         if SDF_Aw0 == 0:
@@ -307,6 +333,11 @@ def densitySw(SDF_Sw0, SDF_Aw0, tage_Sw, SI_bh_Sw):
     return N_bh_Sw
 
 def densityPl(SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl, SI_bh_Pl):
+    '''
+    Main purpose of this function is to project densities
+    forward and backward in time for the species
+
+    '''
 
     if SDF_Pl0 > 0:
         c1 = -5.25144
@@ -360,6 +391,11 @@ BA below is the Basal Area measured in the field and it should be data input int
 
 
 def SCestimate(N_Aw, N_Sb, N_Sw, N_Pl):
+    '''
+    This function calculates species composition based on their densities
+    Constraint ->    SC_Aw + SC_Sw + SC_Sb + SC_Pl ~1
+
+    '''
     N_total = N_Aw + N_Sb + N_Sw + N_Pl
 
     if N_total == 0:
@@ -379,6 +415,12 @@ def SCestimate(N_Aw, N_Sb, N_Sw, N_Pl):
 
 
 def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw):
+    '''
+    predicts the increment in basal area for the subsequent year for the species
+    this function is used to make basal area projections and as a function called
+    by factor finder functions during estimation of correction factor for the species.
+
+    '''
 
     if N_bh_Aw == 0:
         BAinc_Aw = 0
@@ -436,6 +478,12 @@ def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage
 def BAincIter_Aw(sp_Aw, BAinc_AwT, BA_AwT, SC_Aw,
                  SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw,
                  printWarnings=True):
+    '''
+    This is a function used to estimate basal area decrease moving
+    backwards in time. It is not used in the code, but was left here
+    in case this approach is attempted again in the future
+
+    '''
 
 
     acceptableDiff = 0.00001
@@ -479,6 +527,12 @@ def BAincIter_Aw(sp_Aw, BAinc_AwT, BA_AwT, SC_Aw,
 
 
 def BasalAreaIncrementNonSpatialSb(sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, BA_Sb):
+    '''
+    predicts the increment in basal area for the subsequent year for the species
+    this function is used to make basal area projections and as a function called
+    by factor finder functions during estimation of correction factor for the species.
+
+    '''
 
     if N_bh_Sb == 0:
         BAinc_Sb = 0
@@ -507,6 +561,12 @@ def BasalAreaIncrementNonSpatialSb(sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage
 def BAincIter_Sb(sp_Sb, BAinc_SbT, BA_SbT,
                  SC_Sb, SI_bh_Sb, N_bh_Sb,
                  N0_Sb, bhage_Sb, printWarnings=True):
+    '''
+    This is a function used to estimate basal area decrease moving
+    backwards in time. It is not used in the code, but was left here
+    in case this approach is attempted again in the future
+
+    '''
 
 
     acceptableDiff = 0.00001
@@ -546,6 +606,12 @@ def BAincIter_Sb(sp_Sb, BAinc_SbT, BA_SbT,
 def BasalAreaIncrementNonSpatialSw(sp_Sw, SC_Sw, SI_bh_Sw,
                                    N_bh_Sw, N0_Sw, bhage_Sw,
                                    SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw):
+    '''
+    predicts the increment in basal area for the subsequent year for the species
+    this function is used to make basal area projections and as a function called
+    by factor finder functions during estimation of correction factor for the species.
+
+    '''
 
     if N_bh_Sw == 0:
         BAinc_Sw = 0
@@ -595,6 +661,12 @@ def BasalAreaIncrementNonSpatialSw(sp_Sw, SC_Sw, SI_bh_Sw,
 def BAincIter_Sw(sp_Sw, BAinc_SwT, BA_SwT, SC_Sw,
                  SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw,
                  SDF_Aw0, SDF_Pl0, SDF_Sb0, printWarnings=True):
+    '''
+    This is a function used to estimate basal area decrease moving
+    backwards in time. It is not used in the code, but was left here
+    in case this approach is attempted again in the future
+
+    '''
 
 
     acceptableDiff = 0.00001
@@ -642,6 +714,12 @@ def BAincIter_Sw(sp_Sw, BAinc_SwT, BA_SwT, SC_Sw,
 def BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl,
                                    N_bh_Pl, N0_Pl, bhage_Pl,
                                    SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl):
+    '''
+    predicts the increment in basal area for the subsequent year for the species
+    this function is used to make basal area projections and as a function called
+    by factor finder functions during estimation of correction factor for the species.
+
+    '''
 
     if N_bh_Pl == 0:
         BAinc_Pl = 0
@@ -696,6 +774,12 @@ def BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl,
 def BAincIter_Pl(sp_Pl, BAinc_PlT, BA_PlT, SC_Pl,
                  SI_bh_Pl, N_bh_Pl, N0_Pl, bhage_Pl,
                  SDF_Aw0, SDF_Sw0, SDF_Sb0, printWarnings=True):
+    '''
+    This is a function used to estimate basal area decrease moving
+    backwards in time. It is not used in the code, but was left here
+    in case this approach is attempted again in the future
+
+    '''
 
 
     acceptableDiff = 0.00001
@@ -736,6 +820,10 @@ def BAincIter_Pl(sp_Pl, BAinc_PlT, BA_PlT, SC_Pl,
 
 
 def densities_and_SCs_to_250(**kwargs):
+    '''
+    the function returns density estimates for all species along time
+
+    '''
     startTage = kwargs['startTage']
     startTageAw = kwargs['startTageAw']
     y2bh_Aw = kwargs['y2bh_Aw']
@@ -846,6 +934,13 @@ def densities_and_SCs_to_250(**kwargs):
     return densities_along_time
 # this code just below is to be use by the test_iter.py
 def BAfactorFinder_Aw(**kwargs):
+    '''
+    This function guarantees that the trajectory of the species basal area
+    passes through the basal area measured when the data was collected (inventory data)
+
+    There is a trade-off between the precision one wants this estimate, which is
+    given by the parameter - acceptableDiff -, and the time the convergence time
+    '''
     startTage = kwargs['startTage']
     SI_bh_Aw = kwargs['SI_bh_Aw']
     N_bh_AwT = kwargs['N_bh_AwT']
@@ -897,6 +992,12 @@ def BAfactorFinder_Aw(**kwargs):
 def BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw,
                        BA_Aw0, SDF_Aw0, f_Aw, densities,
                        simulation_choice, simulation=True):
+                           
+    '''
+    This is a function that supports factor finder functions.
+    It creates the trajectory of basal area from bhage up to the
+    inventory year given a correction factor that is being optimized
+    '''
     logger.debug('getting basal area from time zero to time of data for aspen')
     if simulation_choice == 'yes':
         max_age = startTage
@@ -940,6 +1041,13 @@ def BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw,
 
 
 def BAfactorFinder_Sb(**kwargs):
+    '''
+    This function guarantees that the trajectory of the species basal area
+    passes through the basal area measured when the data was collected (inventory data)
+
+    There is a trade-off between the precision with one wants this estimate, which is
+    given by the parameter - acceptableDiff -, and the time the convergence time
+    '''
     logger.debug('Getting basal area factor for black spruce')
     startTage = kwargs['startTage']
     startTageSb = kwargs['startTageSb']
@@ -990,6 +1098,11 @@ def BAfactorFinder_Sb(**kwargs):
 def BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb,
                        SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb,
                        BA_Sb0, f_Sb, simulation_choice, simulation=True):
+    '''
+    This is a function that supports factor finder functions.
+    It creates the trajectory of basal area from bhage up to the
+    inventory year given a correction factor that is being optimized
+    '''
     if simulation_choice == 'yes':
         max_age = startTage
     elif simulation_choice == 'no':
@@ -1029,6 +1142,13 @@ def BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb,
 
 
 def BAfactorFinder_Sw(**kwargs):
+    '''
+    This function guarantees that the trajectory of the species basal area
+    passes through the basal area measured when the data was collected (inventory data)
+
+    There is a trade-off between the precision with one wants this estimate, which is
+    given by the parameter - acceptableDiff -, and the time the convergence time
+    '''
     logger.debug('Getting basal area factor for white spruce')
     startTage = kwargs['startTage']
     startTageSw = kwargs['startTageSw']
@@ -1085,6 +1205,11 @@ def BAfactorFinder_Sw(**kwargs):
 def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw,
                        SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0,
                        SDF_Sb0, BA_Sw0, f_Sw, simulation_choice, simulation=True):
+    '''
+    This is a function that supports factor finder functions.
+    It created the trajectory of basal area from bhage up to the
+    inventory year given a correction factor that is being optimized
+    '''
     if simulation_choice == 'yes':
         max_age = startTage
     elif simulation_choice == 'no':
@@ -1127,6 +1252,13 @@ def BAfactorFinder_Pl1(startTage, startTagePl, y2bh_Pl,
                        SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,
                        SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0,
                        BA_PlT, printWarnings=True):
+    '''
+    This function guarantees that the trajectory of the species basal area
+    passes through the basal area measured when the data was collected (inventory data)
+
+    There is a trade-off between the precision with one wants this estimate, which is
+    given by the parameter - acceptableDiff -, and the time the convergence time
+    '''
     f_Pl = 100
     #BA_PlB=BA_Pl0
     acceptableDiff = 0.01
@@ -1160,6 +1292,13 @@ def BAfactorFinder_Pl1(startTage, startTagePl, y2bh_Pl,
     return f_Pl
 
 def BAfactorFinder_Pl(**kwargs):
+    '''
+    This function guarantees that the trajectory of the species basal area
+    passes through the basal area measured when the data was collected (inventory data)
+
+    There is a trade-off between the precision with one wants this estimate, which is
+    given by the parameter - acceptableDiff -, and the time the convergence time
+    '''
     startTage = kwargs['startTage']
     startTagePl = kwargs['startTagePl']
     y2bh_Pl = kwargs['y2bh_Pl']
@@ -1216,6 +1355,11 @@ def BAfactorFinder_Pl(**kwargs):
 def BAfromZeroToDataPl1(startTage, startTagePl, y2bh_Pl,
                         SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,
                         SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl):
+    '''
+    This is a function that supports factor finder functions.
+    It created the trajectory of basal area from bhage up to the
+    inventory year given a correction factor that is being optimized
+    '''
 
 
     t = 0
@@ -1254,6 +1398,11 @@ def BAfromZeroToDataPl1(startTage, startTagePl, y2bh_Pl,
 def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl,
                        SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0,
                        SDF_Sb0, BA_Pl0, f_Pl, simulation_choice, simulation=True):
+    '''
+    This is a function that supports factor finder functions.
+    It created the trajectory of basal area from bhage up to the
+    inventory year given a correction factor that is being optimized
+    '''
     if simulation_choice == 'yes':
         max_age = startTage
     elif simulation_choice == 'no':
@@ -1302,6 +1451,10 @@ Gross total volume is estimated only using species specific Basal Area and Top h
 '''
 
 def GrossTotalVolume_Aw(BA_Aw, topHeight_Aw):
+    '''
+    Gross total volume is estimated only using species specific Basal Area and Top height
+
+    '''
     Tvol_Aw = 0
     if topHeight_Aw > 0:
         a1 = 0.248718
@@ -1312,6 +1465,10 @@ def GrossTotalVolume_Aw(BA_Aw, topHeight_Aw):
     return Tvol_Aw
 
 def GrossTotalVolume_Sw(BA_Sw, topHeight_Sw):
+    '''
+    Gross total volume is estimated only using species specific Basal Area and Top height
+
+    '''
     Tvol_Sw = 0
     if topHeight_Sw > 0:
         b1 = 0.41104
@@ -1322,6 +1479,10 @@ def GrossTotalVolume_Sw(BA_Sw, topHeight_Sw):
 
 
 def GrossTotalVolume_Sb(BA_Sb, topHeight_Sb):
+    '''
+    Gross total volume is estimated only using species specific Basal Area and Top height
+
+    '''
     Tvol_Sb = 0
     if topHeight_Sb > 0:
         b1 = 0.48628
@@ -1332,6 +1493,10 @@ def GrossTotalVolume_Sb(BA_Sb, topHeight_Sb):
 
 
 def GrossTotalVolume_Pl(BA_Pl, topHeight_Pl):
+    '''
+    Gross total volume is estimated only using species specific Basal Area and Top height
+
+    '''
     Tvol_Pl = 0
     if topHeight_Pl > 0:
         a1 = 0.194086
@@ -1356,6 +1521,7 @@ def MerchantableVolumeAw(N_bh_Aw, BA_Aw, topHeight_Aw,
                          StumpDOB_Aw, StumpHeight_Aw,
                          TopDib_Aw, Tvol_Aw):
     '''
+    Merchantable volume only new variables are the stump diameter outside bark, stump height and top diameter inside bark
     I used this if below (and in other functions) to avoid
     division by zero when density is zero, i.e., when the
     species is absent in the plot.
@@ -1387,6 +1553,13 @@ def MerchantableVolumeAw(N_bh_Aw, BA_Aw, topHeight_Aw,
 def MerchantableVolumeSb(N_bh_Sb, BA_Sb, topHeight_Sb,
                          StumpDOB_Sb, StumpHeight_Sb,
                          TopDib_Sb, Tvol_Sb):
+    '''
+    Merchantable volume only new variables are the stump diameter outside bark, stump height and top diameter inside bark
+
+    I used this if below (and in other functions) to avoid
+    division by zero when density is zero, i.e., when the
+    species is absent in the plot.
+    '''
     if N_bh_Sb > 0:
         k_Sb = (BA_Sb * 10000.0 / N_bh_Sb)**0.5
     else:
@@ -1414,6 +1587,13 @@ def MerchantableVolumeSb(N_bh_Sb, BA_Sb, topHeight_Sb,
 def MerchantableVolumeSw(N_bh_Sw, BA_Sw, topHeight_Sw,
                          StumpDOB_Sw, StumpHeight_Sw,
                          TopDib_Sw, Tvol_Sw):
+    '''
+    Merchantable volume only new variables are the stump diameter outside bark, stump height and top diameter inside bark
+
+    I used this if below (and in other functions) to avoid
+    division by zero when density is zero, i.e., when the
+    species is absent in the plot.
+    '''
     if N_bh_Sw > 0:
         k_Sw = (BA_Sw * 10000.0 / N_bh_Sw)**0.5
     else:
@@ -1438,6 +1618,13 @@ def MerchantableVolumeSw(N_bh_Sw, BA_Sw, topHeight_Sw,
 def MerchantableVolumePl(N_bh_Pl, BA_Pl, topHeight_Pl,
                          StumpDOB_Pl, StumpHeight_Pl,
                          TopDib_Pl, Tvol_Pl):
+    '''
+    Merchantable volume only new variables are the stump diameter outside bark, stump height and top diameter inside bark
+
+    I used this if below (and in other functions) to avoid
+    division by zero when density is zero, i.e., when the
+    species is absent in the plot.
+    '''
     if N_bh_Pl > 0:
         k_Pl = (BA_Pl * 10000.0 / N_bh_Pl)**0.5
     else:
