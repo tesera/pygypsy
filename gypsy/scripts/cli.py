@@ -74,20 +74,21 @@ def simulate(data, stand_id, generate_plots, output_fields, output_timestep,
 
     # TODO: filter stand data to ages > 25
     min_age = 25
-    standtable_filter = standtable.query(
-        'tage_Sw > {%d} or tage_Sb > {%d} or tage_Pl > {%d} or tage_Aw > {%d}'.format({d:min_age})
+    standtable_old = standtable.query(
+        'tage_Sw > {a} or tage_Sb > {a} or tage_Pl > {a} or tage_Aw > {a}' .format(a=min_age)
     )
-    # find the complement of the filtered data and save it somewhere for users to refer to
-    # also print a warning to user that some data was filtered
-    standtable_skipped = standtable - standtable_filter
-    standtable_skipped.to_csv(output_dir, 'skipped_plots.csv')
+    
+    standtable_young = standtable.query(
+        'tage_Sw < {a} and tage_Sb < {a} and tage_Pl < {a} and tage_Aw < {a}' .format(a=min_age)
+    )
+    
 
     # TODO: validate that its had dataprep filter id by stand id
 
     LOGGER.info('Running simulation...')
-    result = simulate_forwards_df(standtable)
+    result = simulate_forwards_df(standtable_old)
 
-    # TODO: subset to timestep add id column to data
+    # TODO: subset to timestep add id column to data and fix output path
 
     LOGGER.info('Saving output data')
     os.makedirs(output_dir)
@@ -95,8 +96,11 @@ def simulate(data, stand_id, generate_plots, output_fields, output_timestep,
         filename = '%s.csv' % plot_id
         output_path = os.path.join(output_dir, filename)
         df.to_csv(output_path)
-
-    # TODO: generate plot if necessary
+    
+    standtable_young_path = os.path.join(output_dir, 'skipped_plots.csv') 
+    standtable_young.to_csv(standtable_young_path, columns=['PlotID'])
+    
+    # TODO: plot must have onlu plot ID 
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('simulation-output-dir', type=click.Path(exists=True))

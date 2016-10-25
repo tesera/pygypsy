@@ -107,7 +107,8 @@ def get_species_site_indices(dominant_species, site_index):
 
 
 def prep_standtable(data):
-    ''' define site_index of all other species given the dominant species
+    ''' 
+    define site_index of all other species given the dominant species
 
     :param data:
     '''
@@ -179,7 +180,8 @@ def prep_standtable(data):
         # TODO: this function uses variables from the enclosing scope
         # need to pass the variable into the function instead
         def get_other_species_site_index(site_index):
-            """fill the dictionary with estimated SIs
+            """
+            fill the dictionary with estimated SIs
 
             fill all the SIs to avoid IFs and loops. Some of them will not be used.
 
@@ -238,7 +240,7 @@ def prep_standtable(data):
         # TODO: does species perc dict need to be an argument? if so
         # it should be immutable
         def sort_species(species_perc_list, species_perc_dict={'Aw':0, 'Pl':0, 'Sw':0, 'Sb':0}):
-             '''
+            '''
             re-classification of species that are not considered in gypsy as
             one of the species considered in gypsy (Aw, Sw, Sb, or Pl)
             and sort the species to obtain the dominant species in the plot

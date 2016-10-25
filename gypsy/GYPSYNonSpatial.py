@@ -54,7 +54,7 @@ The main purpose of this step is to estimate SDF that is employed in other formu
 
 
 def densityNonSpatialAw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
-     '''
+    '''
     Main purpose of this function is to estimate SDF for the species
     
     '''
