@@ -21,7 +21,7 @@ def create_output_path(ctx, param, value):
     path = value
     if path is None:
         path = ctx.params.get('standtable')
-        path += '.prepped'
+        path += '_prepped.csv'
         return path
 
 
@@ -74,14 +74,11 @@ def simulate(data, stand_id, generate_plots, output_fields, output_timestep,
 
     # TODO: filter stand data to ages > 25
     min_age = 25
-    standtable_old = standtable.query(
-        'tage_Sw > {a} or tage_Sb > {a} or tage_Pl > {a} or tage_Aw > {a}' .format(a=min_age)
-    )
-    
-    standtable_young = standtable.query(
-        'tage_Sw < {a} and tage_Sb < {a} and tage_Pl < {a} and tage_Aw < {a}' .format(a=min_age)
-    )
-    
+
+    old_query_str = 'tage_Sw > {a} or tage_Sb > {a} or tage_Pl > {a} or tage_Aw > {a}' .format(a=min_age)
+    old_ids = standtable.query(old_query_str).index
+    standtable_old = standtable[standtable.index.isin(old_ids)]
+    standtable_young = standtable[~standtable.index.isin(old_ids)]
 
     # TODO: validate that its had dataprep filter id by stand id
 
