@@ -25,7 +25,6 @@ setup(name='gypsy',
       install_requires=[
           'click>=6.6',
           'pandas>=0.18.1',
-          'matplotlib>=1.5.2',
           'colorlog>=2.7.0',
       ],
       extras_require={
@@ -33,6 +32,7 @@ setup(name='gypsy',
           'lint': ['pylint==1.5.4'],
           'docs': ['sphinx==1.4.1'],
           'dev': ['git-pylint-commit-hook==2.1.1'],
+          'plot': ['matplotlib>=1.5.2'],
       },
       entry_points="""
       [console_scripts]
