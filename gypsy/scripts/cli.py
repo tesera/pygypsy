@@ -21,7 +21,7 @@ def create_output_path(ctx, param, value):
     path = value
     if path is None:
         path = ctx.params.get('standtable')
-        path += '.prepped'
+        path += '_prepped.csv'
         return path
 
 
@@ -72,12 +72,20 @@ def simulate(data, stand_id, generate_plots, output_fields, output_timestep,
 
     standtable = pd.read_csv(data)
 
+    # TODO: filter stand data to ages > 25
+    min_age = 25
+
+    old_query_str = 'tage_Sw > {a} or tage_Sb > {a} or tage_Pl > {a} or tage_Aw > {a}' .format(a=min_age)
+    old_ids = standtable.query(old_query_str).index
+    standtable_old = standtable[standtable.index.isin(old_ids)]
+    standtable_young = standtable[~standtable.index.isin(old_ids)]
+
     # TODO: validate that its had dataprep filter id by stand id
 
     LOGGER.info('Running simulation...')
-    result = simulate_forwards_df(standtable)
+    result = simulate_forwards_df(standtable_old)
 
-    # TODO: subset to timestep add id column to data
+    # TODO: subset to timestep add id column to data and fix output path
 
     LOGGER.info('Saving output data')
     os.makedirs(output_dir)
@@ -85,8 +93,11 @@ def simulate(data, stand_id, generate_plots, output_fields, output_timestep,
         filename = '%s.csv' % plot_id
         output_path = os.path.join(output_dir, filename)
         df.to_csv(output_path)
-
-    # TODO: generate plot if necessary
+    
+    standtable_young_path = os.path.join(output_dir, 'skipped_plots.csv') 
+    standtable_young.to_csv(standtable_young_path, columns=['PlotID'])
+    
+    # TODO: plot must have onlu plot ID 
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('simulation-output-dir', type=click.Path(exists=True))
