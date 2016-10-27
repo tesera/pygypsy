@@ -11,6 +11,7 @@ RUN git config --global user.email "docker@gypsy" && git config --global user.na
 
 ENV WD=/opt/gypsy
 WORKDIR /opt/gypsy
+ENV HISTFILE $WD/.bash_history
 
 RUN pip install virtualenv \
     && virtualenv -p python2.7 venv \
