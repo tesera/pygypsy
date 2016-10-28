@@ -22,8 +22,9 @@ def create_output_path(ctx, param, value): #pylint: disable=unused-argument
     path = value
     if path is None:
         path = ctx.params.get('standtable')
-        path += '_prepped.csv'
-        return path
+        basename = os.path.splitext(path)[0]
+        new_name = basename + '_prepped.csv'
+        return new_name
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
@@ -98,11 +99,11 @@ def simulate(data, stand_id, generate_plots, output_fields, output_timestep,
         filename = '%s.csv' % plot_id
         output_path = os.path.join(output_dir, filename)
         df.to_csv(output_path)
-    
-    standtable_young_path = os.path.join(output_dir, 'skipped_plots.csv') 
+
+    standtable_young_path = os.path.join(output_dir, 'skipped_plots.csv')
     standtable_young.to_csv(standtable_young_path, columns=['PlotID'])
-    
-    # TODO: plot must have onlu plot ID 
+
+    # TODO: plot must have onlu plot ID
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('simulation-output-dir', type=click.Path(exists=True))
