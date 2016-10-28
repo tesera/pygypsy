@@ -29,6 +29,7 @@ def create_output_path(ctx, param, value): #pylint: disable=unused-argument
 
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.option('--verbose', '-v', is_flag=True)
+@click.option('--config-file', '-c', type=click.Path(exists=True))
 def cli(verbose):
     """Growth and Yield Projection System
 
