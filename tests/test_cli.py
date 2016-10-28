@@ -42,9 +42,3 @@ def test_simulate():
     assert result.exit_code == 0
     assert result.output == ""
     assert os.path.exists(expected_output_path)
-
-def test_cli_config_file(cli_config_file): #pylint: disable=missing-docstring
-    runner = CliRunner()
-    result = runner.invoke(cli, ['--config-file', cli_config_file,
-                                 'prep', '-h'])
-    assert result.exit_code == 0

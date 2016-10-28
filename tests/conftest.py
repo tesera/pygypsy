@@ -15,3 +15,14 @@ def cli_config_file():
     yield path
 
     os.remove(path)
+
+@pytest.fixture(scope='module')
+def invalid_cli_config_file():
+    path = os.path.join(DATA_DIR, 'invalid_cli_config.txt')
+
+    with open(path, 'w') as f:
+        f.write('\n\n\n\nnodata\n')
+
+    yield path
+
+    os.remove(path)
