@@ -1,3 +1,4 @@
+"""Command Line Interface"""
 import os
 import click
 import logging
@@ -17,7 +18,7 @@ LOGGER = logging.getLogger(CONSOLE_LOGGER_NAME)
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
 
-def create_output_path(ctx, param, value):
+def create_output_path(ctx, param, value): #pylint: disable=unused-argument
     path = value
     if path is None:
         path = ctx.params.get('standtable')
@@ -33,7 +34,11 @@ def cli(verbose):
     Data prep must be run before simulating
 
     """
-    LOGGER.debug('cli invoked')
+    if verbose:
+        LOGGER.setLevel(logging.DEBUG)
+        for handler in LOGGER.handlers:
+            handler.setLevel(logging.DEBUG)
+    LOGGER.debug('Starting gypsy')
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('standtable', type=click.Path(exists=True))
