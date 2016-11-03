@@ -285,3 +285,45 @@ optimizations to better use of library functions.
 
 Do not attempt to optimize unless it is absolutely necessary, and discuss your
 ideas with other developers before trying to implement them.
+
+### Ad-hoc analyses in `notebooks/`
+
+Sometimes it is useful to inlcude the results of ad-hoc analyses of gypsy's
+behaviour.
+
+For this purpose, a directory called notebooks/ is available, where jupyter
+notebooks can be saved.
+
+If you would like to do an ad-hoc analyses, the procedure is as follows
+
+1. File an issue describing the problem to be solved/reason for the analysis
+
+2. Create a branch for your analysis using the following format
+
+```
+<issue-number>/<desciption>
+```
+
+for example
+
+```
+#32/address-testing-findings
+```
+
+2. Ensure the analysis `extras` are installed
+
+`pip install -e .[analysis]`
+
+If you are using docker remember to first enter the docker container with
+`docker-compose run dev`.
+
+3. Start the jupyter notebook server
+
+```
+docker-compose run --service-ports notebook # if using docker
+jupyter notebook --notebook-dir notebooks # if not using docker
+```
+
+4. Conduct the analysis & revise the source code as necessary
+
+Notebooks are /not/ a replacement for unit tests! It is required to make suitable unit tests for the finding of an analysis before a pull request associated with an analysis will be merged.
