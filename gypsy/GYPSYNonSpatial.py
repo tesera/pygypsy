@@ -60,7 +60,7 @@ def densityNonSpatialAw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
     :param float SI_bh_Aw: site index of species Aw
     :param float bhage_Aw: breast height age of speceis Aw
     :param float N_Aw: densit of species Aw
-    
+
     '''
     N_est_Aw = 0
     SDF_Aw0 = 0
@@ -106,12 +106,12 @@ def densityNonSpatialAw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
 def densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings=True):
     '''
     Main purpose of this function is to estimate SDF for the species
-    
+
     :param str sp_Sb: species name
     :param float SI_bh_Sb: site index of species Sb
     :param float tage_Sb: total age of species Sb
     :param float N_Sb: densit of species Sb
-    
+
 
     '''
     N_est_Sb = 0
@@ -163,11 +163,11 @@ def minimum_sdf_aw(bhage_aw, si_bh_aw):
 def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings=True):
     '''
     Main purpose of this function is to estimate SDF for the species
-    
+
     :param str sp_Sw: species name
     :param float SI_bh_Sw: site index of species Sw
     :param float tage_Sw: total age of species Sw
-    :param float SDF_Aw0: Stand Density Factor of species Aw, this parameter indicates that the density of Sw 
+    :param float SDF_Aw0: Stand Density Factor of species Aw, this parameter indicates that the density of Sw
     depends on the density of Aw
     :param float N_Sw: densit of species Sw
 
@@ -218,14 +218,14 @@ def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings=T
 def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, N_Pl, printWarnings=True):
     '''
     Main purpose of this function is to estimate SDF for the species
-    
+
     :param str sp_Pl: species name
     :param float SI_bh_Pl: site index of species Pl
     :param float tage_Pl: total age of species Pl
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float SDF_Sw0: Stand Density Factor of species Sw
     :param float SDF_Pl0: Stand Density Factor of species Pl
-    these parameters SDF above indicate that the density of Pl 
+    these parameters SDF above indicate that the density of Pl
     depends on the density of all otehr species
     :param float N_Pl: densit of species Pl
 
@@ -288,8 +288,8 @@ def densityAw(SDF_Aw0, bhage_Aw, SI_bh_Aw):
     '''
     Main purpose of this function is to project densities
     forward and backward in time for the species
-    
-    :param float SI_bh_Aw: site index of species Aw 
+
+    :param float SI_bh_Aw: site index of species Aw
     :param float bhage_Aw: breast height age of species Aw
     :param floar SDF_Aw0: Stand Density Factor of species Aw
 
@@ -317,8 +317,8 @@ def densitySb(SDF_Sb0, tage_Sb, SI_bh_Sb):
     '''
     Main purpose of this function is to project densities
     forward and backward in time for the species
-    
-    :param float SI_bh_Sb: site index of species Sb 
+
+    :param float SI_bh_Sb: site index of species Sb
     :param float tage_Sb: total age of species Sb
     :param float SDF_Sb0: Stand Density Factor of species Sb
     :param float SDF_Aw0: Stand Density Factor of species Aw
@@ -345,8 +345,8 @@ def densitySw(SDF_Sw0, SDF_Aw0, tage_Sw, SI_bh_Sw):
     '''
     Main purpose of this function is to project densities
     forward and backward in time for the species
-    
-    :param float SI_bh_Sw: site index of species Sw 
+
+    :param float SI_bh_Sw: site index of species Sw
     :param float tage_Sw: total age of species Sw
     :param float SDF_Sw0: Stand Density Factor of species Sw
     :param float SDF_Aw0: Stand Density Factor of species Aw
@@ -377,8 +377,8 @@ def densityPl(SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl, SI_bh_Pl):
     '''
     Main purpose of this function is to project densities
     forward and backward in time for the species
-    
-    :param float SI_bh_Pl: site index of species Pl 
+
+    :param float SI_bh_Pl: site index of species Pl
     :param float tage_Pl: total age of species Pl
     :param float SDF_Pl0: Stand Density Factor of species Pl
     :param float SDF_Aw0: Stand Density Factor of species Aw
@@ -442,7 +442,7 @@ def SCestimate(N_Aw, N_Sb, N_Sw, N_Pl):
     '''
     This function calculates species composition based on their densities
     Constraint ->    SC_Aw + SC_Sw + SC_Sb + SC_Pl ~1
-    
+
     :para float N_Aw, N_Sb, N_Sw, and N_Pl: densities of the species Aw, Sb, Sw, and Pl
 
     '''
@@ -469,7 +469,7 @@ def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage
     predicts the increment in basal area for the subsequent year for the species.
     This function is also used to make basal area projections and as a function called
     by factor finder functions during estimation of correction factor for the species.
-    
+
     :param str sp_Aw: species name
     :param float SI_bh_Aw: site index of species Aw
     :param float bhage_Aw: breast height age of speceis Aw
@@ -477,8 +477,8 @@ def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage
     :param float SC_Aw: proportion of species Aw in the stand
     :param float BA_Aw: Basal area of the species Aw
     :param float N0_Aw: initial density of species Aw at breast height age
-    
-    
+
+
 
     '''
 
@@ -591,7 +591,7 @@ def BasalAreaIncrementNonSpatialSb(sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage
     predicts the increment in basal area for the subsequent year for the species
     this function is used to make basal area projections and as a function called
     by factor finder functions during estimation of correction factor for the species.
-    
+
     :param str sp_Sb: species name
     :param float SI_bh_Sb: site index of species Sb
     :param float bhage_Sb: breast height age of speceis Sb
@@ -678,7 +678,7 @@ def BasalAreaIncrementNonSpatialSw(sp_Sw, SC_Sw, SI_bh_Sw,
     predicts the increment in basal area for the subsequent year for the species
     this function is used to make basal area projections and as a function called
     by factor finder functions during estimation of correction factor for the species.
-    
+
     :param str sp_Sw: species name
     :param float SI_bh_Sw: site index of species Sw
     :param float bhage_Sw: breast height age of speceis Sw
@@ -689,7 +689,7 @@ def BasalAreaIncrementNonSpatialSw(sp_Sw, SC_Sw, SI_bh_Sw,
     :param float SDF_Pl0: Stand Density Factor of species Pl
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float SDF_Sb0: Stand Density Factor of species Sb
-    
+
 
     '''
 
@@ -798,7 +798,7 @@ def BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl,
     predicts the increment in basal area for the subsequent year for the species
     this function is used to make basal area projections and as a function called
     by factor finder functions during estimation of correction factor for the species.
-    
+
     :param str sp_Pl: species name
     :param float SI_bh_Pl: site index of species Pl
     :param float bhage_Pl: breast height age of species Pl
@@ -914,7 +914,7 @@ def densities_and_SCs_to_250(**kwargs):
     '''
     the function returns density, species composition, top height estimates for all species along time,
     which is counted independently for each species.
-        
+
     :param float startTage: It uses the oldest species as a reference to become the stand age
     :param float startTageAw, startTageSw, startTageSb, and startTagePl: species specific ages counted independently
     :param float SDF_Pl0: Stand Density Factor of species Pl
@@ -929,7 +929,7 @@ def densities_and_SCs_to_250(**kwargs):
     :param float y2bh_Sw: time elapseed in years from zero to breast height age of sp Sw
     :param float y2bh_Sb: time elapseed in years from zero to breast height age of sp Sb
     :param float y2bh_Pl: time elapseed in years from zero to breast height age of sp Pl
-    
+
 
     '''
     startTage = kwargs['startTage']
@@ -1048,7 +1048,7 @@ def BAfactorFinder_Aw(**kwargs):
 
     There is a trade-off between the precision one wants this estimate, which is
     given by the parameter - acceptableDiff -, and the time the convergence time
-    
+
     :param float startTage: Clock that uses the oldest species as a reference to become the stand age
     :param float SI_bh_Aw: site index of species Aw
     :param float N_bh_AwT: density of sp Aw at time T (it varies over time)
@@ -1056,8 +1056,8 @@ def BAfactorFinder_Aw(**kwargs):
     :param float BA_AwT: basal area of Aw at time T
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float N0_Aw: initial density of species Aw at breast height age
-    
-    
+
+
     '''
     startTage = kwargs['startTage']
     SI_bh_Aw = kwargs['SI_bh_Aw']
@@ -1110,22 +1110,22 @@ def BAfactorFinder_Aw(**kwargs):
 def BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw,
                        BA_Aw0, SDF_Aw0, f_Aw, densities,
                        simulation_choice, simulation=True):
-                           
+
     '''
     This is a function that supports factor finder functions.
     It creates the trajectory of basal area from bhage up to the
     inventory year given a correction factor that is being optimized
-    
+
     :param float startTage: Clock that uses the oldest species as a reference to become the stand age
     :param float SI_bh_Aw: site index of species Aw
     :param float BA_Aw0: basal area of Aw at breast height age, assumed to be very small
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float N0_Aw: initial density of species Aw at breast height age
-    :param str simulation_choice: switch that determines whether simulation will stop at the 
+    :param str simulation_choice: switch that determines whether simulation will stop at the
     date of the inventory or will continue until year 250
-    :param float f_Aw: correction factor that guarantees that trajectory passes through 
+    :param float f_Aw: correction factor that guarantees that trajectory passes through
     data obtained with inventory
-    
+
     '''
     logger.debug('getting basal area from time zero to time of data for aspen')
     if simulation_choice == 'yes':
@@ -1176,7 +1176,7 @@ def BAfactorFinder_Sb(**kwargs):
 
     There is a trade-off between the precision with one wants this estimate, which is
     given by the parameter - acceptableDiff -, and the time the convergence time
-    
+
     :param float startTage: Clock that uses the oldest species as a reference to become the stand age
     :param float SI_bh_Sb: site index of species Sb
     :param float N_bh_SbT: density of sp Sb at time T (it varies over time)
@@ -1249,11 +1249,11 @@ def BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb,
     :param float BA_Sb0: basal area of Sb at breast height age, assumed to be very small
     :param float N_bh_SbT: density of species Sb at time T
     :param float N0_Sb: initial density of species Sb at breast height age
-    :param str simulation_choice: switch that determines whether simulation will stop at the 
+    :param str simulation_choice: switch that determines whether simulation will stop at the
     date of the inventory or will continue until year 250
-    :param float f_Sb: correction factor that guarantees that trajectory passes through 
-    data obtained with inventory    
-    
+    :param float f_Sb: correction factor that guarantees that trajectory passes through
+    data obtained with inventory
+
     '''
     if simulation_choice == 'yes':
         max_age = startTage
@@ -1309,11 +1309,11 @@ def BAfactorFinder_Sw(**kwargs):
     :param float N0_Sw: initial density of species Sw at breast height age
     :param float y2bh_Sw: time elapseed in years from zero to breast height age of sp Sw
     :param float startTageSw: species specific ages counted independently
-    :param float SC_Sw: proportion of species Sw in the stand   
+    :param float SC_Sw: proportion of species Sw in the stand
     :param float SDF_Pl0: Stand Density Factor of species Pl
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float SDF_Sb0: Stand Density Factor of species Sb
-    
+
     '''
     logger.debug('Getting basal area factor for white spruce')
     startTage = kwargs['startTage']
@@ -1375,7 +1375,7 @@ def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw,
     This is a function that supports factor finder functions.
     It created the trajectory of basal area from bhage up to the
     inventory year given a correction factor that is being optimized
-    
+
     :param float startTage: Clock that uses the oldest species as a reference to become the stand age
     :param float startTageSw: species specific age counted independently
     :param float y2bh_Sw: time elapseed in years from zero to breast height age of sp Sw
@@ -1383,9 +1383,9 @@ def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw,
     :param float BA_Sw0: basal area of Sw at breast height age, assumed to be very small
     :param float N_bh_SwT: density of species Sw at time T
     :param float N0_Sw: initial density of species Sw at breast height age
-    :param str simulation_choice: switch that determines whether simulation will stop at the 
+    :param str simulation_choice: switch that determines whether simulation will stop at the
     date of the inventory or will continue until year 250
-    :param float f_Sw: correction factor that guarantees that trajectory passes through 
+    :param float f_Sw: correction factor that guarantees that trajectory passes through
     data obtained with inventory
     :param float SDF_Pl0: Stand Density Factor of species Pl
     :param float SDF_Aw0: Stand Density Factor of species Aw
@@ -1439,7 +1439,7 @@ def BAfactorFinder_Pl1(startTage, startTagePl, y2bh_Pl,
 
     There is a trade-off between the precision with one wants this estimate, which is
     given by the parameter - acceptableDiff -, and the time the convergence time
-    
+
     :param float startTage: Clock that uses the oldest species as a reference to become the stand age
     :param float SI_bh_Pl: site index of species Pl
     :param float N_bh_PlT: density of sp Pl at time T (it varies over time)
@@ -1448,7 +1448,7 @@ def BAfactorFinder_Pl1(startTage, startTagePl, y2bh_Pl,
     :param float N0_Pl: initial density of species Pl at breast height age
     :param float y2bh_Pl: time elapseed in years from zero to breast height age of sp Pl
     :param float startTagePl: species specific ages counted independently
-    :param float SC_Pl: proportion of species Pl in the stand   
+    :param float SC_Pl: proportion of species Pl in the stand
     :param float SDF_Sw0: Stand Density Factor of species Sw
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float SDF_Sb0: Stand Density Factor of species Sb
@@ -1492,7 +1492,7 @@ def BAfactorFinder_Pl(**kwargs):
 
     There is a trade-off between the precision with one wants this estimate, which is
     given by the parameter - acceptableDiff -, and the time the convergence time
-    
+
     :param float startTage: Clock that uses the oldest species as a reference to become the stand age
     :param float SI_bh_Pl: site index of species Pl
     :param float N_bh_PlT: density of sp Pl at time T (it varies over time)
@@ -1501,7 +1501,7 @@ def BAfactorFinder_Pl(**kwargs):
     :param float N0_Pl: initial density of species Pl at breast height age
     :param float y2bh_Pl: time elapseed in years from zero to breast height age of sp Pl
     :param float startTagePl: species specific ages counted independently
-    :param float SC_Pl: proportion of species Pl in the stand   
+    :param float SC_Pl: proportion of species Pl in the stand
     :param float SDF_Sw0: Stand Density Factor of species Sw
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float SDF_Sb0: Stand Density Factor of species Sb
@@ -1566,7 +1566,7 @@ def BAfromZeroToDataPl1(startTage, startTagePl, y2bh_Pl,
     This is a function that supports factor finder functions.
     It created the trajectory of basal area from bhage up to the
     inventory year given a correction factor that is being optimized
-    
+
     :param float startTage: Clock that uses the oldest species as a reference to become the stand age
     :param float startTagePl: species specific age counted independently
     :param float y2bh_Pl: time elapseed in years from zero to breast height age of sp Pl
@@ -1574,9 +1574,9 @@ def BAfromZeroToDataPl1(startTage, startTagePl, y2bh_Pl,
     :param float BA_Pl0: basal area of Pl at breast height age, assumed to be very small
     :param float N_bh_PlT: density of species Pl at time T
     :param float N0_Pl: initial density of species Pl at breast height age
-    :param str simulation_choice: switch that determines whether simulation will stop at the 
+    :param str simulation_choice: switch that determines whether simulation will stop at the
     date of the inventory or will continue until year 250
-    :param float f_Pl: correction factor that guarantees that trajectory passes through 
+    :param float f_Pl: correction factor that guarantees that trajectory passes through
     data obtained with inventory
     :param float SDF_Sw0: Stand Density Factor of species Sw
     :param float SDF_Aw0: Stand Density Factor of species Aw
@@ -1624,7 +1624,7 @@ def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl,
     This is a function that supports factor finder functions.
     It created the trajectory of basal area from bhage up to the
     inventory year given a correction factor that is being optimized
-    
+
     :param float startTage: Clock that uses the oldest species as a reference to become the stand age
     :param float startTagePl: species specific age counted independently
     :param float y2bh_Pl: time elapseed in years from zero to breast height age of sp Pl
@@ -1632,9 +1632,9 @@ def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl,
     :param float BA_Pl0: basal area of Pl at breast height age, assumed to be very small
     :param float N_bh_PlT: density of species Pl at time T
     :param float N0_Pl: initial density of species Pl at breast height age
-    :param str simulation_choice: switch that determines whether simulation will stop at the 
+    :param str simulation_choice: switch that determines whether simulation will stop at the
     date of the inventory or will continue until year 250
-    :param float f_Pl: correction factor that guarantees that trajectory passes through 
+    :param float f_Pl: correction factor that guarantees that trajectory passes through
     data obtained with inventory
     :param float SDF_Sw0: Stand Density Factor of species Sw
     :param float SDF_Aw0: Stand Density Factor of species Aw
@@ -1690,7 +1690,7 @@ Gross total volume is estimated only using species specific Basal Area and Top h
 def GrossTotalVolume_Aw(BA_Aw, topHeight_Aw):
     '''
     Gross total volume is estimated only using species specific Basal Area and Top height
-    
+
     :param float BA_Aw: basal area of Aw
     :param float topHeight_Aw: top height of Aw
 
@@ -1707,7 +1707,7 @@ def GrossTotalVolume_Aw(BA_Aw, topHeight_Aw):
 def GrossTotalVolume_Sw(BA_Sw, topHeight_Sw):
     '''
     Gross total volume is estimated only using species specific Basal Area and Top height
-    
+
     :param float BA_Sw: basal area of Sw
     :param float topHeight_Sw: top height of Sw
 
@@ -1724,7 +1724,7 @@ def GrossTotalVolume_Sw(BA_Sw, topHeight_Sw):
 def GrossTotalVolume_Sb(BA_Sb, topHeight_Sb):
     '''
     Gross total volume is estimated only using species specific Basal Area and Top height
-    
+
     :param float BA_Sb: basal area of Sb
     :param float topHeight_Sb: top height of Sb
 
@@ -1741,7 +1741,7 @@ def GrossTotalVolume_Sb(BA_Sb, topHeight_Sb):
 def GrossTotalVolume_Pl(BA_Pl, topHeight_Pl):
     '''
     Gross total volume is estimated only using species specific Basal Area and Top height
-    
+
     :param float BA_Pl: basal area of Pl
     :param float topHeight_Pl: top height of Pl
 
@@ -1774,14 +1774,14 @@ def MerchantableVolumeAw(N_bh_Aw, BA_Aw, topHeight_Aw,
     The if below was used (and in other functions) to avoid
     division by zero when density is zero, i.e., when the
     species is absent in the plot.
-    
+
     :param float N_bh_Aw: density of sp Aw
     :param float topHeight_Aw: top height of Aw
     :param float StumpDOB_Aw:  stump diameter outside bark of Aw
     :param float StumpHeight_Aw: stump height of Aw
     :param float TopDib_Aw: top diameter inside bark
     :param float Tvol_Aw: Gross total volume of Aw
-    
+
 
     '''
     if N_bh_Aw > 0:
@@ -1816,7 +1816,7 @@ def MerchantableVolumeSb(N_bh_Sb, BA_Sb, topHeight_Sb,
     The if below was used (and in other functions) to avoid
     division by zero when density is zero, i.e., when the
     species is absent in the plot.
-    
+
     :param float N_bh_Sb: density of sp Sb
     :param float topHeight_Sb: top height of Sb
     :param float StumpDOB_Sb:  stump diameter outside bark of Sb
@@ -1857,7 +1857,7 @@ def MerchantableVolumeSw(N_bh_Sw, BA_Sw, topHeight_Sw,
     The if below was used (and in other functions) to avoid
     division by zero when density is zero, i.e., when the
     species is absent in the plot.
-    
+
     :param float N_bh_Sw: density of sp Sw
     :param float topHeight_Sw: top height of Sw
     :param float StumpDOB_Sw:  stump diameter outside bark of Sw
@@ -1895,7 +1895,7 @@ def MerchantableVolumePl(N_bh_Pl, BA_Pl, topHeight_Pl,
     The if below was used (and in other functions) to avoid
     division by zero when density is zero, i.e., when the
     species is absent in the plot.
-    
+
     :param float N_bh_Pl: density of sp Pl
     :param float topHeight_Pl: top height of Pl
     :param float StumpDOB_Pl:  stump diameter outside bark of Pl
