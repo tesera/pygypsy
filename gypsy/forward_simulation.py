@@ -36,8 +36,6 @@ logger = logging.getLogger(__name__)
 #N (or density), current Basal Area,
 #Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
 
-#https://www.python.org/dev/peps/pep-0008/#naming-conventions
-
 
 def BA_zeroAw(BA_Aw0, BA_AwT):
     while BA_Aw0 > BA_AwT * 0.5:
@@ -98,8 +96,6 @@ def get_factors_for_all_species(**kwargs):
     f_Aw = 0
     f_Sw = 0
     f_Pl = 0
-#        if kwargs['N0_Aw'] > 0:
-#            f_Aw = BAfactorFinder_Aw (**kwargs)
 
     if kwargs['N0_Aw'] > 0:
         f_Aw = BAfactorFinder_Aw(**kwargs)
@@ -113,7 +109,6 @@ def get_factors_for_all_species(**kwargs):
     if kwargs['N0_Pl'] > 0:
         f_Pl = BAfactorFinder_Pl(**kwargs)
 
-    #print startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, BA_Sw0, f_Sw
     return {'f_Aw':f_Aw,
             'f_Sb':f_Sb,
             'f_Sw':f_Sw,
@@ -129,12 +124,11 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
     !TODO!
     """
 
-    output_dict ={}
+    output_dict = {}
 
     logger.debug('Starting forwards simulation')
-    inputDF = plot_df
-    n_rows = inputDF.shape[0]
-    for _, row in inputDF.iterrows():
+    n_rows = plot_df.shape[0]
+    for _, row in plot_df.iterrows():
         _log_loop_progress(_, n_rows)
         plotID = str(int(row['PlotID']))
 

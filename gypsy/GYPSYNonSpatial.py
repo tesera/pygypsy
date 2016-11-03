@@ -54,8 +54,8 @@ The main purpose of this step is to estimate SDF that is employed in other formu
 
 
 def densityNonSpatialAw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
-    '''
-    Main purpose of this function is to estimate SDF for the species
+    '''Main purpose of this function is to estimate SDF for the species
+
     :param str sp_Aw: species name
     :param float SI_bh_Aw: site index of species Aw
     :param float bhage_Aw: breast height age of speceis Aw
@@ -104,14 +104,12 @@ def densityNonSpatialAw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
 
 
 def densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings=True):
-    '''
-    Main purpose of this function is to estimate SDF for the species
+    '''Main purpose of this function is to estimate SDF for the species
 
     :param str sp_Sb: species name
     :param float SI_bh_Sb: site index of species Sb
     :param float tage_Sb: total age of species Sb
     :param float N_Sb: densit of species Sb
-
 
     '''
     N_est_Sb = 0
