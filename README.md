@@ -301,13 +301,13 @@ If you would like to do an ad-hoc analyses, the procedure is as follows
 2. Create a branch for your analysis using the following format
 
 ```
-<issue-number>/<desciption>
+<issue-number>-<desciption>
 ```
 
 for example
 
 ```
-#32/address-testing-findings
+#32-address-testing-findings
 ```
 
 2. Ensure the analysis `extras` are installed
@@ -324,6 +324,14 @@ docker-compose run --service-ports notebook # if using docker
 jupyter notebook --notebook-dir notebooks # if not using docker
 ```
 
-4. Conduct the analysis & revise the source code as necessary
+4. Create a notebook using the same name as was used for the branch
+
+
+5. Conduct the analysis & revise the source code as necessary
+
+
+#### General guidelines
+
+Do note commit your data used in your analysis
 
 Notebooks are /not/ a replacement for unit tests! It is required to make suitable unit tests for the finding of an analysis before a pull request associated with an analysis will be merged.
