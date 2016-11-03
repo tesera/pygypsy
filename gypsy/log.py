@@ -36,7 +36,7 @@ def setup_logging():
         'loggers': {
             'gypsy.forward_simulation': {
                 'handlers':['file'],
-                'level':'DEBUG',
+                'level':'INFO',
                 'propagate': True,
             },
             'gypsy.data_prep': {
@@ -51,7 +51,7 @@ def setup_logging():
             },
             'gypsy.GYPSYNonSpatial': {
                 'handlers':['file'],
-                'level':'DEBUG',
+                'level':'INFO',
                 'propagate': True,
             },
             'gypsy.site_index': {
