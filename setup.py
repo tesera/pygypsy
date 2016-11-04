@@ -33,7 +33,8 @@ setup(name='gypsy',
           'lint': ['pylint==1.5.4'],
           'docs': ['sphinx==1.4.1'],
           'dev': ['git-pylint-commit-hook==2.1.1'],
-          'analysis': ['jupyter>=1.0.0', 'scikit-learn>=0.18'],
+          'analysis': ['jupyter>=1.0.0', 'scikit-learn>=0.18',
+                       'snakeviz>=0.4.1'],
       },
       entry_points="""
       [console_scripts]
