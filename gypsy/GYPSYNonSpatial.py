@@ -1,5 +1,20 @@
 # -*- coding: utf-8 -*-
 """ density and increment functions
+
+Acronyms:
+
+b_hage = Breast Height Age
+tage = Total age
+
+the algorithm accepts either one
+
+si_Aw  =  estimated Site intex according to the paper in this case for Aspen (Aw)
+y2bh = years until breast height age can be measured
+SI_bh_Aw = Site index estimated with breast heigh age
+N_bh_Aw = estimated N and should be equal N_Aw (for Aspen in this case Aw)
+
+The main purpose of this step is to estimate SDF that is employed in other formulas
+
 """
 # TODO: split these functions into appropriate other modules
 # TODO: make all factor find functions use kwargs in the manner of AW
@@ -14,9 +29,6 @@ from utils import _mkdir_p
 
 logger = logging.getLogger(__name__)
 
-"""
-estimating Sit, total age, and bhage using asaCompileAgeGivenSpSiHt functions
-"""
 # input - species, top height, total age, BHage (from the function),
 #N (or density), current Basal Area,  Measured Percent Stocking,
 #StumpDOB , StumpHeight, TopDib, SI, sp proportion
@@ -25,33 +37,6 @@ sp_Aw = ['Aw', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 sp_Sb = ['Sb', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 sp_Pl = ['Pl', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 sp_Sw = ['Sw', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
-
-'''
-b_hage = Breast Height Age
-tage = Total age
-
-the algorithm accepts either one
-
-si_Aw  =  estimated Site intex according to the paper in this case for Aspen (Aw)
-
-y2bh = years until breast height age can be measured
-
-SI_bh_Aw = Site index estimated with breast heigh age
-
-'''
-
-#test
-
-
-
-
-'''
-N_bh_Aw = estimated N and should be equal N_Aw (for Aspen in this case Aw)
-
-The main purpose of this step is to estimate SDF that is employed in other formulas
-
-'''
-
 
 def densityNonSpatialAw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
     '''Main purpose of this function is to estimate SDF for the species
