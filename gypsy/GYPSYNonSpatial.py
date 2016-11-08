@@ -1366,7 +1366,7 @@ def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl,
     elif simulation_choice == 'no':
         max_age = 250
 
-    BA_Pl_DF = pd.DataFrame(columns=['BA_Pl'])
+    basal_area_pl_df = pd.DataFrame(columns=['BA_Pl'], index=xrange(max_age))
     t = 0
     BA_tempPl = BA_Pl0
 
@@ -1390,7 +1390,7 @@ def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl,
             BA_PlB = 0
 
         if simulation == False:
-            BA_Pl_DF = BA_Pl_DF.append({'BA_Pl': BA_PlB}, ignore_index=True)
+            basal_area_pl_df.loc[t, 'BA_Pl'] = BA_SwB
 
         t += 1
         startTagePl += 1
