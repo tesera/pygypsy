@@ -981,11 +981,10 @@ def BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw,
     elif simulation_choice == 'no':
         max_age = 250
 
-    BA_Aw_DF = pd.DataFrame(columns=['BA_Aw'])
-    t = 0
+    basal_area_aw_df = pd.DataFrame(columns=['BA_Aw'], index=xrange(max_age))
     BA_tempAw = BA_Aw0
 
-    for SC_Dict in densities[0: max_age]:
+    for SC_Dict, i in enumerate(densities[0: max_age]):
         bhage_Aw = SC_Dict['bhage_Aw']
         SC_Aw = SC_Dict['SC_Aw']
         N_bh_AwT = SC_Dict['N_bh_AwT']
@@ -1008,11 +1007,9 @@ def BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw,
             BA_AwB = 0
 
         if simulation == False:
-            BA_Aw_DF = BA_Aw_DF.append({'BA_Aw':BA_AwB}, ignore_index=True)
+            basal_area_aw_df.loc[i, 'BA_Aw'] = BA_AwB
 
-        t += 1
-
-    return BA_AwB, BA_Aw_DF
+    return BA_AwB, basal_area_aw_df
 
 
 def BAfactorFinder_Sb(**kwargs):
@@ -1103,16 +1100,18 @@ def BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb,
     elif simulation_choice == 'no':
         max_age = 250
 
-    BA_Sb_DF = pd.DataFrame(columns=['BA_Sb'])
     t = 0
+    basal_area_sb_df = pd.DataFrame(columns=['BA_Sb'], index=xrange(max_age))
     BA_tempSb = BA_Sb0
 
     while t < max_age:
         tage_Sb = startTageSb - startTage
         bhage_Sb = tage_Sb - y2bh_Sb
+
         if N0_Sb > 0:
             if bhage_Sb < 0:
                 BA_SbB = 0
+
             if bhage_Sb > 0:
                 SC_Sb = (SC_Sb) * f_Sb
                 BAinc_Sb = BasalAreaIncrementNonSpatialSb('Sb', SC_Sb, SI_bh_Sb, N_bh_SbT,
@@ -1128,7 +1127,7 @@ def BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb,
             BA_SbB = 0
 
         if simulation == False:
-            BA_Sb_DF = BA_Sb_DF.append({'BA_Sb': BA_SbB}, ignore_index=True)
+            basal_area_sb_df.loc[t, 'BA_Sb'] = BA_SbB
 
         t += 1
         startTageSb += 1
@@ -1234,7 +1233,7 @@ def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw,
     elif simulation_choice == 'no':
         max_age = 250
 
-    BA_Sw_DF = pd.DataFrame(columns=['BA_Sw'])
+    basal_area_sw_df = pd.DataFrame(columns=['BA_Sw'], index=xrange(max_age))
     t = 0
     BA_tempSw = BA_Sw0
 
@@ -1259,7 +1258,7 @@ def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw,
             BA_SwB = 0
 
         if simulation == False:
-            BA_Sw_DF = BA_Sw_DF.append({'BA_Sw': BA_SwB}, ignore_index=True)
+            basal_area_sw_df.loc[t, 'BA_Sw'] = BA_SwB
 
         t += 1
         startTageSw += 1
