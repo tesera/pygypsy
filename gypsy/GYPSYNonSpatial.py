@@ -984,7 +984,7 @@ def BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw,
     basal_area_aw_df = pd.DataFrame(columns=['BA_Aw'], index=xrange(max_age))
     BA_tempAw = BA_Aw0
 
-    for SC_Dict, i in enumerate(densities[0: max_age]):
+    for i, SC_Dict in enumerate(densities[0: max_age]):
         bhage_Aw = SC_Dict['bhage_Aw']
         SC_Aw = SC_Dict['SC_Aw']
         N_bh_AwT = SC_Dict['N_bh_AwT']
@@ -1132,7 +1132,7 @@ def BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb,
         t += 1
         startTageSb += 1
 
-    return BA_SbB, BA_Sb_DF
+    return BA_SbB, basal_area_sb_df
 
 
 def BAfactorFinder_Sw(**kwargs):
@@ -1263,7 +1263,7 @@ def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw,
         t += 1
         startTageSw += 1
 
-    return BA_SwB, BA_Sw_DF
+    return BA_SwB, basal_area_sw_df
 
 
 def BAfactorFinder_Pl(**kwargs):
@@ -1390,12 +1390,12 @@ def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl,
             BA_PlB = 0
 
         if simulation == False:
-            basal_area_pl_df.loc[t, 'BA_Pl'] = BA_SwB
+            basal_area_pl_df.loc[t, 'BA_Pl'] = BA_PlB
 
         t += 1
         startTagePl += 1
 
-    return BA_PlB, BA_Pl_DF
+    return BA_PlB, basal_area_pl_df
 
 
 def GrossTotalVolume_Aw(BA_Aw, topHeight_Aw):
