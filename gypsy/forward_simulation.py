@@ -289,11 +289,6 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
             densities=densities,
             printWarnings=True)
 
-        output_DF_Aw = pd.DataFrame(columns=['BA_Aw'])
-        output_DF_Sw = pd.DataFrame(columns=['BA_Sw'])
-        output_DF_Sb = pd.DataFrame(columns=['BA_Sb'])
-        output_DF_Pl = pd.DataFrame(columns=['BA_Pl'])
-
         f_Aw = species_factors['f_Aw']
         f_Sw = species_factors['f_Sw']
         f_Sb = species_factors['f_Sb']
@@ -313,10 +308,10 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         BA_0_to_data_Sw = BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice, simulation=False)
         BA_0_to_data_Pl = BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice, simulation=False)
 
-        output_DF_Aw = pd.concat([BA_0_to_data_Aw[1]], axis=1)
-        output_DF_Sw = pd.concat([BA_0_to_data_Sw[1]], axis=1)
-        output_DF_Sb = pd.concat([BA_0_to_data_Sb[1]], axis=1)
-        output_DF_Pl = pd.concat([BA_0_to_data_Pl[1]], axis=1)
+        output_DF_Aw = BA_0_to_data_Aw[1]
+        output_DF_Sw = BA_0_to_data_Sw[1]
+        output_DF_Sb = BA_0_to_data_Sb[1]
+        output_DF_Pl = BA_0_to_data_Pl[1]
 
         if simulation_choice == 'no':
             continue
