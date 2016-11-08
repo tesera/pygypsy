@@ -1392,57 +1392,6 @@ def BAfactorFinder_Pl(**kwargs):
     return f_Pl
 
 
-def BAfromZeroToDataPl1(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl,
-                        N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0,
-                        f_Pl):
-    '''This is a function that supports factor finder functions.
-
-    It created the trajectory of basal area from bhage up to the inventory year
-    given a correction factor that is being optimized
-
-    :param float startTage: Clock that uses the oldest species as a reference to become the stand age
-    :param float startTagePl: species specific age counted independently
-    :param float y2bh_Pl: time elapseed in years from zero to breast height age of sp Pl
-    :param float SI_bh_Pl: site index of species Pl
-    :param float BA_Pl0: basal area of Pl at breast height age, assumed to be very small
-    :param float N_bh_PlT: density of species Pl at time T
-    :param float N0_Pl: initial density of species Pl at breast height age
-    :param str simulation_choice: switch that determines whether simulation will stop at the
-    date of the inventory or will continue until year 250
-    :param float f_Pl: correction factor that guarantees that trajectory passes through
-    data obtained with inventory
-    :param float SDF_Sw0: Stand Density Factor of species Sw
-    :param float SDF_Aw0: Stand Density Factor of species Aw
-    :param float SDF_Sb0: Stand Density Factor of species Sb
-
-    '''
-    t = 0
-    BA_tempPl = BA_Pl0
-
-    while t < startTage:
-        tage_Pl = startTagePl - startTage
-        bhage_Pl = tage_Pl - y2bh_Pl
-        if N0_Pl > 0:
-            if bhage_Pl < 0:
-                BA_PlB = 0
-            if bhage_Pl > 0:
-                BAinc_Pl = f_Pl * BasalAreaIncrementNonSpatialPl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT,
-                                                                 N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0,
-                                                                 SDF_Sb0, BA_tempPl)
-                BA_tempPl = BA_tempPl + BAinc_Pl
-                BA_PlB = BA_tempPl
-            else:
-                BA_PlB = 0
-        else:
-            BA_tempPl = 0
-            BA_PlB = 0
-
-        t += 1
-        startTagePl += 1
-
-    return BA_PlB
-
-
 def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl,
                        N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0,
                        f_Pl, simulation_choice, simulation=True):
