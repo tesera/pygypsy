@@ -74,7 +74,6 @@ def densityNonSpatialAw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
             else:
                 N_est_Aw = (N_Aw + N_est_Aw)/2
                 SDF_Aw0 = N_est_Aw *k2/k1
-                #print 'Aw',  N_est_Aw, SDF_Aw0
             iterCount = iterCount + 1
             if iterCount == 1500:
                 if printWarnings:
@@ -121,7 +120,6 @@ def densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings=True):
                     else:
                         N_est_Sb = (N_Sb + N_est_Sb)/2
                         SDF_Sb0 = N_est_Sb * k2/k1
-                        #print 'Sb', N_est_Sb, SDF_Sb0
                     iterCount = iterCount + 1
                     if iterCount == 150:
                         if printWarnings:
@@ -184,7 +182,6 @@ def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings=T
                     else:
                         N_est_Sw = (N_Sw + N_est_Sw)/2
                         SDF_Sw0 = N_est_Sw * k2/k1
-                        #print 'Sw', N_est_Sw, SDF_Sw0
                     iterCount = iterCount + 1
                     if iterCount == 150:
                         if printWarnings:
@@ -253,7 +250,6 @@ def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, N_P
                     else:
                         N_est_Pl = (N_Pl + N_est_Pl)/2
                         SDF_Pl0 = N_est_Pl * k2/k1
-                        #print 'Pl', N_est_Pl, SDF_Pl0
                     iterCount = iterCount + 1
                     if iterCount == 150:
                         if printWarnings:
@@ -507,11 +503,6 @@ def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage
         d = d1*d2
 
         BAinc_Aw = (n/d) + k
-        #print 'bhage_Aw', bhage_Aw
-        #print 'N0_Aw', N0_Aw
-        #print 'BA_Aw', BA_Aw
-        #print 'SC_Aw', SC_Aw
-        #print 'SI_bh_Aw',  SI_bh_Aw
 
     return  BAinc_Aw
 
@@ -536,25 +527,14 @@ def BAincIter_Aw(sp_Aw, BAinc_AwT, BA_AwT, SC_Aw,
     # BA_Aw = best estimate of BA  and BAinc_AwT
     #best estimate of decrement to previous year , ie, at time T-1
 
-    #print 'BA_AwT =', BA_AwT, 'BAinc_AwT = ', BAinc_AwT
     while BADiffFlag == False:
         BAinc_AwtoT = BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw)
-        # based on best estimate of BA at time T-1
-
-
         BA_AwT_est = BA_Aw + BAinc_AwtoT
-        #print 'kkk', SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw
-
 
         if abs(BA_AwT_est - BA_AwT) < acceptableDiff:           #BA_AwT is known
             BADiffFlag = True
-
         else:
             BA_Aw = (1+ ((BA_AwT - BA_AwT_est)/ BA_AwT)) * BA_Aw
-
-        #print BAinc_AwtoT, BA_Aw
-
-
 
         iterCount = iterCount + 1
 
@@ -744,21 +724,12 @@ def BAincIter_Sw(sp_Sw, BAinc_SwT, BA_SwT, SC_Sw,
         BAinc_SwtoT = BasalAreaIncrementNonSpatialSw(sp_Sw, SC_Sw, SI_bh_Sw,
                                                      N_bh_Sw, N0_Sw, bhage_Sw,
                                                      SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw)
-        # based on best estimate of BA at time T-1
-
-
         BA_SwT_est = BA_Sw + BAinc_SwtoT
 
-
-
         if abs(BA_SwT_est - BA_SwT) < acceptableDiff:
-            #BA_SbT is known
             BADiffFlag = True
-
         else:
             BA_Sw = (1+ ((BA_SwT - BA_SwT_est)/ BA_SwT)) * BA_Sw
-
-        #print BAinc_SwtoT, BA_Sw
 
         iterCount = iterCount + 1
 
@@ -768,8 +739,6 @@ def BAincIter_Sw(sp_Sw, BAinc_SwT, BA_SwT, SC_Sw,
                 print '\n GYPSYNonSpatial.BAincIter_Aw()'
                 print ' Slow convergence'
             return BA_Sw, BAinc_SwT
-    #print 'BA_SwT =', BA_SwT, 'BAinc_SwT = ', BAinc_SwT
-    #print BAinc_SwT, BA_SwT, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0
 
     return BA_Sw, BAinc_SwtoT
 
@@ -941,7 +910,6 @@ def densities_and_SCs_to_250(**kwargs):
     startTageSbB = startTageSb
 
     t = 1
-    #print startTage, startTageAwB
 
     while t < 250:
 
@@ -1072,9 +1040,6 @@ def BAfactorFinder_Aw(**kwargs):
             elif (BA_AwT - BA_AwB) > 0:
                 f_AwN = f_Aw * (1+(numpy.log10(BA_AwT) + numpy.log10(abs(BA_AwB)))/ (100* numpy.log10(abs(BA_AwB))))
                 f_Aw = (f_Aw+f_AwP1)/2
-                #print f_Aw
-
-        #print BA_AwT, BA_AwB, f_Aw
 
         iterCount = iterCount + 1
 
@@ -1147,7 +1112,6 @@ def BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw,
         if simulation == False:
             BA_Aw_DF = BA_Aw_DF.append({'BA_Aw':BA_AwB}, ignore_index=True)
         t += 1
-        #print  'bhageAw ', bhage_Aw, 'BA Aw ',  BA_AwB
 
     return BA_AwB, BA_Aw_DF
 
@@ -1202,9 +1166,6 @@ def BAfactorFinder_Sb(**kwargs):
                 f_Sb = (f_SbP+f_Sb)/2
             elif (BA_SbT - BA_SbB) > 0:
                 f_Sb = (f_Sb+f_SbP1)/2
-                #print f_Sb
-
-        #print BA_SbT, BA_SbB, f_Sb
 
         iterCount = iterCount + 1
 
@@ -1272,7 +1233,6 @@ def BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb,
             BA_Sb_DF = BA_Sb_DF.append({'BA_Sb': BA_SbB}, ignore_index=True)
         t += 1
         startTageSb += 1
-        #print  'bhageSb ', bhage_Sb, 'BA Sb',  BA_SbB
     return BA_SbB, BA_Sb_DF
 
 
@@ -1334,10 +1294,7 @@ def BAfactorFinder_Sw(**kwargs):
                 f_SwP = f_Sw  *  (1+(numpy.log10(BA_SwT) - numpy.log10(abs(BA_SwB)))/ (10*numpy.log10(abs(BA_SwB))))
                 f_Sw = (f_SwP+f_Sw)/2
             elif (BA_SwT - BA_SwB) > 0:
-            #f_SwN = f_Sw * (1+(numpy.log10 (BA_SwT) + numpy.log10(abs(BA_SwB)) )/ (10* numpy.log10 (abs(BA_SwB))) )
                 f_Sw = (f_Sw + f_SwP1)/2
-                #print f_Sw
-            #print BA_SwB, f_Sw
 
         iterCount = iterCount + 1
 
@@ -1407,7 +1364,6 @@ def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw,
             BA_Sw_DF = BA_Sw_DF.append({'BA_Sw': BA_SwB}, ignore_index=True)
         t += 1
         startTageSw += 1
-        #print 'bhageSw ',  bhage_Sw, 'BA Sw ', BA_SwB
 
     return BA_SwB, BA_Sw_DF
 
@@ -1454,7 +1410,6 @@ def BAfactorFinder_Pl1(startTage, startTagePl, y2bh_Pl,
                 f_Pl = (f_PlP+f_Pl)/2
             elif (BA_PlT - BA_PlB) > 0:
                 f_Pl = (f_Pl + f_PlP1)/2
-                #print f_Pl
             print BA_PlT, BA_PlB, f_Pl
 
         iterCount = iterCount + 1
@@ -1528,8 +1483,6 @@ def BAfactorFinder_Pl(**kwargs):
                 f_Pl = (f_PlP+f_Pl)/2
             elif (BA_PlT - BA_PlB) > 0:
                 f_Pl = (f_Pl + f_PlP1)/2
-                #print f_Pl
-            #print BA_PlB, f_Pl
 
         iterCount = iterCount + 1
 
@@ -1576,26 +1529,19 @@ def BAfromZeroToDataPl1(startTage, startTagePl, y2bh_Pl,
             if bhage_Pl < 0:
                 BA_PlB = 0
             if bhage_Pl > 0:
-               #SC_Pl = SC_Pl * (f_Pl )
                 BAinc_Pl = f_Pl * BasalAreaIncrementNonSpatialPl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT,
                                                                  N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0,
                                                                  SDF_Sb0, BA_tempPl)
                 BA_tempPl = BA_tempPl + BAinc_Pl
                 BA_PlB = BA_tempPl
-                # if BA_PlB < 0:
-                #     BA_PlB = 0
-
-                #print BA_PlB, BAinc_Pl, f_Pl
             else:
                 BA_PlB = 0
-
         else:
             BA_tempPl = 0
             BA_PlB = 0
 
         t += 1
         startTagePl += 1
-        #print  'bhagePl ', bhage_Pl, 'BA Pl ', BA_PlB
 
     return BA_PlB
 
@@ -1638,15 +1584,12 @@ def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl,
             if bhage_Pl < 0:
                 BA_PlB = 0
             if bhage_Pl > 0:
-                #SC_Pl = SC_Pl * (f_Pl )
                 BAinc_Pl = f_Pl * BasalAreaIncrementNonSpatialPl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,
                                                                  bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_tempPl)
                 BA_tempPl = BA_tempPl + BAinc_Pl
                 BA_PlB = BA_tempPl
                 if BA_PlB < 0:
                     BA_PlB = 0
-
-                #print BA_PlB, BAinc_Pl, f_Pl
             else:
                 BA_PlB = 0
 
@@ -1658,7 +1601,6 @@ def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl,
             BA_Pl_DF = BA_Pl_DF.append({'BA_Pl': BA_PlB}, ignore_index=True)
         t += 1
         startTagePl += 1
-        #print  'bhagePl ', bhage_Pl, 'BA Pl ', BA_PlB
 
     return BA_PlB, BA_Pl_DF
 
