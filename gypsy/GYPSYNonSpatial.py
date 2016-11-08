@@ -1267,60 +1267,6 @@ def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw,
     return BA_SwB, BA_Sw_DF
 
 
-def BAfactorFinder_Pl1(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl,
-                       N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0,
-                       BA_PlT, printWarnings=True):
-    '''This function guarantees that the trajectory of the species basal area
-    passes through the basal area measured when the data was collected
-    (inventory data)
-
-    There is a trade-off between the precision with one wants this estimate, which is
-    given by the parameter - acceptableDiff -, and the time the convergence time
-
-    :param float startTage: Clock that uses the oldest species as a reference to become the stand age
-    :param float SI_bh_Pl: site index of species Pl
-    :param float N_bh_PlT: density of sp Pl at time T (it varies over time)
-    :param float BA_Pl0: basal area of Pl at breast height age, assumed to be very small
-    :param float BA_PlT: basal area of Pl at time T
-    :param float N0_Pl: initial density of species Pl at breast height age
-    :param float y2bh_Pl: time elapseed in years from zero to breast height age of sp Pl
-    :param float startTagePl: species specific ages counted independently
-    :param float SC_Pl: proportion of species Pl in the stand
-    :param float SDF_Sw0: Stand Density Factor of species Sw
-    :param float SDF_Aw0: Stand Density Factor of species Aw
-    :param float SDF_Sb0: Stand Density Factor of species Sb
-
-    '''
-    f_Pl = 100
-    acceptableDiff = 0.01
-    BADiffFlag = False
-    iterCount = 0
-    f_PlP1 = 1.5 * f_Pl
-
-    while BADiffFlag == False:
-        BA_PlB = BAfromZeroToDataPl1(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl)
-
-        if abs(BA_PlT - BA_PlB) < acceptableDiff:
-            BADiffFlag = True
-        else:
-            if (BA_PlT - BA_PlB) < 0:
-                f_PlP1 = f_Pl
-                f_PlP = f_Pl * (BA_PlT / BA_PlB)
-                f_Pl = (f_PlP+f_Pl)/2
-            elif (BA_PlT - BA_PlB) > 0:
-                f_Pl = (f_Pl + f_PlP1)/2
-
-        iterCount = iterCount + 1
-
-        if iterCount == 150:
-            logger.warning(('GYPSYNonSpatial.BAfactorFinder_Pl()'
-                 ' Slow convergence with Basal Area: %s'
-                 ' and factor:%s '), BA_PlB, f_Pl)
-            return f_Pl
-
-    return f_Pl
-
-
 def BAfactorFinder_Pl(**kwargs):
     '''This function guarantees that the trajectory of the species basal area
     passes through the basal area measured when the data was collected
