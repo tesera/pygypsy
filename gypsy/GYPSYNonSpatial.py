@@ -402,21 +402,6 @@ def densityPl(SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl, SI_bh_Pl):
     return N_bh_Pl
 
 
-
-
-'''
-SC is the species composition. It was estimated here using
-density estimated through bhage, but it could be used using
-any density, since they should be the same.
-
-BA below is the Basal Area measured in the field and it should be data input into Gypsy
-
-'''
-
-#def b = math.log(1.3)/float(msDict[msid]['BHAGE'])
- #                       msDict[msid]['HD'] = round(math.exp(b*msDict[msid]['AGE']),1)
-
-
 def SCestimate(N_Aw, N_Sb, N_Sw, N_Pl):
     '''
     This function calculates species composition based on their densities
@@ -466,11 +451,9 @@ def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage
 
     if bhage_Aw < 0:
         bhage_Aw = 0
-        #raise ValueError ('bhage cannot be negative: %s' %bhage_Aw)
 
     if BA_Aw < 0:
         BAinc_Aw = 0
-        #raise ValueError ('BA_Aw cannot be negative: %s' %BA_Aw)
 
 
     elif N_bh_Aw > 0 and SI_bh_Aw > 0:
@@ -525,13 +508,13 @@ def BAincIter_Aw(sp_Aw, BAinc_AwT, BA_AwT, SC_Aw,
     iterCount = 0
     BA_Aw = BA_AwT - BAinc_AwT
     # BA_Aw = best estimate of BA  and BAinc_AwT
-    #best estimate of decrement to previous year , ie, at time T-1
+    # best estimate of decrement to previous year , ie, at time T-1
 
     while BADiffFlag == False:
         BAinc_AwtoT = BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw)
         BA_AwT_est = BA_Aw + BAinc_AwtoT
 
-        if abs(BA_AwT_est - BA_AwT) < acceptableDiff:           #BA_AwT is known
+        if abs(BA_AwT_est - BA_AwT) < acceptableDiff:
             BADiffFlag = True
         else:
             BA_Aw = (1+ ((BA_AwT - BA_AwT_est)/ BA_AwT)) * BA_Aw
@@ -569,12 +552,10 @@ def BasalAreaIncrementNonSpatialSb(sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage
         BAinc_Sb = 0
 
     if bhage_Sb < 0:
-        #raise ValueError ('bhage cannot be negative: %s' %bhage_Sb)
         bhage_Sb = 0
 
     if BA_Sb < 0:
         BA_Sb = 0
-        #raise ValueError ('BA_Sb cannot be negative: %s' %BA_Sb)
 
     elif N_bh_Sb > 0 and SI_bh_Sb > 0:
         a1 = 0.966285
@@ -660,11 +641,9 @@ def BasalAreaIncrementNonSpatialSw(sp_Sw, SC_Sw, SI_bh_Sw,
         BAinc_Sw = 0
 
     if bhage_Sw < 0:
-        #raise ValueError ('bhage cannot be negative: %s' %bhage_Sw)
         bhage_Sw = 0
 
     if BA_Sw < 0:
-        #raise ValueError ('BA_Sw cannot be negative: %s' %BA_Sw)
         BA_Sw = 0
 
     if N_bh_Sw > 0 and SI_bh_Sw > 0:
@@ -717,7 +696,7 @@ def BAincIter_Sw(sp_Sw, BAinc_SwT, BA_SwT, SC_Sw,
     iterCount = 0
     BA_Sw = BA_SwT - BAinc_SwT
     # BA_Sw = best estimate of BA  and BAinc_AwT best
-    #estimate of decrement to previous year , ie, at time T-1
+    # estimate of decrement to previous year , ie, at time T-1
 
 
     while BADiffFlag == False:
@@ -768,11 +747,9 @@ def BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl,
         BAinc_Pl = 0
 
     if bhage_Pl < 0:
-        #raise ValueError ('bhage cannot be negative: %s' %bhage_Pl)
         bhage_Pl = 0
 
     if BA_Pl <= 0 or SC_Pl == 0:
-        #raise ValueError ('BA_Pl cannot be negative: %s' %BA_Pl)
         BA_Pl = 0
         BAinc_Pl = 0
 
@@ -976,8 +953,6 @@ def densities_and_SCs_to_250(**kwargs):
         SC_Sb = SC_F[2]
         SC_Pl = SC_F[3]
 
-
-        # JUST NEED TO APPEND NEW DENSITIES SC AND YEAR TO THE DICTIONARY
         densities_along_time.append({'N_bh_AwT': N_bh_AwT, 'N_bh_SwT': N_bh_SwT, 'N_bh_SbT': N_bh_SbT, 'N_bh_PlT': N_bh_PlT,
                                      'SC_Aw': SC_Aw, 'SC_Sw': SC_Sw, 'SC_Sb':SC_Sb, 'SC_Pl': SC_Pl,
                                      'tage_Aw': tage_Aw, 'tage_Sw': tage_Sw, 'tage_Sb': tage_Sb, 'tage_Pl': tage_Pl,
@@ -991,7 +966,7 @@ def densities_and_SCs_to_250(**kwargs):
         startTageSbB += 1
 
     return densities_along_time
-# this code just below is to be use by the test_iter.py
+
 def BAfactorFinder_Aw(**kwargs):
     '''
     This function guarantees that the trajectory of the species basal area
@@ -1393,7 +1368,6 @@ def BAfactorFinder_Pl1(startTage, startTagePl, y2bh_Pl,
     :param float SDF_Sb0: Stand Density Factor of species Sb
     '''
     f_Pl = 100
-    #BA_PlB=BA_Pl0
     acceptableDiff = 0.01
     BADiffFlag = False
     iterCount = 0
@@ -1463,7 +1437,6 @@ def BAfactorFinder_Pl(**kwargs):
     #it may crash before the simulation. 100 worked
     #for a sample os stands. 1000 failed
     f_Pl = 100
-    #BA_PlB=BA_Pl0
     acceptableDiff = 0.1
     BADiffFlag = False
     iterCount = 0
@@ -1688,9 +1661,6 @@ Merchantable volume only new variables are the stump diameter outside bark, stum
 
 '''
 
-# to declare variable as double if necessary k_Sb= np.asarray(k_Sb, type = np.float64)
-
-
 def MerchantableVolumeAw(N_bh_Aw, BA_Aw, topHeight_Aw,
                          StumpDOB_Aw, StumpHeight_Aw,
                          TopDib_Aw, Tvol_Aw):
@@ -1847,8 +1817,6 @@ def MerchantableVolumePl(N_bh_Pl, BA_Pl, topHeight_Pl,
 
     return MVol_Pl
 
-
-#uncertain if '' will give the column of years
 
 def _plot_simulation_variables(simulation_df, ax=None, plot_vars=None, y_lab=''):
     """
