@@ -5,31 +5,34 @@ Created on Fri Apr 29 16:06:29 2016
 @author: juliannosambatti
 """
 import logging
-import pandas as pd
 import datetime
+import numpy as np
+import pandas as pd
 
 from utils import _log_loop_progress
-from GYPSYNonSpatial import (BasalAreaIncrementNonSpatialSw,
-                             BasalAreaIncrementNonSpatialSb,
-                             BasalAreaIncrementNonSpatialPl,
-                             SCestimate,
-                             BAfactorFinder_Aw,
-                             BAfromZeroToDataAw,
-                             BAfactorFinder_Sb,
-                             BAfromZeroToDataSb,
-                             BAfactorFinder_Sw,
-                             BAfromZeroToDataSw,
-                             BAfactorFinder_Pl,
-                             BAfromZeroToDataPl,
-                             MerchantableVolumeAw,
-                             MerchantableVolumeSw,
-                             MerchantableVolumeSb,
-                             MerchantableVolumePl,
-                             densities_and_SCs_to_250,
-                             GrossTotalVolume_Aw,
-                             GrossTotalVolume_Sw,
-                             GrossTotalVolume_Sb,
-                             GrossTotalVolume_Pl)
+from GYPSYNonSpatial import (
+    BasalAreaIncrementNonSpatialSw,
+    BasalAreaIncrementNonSpatialSb,
+    BasalAreaIncrementNonSpatialPl,
+    SCestimate,
+    BAfactorFinder_Aw,
+    BAfromZeroToDataAw,
+    BAfactorFinder_Sb,
+    BAfromZeroToDataSb,
+    BAfactorFinder_Sw,
+    BAfromZeroToDataSw,
+    BAfactorFinder_Pl,
+    BAfromZeroToDataPl,
+    MerchantableVolumeAw,
+    MerchantableVolumeSw,
+    MerchantableVolumeSb,
+    MerchantableVolumePl,
+    densities_and_SCs_to_250,
+    GrossTotalVolume_Aw,
+    GrossTotalVolume_Sw,
+    GrossTotalVolume_Sb,
+    GrossTotalVolume_Pl
+)
 
 logger = logging.getLogger(__name__)
 
@@ -319,19 +322,18 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         # this is not ideal, would rather follow what is done for aspen, but at least
         # this only appends once instead of for every year in the iteration
         # TODO: fill with NaN instead of 0s?
-        # TODO: these are 1 row shorter, add 1 to n extra rows?
-        n_extra_rows = len(densities)-startTage
+        n_extra_rows = len(densities)-startTage+1
         output_DF_Sb = pd.concat([
             output_DF_Sb,
-            pd.DataFrame({'BA_Sb': [0.0]*n_extra_rows})
+            pd.DataFrame({'BA_Sb': [np.NaN]*n_extra_rows})
         ], axis=0, ignore_index=True)
         output_DF_Sw = pd.concat([
             output_DF_Sw,
-            pd.DataFrame({'BA_Sw': [0.0]*n_extra_rows})
+            pd.DataFrame({'BA_Sw': [np.NaN]*n_extra_rows})
         ], axis=0, ignore_index=True)
         output_DF_Pl = pd.concat([
             output_DF_Pl,
-            pd.DataFrame({'BA_Pl': [0.0]*n_extra_rows})
+            pd.DataFrame({'BA_Pl': [np.NaN]*n_extra_rows})
         ], axis=0, ignore_index=True)
 
         logger.debug('Starting main simulation')
@@ -390,7 +392,6 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
             [densities_DF, output_DF_Aw, output_DF_Sw, output_DF_Sb, output_DF_Pl],
             axis=1
         )
-
         #http://stackoverflow.com/questions/25314547/cell-var-from-loop-warning-from-pylint
 
         output_DF['Gross_Total_Volume_Aw'] = output_DF.apply(
