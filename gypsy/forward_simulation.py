@@ -312,14 +312,30 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         output_DF_Sw = BA_0_to_data_Sw[1]
         output_DF_Sb = BA_0_to_data_Sb[1]
         output_DF_Pl = BA_0_to_data_Pl[1]
-
         if simulation_choice == 'no':
             continue
 
-        '''simulating growth forwards in time starting from the time at which data was taken '''
-        t = startTage
+        # allocate extra space for the simulation results
+        # this is not ideal, would rather follow what is done for aspen, but at least
+        # this only appends once instead of for every year in the iteration
+        # TODO: fill with NaN instead of 0s?
+        # TODO: these are 1 row shorter, add 1 to n extra rows?
+        n_extra_rows = len(densities)-startTage
+        output_DF_Sb = pd.concat([
+            output_DF_Sb,
+            pd.DataFrame({'BA_Sb': [0.0]*n_extra_rows})
+        ], axis=0, ignore_index=True)
+        output_DF_Sw = pd.concat([
+            output_DF_Sw,
+            pd.DataFrame({'BA_Sw': [0.0]*n_extra_rows})
+        ], axis=0, ignore_index=True)
+        output_DF_Pl = pd.concat([
+            output_DF_Pl,
+            pd.DataFrame({'BA_Pl': [0.0]*n_extra_rows})
+        ], axis=0, ignore_index=True)
 
         logger.debug('Starting main simulation')
+        t = startTage
         for SC_Dict in densities[t-1:]:
             bhage_SwF = SC_Dict['bhage_Sw']
             SC_SwF = SC_Dict['SC_Sw']
@@ -336,7 +352,7 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
             logger.debug('Simulating year %d', t)
 
 
-
+            # TODO: it looks like Aw was factored out of here, these species should have that done also
             if N_bh_SbT > 0:
                 BA_SbT = BA_SbT + BasalAreaIncrementNonSpatialSb('Sb', SC_SbF, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_SbF, BA_SbT)
                 if BA_SbT < 0:
@@ -358,10 +374,10 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
             else:
                 BA_PlT = 0
 
-
-            output_DF_Sw = output_DF_Sw.append({'BA_Sw':BA_SwT}, ignore_index=True)
-            output_DF_Sb = output_DF_Sb.append({'BA_Sb':BA_SbT}, ignore_index=True)
-            output_DF_Pl = output_DF_Pl.append({'BA_Pl':BA_PlT}, ignore_index=True)
+            # TODO: should these be t+1?
+            output_DF_Sw.loc[t, 'BA_Sw'] = BA_SwT
+            output_DF_Sb.loc[t, 'BA_Sb'] = BA_SbT
+            output_DF_Pl.loc[t, 'BA_Pl'] = BA_PlT
 
             t += 1
             startTageAwF += 1
