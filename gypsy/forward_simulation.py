@@ -127,101 +127,75 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
     Return:
     !TODO!
     """
-
     output_dict = {}
-
     logger.debug('Starting forwards simulation')
     n_rows = plot_df.shape[0]
+
     for _, row in plot_df.iterrows():
         start = datetime.datetime.now()
         _log_loop_progress(_, n_rows)
         plot_id = str(int(row['PlotID']))
+
         logger.info('Starting simulation for plot: %s', plot_id)
+
         SI_bh_Aw = row['SI_Aw']
         SI_bh_Sw = row['SI_Sw']
         SI_bh_Pl = row['SI_Pl']
         SI_bh_Sb = row['SI_Sb']
-
         N_bh_AwT = row['N_Aw']
         N_bh_SwT = row['N_Sw']
         N_bh_PlT = row['N_Pl']
         N_bh_SbT = row['N_Sb']
-
         y2bh_Aw = row['y2bh_Aw']
         y2bh_Sw = row['y2bh_Sw']
         y2bh_Sb = row['y2bh_Sb']
         y2bh_Pl = row['y2bh_Pl']
-
         tage_AwT = row['tage_Aw']
         tage_SwT = row['tage_Sw']
         tage_PlT = row['tage_Pl']
         tage_SbT = row['tage_Sb']
-
-
         BA_AwT = row['BA_Aw']
         BA_SwT = row['BA_Sw']
         BA_PlT = row['BA_Pl']
         BA_SbT = row['BA_Sb']
-
-
         SDF_Aw0 = row['SDF_Aw']
         SDF_Sw0 = row['SDF_Sw']
         SDF_Pl0 = row['SDF_Pl']
         SDF_Sb0 = row['SDF_Sb']
-
         N0_Aw = row['N0_Aw']
         N0_Sw = row['N0_Sw']
         N0_Pl = row['N0_Pl']
         N0_Sb = row['N0_Sb']
-
+        StumpDOB_Aw = row['StumpDOB_Aw']
+        StumpDOB_Sb = row['StumpDOB_Sb']
+        StumpDOB_Sw = row['StumpDOB_Sw']
+        StumpDOB_Pl = row['StumpDOB_Pl']
+        StumpHeight_Aw = row['StumpHeight_Aw']
+        StumpHeight_Sb = row['StumpHeight_Sb']
+        StumpHeight_Sw = row['StumpHeight_Sw']
+        StumpHeight_Pl = row['StumpHeight_Pl']
+        TopDib_Aw = row['TopDib_Aw']
+        TopDib_Sb = row['TopDib_Sb']
+        TopDib_Sw = row['TopDib_Sw']
+        TopDib_Pl = row['TopDib_Pl']
 
         BA_Aw0 = BA0_lower_BAT_Aw(BA_AwT)
         BA_Sw0 = BA0_lower_BAT_Sw(BA_SwT)
         BA_Sb0 = BA0_lower_BAT_Sb(BA_SbT)
         BA_Pl0 = BA0_lower_BAT_Pl(BA_PlT)
-
-        SC_0 = SCestimate(N0_Aw, N0_Sb, N0_Sw, N0_Pl)
-        SC_Aw0 = SC_0[0]
-        SC_Sw0 = SC_0[1]
-        SC_Sb0 = SC_0[2]
-        SC_Pl0 = SC_0[3]
-
-        SC_Aw = SC_Aw0
-        SC_Sw = SC_Sw0
-        SC_Sb = SC_Sb0
-        SC_Pl = SC_Pl0
-
-
-        StumpDOB_Aw = row['StumpDOB_Aw']
-        StumpHeight_Aw = row['StumpHeight_Aw']
-        TopDib_Aw = row['TopDib_Aw']
-
-        StumpDOB_Sb = row['StumpDOB_Sb']
-        StumpHeight_Sb = row['StumpHeight_Sb']
-        TopDib_Sb = row['TopDib_Sb']
-
-        StumpDOB_Sw = row['StumpDOB_Sw']
-        StumpHeight_Sw = row['StumpHeight_Sw']
-        TopDib_Sw = row['TopDib_Sw']
-
-        StumpDOB_Pl = row['StumpDOB_Pl']
-        StumpHeight_Pl = row['StumpHeight_Pl']
-        TopDib_Pl = row['TopDib_Pl']
-
+        SC_Aw, SC_Sw, SC_Sb, SC_Pl = SCestimate(N0_Aw, N0_Sb, N0_Sw, N0_Pl)
 
         tageData = [tage_AwT, tage_SwT, tage_PlT, tage_SbT]
         startTageAw = tageData[0]
         startTageSw = tageData[1]
         startTagePl = tageData[2]
         startTageSb = tageData[3]
-
         startTageAwF = tageData[0]+1
         startTageSwF = tageData[1]+1
         startTagePlF = tageData[2]+1
         startTageSbF = tageData[3]+1
 
         tageData = sorted(tageData, reverse=True)
-
         startTage = int(tageData[0])
 
         densities = densities_and_SCs_to_250(
@@ -241,16 +215,12 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
             SI_bh_Aw=SI_bh_Aw,
             SI_bh_Sw=SI_bh_Sw,
             SI_bh_Sb=SI_bh_Sb,
-            SI_bh_Pl=SI_bh_Pl)
+            SI_bh_Pl=SI_bh_Pl
+        )
 
-     # input - species, top height, total age, BHage (from the function),
-     #N (or density), current Basal Area,  Measured Percent Stocking,
-     #StumpDOB , StumpHeight, TopDib, SI, sp proportion
-
-
-        '''estimating correction factor to fit BA at t0 and BA at t and
-           choosing whether simulating with multiplication factor
-           or starting at t recalculating the densities and SC'''
+        # estimating correction factor to fit BA at t0 and BA at t and
+        # choosing whether simulating with multiplication factor
+        # or starting at t recalculating the densities and SC
         species_factors = get_factors_for_all_species(
             startTage=startTage,
             startTageAw=startTageAw,
@@ -290,20 +260,13 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
             BA_Pl0=BA_Pl0,
             BA_PlT=BA_PlT,
             densities=densities,
-            printWarnings=True)
+            printWarnings=True
+        )
 
         f_Aw = species_factors['f_Aw']
         f_Sw = species_factors['f_Sw']
         f_Sb = species_factors['f_Sb']
         f_Pl = species_factors['f_Pl']
-
-        '''choosing no implies in simulating forward after
-           time t using the same factor estimated and used
-           to simulate until time t choosing yes, implies
-           in simulating forward ignoring the factor estimated
-           and used until time t and estimate, at every cycle,
-           densities, SCs etc
-        '''
 
         logger.debug('Getting basal area from time 0 to time of data')
         # simulation choice here is no because aspen was peculiar, empirically demonstrated that using the factor

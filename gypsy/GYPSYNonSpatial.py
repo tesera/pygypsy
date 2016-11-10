@@ -878,11 +878,7 @@ def densities_and_SCs_to_250(**kwargs):
             topHeight_Pl = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Pl', SI_bh_Pl, tage_Pl)
 
 
-        SC_F = SCestimate(N_bh_AwT, N_bh_SbT, N_bh_SwT, N_bh_PlT)
-        SC_Aw = SC_F[0]
-        SC_Sw = SC_F[1]
-        SC_Sb = SC_F[2]
-        SC_Pl = SC_F[3]
+        SC_Aw, SC_Sw, SC_Sb, SC_Pl = SCestimate(N_bh_AwT, N_bh_SbT, N_bh_SwT, N_bh_PlT)
 
         densities_along_time.append({'N_bh_AwT': N_bh_AwT, 'N_bh_SwT': N_bh_SwT, 'N_bh_SbT': N_bh_SbT, 'N_bh_PlT': N_bh_PlT,
                                      'SC_Aw': SC_Aw, 'SC_Sw': SC_Sw, 'SC_Sb':SC_Sb, 'SC_Pl': SC_Pl,
