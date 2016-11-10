@@ -306,6 +306,12 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         '''
 
         logger.debug('Getting basal area from time 0 to time of data')
+        # simulation choice here is no because aspen was peculiar, empirically demonstrated that using the factor
+        # for the whole simulation yielded better results, probably because of variability in density and basal area
+        # unique to aspen
+        # we can't do simulation choice = no here for sb, sw, pl because the factor should not be applied for them
+        # sw, sb, pl use the factor until the time of data. the subsequent years use the regular basal area increment formula
+        # julianno sambatti, november 10, 2016
         BA_0_to_data_Aw = BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice='no', simulation=False)
         BA_0_to_data_Sb = BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice, simulation=False)
         BA_0_to_data_Sw = BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice, simulation=False)
@@ -354,7 +360,12 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
             logger.debug('Simulating year %d', t)
 
 
-            # TODO: it looks like Aw was factored out of here, these species should have that done also
+            # TODO: Aw uses bafromzerotodataaw as described and called above,
+            # but htese are here to avoid using the factors, which should only
+            # apply until time t, then a implicit factor of 1 is used we can
+            # refactor the frmozerotodata functions to switch the factor off
+            # after a certain year, then the whole for loop containing this
+            # comment could be removed
             if N_bh_SbT > 0:
                 BA_SbT = BA_SbT + BasalAreaIncrementNonSpatialSb('Sb', SC_SbF, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_SbF, BA_SbT)
                 if BA_SbT < 0:
