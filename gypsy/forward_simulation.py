@@ -5,38 +5,40 @@ Created on Fri Apr 29 16:06:29 2016
 @author: juliannosambatti
 """
 import logging
+import datetime
+import numpy as np
 import pandas as pd
 
 from utils import _log_loop_progress
-from GYPSYNonSpatial import (BasalAreaIncrementNonSpatialSw,
-                             BasalAreaIncrementNonSpatialSb,
-                             BasalAreaIncrementNonSpatialPl,
-                             SCestimate,
-                             BAfactorFinder_Aw,
-                             BAfromZeroToDataAw,
-                             BAfactorFinder_Sb,
-                             BAfromZeroToDataSb,
-                             BAfactorFinder_Sw,
-                             BAfromZeroToDataSw,
-                             BAfactorFinder_Pl,
-                             BAfromZeroToDataPl,
-                             MerchantableVolumeAw,
-                             MerchantableVolumeSw,
-                             MerchantableVolumeSb,
-                             MerchantableVolumePl,
-                             densities_and_SCs_to_250,
-                             GrossTotalVolume_Aw,
-                             GrossTotalVolume_Sw,
-                             GrossTotalVolume_Sb,
-                             GrossTotalVolume_Pl)
+from GYPSYNonSpatial import (
+    BasalAreaIncrementNonSpatialSw,
+    BasalAreaIncrementNonSpatialSb,
+    BasalAreaIncrementNonSpatialPl,
+    SCestimate,
+    BAfactorFinder_Aw,
+    BAfromZeroToDataAw,
+    BAfactorFinder_Sb,
+    BAfromZeroToDataSb,
+    BAfactorFinder_Sw,
+    BAfromZeroToDataSw,
+    BAfactorFinder_Pl,
+    BAfromZeroToDataPl,
+    MerchantableVolumeAw,
+    MerchantableVolumeSw,
+    MerchantableVolumeSb,
+    MerchantableVolumePl,
+    densities_and_SCs_to_250,
+    GrossTotalVolume_Aw,
+    GrossTotalVolume_Sw,
+    GrossTotalVolume_Sb,
+    GrossTotalVolume_Pl
+)
 
 logger = logging.getLogger(__name__)
 
 #input - species, top height, total age, BHage (from the function),
 #N (or density), current Basal Area,
 #Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
-
-#https://www.python.org/dev/peps/pep-0008/#naming-conventions
 
 
 def BA_zeroAw(BA_Aw0, BA_AwT):
@@ -98,8 +100,6 @@ def get_factors_for_all_species(**kwargs):
     f_Aw = 0
     f_Sw = 0
     f_Pl = 0
-#        if kwargs['N0_Aw'] > 0:
-#            f_Aw = BAfactorFinder_Aw (**kwargs)
 
     if kwargs['N0_Aw'] > 0:
         f_Aw = BAfactorFinder_Aw(**kwargs)
@@ -113,7 +113,6 @@ def get_factors_for_all_species(**kwargs):
     if kwargs['N0_Pl'] > 0:
         f_Pl = BAfactorFinder_Pl(**kwargs)
 
-    #print startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, BA_Sw0, f_Sw
     return {'f_Aw':f_Aw,
             'f_Sb':f_Sb,
             'f_Sw':f_Sw,
@@ -129,15 +128,15 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
     !TODO!
     """
 
-    output_dict ={}
+    output_dict = {}
 
     logger.debug('Starting forwards simulation')
-    inputDF = plot_df
-    n_rows = inputDF.shape[0]
-    for _, row in inputDF.iterrows():
+    n_rows = plot_df.shape[0]
+    for _, row in plot_df.iterrows():
+        start = datetime.datetime.now()
         _log_loop_progress(_, n_rows)
-        plotID = str(int(row['PlotID']))
-
+        plot_id = str(int(row['PlotID']))
+        logger.info('Starting simulation for plot: %s', plot_id)
         SI_bh_Aw = row['SI_Aw']
         SI_bh_Sw = row['SI_Sw']
         SI_bh_Pl = row['SI_Pl']
@@ -209,7 +208,6 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         StumpHeight_Pl = row['StumpHeight_Pl']
         TopDib_Pl = row['TopDib_Pl']
 
-        #print N0_Aw, N0_Sw, N0_Pl, N0_Sb
 
         tageData = [tage_AwT, tage_SwT, tage_PlT, tage_SbT]
         startTageAw = tageData[0]
@@ -244,8 +242,6 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
             SI_bh_Sw=SI_bh_Sw,
             SI_bh_Sb=SI_bh_Sb,
             SI_bh_Pl=SI_bh_Pl)
-        #print startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0
-        #print densities
 
      # input - species, top height, total age, BHage (from the function),
      #N (or density), current Basal Area,  Measured Percent Stocking,
@@ -296,16 +292,10 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
             densities=densities,
             printWarnings=True)
 
-        output_DF_Aw = pd.DataFrame(columns=['BA_Aw'])
-        output_DF_Sw = pd.DataFrame(columns=['BA_Sw'])
-        output_DF_Sb = pd.DataFrame(columns=['BA_Sb'])
-        output_DF_Pl = pd.DataFrame(columns=['BA_Pl'])
-
         f_Aw = species_factors['f_Aw']
         f_Sw = species_factors['f_Sw']
         f_Sb = species_factors['f_Sb']
         f_Pl = species_factors['f_Pl']
-       # print f_Aw
 
         '''choosing no implies in simulating forward after
            time t using the same factor estimated and used
@@ -321,21 +311,33 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         BA_0_to_data_Sw = BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice, simulation=False)
         BA_0_to_data_Pl = BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice, simulation=False)
 
-        #print startTage, startTageAw, y2bh_Aw, SC_Aw, SI_bh_Aw, N_bh_AwT, N0_Aw, BA_Aw0, BA_AwT, simulation_choice
-        #print startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, BA_PlT
-
-        output_DF_Aw = pd.concat([BA_0_to_data_Aw[1]], axis=1)
-        output_DF_Sw = pd.concat([BA_0_to_data_Sw[1]], axis=1)
-        output_DF_Sb = pd.concat([BA_0_to_data_Sb[1]], axis=1)
-        output_DF_Pl = pd.concat([BA_0_to_data_Pl[1]], axis=1)
-
+        output_DF_Aw = BA_0_to_data_Aw[1]
+        output_DF_Sw = BA_0_to_data_Sw[1]
+        output_DF_Sb = BA_0_to_data_Sb[1]
+        output_DF_Pl = BA_0_to_data_Pl[1]
         if simulation_choice == 'no':
             continue
 
-        '''simulating growth forwards in time starting from the time at which data was taken '''
-        t = startTage
+        # allocate extra space for the simulation results
+        # this is not ideal, would rather follow what is done for aspen, but at least
+        # this only appends once instead of for every year in the iteration
+        # TODO: fill with NaN instead of 0s?
+        n_extra_rows = len(densities)-startTage+1
+        output_DF_Sb = pd.concat([
+            output_DF_Sb,
+            pd.DataFrame({'BA_Sb': [np.NaN]*n_extra_rows})
+        ], axis=0, ignore_index=True)
+        output_DF_Sw = pd.concat([
+            output_DF_Sw,
+            pd.DataFrame({'BA_Sw': [np.NaN]*n_extra_rows})
+        ], axis=0, ignore_index=True)
+        output_DF_Pl = pd.concat([
+            output_DF_Pl,
+            pd.DataFrame({'BA_Pl': [np.NaN]*n_extra_rows})
+        ], axis=0, ignore_index=True)
 
         logger.debug('Starting main simulation')
+        t = startTage
         for SC_Dict in densities[t-1:]:
             bhage_SwF = SC_Dict['bhage_Sw']
             SC_SwF = SC_Dict['SC_Sw']
@@ -352,12 +354,11 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
             logger.debug('Simulating year %d', t)
 
 
-
+            # TODO: it looks like Aw was factored out of here, these species should have that done also
             if N_bh_SbT > 0:
                 BA_SbT = BA_SbT + BasalAreaIncrementNonSpatialSb('Sb', SC_SbF, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_SbF, BA_SbT)
                 if BA_SbT < 0:
                     BA_SbT = 0
-                #print 'bhageSb ',  bhage_SbF, 'BA Sb ',  BA_SbT
             else:
                 BA_SbT = 0
 
@@ -365,7 +366,6 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
                 BA_SwT = BA_SwT + BasalAreaIncrementNonSpatialSw('Sw', SC_SwF, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_SwF, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_SwT)
                 if BA_SwT < 0:
                     BA_SwT = 0
-                #print 'bhageSw ', bhage_SwF, 'BA Sw ', BA_SwT
             else:
                 BA_SwT = 0
 
@@ -373,14 +373,13 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
                 BA_PlT = BA_PlT + BasalAreaIncrementNonSpatialPl('Pl', SC_PlF, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_PlF, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_PlT)
                 if BA_PlT < 0:
                     BA_PlT = 0
-                #print 'bhagePl ', bhage_PlF, 'BA Pl', BA_PlT
             else:
                 BA_PlT = 0
 
-
-            output_DF_Sw = output_DF_Sw.append({'BA_Sw':BA_SwT}, ignore_index=True)
-            output_DF_Sb = output_DF_Sb.append({'BA_Sb':BA_SbT}, ignore_index=True)
-            output_DF_Pl = output_DF_Pl.append({'BA_Pl':BA_PlT}, ignore_index=True)
+            # TODO: should these be t+1?
+            output_DF_Sw.loc[t, 'BA_Sw'] = BA_SwT
+            output_DF_Sb.loc[t, 'BA_Sb'] = BA_SbT
+            output_DF_Pl.loc[t, 'BA_Pl'] = BA_PlT
 
             t += 1
             startTageAwF += 1
@@ -389,28 +388,67 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
             startTageSbF += 1
 
         densities_DF = pd.DataFrame(densities)
-        output_DF = pd.concat([densities_DF, output_DF_Aw, output_DF_Sw, output_DF_Sb, output_DF_Pl], axis=1)
-
+        output_DF = pd.concat(
+            [densities_DF, output_DF_Aw, output_DF_Sw, output_DF_Sb, output_DF_Pl],
+            axis=1
+        )
         #http://stackoverflow.com/questions/25314547/cell-var-from-loop-warning-from-pylint
 
-        output_DF['Gross_Total_Volume_Aw'] = output_DF.apply(lambda x: GrossTotalVolume_Aw(x['BA_Aw'], x['topHeight_Aw']), axis=1)
-        output_DF['Gross_Total_Volume_Sw'] = output_DF.apply(lambda x: GrossTotalVolume_Sw(x['BA_Sw'], x['topHeight_Sw']), axis=1)
-        output_DF['Gross_Total_Volume_Sb'] = output_DF.apply(lambda x: GrossTotalVolume_Sb(x['BA_Sb'], x['topHeight_Sb']), axis=1)
-        output_DF['Gross_Total_Volume_Pl'] = output_DF.apply(lambda x: GrossTotalVolume_Pl(x['BA_Pl'], x['topHeight_Pl']), axis=1)
+        output_DF['Gross_Total_Volume_Aw'] = output_DF.apply(
+            lambda x: GrossTotalVolume_Aw(x['BA_Aw'], x['topHeight_Aw']), axis=1
+        )
+        output_DF['Gross_Total_Volume_Sw'] = output_DF.apply(
+            lambda x: GrossTotalVolume_Sw(x['BA_Sw'], x['topHeight_Sw']), axis=1
+        )
+        output_DF['Gross_Total_Volume_Sb'] = output_DF.apply(
+            lambda x: GrossTotalVolume_Sb(x['BA_Sb'], x['topHeight_Sb']), axis=1
+        )
+        output_DF['Gross_Total_Volume_Pl'] = output_DF.apply(
+            lambda x: GrossTotalVolume_Pl(x['BA_Pl'], x['topHeight_Pl']), axis=1
+        )
 
-        output_DF['Gross_Total_Volume_Con'] = output_DF['Gross_Total_Volume_Sw']+output_DF['Gross_Total_Volume_Sb']+output_DF['Gross_Total_Volume_Pl']
+        output_DF['Gross_Total_Volume_Con'] = output_DF['Gross_Total_Volume_Sw'] \
+                                              + output_DF['Gross_Total_Volume_Sb'] \
+                                              + output_DF['Gross_Total_Volume_Pl']
         output_DF['Gross_Total_Volume_Dec'] = output_DF['Gross_Total_Volume_Aw']
-        output_DF['Gross_Total_Volume_Tot'] = output_DF['Gross_Total_Volume_Con'] + output_DF['Gross_Total_Volume_Dec']
+        output_DF['Gross_Total_Volume_Tot'] = output_DF['Gross_Total_Volume_Con'] \
+                                              + output_DF['Gross_Total_Volume_Dec']
 
-        output_DF['MerchantableVolumeAw'] = output_DF.apply(lambda x: MerchantableVolumeAw(x['N_bh_AwT'], x['BA_Aw'], x['topHeight_Aw'], StumpDOB_Aw, StumpHeight_Aw, TopDib_Aw, x['Gross_Total_Volume_Aw']), axis=1)
-        output_DF['MerchantableVolumeSw'] = output_DF.apply(lambda x: MerchantableVolumeSw(x['N_bh_SwT'], x['BA_Sw'], x['topHeight_Sw'], StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, x['Gross_Total_Volume_Sw']), axis=1)
-        output_DF['MerchantableVolumeSb'] = output_DF.apply(lambda x: MerchantableVolumeSb(x['N_bh_SbT'], x['BA_Sb'], x['topHeight_Sb'], StumpDOB_Sb, StumpHeight_Sb, TopDib_Sb, x['Gross_Total_Volume_Sb']), axis=1)
-        output_DF['MerchantableVolumePl'] = output_DF.apply(lambda x: MerchantableVolumePl(x['N_bh_PlT'], x['BA_Pl'], x['topHeight_Pl'], StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, x['Gross_Total_Volume_Pl']), axis=1)
+        output_DF['MerchantableVolumeAw'] = output_DF.apply(
+            lambda x: MerchantableVolumeAw(
+                x['N_bh_AwT'], x['BA_Aw'], x['topHeight_Aw'],
+                StumpDOB_Aw, StumpHeight_Aw, TopDib_Aw, x['Gross_Total_Volume_Aw']
+            ), axis=1
+        )
+        output_DF['MerchantableVolumeSw'] = output_DF.apply(
+            lambda x: MerchantableVolumeSw(
+                x['N_bh_SwT'], x['BA_Sw'], x['topHeight_Sw'],
+                StumpDOB_Sw, StumpHeight_Sw, TopDib_Sw, x['Gross_Total_Volume_Sw']
+            ), axis=1
+        )
+        output_DF['MerchantableVolumeSb'] = output_DF.apply(
+            lambda x: MerchantableVolumeSb(
+                x['N_bh_SbT'], x['BA_Sb'], x['topHeight_Sb'],
+                StumpDOB_Sb, StumpHeight_Sb, TopDib_Sb, x['Gross_Total_Volume_Sb']), axis=1
+        )
+        output_DF['MerchantableVolumePl'] = output_DF.apply(
+            lambda x: MerchantableVolumePl(
+                x['N_bh_PlT'], x['BA_Pl'], x['topHeight_Pl'],
+                StumpDOB_Pl, StumpHeight_Pl, TopDib_Pl, x['Gross_Total_Volume_Pl']
+            ), axis=1
+        )
 
-        output_DF['MerchantableVolume_Con'] = output_DF['MerchantableVolumeSw']+output_DF['MerchantableVolumeSb']+output_DF['MerchantableVolumePl']
+        output_DF['MerchantableVolume_Con'] = output_DF['MerchantableVolumeSw'] \
+                                              + output_DF['MerchantableVolumeSb'] \
+                                              + output_DF['MerchantableVolumePl']
         output_DF['MerchantableVolume_Dec'] = output_DF['MerchantableVolumeAw']
-        output_DF['MerchantableVolume_Tot'] = output_DF['MerchantableVolume_Con'] + output_DF['MerchantableVolume_Dec']
+        output_DF['MerchantableVolume_Tot'] = output_DF['MerchantableVolume_Con'] \
+                                              + output_DF['MerchantableVolume_Dec']
 
-        output_dict[plotID] = output_DF
+        output_dict[plot_id] = output_DF
+
+        end = datetime.datetime.now()
+        time = end - start
+        logger.info('plot %s took %f seconds', plot_id, time.total_seconds())
 
     return output_dict

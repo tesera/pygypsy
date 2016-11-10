@@ -75,3 +75,5 @@ gypsy-output/
 /lint-output.txt
 data/figures/
 /data/private/
+private-data/
+notebooks/.ipynb_checkpoints/

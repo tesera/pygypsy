@@ -1,5 +1,14 @@
-# -*- coding: utf-8 -*-
-""" density and increment functions
+"""Density and Increment Functions
+
+Acronyms:
+
+b_hage = Breast Height Age
+tage = Total age
+si_Aw  =  estimated Site intex according to the paper in this case for Aspen (Aw)
+y2bh = years until breast height age can be measured
+SI_bh_Aw = Site index estimated with breast heigh age
+N_bh_Aw = estimated N and should be equal N_Aw (for Aspen in this case Aw)
+
 """
 # TODO: split these functions into appropriate other modules
 # TODO: make all factor find functions use kwargs in the manner of AW
@@ -14,9 +23,6 @@ from utils import _mkdir_p
 
 logger = logging.getLogger(__name__)
 
-"""
-estimating Sit, total age, and bhage using asaCompileAgeGivenSpSiHt functions
-"""
 # input - species, top height, total age, BHage (from the function),
 #N (or density), current Basal Area,  Measured Percent Stocking,
 #StumpDOB , StumpHeight, TopDib, SI, sp proportion
@@ -26,48 +32,25 @@ sp_Sb = ['Sb', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 sp_Pl = ['Pl', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 sp_Sw = ['Sw', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 
-'''
-b_hage = Breast Height Age
-tage = Total age
-
-the algorithm accepts either one
-
-si_Aw  =  estimated Site intex according to the paper in this case for Aspen (Aw)
-
-y2bh = years until breast height age can be measured
-
-SI_bh_Aw = Site index estimated with breast heigh age
-
-'''
-
-#test
-
-
-
-
-'''
-N_bh_Aw = estimated N and should be equal N_Aw (for Aspen in this case Aw)
-
-The main purpose of this step is to estimate SDF that is employed in other formulas
-
-'''
-
 
 def densityNonSpatialAw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
-    '''
-    Main purpose of this function is to estimate SDF for the species
+    '''Main purpose of this function is to estimate SDF for the species
+
     :param str sp_Aw: species name
     :param float SI_bh_Aw: site index of species Aw
     :param float bhage_Aw: breast height age of speceis Aw
     :param float N_Aw: densit of species Aw
-    
+
     '''
     N_est_Aw = 0
     SDF_Aw0 = 0
+
     if N_Aw <= 0:
         return N_est_Aw, SDF_Aw0
+
     if bhage_Aw <= 0 or SI_bh_Aw <= 0:
         return N_est_Aw, SDF_Aw0
+
     if sp_Aw[0] in ('Aw', 'Bw', 'Pb', 'A', 'H'):
         c0 = 0.717966
         c1 = 6.67468
@@ -75,6 +58,7 @@ def densityNonSpatialAw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
         acceptableDiff = 0.00001
         NDiffFlag = False
         iterCount = 0
+
         while NDiffFlag == False:
             b3 = (1+c0) * SDF_Aw0**((c1 + numpy.log(SDF_Aw0))/SDF_Aw0)
             b2 = (c0/4) * (SDF_Aw0**0.5)**(1/(SDF_Aw0))
@@ -83,39 +67,34 @@ def densityNonSpatialAw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
             k2 = 1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(1+bhage_Aw)))
             N_est_Aw = SDF_Aw0*k1/k2
 
-
             if abs(N_Aw-N_est_Aw) < acceptableDiff:
                 NDiffFlag = True
             else:
                 N_est_Aw = (N_Aw + N_est_Aw)/2
                 SDF_Aw0 = N_est_Aw *k2/k1
-                #print 'Aw',  N_est_Aw, SDF_Aw0
             iterCount = iterCount + 1
+
             if iterCount == 1500:
                 if printWarnings:
                     print '\n GYPSYNonSpatial.densityNonSpatialAw()'
                     print ' Slow convergence'
                 return N_est_Aw, SDF_Aw0
 
-
     return N_est_Aw, SDF_Aw0
 
 
-
-
 def densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings=True):
-    '''
-    Main purpose of this function is to estimate SDF for the species
-    
+    '''Main purpose of this function is to estimate SDF for the species
+
     :param str sp_Sb: species name
     :param float SI_bh_Sb: site index of species Sb
     :param float tage_Sb: total age of species Sb
     :param float N_Sb: densit of species Sb
-    
 
     '''
     N_est_Sb = 0
     SDF_Sb0 = 0
+
     if N_Sb > 0:
         if tage_Sb > 0 or SI_bh_Sb > 0:
             if sp_Sb[0] in ('Sb', 'Lt', 'La', 'Lw', 'L'):
@@ -126,6 +105,7 @@ def densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings=True):
                 acceptableDiff = 0.00001
                 NDiffFlag = False
                 iterCount = 0
+
                 while abs(N_Sb-N_est_Sb) > acceptableDiff:
                     b2 = c3
                     b3 = c3*(SDF_Sb0**(1/SDF_Sb0))
@@ -133,26 +113,26 @@ def densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings=True):
                     k1 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sb))+(b3*numpy.log(1+50)))
                     k2 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sb))+(b3*numpy.log(1+tage_Sb)))
                     N_est_Sb = SDF_Sb0*k1/k2
+
                     if abs(N_Sb-N_est_Sb) < acceptableDiff:
                         NDiffFlag = True
                     else:
                         N_est_Sb = (N_Sb + N_est_Sb)/2
                         SDF_Sb0 = N_est_Sb * k2/k1
-                        #print 'Sb', N_est_Sb, SDF_Sb0
                     iterCount = iterCount + 1
+
                     if iterCount == 150:
                         if printWarnings:
                             print '\n GYPSYNonSpatial.densityNonSpatialSb()'
                             print ' Slow convergence'
                         return N_est_Sb, SDF_Sb0
 
-
     return N_est_Sb, SDF_Sb0
 
 
 def minimum_sdf_aw(bhage_aw, si_bh_aw):
-    """
-    estimate N given that SDF have been estimated
+    """estimate N given that SDF have been estimated
+
     """
     x0 = [200.0]
     optimize = fmin(densityAw, x0, args=(bhage_aw, si_bh_aw))
@@ -161,19 +141,19 @@ def minimum_sdf_aw(bhage_aw, si_bh_aw):
 
 
 def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings=True):
-    '''
-    Main purpose of this function is to estimate SDF for the species
-    
+    '''Main purpose of this function is to estimate SDF for the species
+
     :param str sp_Sw: species name
     :param float SI_bh_Sw: site index of species Sw
     :param float tage_Sw: total age of species Sw
-    :param float SDF_Aw0: Stand Density Factor of species Aw, this parameter indicates that the density of Sw 
+    :param float SDF_Aw0: Stand Density Factor of species Aw, this parameter indicates that the density of Sw
     depends on the density of Aw
     :param float N_Sw: densit of species Sw
 
     '''
     N_est_Sw = 0
     SDF_Sw0 = 0
+
     if N_Sw > 0:
         if tage_Sw > 0 or SI_bh_Sw > 0:
             if sp_Sw[0] in ('Sw', 'Se', 'Fd', 'Fb', 'Fa'):
@@ -182,6 +162,7 @@ def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings=T
                     z1 = 0
                 elif SDF_Aw0 > 0:
                     z1 = 1
+
                 c1 = -231.617
                 c2 = 1.176995
                 c3 = 1.733601
@@ -189,6 +170,7 @@ def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings=T
                 acceptableDiff = 0.00001
                 NDiffFlag = False
                 iterCount = 0
+
                 while abs(N_Sw-N_est_Sw) > acceptableDiff:
                     b3 = c3*(SDF_Sw0**(1/SDF_Sw0))
                     b2 = c3
@@ -196,42 +178,41 @@ def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings=T
                     k1 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sw))+(b3*numpy.log(50+1)))
                     k2 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sw))+(b3*numpy.log(1+tage_Sw)))
                     N_est_Sw = SDF_Sw0*k1/k2
+
                     if abs(N_Sw-N_est_Sw) < acceptableDiff:
                         NDiffFlag = True
                     else:
                         N_est_Sw = (N_Sw + N_est_Sw)/2
                         SDF_Sw0 = N_est_Sw * k2/k1
-                        #print 'Sw', N_est_Sw, SDF_Sw0
+
                     iterCount = iterCount + 1
+
                     if iterCount == 150:
                         if printWarnings:
                             print '\n GYPSYNonSpatial.densityNonSpatialSw()'
                             print ' Slow convergence'
                         return N_est_Sw, SDF_Sw0
 
-
-
-
     return N_est_Sw, SDF_Sw0
 
 
 def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, N_Pl, printWarnings=True):
-    '''
-    Main purpose of this function is to estimate SDF for the species
-    
+    '''Main purpose of this function is to estimate SDF for the species
+
     :param str sp_Pl: species name
     :param float SI_bh_Pl: site index of species Pl
     :param float tage_Pl: total age of species Pl
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float SDF_Sw0: Stand Density Factor of species Sw
     :param float SDF_Pl0: Stand Density Factor of species Pl
-    these parameters SDF above indicate that the density of Pl 
+    these parameters SDF above indicate that the density of Pl
     depends on the density of all otehr species
     :param float N_Pl: densit of species Pl
 
     '''
     N_est_Pl = 0
     SDF_Pl0 = 0
+
     if N_Pl > 0:
         if tage_Pl > 0 or SI_bh_Pl > 0:
             if sp_Pl[0] in ('P', 'Pl', 'Pj', 'Pa', 'Pf'):
@@ -241,6 +222,7 @@ def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, N_P
                 c4 = 1.017479
                 c5 = -0.05471
                 c6 = 4.11215
+
                 if SDF_Aw0 == 0:
                     z1 = 0
                 elif SDF_Aw0 > 0:
@@ -253,10 +235,12 @@ def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, N_P
                     z3 = 0
                 elif SDF_Sb0 > 0:
                     z3 = 1
+
                 SDF_Pl0 = N_Pl # best SDF_Sb guess
                 acceptableDiff = 0.00001
                 NDiffFlag = False
                 iterCount = 0
+
                 while abs(N_Pl-N_est_Pl) > acceptableDiff:
                     k = (1+(c6*(SDF_Pl0**0.5)))/SDF_Pl0
                     b3 = c4*(SDF_Pl0**k)
@@ -265,31 +249,29 @@ def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, N_P
                     k1 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Pl))+(b3*numpy.log(50+1)))
                     k2 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Pl))+(b3*numpy.log(1+tage_Pl)))
                     N_est_Pl = SDF_Pl0*k1/k2
+
                     if abs(N_Pl-N_est_Pl) < acceptableDiff:
                         NDiffFlag = True
                     else:
                         N_est_Pl = (N_Pl + N_est_Pl)/2
                         SDF_Pl0 = N_est_Pl * k2/k1
-                        #print 'Pl', N_est_Pl, SDF_Pl0
+
                     iterCount = iterCount + 1
+
                     if iterCount == 150:
                         if printWarnings:
                             print '\n GYPSYNonSpatial.densityNonSpatialSw()'
                             print ' Slow convergence'
                         return N_est_Pl, SDF_Pl0
 
-
     return N_est_Pl, SDF_Pl0
 
 
-
-
 def densityAw(SDF_Aw0, bhage_Aw, SI_bh_Aw):
-    '''
-    Main purpose of this function is to project densities
-    forward and backward in time for the species
-    
-    :param float SI_bh_Aw: site index of species Aw 
+    '''Main purpose of this function is to project densities forward and backward
+    in time for the species
+
+    :param float SI_bh_Aw: site index of species Aw
     :param float bhage_Aw: breast height age of species Aw
     :param floar SDF_Aw0: Stand Density Factor of species Aw
 
@@ -299,14 +281,10 @@ def densityAw(SDF_Aw0, bhage_Aw, SI_bh_Aw):
         c0 = 0.717966
         c1 = 6.67468
         b3 = (1+c0) * SDF_Aw0**((c1+numpy.log(SDF_Aw0))/SDF_Aw0)
-
         b2 = (c0/4)*(SDF_Aw0**0.5)**(1/(SDF_Aw0))
-
         b1 = -((1/((SDF_Aw0/1000.0)**(0.5))) + (numpy.sqrt(1+numpy.sqrt(50/(numpy.sqrt(SDF_Aw0)*numpy.log(50+1)))))) * numpy.log(50+1)
-
         k1 = 1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(50+1)))
         k2 = 1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(1+bhage_Aw)))
-
         N_bh_Aw = SDF_Aw0*k1/k2
     else:
         N_bh_Aw = 0
@@ -314,11 +292,10 @@ def densityAw(SDF_Aw0, bhage_Aw, SI_bh_Aw):
     return N_bh_Aw
 
 def densitySb(SDF_Sb0, tage_Sb, SI_bh_Sb):
-    '''
-    Main purpose of this function is to project densities
-    forward and backward in time for the species
-    
-    :param float SI_bh_Sb: site index of species Sb 
+    '''Main purpose of this function is to project densities forward and backward
+    in time for the species
+
+    :param float SI_bh_Sb: site index of species Sb
     :param float tage_Sb: total age of species Sb
     :param float SDF_Sb0: Stand Density Factor of species Sb
     :param float SDF_Aw0: Stand Density Factor of species Aw
@@ -334,19 +311,19 @@ def densitySb(SDF_Sb0, tage_Sb, SI_bh_Sb):
         b1 = c1/((((SDF_Sb0/1000.0)**0.5)+numpy.log(50+1))**c2)
         k1 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sb))+(b3*numpy.log(1+50)))
         k2 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sb))+(b3*numpy.log(1+tage_Sb)))
-
         N_bh_Sb = SDF_Sb0*k1/k2
+
     else:
         N_bh_Sb = 0
 
     return N_bh_Sb
 
+
 def densitySw(SDF_Sw0, SDF_Aw0, tage_Sw, SI_bh_Sw):
-    '''
-    Main purpose of this function is to project densities
-    forward and backward in time for the species
-    
-    :param float SI_bh_Sw: site index of species Sw 
+    '''Main purpose of this function is to project densities forward and backward
+    in time for the species
+
+    :param float SI_bh_Sw: site index of species Sw
     :param float tage_Sw: total age of species Sw
     :param float SDF_Sw0: Stand Density Factor of species Sw
     :param float SDF_Aw0: Stand Density Factor of species Aw
@@ -354,10 +331,12 @@ def densitySw(SDF_Sw0, SDF_Aw0, tage_Sw, SI_bh_Sw):
     '''
 
     if SDF_Sw0 > 0:
+
         if SDF_Aw0 == 0:
             z1 = 0
         elif SDF_Aw0 > 0:
             z1 = 1
+
         c1 = -231.617
         c2 = 1.176995
         c3 = 1.733601
@@ -368,17 +347,18 @@ def densitySw(SDF_Sw0, SDF_Aw0, tage_Sw, SI_bh_Sw):
         k2 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sw))+(b3*numpy.log(1+tage_Sw)))
 
         N_bh_Sw = SDF_Sw0*k1/k2
+
     else:
         N_bh_Sw = 0
 
     return N_bh_Sw
 
+
 def densityPl(SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl, SI_bh_Pl):
-    '''
-    Main purpose of this function is to project densities
-    forward and backward in time for the species
-    
-    :param float SI_bh_Pl: site index of species Pl 
+    '''Main purpose of this function is to project densities forward and backward
+    in time for the species
+
+    :param float SI_bh_Pl: site index of species Pl
     :param float tage_Pl: total age of species Pl
     :param float SDF_Pl0: Stand Density Factor of species Pl
     :param float SDF_Aw0: Stand Density Factor of species Aw
@@ -394,6 +374,7 @@ def densityPl(SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl, SI_bh_Pl):
         c4 = 1.017479
         c5 = -0.05471
         c6 = 4.11215
+
         if SDF_Aw0 == 0:
             z1 = 0
         elif SDF_Aw0 > 0:
@@ -406,16 +387,13 @@ def densityPl(SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl, SI_bh_Pl):
             z3 = 0
         elif SDF_Sb0 > 0:
             z3 = 1
-        k = (1+(c6*(SDF_Pl0**0.5)))/SDF_Pl0
 
+        k = (1+(c6*(SDF_Pl0**0.5)))/SDF_Pl0
         b3 = c4*(SDF_Pl0**k)
         b2 = c4/(numpy.sqrt(SDF_Pl0)**c5)
-
         b1 = (c1+(z1*(SDF_Aw0/1000.0)/2.0) + (z2*(SDF_Sw0/1000.0)/3.0) + (z3*(SDF_Sb0/1000.0)/4.0)) + (c2/((SDF_Pl0**0.5)**c3))
-
         k1 = 1+numpy.exp(b1 + (b2*numpy.log(SI_bh_Pl)) + (b3*numpy.log(50+1)))
         k2 = 1+numpy.exp(b1 + (b2*numpy.log(SI_bh_Pl)) + (b3*numpy.log(1+tage_Pl)))
-
         N_bh_Pl = SDF_Pl0*k1/k2
     else:
         N_bh_Pl = 0
@@ -423,27 +401,11 @@ def densityPl(SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl, SI_bh_Pl):
     return N_bh_Pl
 
 
-
-
-'''
-SC is the species composition. It was estimated here using
-density estimated through bhage, but it could be used using
-any density, since they should be the same.
-
-BA below is the Basal Area measured in the field and it should be data input into Gypsy
-
-'''
-
-#def b = math.log(1.3)/float(msDict[msid]['BHAGE'])
- #                       msDict[msid]['HD'] = round(math.exp(b*msDict[msid]['AGE']),1)
-
-
 def SCestimate(N_Aw, N_Sb, N_Sw, N_Pl):
-    '''
-    This function calculates species composition based on their densities
-    Constraint ->    SC_Aw + SC_Sw + SC_Sb + SC_Pl ~1
-    
-    :para float N_Aw, N_Sb, N_Sw, and N_Pl: densities of the species Aw, Sb, Sw, and Pl
+    '''This function calculates species composition based on their densities
+    Constraint -> SC_Aw + SC_Sw + SC_Sb + SC_Pl ~1
+
+    :param float N_Aw, N_Sb, N_Sw, and N_Pl: densities of the species Aw, Sb, Sw, and Pl
 
     '''
     N_total = N_Aw + N_Sb + N_Sw + N_Pl
@@ -458,18 +420,18 @@ def SCestimate(N_Aw, N_Sb, N_Sw, N_Pl):
         SC_Sw = N_Sw/N_total
         SC_Sb = N_Sb/N_total
         SC_Pl = N_Pl/N_total
+
     return SC_Aw, SC_Sw, SC_Sb, SC_Pl
-
-''' SC_Aw + SC_Sw + SC_Sb + SC_Pl ~1'''
-
 
 
 def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw):
-    '''
-    predicts the increment in basal area for the subsequent year for the species.
-    This function is also used to make basal area projections and as a function called
-    by factor finder functions during estimation of correction factor for the species.
-    
+    '''Predicts the increment in basal area for the subsequent year for the
+    species.
+
+    This function is also used to make basal area projections and as a function
+    called by factor finder functions during estimation of correction factor
+    for the species.
+
     :param str sp_Aw: species name
     :param float SI_bh_Aw: site index of species Aw
     :param float bhage_Aw: breast height age of speceis Aw
@@ -477,8 +439,6 @@ def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage
     :param float SC_Aw: proportion of species Aw in the stand
     :param float BA_Aw: Basal area of the species Aw
     :param float N0_Aw: initial density of species Aw at breast height age
-    
-    
 
     '''
 
@@ -487,30 +447,15 @@ def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage
 
     if bhage_Aw < 0:
         bhage_Aw = 0
-        #raise ValueError ('bhage cannot be negative: %s' %bhage_Aw)
 
     if BA_Aw < 0:
         BAinc_Aw = 0
-        #raise ValueError ('BA_Aw cannot be negative: %s' %BA_Aw)
-
-
     elif N_bh_Aw > 0 and SI_bh_Aw > 0:
         a1 = 0.751313
         a2 = 0.018847
         a3 = 1.143762
         a4 = -0.03475
         a5 = 0.835189
-
-        '''
-        k=a4 * numpy.log (0.01+(bhage_Aw/10) )
-        k1=(10**(-4)) * a1 * (bhage_Aw**2) * (numpy.exp(-a2*(bhage_Aw**(0.5+a1)))) * (SC_Aw**a5) * ((numpy.log(1+(N0_Aw * numpy.sqrt(1+bhage_Aw) )))**2) * SI_bh_Aw
-        k2= ((1+BA_Aw )**a3) * (1+numpy.exp(1 - ((numpy.log(1+SC_Aw**2))/2)    ))
-        BAinc_Aw=(k1/k2)+k
-
-        be careful not using 1/2 in (0.5+a1)
-        without declaring this as a float.
-        It gives wrong results.
-        '''
         X1 = a1* 10**(-4)
         X2 = (bhage_Aw)**2
         X3 = numpy.exp(-a2*bhage_Aw**(0.5+a1))
@@ -522,56 +467,35 @@ def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage
         k = a4*numpy.log(0.01+bhage_Aw/10.0)
         n = X1*X2*X3*X4*X5*X6
         d = d1*d2
-
         BAinc_Aw = (n/d) + k
-        #print 'bhage_Aw', bhage_Aw
-        #print 'N0_Aw', N0_Aw
-        #print 'BA_Aw', BA_Aw
-        #print 'SC_Aw', SC_Aw
-        #print 'SI_bh_Aw',  SI_bh_Aw
 
     return  BAinc_Aw
 
 
+def BAincIter_Aw(sp_Aw, BAinc_AwT, BA_AwT, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw,
+                 bhage_Aw, printWarnings=True):
+    '''This is a function used to estimate basal area decrease moving backwards in
+    time.
 
-
-def BAincIter_Aw(sp_Aw, BAinc_AwT, BA_AwT, SC_Aw,
-                 SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw,
-                 printWarnings=True):
-    '''
-    This is a function used to estimate basal area decrease moving
-    backwards in time. It is not used in the code, but was left here
-    in case this approach is attempted again in the future
+    It is not used in the code, but was left here in case this approach is
+    attempted again in the future
 
     '''
-
-
     acceptableDiff = 0.00001
     BADiffFlag = False
     iterCount = 0
     BA_Aw = BA_AwT - BAinc_AwT
     # BA_Aw = best estimate of BA  and BAinc_AwT
-    #best estimate of decrement to previous year , ie, at time T-1
+    # best estimate of decrement to previous year , ie, at time T-1
 
-    #print 'BA_AwT =', BA_AwT, 'BAinc_AwT = ', BAinc_AwT
     while BADiffFlag == False:
         BAinc_AwtoT = BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw)
-        # based on best estimate of BA at time T-1
-
-
         BA_AwT_est = BA_Aw + BAinc_AwtoT
-        #print 'kkk', SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw
 
-
-        if abs(BA_AwT_est - BA_AwT) < acceptableDiff:           #BA_AwT is known
+        if abs(BA_AwT_est - BA_AwT) < acceptableDiff:
             BADiffFlag = True
-
         else:
             BA_Aw = (1+ ((BA_AwT - BA_AwT_est)/ BA_AwT)) * BA_Aw
-
-        #print BAinc_AwtoT, BA_Aw
-
-
 
         iterCount = iterCount + 1
 
@@ -584,14 +508,14 @@ def BAincIter_Aw(sp_Aw, BAinc_AwT, BA_AwT, SC_Aw,
     return BA_Aw, BAinc_AwtoT
 
 
-
-
 def BasalAreaIncrementNonSpatialSb(sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, BA_Sb):
-    '''
-    predicts the increment in basal area for the subsequent year for the species
-    this function is used to make basal area projections and as a function called
-    by factor finder functions during estimation of correction factor for the species.
-    
+    '''Predicts the increment in basal area for the subsequent year for the
+    species.
+
+    This function is used to make basal area projections and as a function
+    called by factor finder functions during estimation of correction factor
+    for the species.
+
     :param str sp_Sb: species name
     :param float SI_bh_Sb: site index of species Sb
     :param float bhage_Sb: breast height age of speceis Sb
@@ -601,17 +525,14 @@ def BasalAreaIncrementNonSpatialSb(sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage
     :param float N0_Sb: initial density of species Sb at total age
 
     '''
-
     if N_bh_Sb == 0:
         BAinc_Sb = 0
 
     if bhage_Sb < 0:
-        #raise ValueError ('bhage cannot be negative: %s' %bhage_Sb)
         bhage_Sb = 0
 
     if BA_Sb < 0:
         BA_Sb = 0
-        #raise ValueError ('BA_Sb cannot be negative: %s' %BA_Sb)
 
     elif N_bh_Sb > 0 and SI_bh_Sb > 0:
         a1 = 0.966285
@@ -622,21 +543,16 @@ def BasalAreaIncrementNonSpatialSb(sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage
         k1 = (10**-4)*a1*(numpy.exp(-a2*bhage_Sb))*(SC_Sb**a3)*(bhage_Sb**(a2+numpy.sqrt(a1)))
         BAinc_Sb = k*k1
 
-
     return BAinc_Sb
 
 
-def BAincIter_Sb(sp_Sb, BAinc_SbT, BA_SbT,
-                 SC_Sb, SI_bh_Sb, N_bh_Sb,
-                 N0_Sb, bhage_Sb, printWarnings=True):
-    '''
-    This is a function used to estimate basal area decrease moving
-    backwards in time. It is not used in the code, but was left here
-    in case this approach is attempted again in the future
+def BAincIter_Sb(sp_Sb, BAinc_SbT, BA_SbT, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb,
+                 bhage_Sb, printWarnings=True):
+    '''This is a function used to estimate basal area decrease moving backwards in
+    time. It is not used in the code, but was left here in case this approach
+    is attempted again in the future
 
     '''
-
-
     acceptableDiff = 0.00001
     BADiffFlag = False
     iterCount = 0
@@ -647,15 +563,10 @@ def BAincIter_Sb(sp_Sb, BAinc_SbT, BA_SbT,
     while BADiffFlag == False:
         BAinc_SbtoT = BasalAreaIncrementNonSpatialSb(sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, BA_Sb)
         # based on best estimate of BA at time T-1
-
-
         BA_SbT_est = BA_Sb + BAinc_SbtoT
-
-
 
         if abs(BA_SbT_est - BA_SbT) < acceptableDiff:           #BA_SbT is known
             BADiffFlag = True
-
         else:
             BA_Sb = (1+ ((BA_SbT - BA_SbT_est)/ BA_SbT)) * BA_Sb
 
@@ -670,15 +581,15 @@ def BAincIter_Sb(sp_Sb, BAinc_SbT, BA_SbT,
     return BA_Sb, BAinc_SbtoT
 
 
+def BasalAreaIncrementNonSpatialSw(sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw,
+                                   bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw):
+    '''Predicts the increment in basal area for the subsequent year for the
+    species.
 
-def BasalAreaIncrementNonSpatialSw(sp_Sw, SC_Sw, SI_bh_Sw,
-                                   N_bh_Sw, N0_Sw, bhage_Sw,
-                                   SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw):
-    '''
-    predicts the increment in basal area for the subsequent year for the species
-    this function is used to make basal area projections and as a function called
-    by factor finder functions during estimation of correction factor for the species.
-    
+    This function is used to make basal area projections and as a function
+    called by factor finder functions during estimation of correction factor
+    for the species.
+
     :param str sp_Sw: species name
     :param float SI_bh_Sw: site index of species Sw
     :param float bhage_Sw: breast height age of speceis Sw
@@ -689,19 +600,15 @@ def BasalAreaIncrementNonSpatialSw(sp_Sw, SC_Sw, SI_bh_Sw,
     :param float SDF_Pl0: Stand Density Factor of species Pl
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float SDF_Sb0: Stand Density Factor of species Sb
-    
 
     '''
-
     if N_bh_Sw == 0:
         BAinc_Sw = 0
 
     if bhage_Sw < 0:
-        #raise ValueError ('bhage cannot be negative: %s' %bhage_Sw)
         bhage_Sw = 0
 
     if BA_Sw < 0:
-        #raise ValueError ('BA_Sw cannot be negative: %s' %BA_Sw)
         BA_Sw = 0
 
     if N_bh_Sw > 0 and SI_bh_Sw > 0:
@@ -711,6 +618,7 @@ def BasalAreaIncrementNonSpatialSw(sp_Sw, SC_Sw, SI_bh_Sw,
         a4 = 5.839408
         a5 = 1.753002
         a6 = 0.239521
+
         if SDF_Aw0 == 0:
             z1 = 0
         elif SDF_Aw0 > 0:
@@ -725,80 +633,61 @@ def BasalAreaIncrementNonSpatialSw(sp_Sw, SC_Sw, SI_bh_Sw,
             z3 = 1
 
         k = (a4*z1*numpy.log(1+(SDF_Aw0/10000.0))) + (a5*z2*numpy.log(1+(SDF_Pl0/10000.0))) + (z3*numpy.log(1+(SDF_Sb0/10000.0)))
-
         k1 = (10**-4)*a1*((a2+bhage_Sw)**2)*((1+bhage_Sw)**((a1**0.5)+a2-a3))*numpy.exp(-a2*bhage_Sw)*(SC_Sw**a6)
-
         k2 = 1 + numpy.exp(1 + k + ((numpy.log(1+((N0_Sw**0.5)/10000.0)))/2.0)  + (a3 * numpy.log(1+BA_Sw)))
-
         m = (numpy.log(1+(N0_Sw*((1+bhage_Sw)**0.5)))**2)* ((SI_bh_Sw)**0.5)* numpy.exp(-(N0_Sw/10.0)/10000.0)
-
         BAinc_Sw = k1*m/k2
-
 
     return BAinc_Sw
 
 
-def BAincIter_Sw(sp_Sw, BAinc_SwT, BA_SwT, SC_Sw,
-                 SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw,
-                 SDF_Aw0, SDF_Pl0, SDF_Sb0, printWarnings=True):
-    '''
-    This is a function used to estimate basal area decrease moving
-    backwards in time. It is not used in the code, but was left here
-    in case this approach is attempted again in the future
+def BAincIter_Sw(sp_Sw, BAinc_SwT, BA_SwT, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw,
+                 bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, printWarnings=True):
+    '''This is a function used to estimate basal area decrease moving backwards in
+    time.
+
+    It is not used in the application, but was left here in case this approach is
+    attempted again in the future
 
     '''
-
-
     acceptableDiff = 0.00001
     BADiffFlag = False
     iterCount = 0
     BA_Sw = BA_SwT - BAinc_SwT
     # BA_Sw = best estimate of BA  and BAinc_AwT best
-    #estimate of decrement to previous year , ie, at time T-1
-
+    # estimate of decrement to previous year , ie, at time T-1
 
     while BADiffFlag == False:
         BAinc_SwtoT = BasalAreaIncrementNonSpatialSw(sp_Sw, SC_Sw, SI_bh_Sw,
                                                      N_bh_Sw, N0_Sw, bhage_Sw,
                                                      SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw)
-        # based on best estimate of BA at time T-1
-
-
         BA_SwT_est = BA_Sw + BAinc_SwtoT
 
-
-
         if abs(BA_SwT_est - BA_SwT) < acceptableDiff:
-            #BA_SbT is known
             BADiffFlag = True
-
         else:
             BA_Sw = (1+ ((BA_SwT - BA_SwT_est)/ BA_SwT)) * BA_Sw
 
-        #print BAinc_SwtoT, BA_Sw
-
         iterCount = iterCount + 1
-
 
         if iterCount == 150:
             if printWarnings:
                 print '\n GYPSYNonSpatial.BAincIter_Aw()'
                 print ' Slow convergence'
             return BA_Sw, BAinc_SwT
-    #print 'BA_SwT =', BA_SwT, 'BAinc_SwT = ', BAinc_SwT
-    #print BAinc_SwT, BA_SwT, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0
 
     return BA_Sw, BAinc_SwtoT
 
 
-def BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl,
-                                   N_bh_Pl, N0_Pl, bhage_Pl,
-                                   SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl):
-    '''
-    predicts the increment in basal area for the subsequent year for the species
-    this function is used to make basal area projections and as a function called
-    by factor finder functions during estimation of correction factor for the species.
-    
+def BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl,
+                                   bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl):
+    '''Predicts the increment in basal area for the subsequent year for the
+    species.
+
+    This function is used to make basal area projections and as a
+    function called by factor finder functions during estimation of correction
+    factor for the species.
+
     :param str sp_Pl: species name
     :param float SI_bh_Pl: site index of species Pl
     :param float bhage_Pl: breast height age of species Pl
@@ -816,14 +705,11 @@ def BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl,
         BAinc_Pl = 0
 
     if bhage_Pl < 0:
-        #raise ValueError ('bhage cannot be negative: %s' %bhage_Pl)
         bhage_Pl = 0
 
     if BA_Pl <= 0 or SC_Pl == 0:
-        #raise ValueError ('BA_Pl cannot be negative: %s' %BA_Pl)
         BA_Pl = 0
         BAinc_Pl = 0
-
 
     if N_bh_Pl > 0 and SI_bh_Pl > 0:
         a1 = 3.923984
@@ -847,32 +733,24 @@ def BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl,
             z3 = 1
 
         k = (z1*numpy.log(1+(SDF_Aw0/1000.0))) + (z2*(numpy.log(1+(SDF_Sw0/1000.0)))/2.0)+ (z3*(numpy.log(1+(SDF_Sb0/1000.0)))/2.0)
-
         k1 = (10**-4)*a1*bhage_Pl * numpy.exp(-a2* bhage_Pl) * (1 + ((numpy.log(1+ bhage_Pl))/2.0))
-
         k2 = 1+numpy.exp((k/2.0)+ numpy.log(1+((N0_Pl/3.0)/10000.0)) - (a3 * (SC_Pl**0.5)) + (a4*numpy.log(1+BA_Pl)))
-
         m1 = (1+a3+(SI_bh_Pl**a6)) * (N0_Pl**0.5) * numpy.exp(-(N0_Pl/3.0)/10000.0)
-
         m2 = a5 * numpy.log(0.01+(bhage_Pl/10.0))
-
         BAinc_Pl = (k1*m1/k2)+m2
 
     return BAinc_Pl
 
 
+def BAincIter_Pl(sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl,
+                 bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, printWarnings=True):
+    '''This is a function used to estimate basal area decrease moving backwards in
+    time.
 
-def BAincIter_Pl(sp_Pl, BAinc_PlT, BA_PlT, SC_Pl,
-                 SI_bh_Pl, N_bh_Pl, N0_Pl, bhage_Pl,
-                 SDF_Aw0, SDF_Sw0, SDF_Sb0, printWarnings=True):
+    It is not used in the code, but was left here in case this approach is
+    attempted again in the future
+
     '''
-    This is a function used to estimate basal area decrease moving
-    backwards in time. It is not used in the code, but was left here
-    in case this approach is attempted again in the future
-
-    '''
-
-
     acceptableDiff = 0.00001
     BADiffFlag = False
     iterCount = 0
@@ -885,19 +763,12 @@ def BAincIter_Pl(sp_Pl, BAinc_PlT, BA_PlT, SC_Pl,
                                                      N_bh_Pl, N0_Pl, bhage_Pl,
                                                      SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl)
         # based on best estimate of BA at time T-1
-
-
         BA_PlT_est = BA_Pl + BAinc_PltoT
-
-
 
         if abs(BA_PlT_est - BA_PlT) < acceptableDiff:           #BA_SbT is known
             BADiffFlag = True
-
         else:
             BA_Pl = (1+ ((BA_PlT - BA_PlT_est)/ BA_PlT)) * BA_Pl
-
-
 
         iterCount = iterCount + 1
 
@@ -911,10 +782,9 @@ def BAincIter_Pl(sp_Pl, BAinc_PlT, BA_PlT, SC_Pl,
 
 
 def densities_and_SCs_to_250(**kwargs):
-    '''
-    the function returns density, species composition, top height estimates for all species along time,
-    which is counted independently for each species.
-        
+    '''The function returns density, species composition, top height estimates for
+    all species along time, which is counted independently for each species.
+
     :param float startTage: It uses the oldest species as a reference to become the stand age
     :param float startTageAw, startTageSw, startTageSb, and startTagePl: species specific ages counted independently
     :param float SDF_Pl0: Stand Density Factor of species Pl
@@ -929,7 +799,6 @@ def densities_and_SCs_to_250(**kwargs):
     :param float y2bh_Sw: time elapseed in years from zero to breast height age of sp Sw
     :param float y2bh_Sb: time elapseed in years from zero to breast height age of sp Sb
     :param float y2bh_Pl: time elapseed in years from zero to breast height age of sp Pl
-    
 
     '''
     startTage = kwargs['startTage']
@@ -949,26 +818,18 @@ def densities_and_SCs_to_250(**kwargs):
     SI_bh_Sw = kwargs['SI_bh_Sw']
     SI_bh_Sb = kwargs['SI_bh_Sb']
     SI_bh_Pl = kwargs['SI_bh_Pl']
-
     densities_along_time = []
-
     startTageAwB = startTageAw
     startTageSwB = startTageSw
     startTagePlB = startTagePl
     startTageSbB = startTageSb
-
     t = 1
-    #print startTage, startTageAwB
 
     while t < 250:
-
-
         tage_Aw = startTageAwB - startTage
         tage_Sw = startTageSwB - startTage
         tage_Pl = startTagePlB - startTage
         tage_Sb = startTageSbB - startTage
-
-
         bhage_Aw = tage_Aw - y2bh_Aw
         bhage_Sw = tage_Sw - y2bh_Sw
         bhage_Pl = tage_Pl - y2bh_Pl
@@ -1017,22 +878,17 @@ def densities_and_SCs_to_250(**kwargs):
             topHeight_Pl = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Pl', SI_bh_Pl, tage_Pl)
 
 
-
         SC_F = SCestimate(N_bh_AwT, N_bh_SbT, N_bh_SwT, N_bh_PlT)
-
         SC_Aw = SC_F[0]
         SC_Sw = SC_F[1]
         SC_Sb = SC_F[2]
         SC_Pl = SC_F[3]
 
-
-        # JUST NEED TO APPEND NEW DENSITIES SC AND YEAR TO THE DICTIONARY
         densities_along_time.append({'N_bh_AwT': N_bh_AwT, 'N_bh_SwT': N_bh_SwT, 'N_bh_SbT': N_bh_SbT, 'N_bh_PlT': N_bh_PlT,
                                      'SC_Aw': SC_Aw, 'SC_Sw': SC_Sw, 'SC_Sb':SC_Sb, 'SC_Pl': SC_Pl,
                                      'tage_Aw': tage_Aw, 'tage_Sw': tage_Sw, 'tage_Sb': tage_Sb, 'tage_Pl': tage_Pl,
                                      'bhage_Aw': bhage_Aw, 'bhage_Sw': bhage_Sw, 'bhage_Sb': bhage_Sb, 'bhage_Pl': bhage_Pl,
                                      'topHeight_Aw': topHeight_Aw, 'topHeight_Sw': topHeight_Sw, 'topHeight_Sb': topHeight_Sb, 'topHeight_Pl': topHeight_Pl})
-
         t += 1
         startTageAwB += 1
         startTageSwB += 1
@@ -1040,15 +896,16 @@ def densities_and_SCs_to_250(**kwargs):
         startTageSbB += 1
 
     return densities_along_time
-# this code just below is to be use by the test_iter.py
+
+
 def BAfactorFinder_Aw(**kwargs):
-    '''
-    This function guarantees that the trajectory of the species basal area
-    passes through the basal area measured when the data was collected (inventory data)
+    '''This function guarantees that the trajectory of the species basal area
+    passes through the basal area measured when the data was collected
+    (inventory data)
 
     There is a trade-off between the precision one wants this estimate, which is
     given by the parameter - acceptableDiff -, and the time the convergence time
-    
+
     :param float startTage: Clock that uses the oldest species as a reference to become the stand age
     :param float SI_bh_Aw: site index of species Aw
     :param float N_bh_AwT: density of sp Aw at time T (it varies over time)
@@ -1056,8 +913,7 @@ def BAfactorFinder_Aw(**kwargs):
     :param float BA_AwT: basal area of Aw at time T
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float N0_Aw: initial density of species Aw at breast height age
-    
-    
+
     '''
     startTage = kwargs['startTage']
     SI_bh_Aw = kwargs['SI_bh_Aw']
@@ -1067,13 +923,13 @@ def BAfactorFinder_Aw(**kwargs):
     SDF_Aw0 = kwargs['SDF_Aw0']
     N0_Aw = kwargs['N0_Aw']
     densities = kwargs['densities']
-
     simulation_choice = 'yes'
     f_Aw = 100
     f_AwP1 = 100 * f_Aw
     acceptableDiff = 0.01 * BA_AwT
     BADiffFlag = False
     iterCount = 0
+
     while BADiffFlag == False:
         BA_AwB = BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw,
                                     BA_Aw0, SDF_Aw0, f_Aw, densities,
@@ -1089,55 +945,46 @@ def BAfactorFinder_Aw(**kwargs):
             elif (BA_AwT - BA_AwB) > 0:
                 f_AwN = f_Aw * (1+(numpy.log10(BA_AwT) + numpy.log10(abs(BA_AwB)))/ (100* numpy.log10(abs(BA_AwB))))
                 f_Aw = (f_Aw+f_AwP1)/2
-                #print f_Aw
-
-        #print BA_AwT, BA_AwB, f_Aw
 
         iterCount = iterCount + 1
 
         if iterCount == 10000:
-            logger.warning(
-                ('GYPSYNonSpatial.BAfactorFinder_Aw()'
+            logger.warning(('GYPSYNonSpatial.BAfactorFinder_Aw()'
                  ' Slow convergence with Basal Area: %s'
-                 ' and factor:%s '), BA_AwB, f_Aw
-            )
+                 ' and factor:%s '), BA_AwB, f_Aw)
             return f_Aw
-    #f_Aw = 1
     return f_Aw
 
 
+def BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw,
+                       densities, simulation_choice, simulation=True):
+    '''This is a function that supports factor finder functions.
 
-def BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw,
-                       BA_Aw0, SDF_Aw0, f_Aw, densities,
-                       simulation_choice, simulation=True):
-                           
-    '''
-    This is a function that supports factor finder functions.
-    It creates the trajectory of basal area from bhage up to the
-    inventory year given a correction factor that is being optimized
-    
+    It creates the trajectory of basal area from bhage up to the inventory year
+    given a correction factor that is being optimized
+
     :param float startTage: Clock that uses the oldest species as a reference to become the stand age
     :param float SI_bh_Aw: site index of species Aw
     :param float BA_Aw0: basal area of Aw at breast height age, assumed to be very small
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float N0_Aw: initial density of species Aw at breast height age
-    :param str simulation_choice: switch that determines whether simulation will stop at the 
+    :param str simulation_choice: switch that determines whether simulation will stop at the
     date of the inventory or will continue until year 250
-    :param float f_Aw: correction factor that guarantees that trajectory passes through 
+    :param float f_Aw: correction factor that guarantees that trajectory passes through
     data obtained with inventory
-    
+
     '''
     logger.debug('getting basal area from time zero to time of data for aspen')
+
     if simulation_choice == 'yes':
         max_age = startTage
     elif simulation_choice == 'no':
         max_age = 250
-    BA_Aw_DF = pd.DataFrame(columns=['BA_Aw'])
 
-
-    t = 0
+    basal_area_aw_df = pd.DataFrame(columns=['BA_Aw'], index=xrange(max_age))
     BA_tempAw = BA_Aw0
-    for SC_Dict in densities[0: max_age]:
+
+    for i, SC_Dict in enumerate(densities[0: max_age]):
         bhage_Aw = SC_Dict['bhage_Aw']
         SC_Aw = SC_Dict['SC_Aw']
         N_bh_AwT = SC_Dict['N_bh_AwT']
@@ -1153,30 +1000,26 @@ def BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw,
                 BA_AwB = BA_tempAw
                 if BA_AwB < 0:
                     BA_AwB = 0
-
-
             else:
                 BA_AwB = 0
-
         else:
             BA_tempAw = 0
             BA_AwB = 0
-        if simulation == False:
-            BA_Aw_DF = BA_Aw_DF.append({'BA_Aw':BA_AwB}, ignore_index=True)
-        t += 1
-        #print  'bhageAw ', bhage_Aw, 'BA Aw ',  BA_AwB
 
-    return BA_AwB, BA_Aw_DF
+        if simulation == False:
+            basal_area_aw_df.loc[i, 'BA_Aw'] = BA_AwB
+
+    return BA_AwB, basal_area_aw_df
 
 
 def BAfactorFinder_Sb(**kwargs):
-    '''
-    This function guarantees that the trajectory of the species basal area
-    passes through the basal area measured when the data was collected (inventory data)
+    '''This function guarantees that the trajectory of the species basal area
+    passes through the basal area measured when the data was collected
+    (inventory data)
 
     There is a trade-off between the precision with one wants this estimate, which is
     given by the parameter - acceptableDiff -, and the time the convergence time
-    
+
     :param float startTage: Clock that uses the oldest species as a reference to become the stand age
     :param float SI_bh_Sb: site index of species Sb
     :param float N_bh_SbT: density of sp Sb at time T (it varies over time)
@@ -1186,6 +1029,7 @@ def BAfactorFinder_Sb(**kwargs):
     :param float y2bh_Sb: time elapseed in years from zero to breast height age of sp Sb
     :param float startTageSb: species specific ages counted independently
     :param float SC_Sb: proportion of species Sb in the stand
+
     '''
     logger.debug('Getting basal area factor for black spruce')
     startTage = kwargs['startTage']
@@ -1197,14 +1041,13 @@ def BAfactorFinder_Sb(**kwargs):
     N0_Sb = kwargs['N0_Sb']
     BA_Sb0 = kwargs['BA_Sb0']
     BA_SbT = kwargs['BA_SbT']
-
-
     simulation_choice = 'yes'
     f_Sb = 1.2
     f_SbP1 = 1.5 * f_Sb
     acceptableDiff = 0.1
     BADiffFlag = False
     iterCount = 0
+
     while BADiffFlag == False:
         BA_SbB = BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb,
                                     SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb,
@@ -1219,28 +1062,25 @@ def BAfactorFinder_Sb(**kwargs):
                 f_Sb = (f_SbP+f_Sb)/2
             elif (BA_SbT - BA_SbB) > 0:
                 f_Sb = (f_Sb+f_SbP1)/2
-                #print f_Sb
-
-        #print BA_SbT, BA_SbB, f_Sb
 
         iterCount = iterCount + 1
 
         if iterCount == 1500:
-            logger.warning(
-                ('GYPSYNonSpatial.BAfactorFinder_Sb()'
+            logger.warning(('GYPSYNonSpatial.BAfactorFinder_Sb()'
                  ' Slow convergence with Basal Area: %s'
-                 ' and factor:%s '), BA_SbB, f_Sb
-            )
+                 ' and factor:%s '), BA_SbB, f_Sb)
             return f_Sb
+
     return f_Sb
 
-def BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb,
-                       SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb,
-                       BA_Sb0, f_Sb, simulation_choice, simulation=True):
-    '''
-    This is a function that supports factor finder functions.
-    It creates the trajectory of basal area from bhage up to the
-    inventory year given a correction factor that is being optimized
+
+def BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb,
+                       N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice,
+                       simulation=True):
+    '''This is a function that supports factor finder functions.
+
+    It creates the trajectory of basal area from bhage up to the inventory year
+    given a correction factor that is being optimized
 
     :param float startTage: Clock that uses the oldest species as a reference to become the stand age
     :param float startTageSb: species specific age counted independently
@@ -1249,27 +1089,29 @@ def BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb,
     :param float BA_Sb0: basal area of Sb at breast height age, assumed to be very small
     :param float N_bh_SbT: density of species Sb at time T
     :param float N0_Sb: initial density of species Sb at breast height age
-    :param str simulation_choice: switch that determines whether simulation will stop at the 
+    :param str simulation_choice: switch that determines whether simulation will stop at the
     date of the inventory or will continue until year 250
-    :param float f_Sb: correction factor that guarantees that trajectory passes through 
-    data obtained with inventory    
-    
+    :param float f_Sb: correction factor that guarantees that trajectory passes through
+    data obtained with inventory
+
     '''
     if simulation_choice == 'yes':
         max_age = startTage
     elif simulation_choice == 'no':
         max_age = 250
 
-    BA_Sb_DF = pd.DataFrame(columns=['BA_Sb'])
-
     t = 0
+    basal_area_sb_df = pd.DataFrame(columns=['BA_Sb'], index=xrange(max_age))
     BA_tempSb = BA_Sb0
+
     while t < max_age:
         tage_Sb = startTageSb - startTage
         bhage_Sb = tage_Sb - y2bh_Sb
+
         if N0_Sb > 0:
             if bhage_Sb < 0:
                 BA_SbB = 0
+
             if bhage_Sb > 0:
                 SC_Sb = (SC_Sb) * f_Sb
                 BAinc_Sb = BasalAreaIncrementNonSpatialSb('Sb', SC_Sb, SI_bh_Sb, N_bh_SbT,
@@ -1278,25 +1120,25 @@ def BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb,
                 BA_SbB = BA_tempSb
                 if BA_SbB < 0:
                     BA_SbB = 0
-
             else:
                 BA_SbB = 0
-
         else:
             BA_tempSb = 0
             BA_SbB = 0
+
         if simulation == False:
-            BA_Sb_DF = BA_Sb_DF.append({'BA_Sb': BA_SbB}, ignore_index=True)
+            basal_area_sb_df.loc[t, 'BA_Sb'] = BA_SbB
+
         t += 1
         startTageSb += 1
-        #print  'bhageSb ', bhage_Sb, 'BA Sb',  BA_SbB
-    return BA_SbB, BA_Sb_DF
+
+    return BA_SbB, basal_area_sb_df
 
 
 def BAfactorFinder_Sw(**kwargs):
-    '''
-    This function guarantees that the trajectory of the species basal area
-    passes through the basal area measured when the data was collected (inventory data)
+    '''This function guarantees that the trajectory of the species basal area
+    passes through the basal area measured when the data was collected
+    (inventory data)
 
     There is a trade-off between the precision with one wants this estimate, which is
     given by the parameter - acceptableDiff -, and the time the convergence time
@@ -1309,11 +1151,11 @@ def BAfactorFinder_Sw(**kwargs):
     :param float N0_Sw: initial density of species Sw at breast height age
     :param float y2bh_Sw: time elapseed in years from zero to breast height age of sp Sw
     :param float startTageSw: species specific ages counted independently
-    :param float SC_Sw: proportion of species Sw in the stand   
+    :param float SC_Sw: proportion of species Sw in the stand
     :param float SDF_Pl0: Stand Density Factor of species Pl
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float SDF_Sb0: Stand Density Factor of species Sb
-    
+
     '''
     logger.debug('Getting basal area factor for white spruce')
     startTage = kwargs['startTage']
@@ -1328,8 +1170,6 @@ def BAfactorFinder_Sw(**kwargs):
     SDF_Sb0 = kwargs['SDF_Sb0']
     BA_Sw0 = kwargs['BA_Sw0']
     BA_SwT = kwargs['BA_SwT']
-
-
     simulation_choice = 'yes'
     f_Sw = 2.5
     BA_SwB = BA_Sw0
@@ -1337,12 +1177,12 @@ def BAfactorFinder_Sw(**kwargs):
     BADiffFlag = False
     iterCount = 0
     f_SwP1 = 1.5* f_Sw
+
     while BADiffFlag == False:
         BA_SwB = BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw,
                                     SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw,
                                     SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0,
                                     f_Sw, simulation_choice, simulation=True)[0]
-
         if abs(BA_SwT - BA_SwB) < acceptableDiff:
             BADiffFlag = True
         else:
@@ -1351,31 +1191,27 @@ def BAfactorFinder_Sw(**kwargs):
                 f_SwP = f_Sw  *  (1+(numpy.log10(BA_SwT) - numpy.log10(abs(BA_SwB)))/ (10*numpy.log10(abs(BA_SwB))))
                 f_Sw = (f_SwP+f_Sw)/2
             elif (BA_SwT - BA_SwB) > 0:
-            #f_SwN = f_Sw * (1+(numpy.log10 (BA_SwT) + numpy.log10(abs(BA_SwB)) )/ (10* numpy.log10 (abs(BA_SwB))) )
                 f_Sw = (f_Sw + f_SwP1)/2
-                #print f_Sw
-            #print BA_SwB, f_Sw
 
         iterCount = iterCount + 1
 
         if iterCount == 1500:
-            logger.warning(
-                ('GYPSYNonSpatial.BAfactorFinder_Sw()'
+            logger.warning(('GYPSYNonSpatial.BAfactorFinder_Sw()'
                  ' Slow convergence with Basal Area: %s'
-                 ' and factor:%s '), BA_SwB, f_Sw
-            )
+                 ' and factor:%s '), BA_SwB, f_Sw)
             return f_Sw
+
     return f_Sw
 
 
-def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw,
-                       SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0,
-                       SDF_Sb0, BA_Sw0, f_Sw, simulation_choice, simulation=True):
-    '''
-    This is a function that supports factor finder functions.
-    It created the trajectory of basal area from bhage up to the
-    inventory year given a correction factor that is being optimized
-    
+def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw,
+                       N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0,
+                       f_Sw, simulation_choice, simulation=True):
+    '''This is a function that supports factor finder functions.
+
+    It created the trajectory of basal area from bhage up to the inventory year
+    given a correction factor that is being optimized
+
     :param float startTage: Clock that uses the oldest species as a reference to become the stand age
     :param float startTageSw: species specific age counted independently
     :param float y2bh_Sw: time elapseed in years from zero to breast height age of sp Sw
@@ -1383,25 +1219,28 @@ def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw,
     :param float BA_Sw0: basal area of Sw at breast height age, assumed to be very small
     :param float N_bh_SwT: density of species Sw at time T
     :param float N0_Sw: initial density of species Sw at breast height age
-    :param str simulation_choice: switch that determines whether simulation will stop at the 
+    :param str simulation_choice: switch that determines whether simulation will stop at the
     date of the inventory or will continue until year 250
-    :param float f_Sw: correction factor that guarantees that trajectory passes through 
+    :param float f_Sw: correction factor that guarantees that trajectory passes through
     data obtained with inventory
     :param float SDF_Pl0: Stand Density Factor of species Pl
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float SDF_Sb0: Stand Density Factor of species Sb
+
     '''
     if simulation_choice == 'yes':
         max_age = startTage
     elif simulation_choice == 'no':
         max_age = 250
 
-    BA_Sw_DF = pd.DataFrame(columns=['BA_Sw'])
+    basal_area_sw_df = pd.DataFrame(columns=['BA_Sw'], index=xrange(max_age))
     t = 0
     BA_tempSw = BA_Sw0
+
     while t < max_age:
         tage_Sw = startTageSw - startTage
         bhage_Sw = tage_Sw - y2bh_Sw
+
         if N0_Sw > 0:
             if bhage_Sw < 0:
                 BA_SwB = 0
@@ -1412,87 +1251,29 @@ def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw,
                 BA_SwB = BA_tempSw
                 if BA_SwB < 0:
                     BA_SwB = 0
-
             else:
                 BA_SwB = 0
-
         else:
             BA_tempSw = 0
             BA_SwB = 0
 
         if simulation == False:
-            BA_Sw_DF = BA_Sw_DF.append({'BA_Sw': BA_SwB}, ignore_index=True)
+            basal_area_sw_df.loc[t, 'BA_Sw'] = BA_SwB
+
         t += 1
         startTageSw += 1
-        #print 'bhageSw ',  bhage_Sw, 'BA Sw ', BA_SwB
 
-    return BA_SwB, BA_Sw_DF
+    return BA_SwB, basal_area_sw_df
 
-
-def BAfactorFinder_Pl1(startTage, startTagePl, y2bh_Pl,
-                       SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,
-                       SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0,
-                       BA_PlT, printWarnings=True):
-    '''
-    This function guarantees that the trajectory of the species basal area
-    passes through the basal area measured when the data was collected (inventory data)
-
-    There is a trade-off between the precision with one wants this estimate, which is
-    given by the parameter - acceptableDiff -, and the time the convergence time
-    
-    :param float startTage: Clock that uses the oldest species as a reference to become the stand age
-    :param float SI_bh_Pl: site index of species Pl
-    :param float N_bh_PlT: density of sp Pl at time T (it varies over time)
-    :param float BA_Pl0: basal area of Pl at breast height age, assumed to be very small
-    :param float BA_PlT: basal area of Pl at time T
-    :param float N0_Pl: initial density of species Pl at breast height age
-    :param float y2bh_Pl: time elapseed in years from zero to breast height age of sp Pl
-    :param float startTagePl: species specific ages counted independently
-    :param float SC_Pl: proportion of species Pl in the stand   
-    :param float SDF_Sw0: Stand Density Factor of species Sw
-    :param float SDF_Aw0: Stand Density Factor of species Aw
-    :param float SDF_Sb0: Stand Density Factor of species Sb
-    '''
-    f_Pl = 100
-    #BA_PlB=BA_Pl0
-    acceptableDiff = 0.01
-    BADiffFlag = False
-    iterCount = 0
-    f_PlP1 = 1.5 * f_Pl
-    while BADiffFlag == False:
-        BA_PlB = BAfromZeroToDataPl1(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl)
-
-        if abs(BA_PlT - BA_PlB) < acceptableDiff:
-            BADiffFlag = True
-        else:
-            if (BA_PlT - BA_PlB) < 0:
-                f_PlP1 = f_Pl
-                f_PlP = f_Pl * (BA_PlT / BA_PlB)
-                f_Pl = (f_PlP+f_Pl)/2
-            elif (BA_PlT - BA_PlB) > 0:
-                f_Pl = (f_Pl + f_PlP1)/2
-                #print f_Pl
-            print BA_PlT, BA_PlB, f_Pl
-
-        iterCount = iterCount + 1
-
-        if iterCount == 150:
-            logger.warning(
-                ('GYPSYNonSpatial.BAfactorFinder_Pl()'
-                 ' Slow convergence with Basal Area: %s'
-                 ' and factor:%s '), BA_PlB, f_Pl
-            )
-            return f_Pl
-    return f_Pl
 
 def BAfactorFinder_Pl(**kwargs):
-    '''
-    This function guarantees that the trajectory of the species basal area
-    passes through the basal area measured when the data was collected (inventory data)
+    '''This function guarantees that the trajectory of the species basal area
+    passes through the basal area measured when the data was collected
+    (inventory data)
 
     There is a trade-off between the precision with one wants this estimate, which is
     given by the parameter - acceptableDiff -, and the time the convergence time
-    
+
     :param float startTage: Clock that uses the oldest species as a reference to become the stand age
     :param float SI_bh_Pl: site index of species Pl
     :param float N_bh_PlT: density of sp Pl at time T (it varies over time)
@@ -1501,10 +1282,11 @@ def BAfactorFinder_Pl(**kwargs):
     :param float N0_Pl: initial density of species Pl at breast height age
     :param float y2bh_Pl: time elapseed in years from zero to breast height age of sp Pl
     :param float startTagePl: species specific ages counted independently
-    :param float SC_Pl: proportion of species Pl in the stand   
+    :param float SC_Pl: proportion of species Pl in the stand
     :param float SDF_Sw0: Stand Density Factor of species Sw
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float SDF_Sb0: Stand Density Factor of species Sb
+
     '''
     startTage = kwargs['startTage']
     startTagePl = kwargs['startTagePl']
@@ -1518,18 +1300,16 @@ def BAfactorFinder_Pl(**kwargs):
     SDF_Sb0 = kwargs['SDF_Sb0']
     BA_Pl0 = kwargs['BA_Pl0']
     BA_PlT = kwargs['BA_PlT']
-
-
     simulation_choice = 'yes'
     # the start guess is critical. If it is too large,
     #it may crash before the simulation. 100 worked
     #for a sample os stands. 1000 failed
     f_Pl = 100
-    #BA_PlB=BA_Pl0
     acceptableDiff = 0.1
     BADiffFlag = False
     iterCount = 0
     f_PlP1 = 1.5* f_Pl
+
     while BADiffFlag == False:
         BA_PlB = BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl,
                                     SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,
@@ -1545,28 +1325,26 @@ def BAfactorFinder_Pl(**kwargs):
                 f_Pl = (f_PlP+f_Pl)/2
             elif (BA_PlT - BA_PlB) > 0:
                 f_Pl = (f_Pl + f_PlP1)/2
-                #print f_Pl
-            #print BA_PlB, f_Pl
 
         iterCount = iterCount + 1
 
         if iterCount == 150:
-            logger.warning(
-                ('GYPSYNonSpatial.BAfactorFinder_Pl()'
+            logger.warning(('GYPSYNonSpatial.BAfactorFinder_Pl()'
                  ' Slow convergence with Basal Area: %s'
-                 ' and factor:%s '), BA_Pl0, BA_PlB, f_Pl
-            )
+                 ' and factor:%s '), BA_Pl0, BA_PlB, f_Pl)
             return f_Pl
+
     return f_Pl
 
-def BAfromZeroToDataPl1(startTage, startTagePl, y2bh_Pl,
-                        SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,
-                        SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl):
-    '''
-    This is a function that supports factor finder functions.
-    It created the trajectory of basal area from bhage up to the
-    inventory year given a correction factor that is being optimized
-    
+
+def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl,
+                       N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0,
+                       f_Pl, simulation_choice, simulation=True):
+    '''This is a function that supports factor finder functions.
+
+    It created the trajectory of basal area from bhage up to the inventory year
+    given a correction factor that is being optimized
+
     :param float startTage: Clock that uses the oldest species as a reference to become the stand age
     :param float startTagePl: species specific age counted independently
     :param float y2bh_Pl: time elapseed in years from zero to breast height age of sp Pl
@@ -1574,80 +1352,24 @@ def BAfromZeroToDataPl1(startTage, startTagePl, y2bh_Pl,
     :param float BA_Pl0: basal area of Pl at breast height age, assumed to be very small
     :param float N_bh_PlT: density of species Pl at time T
     :param float N0_Pl: initial density of species Pl at breast height age
-    :param str simulation_choice: switch that determines whether simulation will stop at the 
+    :param str simulation_choice: switch that determines whether simulation will stop at the
     date of the inventory or will continue until year 250
-    :param float f_Pl: correction factor that guarantees that trajectory passes through 
+    :param float f_Pl: correction factor that guarantees that trajectory passes through
     data obtained with inventory
     :param float SDF_Sw0: Stand Density Factor of species Sw
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float SDF_Sb0: Stand Density Factor of species Sb
-    '''
 
-
-    t = 0
-    BA_tempPl = BA_Pl0
-    while t < startTage:
-        tage_Pl = startTagePl - startTage
-        bhage_Pl = tage_Pl - y2bh_Pl
-        if N0_Pl > 0:
-            if bhage_Pl < 0:
-                BA_PlB = 0
-            if bhage_Pl > 0:
-               #SC_Pl = SC_Pl * (f_Pl )
-                BAinc_Pl = f_Pl * BasalAreaIncrementNonSpatialPl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT,
-                                                                 N0_Pl, bhage_Pl, SDF_Aw0, SDF_Sw0,
-                                                                 SDF_Sb0, BA_tempPl)
-                BA_tempPl = BA_tempPl + BAinc_Pl
-                BA_PlB = BA_tempPl
-                # if BA_PlB < 0:
-                #     BA_PlB = 0
-
-                #print BA_PlB, BAinc_Pl, f_Pl
-            else:
-                BA_PlB = 0
-
-        else:
-            BA_tempPl = 0
-            BA_PlB = 0
-
-        t += 1
-        startTagePl += 1
-        #print  'bhagePl ', bhage_Pl, 'BA Pl ', BA_PlB
-
-    return BA_PlB
-
-
-def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl,
-                       SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0,
-                       SDF_Sb0, BA_Pl0, f_Pl, simulation_choice, simulation=True):
-    '''
-    This is a function that supports factor finder functions.
-    It created the trajectory of basal area from bhage up to the
-    inventory year given a correction factor that is being optimized
-    
-    :param float startTage: Clock that uses the oldest species as a reference to become the stand age
-    :param float startTagePl: species specific age counted independently
-    :param float y2bh_Pl: time elapseed in years from zero to breast height age of sp Pl
-    :param float SI_bh_Pl: site index of species Pl
-    :param float BA_Pl0: basal area of Pl at breast height age, assumed to be very small
-    :param float N_bh_PlT: density of species Pl at time T
-    :param float N0_Pl: initial density of species Pl at breast height age
-    :param str simulation_choice: switch that determines whether simulation will stop at the 
-    date of the inventory or will continue until year 250
-    :param float f_Pl: correction factor that guarantees that trajectory passes through 
-    data obtained with inventory
-    :param float SDF_Sw0: Stand Density Factor of species Sw
-    :param float SDF_Aw0: Stand Density Factor of species Aw
-    :param float SDF_Sb0: Stand Density Factor of species Sb
     '''
     if simulation_choice == 'yes':
         max_age = startTage
     elif simulation_choice == 'no':
         max_age = 250
 
-    BA_Pl_DF = pd.DataFrame(columns=['BA_Pl'])
+    basal_area_pl_df = pd.DataFrame(columns=['BA_Pl'], index=xrange(max_age))
     t = 0
     BA_tempPl = BA_Pl0
+
     while t < max_age:
         tage_Pl = startTagePl - startTage
         bhage_Pl = tage_Pl - y2bh_Pl
@@ -1655,140 +1377,128 @@ def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl,
             if bhage_Pl < 0:
                 BA_PlB = 0
             if bhage_Pl > 0:
-                #SC_Pl = SC_Pl * (f_Pl )
                 BAinc_Pl = f_Pl * BasalAreaIncrementNonSpatialPl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,
                                                                  bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_tempPl)
                 BA_tempPl = BA_tempPl + BAinc_Pl
                 BA_PlB = BA_tempPl
                 if BA_PlB < 0:
                     BA_PlB = 0
-
-                #print BA_PlB, BAinc_Pl, f_Pl
             else:
                 BA_PlB = 0
-
         else:
             BA_tempPl = 0
             BA_PlB = 0
 
         if simulation == False:
-            BA_Pl_DF = BA_Pl_DF.append({'BA_Pl': BA_PlB}, ignore_index=True)
+            basal_area_pl_df.loc[t, 'BA_Pl'] = BA_PlB
+
         t += 1
         startTagePl += 1
-        #print  'bhagePl ', bhage_Pl, 'BA Pl ', BA_PlB
 
-    return BA_PlB, BA_Pl_DF
+    return BA_PlB, basal_area_pl_df
 
-
-
-
-'''
-Gross total volume is estimated only using species specific Basal Area and Top height
-
-'''
 
 def GrossTotalVolume_Aw(BA_Aw, topHeight_Aw):
-    '''
-    Gross total volume is estimated only using species specific Basal Area and Top height
-    
+    '''Gross total volume is estimated only using species specific Basal Area and
+    Top height
+
     :param float BA_Aw: basal area of Aw
     :param float topHeight_Aw: top height of Aw
 
     '''
     Tvol_Aw = 0
+
     if topHeight_Aw > 0:
         a1 = 0.248718
         a2 = 0.98568
         a3 = 0.857278
         a4 = -24.9961
         Tvol_Aw = a1 * (BA_Aw**a2) * (topHeight_Aw**a3) * numpy.exp(1+(a4/((topHeight_Aw**2)+1)))
+
     return Tvol_Aw
 
+
 def GrossTotalVolume_Sw(BA_Sw, topHeight_Sw):
-    '''
-    Gross total volume is estimated only using species specific Basal Area and Top height
-    
+    '''Gross total volume is estimated only using species specific Basal Area and
+    Top height
+
     :param float BA_Sw: basal area of Sw
     :param float topHeight_Sw: top height of Sw
 
     '''
     Tvol_Sw = 0
+
     if topHeight_Sw > 0:
         b1 = 0.41104
         b2 = 0.983108
         b3 = 0.971061
         Tvol_Sw = b1 * (BA_Sw**b2) *  (topHeight_Sw**b3)
+
     return Tvol_Sw
 
 
 def GrossTotalVolume_Sb(BA_Sb, topHeight_Sb):
-    '''
-    Gross total volume is estimated only using species specific Basal Area and Top height
-    
+    '''Gross total volume is estimated only using species specific Basal Area and
+    Top height
+
     :param float BA_Sb: basal area of Sb
     :param float topHeight_Sb: top height of Sb
 
     '''
     Tvol_Sb = 0
+
     if topHeight_Sb > 0:
         b1 = 0.48628
         b2 = 0.982962
         b3 = 0.910603
         Tvol_Sb = b1 * (BA_Sb**b2) * (topHeight_Sb**b3)
+
     return Tvol_Sb
 
 
 def GrossTotalVolume_Pl(BA_Pl, topHeight_Pl):
-    '''
-    Gross total volume is estimated only using species specific Basal Area and Top height
-    
+    '''Gross total volume is estimated only using species specific Basal Area and
+    Top height
+
     :param float BA_Pl: basal area of Pl
     :param float topHeight_Pl: top height of Pl
 
     '''
     Tvol_Pl = 0
+
     if topHeight_Pl > 0:
         a1 = 0.194086
         a2 = 0.988276
         a3 = 0.949346
         a4 = -3.39036
         Tvol_Pl = a1* (BA_Pl**a2) * (topHeight_Pl **a3) * numpy.exp(1+(a4/((topHeight_Pl**2)+1)))
+
     return Tvol_Pl
 
 
+def MerchantableVolumeAw(N_bh_Aw, BA_Aw, topHeight_Aw, StumpDOB_Aw,
+                         StumpHeight_Aw, TopDib_Aw, Tvol_Aw):
+    '''Merchantable volume for white aspen
 
-'''
+    Only new variables are the stump diameter outside bark, stump height and
+    top diameter inside bark The if below was used (and in other functions) to
+    avoid division by zero when density is zero, i.e., when the species is
+    absent in the plot.
 
-Merchantable volume only new variables are the stump diameter outside bark, stump height and top diameter inside bark
-
-'''
-
-# to declare variable as double if necessary k_Sb= np.asarray(k_Sb, type = np.float64)
-
-
-def MerchantableVolumeAw(N_bh_Aw, BA_Aw, topHeight_Aw,
-                         StumpDOB_Aw, StumpHeight_Aw,
-                         TopDib_Aw, Tvol_Aw):
-    '''
-    Merchantable volume only new variables are the stump diameter outside bark, stump height and top diameter inside bark
-    The if below was used (and in other functions) to avoid
-    division by zero when density is zero, i.e., when the
-    species is absent in the plot.
-    
     :param float N_bh_Aw: density of sp Aw
     :param float topHeight_Aw: top height of Aw
     :param float StumpDOB_Aw:  stump diameter outside bark of Aw
     :param float StumpHeight_Aw: stump height of Aw
     :param float TopDib_Aw: top diameter inside bark
     :param float Tvol_Aw: Gross total volume of Aw
-    
 
     '''
     if N_bh_Aw > 0:
         k_Aw = (BA_Aw * 10000.0 / N_bh_Aw)**0.5
     else:
         k_Aw = 0
-    if k_Aw > 0 and  topHeight_Aw > 0:
+
+    if k_Aw > 0 and topHeight_Aw > 0:
         b0 = 0.993673
         b1 = 923.5825
         b2 = -3.96171
@@ -1805,29 +1515,26 @@ def MerchantableVolumeAw(N_bh_Aw, BA_Aw, topHeight_Aw,
     return MVol_Aw
 
 
+def MerchantableVolumeSb(N_bh_Sb, BA_Sb, topHeight_Sb, StumpDOB_Sb,
+                         StumpHeight_Sb, TopDib_Sb, Tvol_Sb):
+    '''Merchantable volume black spruce
 
+    The if below was used (and in other functions) to avoid division by zero
+    when density is zero, i.e., when the species is absent in the plot.
 
-def MerchantableVolumeSb(N_bh_Sb, BA_Sb, topHeight_Sb,
-                         StumpDOB_Sb, StumpHeight_Sb,
-                         TopDib_Sb, Tvol_Sb):
-    '''
-    Merchantable volume only new variables are the stump diameter outside bark, stump height and top diameter inside bark
-
-    The if below was used (and in other functions) to avoid
-    division by zero when density is zero, i.e., when the
-    species is absent in the plot.
-    
     :param float N_bh_Sb: density of sp Sb
     :param float topHeight_Sb: top height of Sb
     :param float StumpDOB_Sb:  stump diameter outside bark of Sb
     :param float StumpHeight_Sb: stump height of Sb
     :param float TopDib_Sb: top diameter inside bark of Sb
     :param float Tvol_Sb: Gross total volume of Sb
+
     '''
     if N_bh_Sb > 0:
         k_Sb = (BA_Sb * 10000.0 / N_bh_Sb)**0.5
     else:
         k_Sb = 0
+
     if k_Sb > 0 and  topHeight_Sb > 0:
         if sp_Sb[0] in('Sb', 'Lt', 'La', 'Lw', 'L'):
             b0 = 0.98152
@@ -1848,16 +1555,15 @@ def MerchantableVolumeSb(N_bh_Sb, BA_Sb, topHeight_Sb,
 
 
 
-def MerchantableVolumeSw(N_bh_Sw, BA_Sw, topHeight_Sw,
-                         StumpDOB_Sw, StumpHeight_Sw,
-                         TopDib_Sw, Tvol_Sw):
+def MerchantableVolumeSw(N_bh_Sw, BA_Sw, topHeight_Sw, StumpDOB_Sw,
+                         StumpHeight_Sw, TopDib_Sw, Tvol_Sw):
     '''
     Merchantable volume only new variables are the stump diameter outside bark, stump height and top diameter inside bark
 
     The if below was used (and in other functions) to avoid
     division by zero when density is zero, i.e., when the
     species is absent in the plot.
-    
+
     :param float N_bh_Sw: density of sp Sw
     :param float topHeight_Sw: top height of Sw
     :param float StumpDOB_Sw:  stump diameter outside bark of Sw
@@ -1886,28 +1592,27 @@ def MerchantableVolumeSw(N_bh_Sw, BA_Sw, topHeight_Sw,
 
 
 
-def MerchantableVolumePl(N_bh_Pl, BA_Pl, topHeight_Pl,
-                         StumpDOB_Pl, StumpHeight_Pl,
-                         TopDib_Pl, Tvol_Pl):
-    '''
-    Merchantable volume only new variables are the stump diameter outside bark, stump height and top diameter inside bark
+def MerchantableVolumePl(N_bh_Pl, BA_Pl, topHeight_Pl, StumpDOB_Pl,
+                         StumpHeight_Pl, TopDib_Pl, Tvol_Pl):
+    '''Merchantable volume lodgepole pine
 
-    The if below was used (and in other functions) to avoid
-    division by zero when density is zero, i.e., when the
-    species is absent in the plot.
-    
+    The if below was used (and in other functions) to avoid division by zero
+    when density is zero, i.e., when the species is absent in the plot.
+
     :param float N_bh_Pl: density of sp Pl
     :param float topHeight_Pl: top height of Pl
     :param float StumpDOB_Pl:  stump diameter outside bark of Pl
     :param float StumpHeight_Pl: stump height of Pl
     :param float TopDib_Pl: top diameter inside bark of Pl
     :param float Tvol_Pl: Gross total volume of Pl
+
     '''
     if N_bh_Pl > 0:
         k_Pl = (BA_Pl * 10000.0 / N_bh_Pl)**0.5
     else:
         k_Pl = 0
-    if k_Pl > 0 and  topHeight_Pl > 0:
+
+    if k_Pl > 0 and topHeight_Pl > 0:
         if sp_Pl[0] in ('P', 'Pl', 'Pj', 'Pa', 'Pf'):
             b0 = 0.989889
             b1 = 1.055091
@@ -1922,8 +1627,6 @@ def MerchantableVolumePl(N_bh_Pl, BA_Pl, topHeight_Pl,
 
     return MVol_Pl
 
-
-#uncertain if '' will give the column of years
 
 def _plot_simulation_variables(simulation_df, ax=None, plot_vars=None, y_lab=''):
     """
@@ -1995,9 +1698,11 @@ def plot_N(output_DF, ax):
                                y_lab='Density')
 
 def save_plot(output_DF, path):
-    '''
-    Creates a panel and includes all plots generated as gypsy outputs (output_DF)
-    and saves the panel on a folder determined byt path
+    '''Save plots of gypsy simulation output
+
+    Creates a panel and includes all plots generated as gypsy outputs
+    (output_DF) and saves the panel on a folder determined byt path
+
     '''
     _mkdir_p(os.path.dirname(path))
     fig = plt.figure(1)

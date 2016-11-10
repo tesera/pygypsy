@@ -28,3 +28,19 @@ pre-commit:
   volumes:
     - ./:/opt/gypsy
   command: 'bash bin/pre-commit.sh'
+notebook:
+  container_name: gypsy
+  build: .
+  volumes:
+    - ./:/opt/gypsy
+  ports:
+    - '8888:8888'
+  command: 'bash bin/run-notebook.sh'
+snakeviz:
+  container_name: gypsy
+  build: .
+  volumes:
+    - ./:/opt/gypsy
+  ports:
+    - '8889:8889'
+  entrypoint: 'bash bin/run-snakeviz.sh'
