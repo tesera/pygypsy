@@ -1458,6 +1458,15 @@ def GrossTotalVolume_Pl(BA_Pl, topHeight_Pl):
 
     return Tvol_Pl
 
+def gross_total_volume(species, *args):
+    return {
+        'Aw': GrossTotalVolume_Aw,
+        'Sw': GrossTotalVolume_Sw,
+        'Sb': GrossTotalVolume_Sb,
+        'Pl': GrossTotalVolume_Pl,
+    }[species](*args)
+
+
 
 def MerchantableVolumeAw(N_bh_Aw, BA_Aw, topHeight_Aw, StumpDOB_Aw,
                          StumpHeight_Aw, TopDib_Aw, Tvol_Aw):
@@ -1609,6 +1618,15 @@ def MerchantableVolumePl(N_bh_Pl, BA_Pl, topHeight_Pl, StumpDOB_Pl,
         MVol_Pl = 0
 
     return MVol_Pl
+
+
+def merchantable_volume(species, *args):
+    return {
+        'Aw': MerchantableVolumeAw,
+        'Sw': MerchantableVolumeSw,
+        'Sb': MerchantableVolumeSb,
+        'Pl': MerchantableVolumePl,
+    }[species](*args)
 
 
 def _plot_simulation_variables(simulation_df, ax=None, plot_vars=None, y_lab=''):
