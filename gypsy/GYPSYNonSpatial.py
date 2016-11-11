@@ -1104,9 +1104,6 @@ def BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb,
         bhage_Sb = tage_Sb - y2bh_Sb
 
         if N0_Sb > 0:
-            if bhage_Sb < 0:
-                BA_SbB = 0
-
             if bhage_Sb > 0:
                 SC_Sb = (SC_Sb) * f_Sb
                 BAinc_Sb = BasalAreaIncrementNonSpatialSb('Sb', SC_Sb, SI_bh_Sb, N_bh_SbT,
@@ -1237,8 +1234,6 @@ def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw,
         bhage_Sw = tage_Sw - y2bh_Sw
 
         if N0_Sw > 0:
-            if bhage_Sw < 0:
-                BA_SwB = 0
             if bhage_Sw > 0:
                 SC_Sw = (SC_Sw) * f_Sw
                 BAinc_Sw = BasalAreaIncrementNonSpatialSw('Sw', SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_tempSw)
@@ -1369,8 +1364,6 @@ def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl,
         tage_Pl = startTagePl - startTage
         bhage_Pl = tage_Pl - y2bh_Pl
         if N0_Pl > 0:
-            if bhage_Pl < 0:
-                BA_PlB = 0
             if bhage_Pl > 0:
                 BAinc_Pl = f_Pl * BasalAreaIncrementNonSpatialPl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,
                                                                  bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_tempPl)
