@@ -15,6 +15,7 @@ N_bh_Aw = estimated N and should be equal N_Aw (for Aspen in this case Aw)
 import os
 import logging
 import numpy
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -929,7 +930,7 @@ def BAfactorFinder_Aw(**kwargs):
     while BADiffFlag == False:
         BA_AwB = BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw,
                                     BA_Aw0, SDF_Aw0, f_Aw, densities,
-                                    simulation_choice, simulation=True)[0]
+                                    simulation_choice, simulation=True)[-1]
 
         if abs(BA_AwT - BA_AwB) < acceptableDiff:
             BADiffFlag = True
@@ -977,7 +978,7 @@ def BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw,
     elif simulation_choice == 'no':
         max_age = 250
 
-    basal_area_aw_df = pd.DataFrame(columns=['BA_Aw'], index=xrange(max_age))
+    basal_area_aw_arr = np.zeros(max_age)
     BA_tempAw = BA_Aw0
 
     for i, SC_Dict in enumerate(densities[0: max_age]):
@@ -986,8 +987,6 @@ def BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw,
         N_bh_AwT = SC_Dict['N_bh_AwT']
 
         if N0_Aw > 0:
-            if bhage_Aw < 0:
-                BA_AwB = 0
             if bhage_Aw > 0:
                 SC_Aw = (SC_Aw) * f_Aw
                 BAinc_Aw = BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT,
@@ -1003,9 +1002,9 @@ def BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw,
             BA_AwB = 0
 
         if simulation == False:
-            basal_area_aw_df.loc[i, 'BA_Aw'] = BA_AwB
+            basal_area_aw_arr[i] = BA_AwB
 
-    return BA_AwB, basal_area_aw_df
+    return basal_area_aw_arr
 
 
 def BAfactorFinder_Sb(**kwargs):
@@ -1047,7 +1046,7 @@ def BAfactorFinder_Sb(**kwargs):
     while BADiffFlag == False:
         BA_SbB = BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb,
                                     SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb,
-                                    BA_Sb0, f_Sb, simulation_choice, simulation=True)[0]
+                                    BA_Sb0, f_Sb, simulation_choice, simulation=True)[-1]
 
         if abs(BA_SbT - BA_SbB) < acceptableDiff:
             BADiffFlag = True
@@ -1097,7 +1096,7 @@ def BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb,
         max_age = 250
 
     t = 0
-    basal_area_sb_df = pd.DataFrame(columns=['BA_Sb'], index=xrange(max_age))
+    basal_area_arr = np.zeros(max_age)
     BA_tempSb = BA_Sb0
 
     while t < max_age:
@@ -1123,12 +1122,12 @@ def BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb,
             BA_SbB = 0
 
         if simulation == False:
-            basal_area_sb_df.loc[t, 'BA_Sb'] = BA_SbB
+            basal_area_arr[t] = BA_SbB
 
         t += 1
         startTageSb += 1
 
-    return BA_SbB, basal_area_sb_df
+    return basal_area_arr
 
 
 def BAfactorFinder_Sw(**kwargs):
@@ -1178,7 +1177,7 @@ def BAfactorFinder_Sw(**kwargs):
         BA_SwB = BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw,
                                     SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw,
                                     SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0,
-                                    f_Sw, simulation_choice, simulation=True)[0]
+                                    f_Sw, simulation_choice, simulation=True)[-1]
         if abs(BA_SwT - BA_SwB) < acceptableDiff:
             BADiffFlag = True
         else:
@@ -1229,7 +1228,7 @@ def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw,
     elif simulation_choice == 'no':
         max_age = 250
 
-    basal_area_sw_df = pd.DataFrame(columns=['BA_Sw'], index=xrange(max_age))
+    basal_area_arr = np.zeros(max_age)
     t = 0
     BA_tempSw = BA_Sw0
 
@@ -1254,12 +1253,12 @@ def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw,
             BA_SwB = 0
 
         if simulation == False:
-            basal_area_sw_df.loc[t, 'BA_Sw'] = BA_SwB
+            basal_area_arr[t] = BA_SwB
 
         t += 1
         startTageSw += 1
 
-    return BA_SwB, basal_area_sw_df
+    return basal_area_arr
 
 
 def BAfactorFinder_Pl(**kwargs):
@@ -1298,8 +1297,8 @@ def BAfactorFinder_Pl(**kwargs):
     BA_PlT = kwargs['BA_PlT']
     simulation_choice = 'yes'
     # the start guess is critical. If it is too large,
-    #it may crash before the simulation. 100 worked
-    #for a sample os stands. 1000 failed
+    # it may crash before the simulation. 100 worked
+    # for a sample os stands. 1000 failed
     f_Pl = 100
     acceptableDiff = 0.1
     BADiffFlag = False
@@ -1310,7 +1309,7 @@ def BAfactorFinder_Pl(**kwargs):
         BA_PlB = BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl,
                                     SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,
                                     SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl,
-                                    simulation_choice, simulation=True)[0]
+                                    simulation_choice, simulation=True)[-1]
 
         if abs(BA_PlT - BA_PlB) < acceptableDiff:
             BADiffFlag = True
@@ -1362,7 +1361,7 @@ def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl,
     elif simulation_choice == 'no':
         max_age = 250
 
-    basal_area_pl_df = pd.DataFrame(columns=['BA_Pl'], index=xrange(max_age))
+    basal_area_arr = np.zeros(max_age)
     t = 0
     BA_tempPl = BA_Pl0
 
@@ -1386,12 +1385,12 @@ def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl,
             BA_PlB = 0
 
         if simulation == False:
-            basal_area_pl_df.loc[t, 'BA_Pl'] = BA_PlB
+            basal_area_arr[t] = BA_PlB
 
         t += 1
         startTagePl += 1
 
-    return BA_PlB, basal_area_pl_df
+    return basal_area_arr
 
 
 def GrossTotalVolume_Aw(BA_Aw, topHeight_Aw):
