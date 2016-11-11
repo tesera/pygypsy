@@ -28,8 +28,9 @@ def test_compare_forward_simulation(test_file):
     expected = pd.read_csv(expected_data_path, index_col=0)
 
     assert isinstance(result, pd.DataFrame)
-    assert np.allclose(
-        expected.values.astype(np.float64), result.values.astype(np.float64),
+    assert np.testing.assert_allclose(
+        expected.values, result.values,
+        rtol=0, atol=1e-4,
         equal_nan=True
     )
 
