@@ -930,7 +930,7 @@ def BAfactorFinder_Aw(**kwargs):
     while BADiffFlag == False:
         BA_AwB = BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw,
                                     BA_Aw0, SDF_Aw0, f_Aw, densities,
-                                    simulation_choice, simulation=True)[-1]
+                                    simulation_choice)[-1]
 
         if abs(BA_AwT - BA_AwB) < acceptableDiff:
             BADiffFlag = True
@@ -954,7 +954,7 @@ def BAfactorFinder_Aw(**kwargs):
 
 
 def BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw,
-                       densities, simulation_choice, simulation=True):
+                       densities, simulation_choice):
     '''This is a function that supports factor finder functions.
 
     It creates the trajectory of basal area from bhage up to the inventory year
@@ -1001,8 +1001,7 @@ def BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw,
             BA_tempAw = 0
             BA_AwB = 0
 
-        if simulation == False:
-            basal_area_aw_arr[i] = BA_AwB
+        basal_area_aw_arr[i] = BA_AwB
 
     return basal_area_aw_arr
 
@@ -1046,7 +1045,7 @@ def BAfactorFinder_Sb(**kwargs):
     while BADiffFlag == False:
         BA_SbB = BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb,
                                     SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb,
-                                    BA_Sb0, f_Sb, simulation_choice, simulation=True)[-1]
+                                    BA_Sb0, f_Sb, simulation_choice)[-1]
 
         if abs(BA_SbT - BA_SbB) < acceptableDiff:
             BADiffFlag = True
@@ -1070,8 +1069,7 @@ def BAfactorFinder_Sb(**kwargs):
 
 
 def BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb,
-                       N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice,
-                       simulation=True):
+                       N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice):
     '''This is a function that supports factor finder functions.
 
     It creates the trajectory of basal area from bhage up to the inventory year
@@ -1118,8 +1116,7 @@ def BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb,
             BA_tempSb = 0
             BA_SbB = 0
 
-        if simulation == False:
-            basal_area_arr[t] = BA_SbB
+        basal_area_arr[t] = BA_SbB
 
         t += 1
         startTageSb += 1
@@ -1174,7 +1171,7 @@ def BAfactorFinder_Sw(**kwargs):
         BA_SwB = BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw,
                                     SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw,
                                     SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0,
-                                    f_Sw, simulation_choice, simulation=True)[-1]
+                                    f_Sw, simulation_choice)[-1]
         if abs(BA_SwT - BA_SwB) < acceptableDiff:
             BADiffFlag = True
         else:
@@ -1198,7 +1195,7 @@ def BAfactorFinder_Sw(**kwargs):
 
 def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw,
                        N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0,
-                       f_Sw, simulation_choice, simulation=True):
+                       f_Sw, simulation_choice):
     '''This is a function that supports factor finder functions.
 
     It created the trajectory of basal area from bhage up to the inventory year
@@ -1247,8 +1244,7 @@ def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw,
             BA_tempSw = 0
             BA_SwB = 0
 
-        if simulation == False:
-            basal_area_arr[t] = BA_SwB
+        basal_area_arr[t] = BA_SwB
 
         t += 1
         startTageSw += 1
@@ -1304,7 +1300,7 @@ def BAfactorFinder_Pl(**kwargs):
         BA_PlB = BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl,
                                     SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,
                                     SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl,
-                                    simulation_choice, simulation=True)[-1]
+                                    simulation_choice)[-1]
 
         if abs(BA_PlT - BA_PlB) < acceptableDiff:
             BADiffFlag = True
@@ -1329,7 +1325,7 @@ def BAfactorFinder_Pl(**kwargs):
 
 def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl,
                        N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0,
-                       f_Pl, simulation_choice, simulation=True):
+                       f_Pl, simulation_choice):
     '''This is a function that supports factor finder functions.
 
     It created the trajectory of basal area from bhage up to the inventory year
@@ -1377,8 +1373,7 @@ def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl,
             BA_tempPl = 0
             BA_PlB = 0
 
-        if simulation == False:
-            basal_area_arr[t] = BA_PlB
+        basal_area_arr[t] = BA_PlB
 
         t += 1
         startTagePl += 1
