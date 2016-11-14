@@ -1475,7 +1475,7 @@ def gross_total_volume(species, *args):
 
 
 def MerchantableVolumeAw(density, basal_area, top_height, total_volume,
-                         stump_dob=13, top_dib=0.3, stump_height=7):
+                         stump_dob=13, top_dib=7, stump_height=0.3):
     '''Merchantable volume for white aspen
 
     Only new variables are the stump diameter outside bark, stump height and
@@ -1515,7 +1515,7 @@ def MerchantableVolumeAw(density, basal_area, top_height, total_volume,
 
 
 def MerchantableVolumeSb(density, basal_area, top_height, total_volume,
-                         stump_dob=13, top_dib=0.3, stump_height=7):
+                         stump_dob=13, top_dib=7, stump_height=0.3):
     '''Merchantable volume black spruce
 
     The if below was used (and in other functions) to avoid division by zero
@@ -1551,7 +1551,7 @@ def MerchantableVolumeSb(density, basal_area, top_height, total_volume,
 
 
 def MerchantableVolumeSw(density, basal_area, top_height, total_volume,
-                         stump_dob=13, top_dib=0.3, stump_height=7):
+                         stump_dob=13, top_dib=7, stump_height=0.3):
     '''Merchantable volume for white spruce
 
     The if below was used (and in other functions) to avoid
@@ -1587,7 +1587,7 @@ def MerchantableVolumeSw(density, basal_area, top_height, total_volume,
 
 
 def MerchantableVolumePl(density, basal_area, top_height, total_volume,
-                         stump_dob=13, top_dib=0.3, stump_height=7):
+                         stump_dob=13, top_dib=7, stump_height=0.3):
     '''Merchantable volume for lodgepole pine
 
     The if below was used (and in other functions) to avoid division by zero
