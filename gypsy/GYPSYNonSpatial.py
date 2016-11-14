@@ -1474,8 +1474,8 @@ def gross_total_volume(species, *args):
 
 
 
-def MerchantableVolumeAw(N_bh, BA, topHeight, StumpDOB,
-                         StumpHeight, TopDib, Tvol):
+def MerchantableVolumeAw(density, basal_area, top_height, total_volume,
+                         stump_dob=13, top_dib=0.3, stump_height=7):
     '''Merchantable volume for white aspen
 
     Only new variables are the stump diameter outside bark, stump height and
@@ -1483,20 +1483,21 @@ def MerchantableVolumeAw(N_bh, BA, topHeight, StumpDOB,
     avoid division by zero when density is zero, i.e., when the species is
     absent in the plot.
 
-    :param float N_bh: density of sp Aw
-    :param float topHeight: top height of Aw
-    :param float StumpDOB:  stump diameter outside bark of Aw
-    :param float StumpHeight: stump height of Aw
+    :param float density: density
+    :param float basal_area: basal area
+    :param float top_height: top height
+    :param float StumpHeight: stump height
     :param float TopDib: top diameter inside bark
-    :param float Tvol: Gross total volume of Aw
+    :param float total_volume: Gross total volume
+    :param float StumpDOB:  stump diameter outside bark
 
     '''
-    if N_bh > 0:
-        k = (BA * 10000.0 / N_bh)**0.5
+    if density > 0:
+        k = (basal_area * 10000.0 / density)**0.5
     else:
         k = 0
 
-    if k > 0 and topHeight > 0:
+    if k > 0 and top_height > 0:
         b0 = 0.993673
         b1 = 923.5825
         b2 = -3.96171
@@ -1504,36 +1505,36 @@ def MerchantableVolumeAw(N_bh, BA, topHeight, StumpDOB,
         b4 = 0.316236
         b5 = 0.968953
         b6 = -1.61247
-        k1 = Tvol * (k**b0)
-        k2 = (b1* (topHeight**b2) * (StumpDOB**b3) * (StumpHeight**b4) * (TopDib**b5)  * (k**b6)) + k
-        MVol = k1/k2
+        k1 = total_volume * (k**b0)
+        k2 = (b1* (top_height**b2) * (stump_dob**b3) * (stump_height**b4) * (top_dib**b5)  * (k**b6)) + k
+        merch_vol = k1/k2
     else:
-        MVol = 0
+        merch_vol = 0
 
-    return MVol
+    return merch_vol
 
 
-def MerchantableVolumeSb(N_bh, BA, topHeight, StumpDOB,
-                         StumpHeight, TopDib, Tvol):
+def MerchantableVolumeSb(density, basal_area, top_height, total_volume,
+                         stump_dob=13, top_dib=0.3, stump_height=7):
     '''Merchantable volume black spruce
 
     The if below was used (and in other functions) to avoid division by zero
     when density is zero, i.e., when the species is absent in the plot.
 
-    :param float N_bh: density of sp Sb
-    :param float topHeight: top height of Sb
-    :param float StumpDOB:  stump diameter outside bark of Sb
-    :param float StumpHeight: stump height of Sb
-    :param float TopDib: top diameter inside bark of Sb
-    :param float Tvol: Gross total volume of Sb
+    :param float density: density
+    :param float top_height: top height
+    :param float StumpDOB:  stump diameter outside bark
+    :param float StumpHeight: stump height
+    :param float TopDib: top diameter inside bark
+    :param float total_volume: Gross total volume
 
     '''
-    if N_bh > 0:
-        k = (BA * 10000.0 / N_bh)**0.5
+    if density > 0:
+        k = (basal_area * 10000.0 / density)**0.5
     else:
         k = 0
 
-    if k > 0 and  topHeight > 0:
+    if k > 0 and  top_height > 0:
         b0 = 0.98152
         b1 = 0.678011
         b2 = -1.10256
@@ -1541,35 +1542,35 @@ def MerchantableVolumeSb(N_bh, BA, topHeight, StumpDOB,
         b4 = 0.511391
         b5 = 1.484988
         b6 = -3.26425
-        MVol = (Tvol * (k**b0))/ ((b1* (topHeight**b2) * (StumpDOB**b3) * (StumpHeight**b4) * (TopDib**b5) * (k**b6)) +k)
+        merch_vol = (total_volume * (k**b0))/ ((b1* (top_height**b2) * (stump_dob**b3) * (stump_height**b4) * (top_dib**b5) * (k**b6)) +k)
     else:
-        MVol = 0
+        merch_vol = 0
 
-    return MVol
+    return merch_vol
 
 
 
-def MerchantableVolumeSw(N_bh, BA, topHeight, StumpDOB,
-                         StumpHeight, TopDib, Tvol):
-    '''
-    Merchantable volume only new variables are the stump diameter outside bark, stump height and top diameter inside bark
+def MerchantableVolumeSw(density, basal_area, top_height, total_volume,
+                         stump_dob=13, top_dib=0.3, stump_height=7):
+    '''Merchantable volume for white spruce
 
     The if below was used (and in other functions) to avoid
     division by zero when density is zero, i.e., when the
     species is absent in the plot.
 
-    :param float N_bh: density of sp Sw
-    :param float topHeight: top height of Sw
-    :param float StumpDOB:  stump diameter outside bark of Sw
-    :param float StumpHeight: stump height of Sw
-    :param float TopDib: top diameter inside bark of Sw
-    :param float Tvol: Gross total volume of Sw
+    :param float density: density
+    :param float top_height: top height
+    :param float StumpDOB:  stump diameter outside bark
+    :param float StumpHeight: stump height
+    :param float TopDib: top diameter inside bark
+    :param float total_volume: Gross total volume
+
     '''
-    if N_bh > 0:
-        k = (BA * 10000.0 / N_bh)**0.5
+    if density > 0:
+        k = (basal_area * 10000.0 / density)**0.5
     else:
         k = 0
-    if k > 0 and  topHeight > 0:
+    if k > 0 and  top_height > 0:
         b0 = 0.996262
         b1 = 7.021736
         b2 = -1.77615
@@ -1577,35 +1578,35 @@ def MerchantableVolumeSw(N_bh, BA, topHeight, StumpDOB,
         b4 = 0.4111
         b5 = 1.024803
         b6 = -0.80121
-        MVol = (Tvol * (k**b0)) /   ((b1* (topHeight**b2) * (sp_Sw[7]**b3) * (sp_Sw[8]**b4) * (sp_Sw[9]**b5) * (k**b6)) +k)
+        merch_vol = (total_volume * (k**b0)) /   ((b1* (top_height**b2) * (stump_dob**b3) * (stump_height**b4) * (top_dib**b5) * (k**b6)) +k)
     else:
-        MVol = 0
+        merch_vol = 0
 
-    return MVol
+    return merch_vol
 
 
 
-def MerchantableVolumePl(N_bh, BA, topHeight, StumpDOB,
-                         StumpHeight, TopDib, Tvol):
-    '''Merchantable volume lodgepole pine
+def MerchantableVolumePl(density, basal_area, top_height, total_volume,
+                         stump_dob=13, top_dib=0.3, stump_height=7):
+    '''Merchantable volume for lodgepole pine
 
     The if below was used (and in other functions) to avoid division by zero
     when density is zero, i.e., when the species is absent in the plot.
 
-    :param float N_bh: density of sp Pl
-    :param float topHeight: top height of Pl
-    :param float StumpDOB:  stump diameter outside bark of Pl
-    :param float StumpHeight: stump height of Pl
-    :param float TopDib: top diameter inside bark of Pl
-    :param float Tvol: Gross total volume of Pl
+    :param float density: density
+    :param float top_height: top height
+    :param float StumpDOB:  stump diameter outside bark
+    :param float StumpHeight: stump height
+    :param float TopDib: top diameter inside bark
+    :param float total_volume: Gross total volume
 
     '''
-    if N_bh > 0:
-        k = (BA * 10000.0 / N_bh)**0.5
+    if density > 0:
+        k = (basal_area * 10000.0 / density)**0.5
     else:
         k = 0
 
-    if k > 0 and topHeight > 0:
+    if k > 0 and top_height > 0:
         b0 = 0.989889
         b1 = 1.055091
         b2 = -0.19072
@@ -1613,20 +1614,20 @@ def MerchantableVolumePl(N_bh, BA, topHeight, StumpDOB,
         b4 = 0.42574
         b5 = 1.006379
         b6 = -4.87808
-        MVol = (Tvol * (k**b0)) / ((b1* (topHeight**b2) * (sp_Pl[7]**b3) * (sp_Pl[8]**b4) * (sp_Pl[9]**b5) * (k**b6)) +k)
+        merch_vol = (total_volume * (k**b0)) / ((b1* (top_height**b2) * (stump_dob**b3) * (stump_height**b4) * (top_dib**b5) * (k**b6)) +k)
     else:
-        MVol = 0
+        merch_vol = 0
 
-    return MVol
+    return merch_vol
 
 
-def merchantable_volume(species, *args):
+def merchantable_volume(species, *args, **kwargs):
     return {
         'Aw': MerchantableVolumeAw,
         'Sw': MerchantableVolumeSw,
         'Sb': MerchantableVolumeSb,
         'Pl': MerchantableVolumePl,
-    }[species](*args)
+    }[species](*args, **kwargs)
 
 
 def _plot_simulation_variables(simulation_df, ax=None, plot_vars=None, y_lab=''):
