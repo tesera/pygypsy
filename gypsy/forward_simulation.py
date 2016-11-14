@@ -358,13 +358,10 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         #http://stackoverflow.com/questions/25314547/cell-var-from-loop-warning-from-pylint
 
         for spec in SPECIES:
-            output_DF['Gross_Total_Volume_%s' % spec] = output_DF.apply(
-                lambda x: gross_total_volume(
-                    spec,
-                    x.at['BA_%s' % spec],
-                    x.at['topHeight_%s' % spec]
-                ),
-                axis=1
+            output_DF['Gross_Total_Volume_%s' % spec] = gross_total_volume(
+                spec,
+                output_DF['BA_%s' % spec],
+                output_DF['topHeight_%s' % spec]
             )
 
         output_DF['Gross_Total_Volume_Con'] = output_DF['Gross_Total_Volume_Sw'] \

@@ -1381,82 +1381,88 @@ def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl,
     return basal_area_arr
 
 
-def GrossTotalVolume_Aw(BA_Aw, topHeight_Aw):
-    '''Gross total volume is estimated only using species specific Basal Area and
-    Top height
+def GrossTotalVolume_Aw(basal_area, top_height):
+    ''' White Aspen Gross Total Volume
 
-    :param float BA_Aw: basal area of Aw
-    :param float topHeight_Aw: top height of Aw
+    Note that inputs may be scalars, or numpy arrays.
 
-    '''
-    Tvol_Aw = 0
-
-    if topHeight_Aw > 0:
-        a1 = 0.248718
-        a2 = 0.98568
-        a3 = 0.857278
-        a4 = -24.9961
-        Tvol_Aw = a1 * (BA_Aw**a2) * (topHeight_Aw**a3) * numpy.exp(1+(a4/((topHeight_Aw**2)+1)))
-
-    return Tvol_Aw
-
-
-def GrossTotalVolume_Sw(BA_Sw, topHeight_Sw):
-    '''Gross total volume is estimated only using species specific Basal Area and
-    Top height
-
-    :param float BA_Sw: basal area of Sw
-    :param float topHeight_Sw: top height of Sw
+    :param float basal_area: basal area
+    :param float top_height: top height
 
     '''
-    Tvol_Sw = 0
+    a1 = 0.248718
+    a2 = 0.98568
+    a3 = 0.857278
+    a4 = -24.9961
+    tot_vol = a1 \
+              * (basal_area**a2) \
+              * (top_height**a3) \
+              * numpy.exp( 1 \
+                           + ( a4 / (( top_height**2 ) + 1 ))
+              )
 
-    if topHeight_Sw > 0:
-        b1 = 0.41104
-        b2 = 0.983108
-        b3 = 0.971061
-        Tvol_Sw = b1 * (BA_Sw**b2) *  (topHeight_Sw**b3)
-
-    return Tvol_Sw
-
-
-def GrossTotalVolume_Sb(BA_Sb, topHeight_Sb):
-    '''Gross total volume is estimated only using species specific Basal Area and
-    Top height
-
-    :param float BA_Sb: basal area of Sb
-    :param float topHeight_Sb: top height of Sb
-
-    '''
-    Tvol_Sb = 0
-
-    if topHeight_Sb > 0:
-        b1 = 0.48628
-        b2 = 0.982962
-        b3 = 0.910603
-        Tvol_Sb = b1 * (BA_Sb**b2) * (topHeight_Sb**b3)
-
-    return Tvol_Sb
+    return tot_vol
 
 
-def GrossTotalVolume_Pl(BA_Pl, topHeight_Pl):
-    '''Gross total volume is estimated only using species specific Basal Area and
-    Top height
+def GrossTotalVolume_Sw(basal_area, top_height):
+    '''White Spruce Gross Total Volume
 
-    :param float BA_Pl: basal area of Pl
-    :param float topHeight_Pl: top height of Pl
+    Note that inputs may be scalars, or numpy arrays.
+
+    :param float basal_area: basal area
+    :param float top_height: top height
 
     '''
-    Tvol_Pl = 0
+    b1 = 0.41104
+    b2 = 0.983108
+    b3 = 0.971061
+    tot_vol = b1 \
+              * (basal_area**b2) \
+              * (top_height**b3)
 
-    if topHeight_Pl > 0:
-        a1 = 0.194086
-        a2 = 0.988276
-        a3 = 0.949346
-        a4 = -3.39036
-        Tvol_Pl = a1* (BA_Pl**a2) * (topHeight_Pl **a3) * numpy.exp(1+(a4/((topHeight_Pl**2)+1)))
+    return tot_vol
 
-    return Tvol_Pl
+
+def GrossTotalVolume_Sb(basal_area, top_height):
+    '''Black Spruce Gross Total Volume
+
+    Note that inputs may be scalars, or numpy arrays.
+
+    :param float basal_area: basal area
+    :param float top_height: top height
+
+    '''
+    b1 = 0.48628
+    b2 = 0.982962
+    b3 = 0.910603
+    tot_vol = b1 \
+              * (basal_area**b2) \
+              * (top_height**b3)
+
+    return tot_vol
+
+
+def GrossTotalVolume_Pl(basal_area, top_height):
+    '''Lodgepole Pine Gross Total Volume
+
+    Note that inputs may be scalars, or numpy arrays.
+
+    :param float basal_area: basal area
+    :param float top_height: top height
+
+    '''
+    a1 = 0.194086
+    a2 = 0.988276
+    a3 = 0.949346
+    a4 = -3.39036
+    tot_vol = a1 \
+              * (basal_area**a2) \
+              * (top_height**a3) \
+              * numpy.exp(
+                  1 + ( a4 / (( top_height**2 ) + 1 ))
+              )
+
+    return tot_vol
 
 def gross_total_volume(species, *args):
     return {
