@@ -1534,18 +1534,14 @@ def MerchantableVolumeSb(N_bh, BA, topHeight, StumpDOB,
         k = 0
 
     if k > 0 and  topHeight > 0:
-        if sp[0] in('Sb', 'Lt', 'La', 'Lw', 'L'):
-            b0 = 0.98152
-            b1 = 0.678011
-            b2 = -1.10256
-            b3 = 4.148139
-            b4 = 0.511391
-            b5 = 1.484988
-            b6 = -3.26425
-            StumpDOB = sp[7]
-            StumpHeight = sp[8]
-            TopDib = sp[9]
-            MVol = (Tvol * (k**b0))/ ((b1* (topHeight**b2) * (StumpDOB**b3) * (StumpHeight**b4) * (TopDib**b5) * (k**b6)) +k)
+        b0 = 0.98152
+        b1 = 0.678011
+        b2 = -1.10256
+        b3 = 4.148139
+        b4 = 0.511391
+        b5 = 1.484988
+        b6 = -3.26425
+        MVol = (Tvol * (k**b0))/ ((b1* (topHeight**b2) * (StumpDOB**b3) * (StumpHeight**b4) * (TopDib**b5) * (k**b6)) +k)
     else:
         MVol = 0
 
@@ -1574,15 +1570,14 @@ def MerchantableVolumeSw(N_bh, BA, topHeight, StumpDOB,
     else:
         k = 0
     if k > 0 and  topHeight > 0:
-        if sp[0] in ('Sw', 'Se', 'Fd', 'Fb', 'Fa'):
-            b0 = 0.996262
-            b1 = 7.021736
-            b2 = -1.77615
-            b3 = 1.91562
-            b4 = 0.4111
-            b5 = 1.024803
-            b6 = -0.80121
-            MVol = (Tvol * (k**b0)) /   ((b1* (topHeight**b2) * (sp[7]**b3) * (sp[8]**b4) * (sp[9]**b5) * (k**b6)) +k)
+        b0 = 0.996262
+        b1 = 7.021736
+        b2 = -1.77615
+        b3 = 1.91562
+        b4 = 0.4111
+        b5 = 1.024803
+        b6 = -0.80121
+        MVol = (Tvol * (k**b0)) /   ((b1* (topHeight**b2) * (sp_Sw[7]**b3) * (sp_Sw[8]**b4) * (sp_Sw[9]**b5) * (k**b6)) +k)
     else:
         MVol = 0
 
@@ -1611,15 +1606,14 @@ def MerchantableVolumePl(N_bh, BA, topHeight, StumpDOB,
         k = 0
 
     if k > 0 and topHeight > 0:
-        if sp[0] in ('P', 'Pl', 'Pj', 'Pa', 'Pf'):
-            b0 = 0.989889
-            b1 = 1.055091
-            b2 = -0.19072
-            b3 = 4.915593
-            b4 = 0.42574
-            b5 = 1.006379
-            b6 = -4.87808
-            MVol = (Tvol * (k**b0)) / ((b1* (topHeight**b2) * (sp[7]**b3) * (sp[8]**b4) * (sp[9]**b5) * (k**b6)) +k)
+        b0 = 0.989889
+        b1 = 1.055091
+        b2 = -0.19072
+        b3 = 4.915593
+        b4 = 0.42574
+        b5 = 1.006379
+        b6 = -4.87808
+        MVol = (Tvol * (k**b0)) / ((b1* (topHeight**b2) * (sp_Pl[7]**b3) * (sp_Pl[8]**b4) * (sp_Pl[9]**b5) * (k**b6)) +k)
     else:
         MVol = 0
 
