@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Apr 29 16:06:29 2016
-
-@author: juliannosambatti
-"""
+"""Simulation"""
 import logging
 import datetime
 import numpy as np
