@@ -8,6 +8,7 @@ import logging
 import datetime
 import numpy as np
 import pandas as pd
+from collections import OrderedDict
 
 from utils import _log_loop_progress
 from GYPSYNonSpatial import (
@@ -160,6 +161,18 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         N0_Sw = row.at['N0_Sw']
         N0_Pl = row.at['N0_Pl']
         N0_Sb = row.at['N0_Sb']
+        StumpDOB_Aw = row.at['StumpDOB_Aw']
+        StumpDOB_Sb = row.at['StumpDOB_Sb']
+        StumpDOB_Sw = row.at['StumpDOB_Sw']
+        StumpDOB_Pl = row.at['StumpDOB_Pl']
+        StumpHeight_Aw = row.at['StumpHeight_Aw']
+        StumpHeight_Sb = row.at['StumpHeight_Sb']
+        StumpHeight_Sw = row.at['StumpHeight_Sw']
+        StumpHeight_Pl = row.at['StumpHeight_Pl']
+        TopDib_Aw = row.at['TopDib_Aw']
+        TopDib_Sb = row.at['TopDib_Sb']
+        TopDib_Sw = row.at['TopDib_Sw']
+        TopDib_Pl = row.at['TopDib_Pl']
 
         BA_Aw0 = BA0_lower_BAT_Aw(BA_AwT)
         BA_Sw0 = BA0_lower_BAT_Sw(BA_SwT)
@@ -367,21 +380,40 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
 
         # this could go in the loop above, but is left here for now since
         # the tests are sensitive to column order
-        # TODO: hack here, row is used for stumpdob, stumpheight, topdib
-        # it's not bad since it's cached, and the purpose is enable to do this in a loop
-        # which wasn't possible assigning the row value to variable because of species suffix
-        for spec in SPECIES:
+        species_plot_merch_vol_params = OrderedDict(
+            (
+                ('Aw', {
+                    'StumpDOB': StumpDOB_Aw,
+                    'TopDib': TopDib_Aw,
+                    'StumpHeight': StumpHeight_Aw
+                 }),
+                ('Sw', {
+                    'StumpDOB': StumpDOB_Sw,
+                    'TopDib': TopDib_Sw,
+                    'StumpHeight': StumpHeight_Sw
+                 }),
+                ('Sb', {
+                    'StumpDOB': StumpDOB_Sb,
+                    'TopDib': TopDib_Sb,
+                    'StumpHeight': StumpHeight_Sb
+                 }),
+                ('Pl', {
+                    'StumpDOB': StumpDOB_Pl,
+                    'TopDib': TopDib_Pl,
+                    'StumpHeight': StumpHeight_Pl
+                 }),
+            )
+        )
+        for spec, params in species_plot_merch_vol_params.items():
             output_DF['MerchantableVolume%s' % spec] = output_DF.apply(
-                # TODO: this functio nis aw - have a top level function that
-                # delegates to species functions?
                 lambda x: merchantable_volume(
                     spec,
                     x.at['N_bh_%sT' % spec],
                     x.at['BA_%s' % spec],
                     x.at['topHeight_%s' % spec],
-                    row.at['StumpDOB_%s' % spec],
-                    row.at['StumpHeight_%s' % spec],
-                    row.at['TopDib_%s' % spec],
+                    params['StumpDOB'],
+                    params['StumpHeight'],
+                    params['TopDib'],
                     x.at['Gross_Total_Volume_%s' % spec]
                 ), axis=1
             )
