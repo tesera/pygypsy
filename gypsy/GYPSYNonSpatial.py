@@ -1492,24 +1492,24 @@ def MerchantableVolumeAw(density, basal_area, top_height, total_volume,
     :param float StumpDOB:  stump diameter outside bark
 
     '''
-    if density > 0:
-        k = (basal_area * 10000.0 / density)**0.5
-    else:
-        k = 0
-
-    if k > 0 and top_height > 0:
-        b0 = 0.993673
-        b1 = 923.5825
-        b2 = -3.96171
-        b3 = 3.366144
-        b4 = 0.316236
-        b5 = 0.968953
-        b6 = -1.61247
-        k1 = total_volume * (k**b0)
-        k2 = (b1* (top_height**b2) * (stump_dob**b3) * (stump_height**b4) * (top_dib**b5)  * (k**b6)) + k
-        merch_vol = k1/k2
-    else:
-        merch_vol = 0
+    k = (basal_area * 10000.0 / density)**0.5
+    b0 = 0.993673
+    b1 = 923.5825
+    b2 = -3.96171
+    b3 = 3.366144
+    b4 = 0.316236
+    b5 = 0.968953
+    b6 = -1.61247
+    k1 = total_volume * (k**b0)
+    k2 = (
+        b1 \
+        * (top_height**b2) \
+        * (stump_dob**b3) \
+        * (stump_height**b4) \
+        * (top_dib**b5) \
+        * (k**b6)
+    ) + k
+    merch_vol = k1/k2
 
     return merch_vol
 
@@ -1529,22 +1529,24 @@ def MerchantableVolumeSb(density, basal_area, top_height, total_volume,
     :param float total_volume: Gross total volume
 
     '''
-    if density > 0:
-        k = (basal_area * 10000.0 / density)**0.5
-    else:
-        k = 0
-
-    if k > 0 and  top_height > 0:
-        b0 = 0.98152
-        b1 = 0.678011
-        b2 = -1.10256
-        b3 = 4.148139
-        b4 = 0.511391
-        b5 = 1.484988
-        b6 = -3.26425
-        merch_vol = (total_volume * (k**b0))/ ((b1* (top_height**b2) * (stump_dob**b3) * (stump_height**b4) * (top_dib**b5) * (k**b6)) +k)
-    else:
-        merch_vol = 0
+    k = (basal_area * 10000.0 / density)**0.5
+    b0 = 0.98152
+    b1 = 0.678011
+    b2 = -1.10256
+    b3 = 4.148139
+    b4 = 0.511391
+    b5 = 1.484988
+    b6 = -3.26425
+    merch_vol = ( total_volume * (k**b0) ) \
+                / (
+                    ( b1 \
+                      * (top_height**b2) \
+                      * (stump_dob**b3) \
+                      * (stump_height**b4) \
+                      * (top_dib**b5) \
+                      * (k**b6)
+                    ) + k
+                )
 
     return merch_vol
 
@@ -1566,21 +1568,24 @@ def MerchantableVolumeSw(density, basal_area, top_height, total_volume,
     :param float total_volume: Gross total volume
 
     '''
-    if density > 0:
-        k = (basal_area * 10000.0 / density)**0.5
-    else:
-        k = 0
-    if k > 0 and  top_height > 0:
-        b0 = 0.996262
-        b1 = 7.021736
-        b2 = -1.77615
-        b3 = 1.91562
-        b4 = 0.4111
-        b5 = 1.024803
-        b6 = -0.80121
-        merch_vol = (total_volume * (k**b0)) /   ((b1* (top_height**b2) * (stump_dob**b3) * (stump_height**b4) * (top_dib**b5) * (k**b6)) +k)
-    else:
-        merch_vol = 0
+    k = (basal_area * 10000.0 / density)**0.5
+    b0 = 0.996262
+    b1 = 7.021736
+    b2 = -1.77615
+    b3 = 1.91562
+    b4 = 0.4111
+    b5 = 1.024803
+    b6 = -0.80121
+    merch_vol = (total_volume * (k**b0)) \
+                / (
+                    ( b1 \
+                     * (top_height**b2) \
+                     * (stump_dob**b3) \
+                     * (stump_height**b4) \
+                     * (top_dib**b5) \
+                     * (k**b6)
+                    ) + k
+                )
 
     return merch_vol
 
@@ -1601,22 +1606,24 @@ def MerchantableVolumePl(density, basal_area, top_height, total_volume,
     :param float total_volume: Gross total volume
 
     '''
-    if density > 0:
-        k = (basal_area * 10000.0 / density)**0.5
-    else:
-        k = 0
-
-    if k > 0 and top_height > 0:
-        b0 = 0.989889
-        b1 = 1.055091
-        b2 = -0.19072
-        b3 = 4.915593
-        b4 = 0.42574
-        b5 = 1.006379
-        b6 = -4.87808
-        merch_vol = (total_volume * (k**b0)) / ((b1* (top_height**b2) * (stump_dob**b3) * (stump_height**b4) * (top_dib**b5) * (k**b6)) +k)
-    else:
-        merch_vol = 0
+    k = (basal_area * 10000.0 / density)**0.5
+    b0 = 0.989889
+    b1 = 1.055091
+    b2 = -0.19072
+    b3 = 4.915593
+    b4 = 0.42574
+    b5 = 1.006379
+    b6 = -4.87808
+    merch_vol = (total_volume * (k**b0)) \
+                / (
+                    (b1 \
+                     * (top_height**b2) \
+                     * (stump_dob**b3) \
+                     * (stump_height**b4) \
+                     * (top_dib**b5) \
+                     * (k**b6)
+                    ) + k
+                )
 
     return merch_vol
 

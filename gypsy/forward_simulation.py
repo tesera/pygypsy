@@ -362,14 +362,12 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         # this could go in the loop above, but is left here for now since
         # the tests are sensitive to column order
         for spec in SPECIES:
-            output_DF['MerchantableVolume%s' % spec] = output_DF.apply(
-                lambda x: merchantable_volume(
-                    spec,
-                    x.at['N_bh_%sT' % spec],
-                    x.at['BA_%s' % spec],
-                    x.at['topHeight_%s' % spec],
-                    x.at['Gross_Total_Volume_%s' % spec]
-                ), axis=1
+            output_DF['MerchantableVolume%s' % spec] = merchantable_volume(
+                spec,
+                output_DF['N_bh_%sT' % spec],
+                output_DF['BA_%s' % spec],
+                output_DF['topHeight_%s' % spec],
+                output_DF['Gross_Total_Volume_%s' % spec]
             )
 
         output_DF['MerchantableVolume_Con'] = output_DF['MerchantableVolumeSw'] \
