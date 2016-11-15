@@ -18,7 +18,7 @@ setup(name='gypsy',
       url='',
       license='',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
-      ext_modules=cythonize('gypsy/*.pyx', include_path=np.get_include()),
+      ext_modules=cythonize('gypsy/*.pyx', include_path=[np.get_include()]),
       zip_safe=False,
       include_package_data=True,
       package_data={
