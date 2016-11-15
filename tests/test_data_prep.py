@@ -17,8 +17,10 @@ def test_prep_standtable():
     expected = pd.read_csv(expected_data_path, index_col=0)
 
     assert isinstance(result, pd.DataFrame)
-    assert npt.assert_almost_equal(
-        expected.values, result.values, decimal=3
+    assert npt.assert_allclose(
+        expected.values, result.values,
+        rtol=0.01, atol=0.1,
+        equal_nan=True
     ) is None
 
     # regenerate output files
