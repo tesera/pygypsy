@@ -1,4 +1,4 @@
-from gypsy import gross_total_volume
+from gypsy import merchantable_volume
 
 def test_pl():
     # TODO: known value
@@ -6,7 +6,7 @@ def test_pl():
     # TODO: negative as an input
     # TODO: scalar and array
     # different length arrays
-    gross_total_volume.gtv_pl(0, 0)
+    merchantable_volume.mv_pl(0, 0)
     assert False
 
 def test_aw():
@@ -15,7 +15,7 @@ def test_aw():
     # TODO: negative as an input
     # TODO: scalar and array
     # different length arrays
-    gross_total_volume.gtv_aw(0, 0)
+    merchantable_volume.mv_aw(0, 0)
     assert False
 
 def test_sb():
@@ -24,7 +24,7 @@ def test_sb():
     # TODO: negative as an input
     # TODO: scalar and array
     # different length arrays
-    gross_total_volume.gtv_sb(0, 0)
+    merchantable_volume.mv_sb(0, 0)
     assert False
 
 def test_sw():
@@ -33,9 +33,9 @@ def test_sw():
     # TODO: negative as an input
     # TODO: scalar and array
     # different length arrays
-    gross_total_volume.gtv_sw(0, 0)
+    merchantable_volume.mv_sw(0, 0)
     assert False
 
-def test_gross_total_volume():
+def test_merchantable_volume():
     # TODO: test this delegates properly
     assert False
