@@ -6,6 +6,7 @@ resolution.
 It uses the non-spatial implementaion.
 
 """
+# TODO: remove sp_<speciesacroynm> from function args & update uses of function
 import numpy as np
 
 
@@ -96,7 +97,7 @@ def increment_basal_area_sb(sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, BA
 
 
 def increment_basal_area_sw(sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw,
-                                   bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw):
+                            bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw):
     '''Predicts the increment in basal area for the subsequent year for the
     species.
 
@@ -156,7 +157,7 @@ def increment_basal_area_sw(sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw,
 
 
 def increment_basal_area_pl(sp_Pl, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl,
-                                   bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl):
+                            bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl):
     '''Predicts the increment in basal area for the subsequent year for the
     species.
 
