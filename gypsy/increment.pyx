@@ -1,6 +1,6 @@
 import numpy as np
 
-def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw):
+def increment_basal_area_aw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw):
     '''Predicts the increment in basal area for the subsequent year for the
     species.
 
@@ -48,7 +48,7 @@ def BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage
     return  BAinc_Aw
 
 
-def BasalAreaIncrementNonSpatialSb(sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, BA_Sb):
+def increment_basal_area_sb(sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, BA_Sb):
     '''Predicts the increment in basal area for the subsequent year for the
     species.
 
@@ -86,7 +86,7 @@ def BasalAreaIncrementNonSpatialSb(sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage
     return BAinc_Sb
 
 
-def BasalAreaIncrementNonSpatialSw(sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw,
+def increment_basal_area_sw(sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw,
                                    bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw):
     '''Predicts the increment in basal area for the subsequent year for the
     species.
@@ -146,7 +146,7 @@ def BasalAreaIncrementNonSpatialSw(sp_Sw, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw,
     return BAinc_Sw
 
 
-def BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl,
+def increment_basal_area_pl(sp_Pl, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl,
                                    bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl):
     '''Predicts the increment in basal area for the subsequent year for the
     species.

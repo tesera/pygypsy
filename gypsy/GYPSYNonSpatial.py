@@ -18,6 +18,7 @@ import numpy
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from import increment as incr
 
 from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
 from utils import _mkdir_p
@@ -442,7 +443,7 @@ def BAincIter_Aw(sp_Aw, BAinc_AwT, BA_AwT, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw,
     # best estimate of decrement to previous year , ie, at time T-1
 
     while BADiffFlag == False:
-        BAinc_AwtoT = BasalAreaIncrementNonSpatialAw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw)
+        BAinc_AwtoT = incr.increment_basal_area_aw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw)
         BA_AwT_est = BA_Aw + BAinc_AwtoT
 
         if abs(BA_AwT_est - BA_AwT) < acceptableDiff:
@@ -476,7 +477,7 @@ def BAincIter_Sb(sp_Sb, BAinc_SbT, BA_SbT, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb,
     # best estimate of decrement to previous year , ie, at time T-1
 
     while BADiffFlag == False:
-        BAinc_SbtoT = BasalAreaIncrementNonSpatialSb(sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, BA_Sb)
+        BAinc_SbtoT = incr.increment_basal_area_sb(sp_Sb, SC_Sb, SI_bh_Sb, N_bh_Sb, N0_Sb, bhage_Sb, BA_Sb)
         # based on best estimate of BA at time T-1
         BA_SbT_est = BA_Sb + BAinc_SbtoT
 
@@ -513,7 +514,7 @@ def BAincIter_Sw(sp_Sw, BAinc_SwT, BA_SwT, SC_Sw, SI_bh_Sw, N_bh_Sw, N0_Sw,
     # estimate of decrement to previous year , ie, at time T-1
 
     while BADiffFlag == False:
-        BAinc_SwtoT = BasalAreaIncrementNonSpatialSw(sp_Sw, SC_Sw, SI_bh_Sw,
+        BAinc_SwtoT = incr.increment_basal_area_sw(sp_Sw, SC_Sw, SI_bh_Sw,
                                                      N_bh_Sw, N0_Sw, bhage_Sw,
                                                      SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw)
         BA_SwT_est = BA_Sw + BAinc_SwtoT
@@ -551,7 +552,7 @@ def BAincIter_Pl(sp_Pl, BAinc_PlT, BA_PlT, SC_Pl, SI_bh_Pl, N_bh_Pl, N0_Pl,
     #best estimate of decrement to previous year , ie, at time T-1
 
     while BADiffFlag == False:
-        BAinc_PltoT = BasalAreaIncrementNonSpatialPl(sp_Pl, SC_Pl, SI_bh_Pl,
+        BAinc_PltoT = incr.increment_basal_area_pl(sp_Pl, SC_Pl, SI_bh_Pl,
                                                      N_bh_Pl, N0_Pl, bhage_Pl,
                                                      SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl)
         # based on best estimate of BA at time T-1
@@ -780,7 +781,7 @@ def BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw,
         if N0_Aw > 0:
             if bhage_Aw > 0:
                 SC_Aw = (SC_Aw) * f_Aw
-                BAinc_Aw = BasalAreaIncrementNonSpatialAw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT,
+                BAinc_Aw = incr.increment_basal_area_aw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT,
                                                           N0_Aw, bhage_Aw, BA_tempAw)
                 BA_tempAw = BA_tempAw + BAinc_Aw
                 BA_AwB = BA_tempAw
@@ -895,7 +896,7 @@ def BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb,
         if N0_Sb > 0:
             if bhage_Sb > 0:
                 SC_Sb = (SC_Sb) * f_Sb
-                BAinc_Sb = BasalAreaIncrementNonSpatialSb('Sb', SC_Sb, SI_bh_Sb, N_bh_SbT,
+                BAinc_Sb = incr.increment_basal_area_sb('Sb', SC_Sb, SI_bh_Sb, N_bh_SbT,
                                                           N0_Sb, bhage_Sb, BA_tempSb)
                 BA_tempSb = BA_tempSb + BAinc_Sb
                 BA_SbB = BA_tempSb
@@ -1024,7 +1025,7 @@ def BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw,
         if N0_Sw > 0:
             if bhage_Sw > 0:
                 SC_Sw = (SC_Sw) * f_Sw
-                BAinc_Sw = BasalAreaIncrementNonSpatialSw('Sw', SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_tempSw)
+                BAinc_Sw = incr.increment_basal_area_sw('Sw', SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_tempSw)
                 BA_tempSw = BA_tempSw + BAinc_Sw
                 BA_SwB = BA_tempSw
                 if BA_SwB < 0:
@@ -1152,7 +1153,7 @@ def BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl,
         bhage_Pl = tage_Pl - y2bh_Pl
         if N0_Pl > 0:
             if bhage_Pl > 0:
-                BAinc_Pl = f_Pl * BasalAreaIncrementNonSpatialPl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,
+                BAinc_Pl = f_Pl * incr.increment_basal_area_pl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,
                                                                  bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_tempPl)
                 BA_tempPl = BA_tempPl + BAinc_Pl
                 BA_PlB = BA_tempPl
