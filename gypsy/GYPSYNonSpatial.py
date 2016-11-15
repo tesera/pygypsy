@@ -1110,7 +1110,7 @@ def BAfactorFinder_Pl(**kwargs):
         if iterCount == 150:
             LOGGER.warning(('GYPSYNonSpatial.BAfactorFinder_Pl()'
                  ' Slow convergence with Basal Area: %s'
-                 ' and factor:%s '), BA_Pl0, BA_PlB, f_Pl)
+                 ' and factor:%s '), BA_PlB, f_Pl)
             return f_Pl
 
     return f_Pl
