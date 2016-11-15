@@ -18,17 +18,18 @@ import numpy
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from import increment as incr
 
-from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
+import increment as incr
 from utils import _mkdir_p
+from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
 
-logger = logging.getLogger(__name__)
+
+LOGGER = logging.getLogger(__name__)
+
 
 # input - species, top height, total age, BHage (from the function),
 #N (or density), current Basal Area,  Measured Percent Stocking,
 #StumpDOB , StumpHeight, TopDib, SI, sp proportion
-
 sp_Aw = ['Aw', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 sp_Sb = ['Sb', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 sp_Pl = ['Pl', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
@@ -738,7 +739,7 @@ def BAfactorFinder_Aw(**kwargs):
         iterCount = iterCount + 1
 
         if iterCount == 10000:
-            logger.warning(('GYPSYNonSpatial.BAfactorFinder_Aw()'
+            LOGGER.warning(('GYPSYNonSpatial.BAfactorFinder_Aw()'
                  ' Slow convergence with Basal Area: %s'
                  ' and factor:%s '), BA_AwB, f_Aw)
             return f_Aw
@@ -763,7 +764,7 @@ def BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw,
     data obtained with inventory
 
     '''
-    logger.debug('getting basal area from time zero to time of data for aspen')
+    LOGGER.debug('getting basal area from time zero to time of data for aspen')
 
     if simulation_choice == 'yes':
         max_age = startTage
@@ -817,7 +818,7 @@ def BAfactorFinder_Sb(**kwargs):
     :param float SC_Sb: proportion of species Sb in the stand
 
     '''
-    logger.debug('Getting basal area factor for black spruce')
+    LOGGER.debug('Getting basal area factor for black spruce')
     startTage = kwargs['startTage']
     startTageSb = kwargs['startTageSb']
     y2bh_Sb = kwargs['y2bh_Sb']
@@ -852,7 +853,7 @@ def BAfactorFinder_Sb(**kwargs):
         iterCount = iterCount + 1
 
         if iterCount == 1500:
-            logger.warning(('GYPSYNonSpatial.BAfactorFinder_Sb()'
+            LOGGER.warning(('GYPSYNonSpatial.BAfactorFinder_Sb()'
                  ' Slow convergence with Basal Area: %s'
                  ' and factor:%s '), BA_SbB, f_Sb)
             return f_Sb
@@ -938,7 +939,7 @@ def BAfactorFinder_Sw(**kwargs):
     :param float SDF_Sb0: Stand Density Factor of species Sb
 
     '''
-    logger.debug('Getting basal area factor for white spruce')
+    LOGGER.debug('Getting basal area factor for white spruce')
     startTage = kwargs['startTage']
     startTageSw = kwargs['startTageSw']
     y2bh_Sw = kwargs['y2bh_Sw']
@@ -977,7 +978,7 @@ def BAfactorFinder_Sw(**kwargs):
         iterCount = iterCount + 1
 
         if iterCount == 1500:
-            logger.warning(('GYPSYNonSpatial.BAfactorFinder_Sw()'
+            LOGGER.warning(('GYPSYNonSpatial.BAfactorFinder_Sw()'
                  ' Slow convergence with Basal Area: %s'
                  ' and factor:%s '), BA_SwB, f_Sw)
             return f_Sw
@@ -1107,7 +1108,7 @@ def BAfactorFinder_Pl(**kwargs):
         iterCount = iterCount + 1
 
         if iterCount == 150:
-            logger.warning(('GYPSYNonSpatial.BAfactorFinder_Pl()'
+            LOGGER.warning(('GYPSYNonSpatial.BAfactorFinder_Pl()'
                  ' Slow convergence with Basal Area: %s'
                  ' and factor:%s '), BA_Pl0, BA_PlB, f_Pl)
             return f_Pl

@@ -1,4 +1,13 @@
+"""Increment functions
+
+This module contains functions to increment plot characteristics at an annual
+resolution.
+
+It uses the non-spatial implementaion.
+
+"""
 import numpy as np
+
 
 def increment_basal_area_aw(sp_Aw, SC_Aw, SI_bh_Aw, N_bh_Aw, N0_Aw, bhage_Aw, BA_Aw):
     '''Predicts the increment in basal area for the subsequent year for the
