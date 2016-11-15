@@ -512,19 +512,19 @@ def prep_standtable(data):
         basal_area_sw = sp_sw[5]
         basal_area_pl = sp_pl[5]
 
-        basal_area_increment_aw = BasalAreaIncrementNonSpatialAw(
+        basal_area_increment_aw = incr.increment_basal_area_aw(
             sp_aw, species_composition_aw, site_index_bh_aw, density_bh_aw,
             initial_density_aw, bhage_aw, basal_area_aw
         )
-        basal_area_increment_sb = BasalAreaIncrementNonSpatialSb(
+        basal_area_increment_sb = incr.increment_basal_area_sb(
             sp_sb, species_composition_sb, site_index_bh_sb, density_bh_sb,
             initial_density_sb, bhage_sb, basal_area_sb
         )
-        basal_area_increment_sw = BasalAreaIncrementNonSpatialSw(
+        basal_area_increment_sw = incr.increment_basal_area_sw(
             sp_sw, species_composition_sw, site_index_bh_sw, density_bh_sw,
             initial_density_sw, bhage_sw, sdf_aw0, sdf_pl0, sdf_sb0, basal_area_sw
         )
-        basal_area_increment_pl = BasalAreaIncrementNonSpatialPl(
+        basal_area_increment_pl = incr.increment_basal_area_pl(
             sp_pl, species_composition_pl, site_index_bh_pl, density_bh_pl,
             initial_density_pl, bhage_pl, sdf_aw0, sdf_sw0, sdf_sb0, basal_area_pl
         )
