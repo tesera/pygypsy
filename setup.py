@@ -30,13 +30,19 @@ setup(name='gypsy',
           'matplotlib>=1.5.2',
           'colorlog>=2.7.0',
       ],
-      extras_require={
+      exrtas_require={
           'test': ['pytest==2.9.1', 'pytest-cov==2.4.0'],
           'lint': ['pylint==1.5.4'],
           'docs': ['sphinx==1.4.1'],
-          'dev': ['git-pylint-commit-hook==2.1.1'],
-          'analysis': ['jupyter>=1.0.0', 'scikit-learn>=0.18',
-                       'snakeviz>=0.4.1'],
+          'dev': [
+              'git-pylint-commit-hook==2.1.1',
+              'Cython>=0.25.1',
+          ],
+          'analysis': [
+              'jupyter>=1.0.0',
+              'scikit-learn>=0.18',
+              'snakeviz>=0.4.1',
+          ],
       },
       entry_points="""
       [console_scripts]
