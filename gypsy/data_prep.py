@@ -1,27 +1,30 @@
-# -*- coding: utf-8 -*-
-""" Data Preparation
+"""Data Preparation
+
+Calculates and joins parameters required for GYPSY to a plot table
+
 """
 import logging
 import pandas as pd
 from copy import deepcopy
 
+import increment as incr
+from GYPSYNonSpatial import (
+    densityNonSpatialAw,
+    densityNonSpatialSb,
+    densityNonSpatialSw,
+    densityNonSpatialPl,
+    densityAw,
+    densitySw,
+    densitySb,
+    densityPl,
+    SCestimate,
+)
 from utils import _log_loop_progress
-from GYPSYNonSpatial import (densityNonSpatialAw,
-                             densityNonSpatialSb,
-                             densityNonSpatialSw,
-                             densityNonSpatialPl,
-                             densityAw,
-                             densitySw,
-                             densitySb,
-                             densityPl,
-                             BasalAreaIncrementNonSpatialAw,
-                             BasalAreaIncrementNonSpatialSw,
-                             BasalAreaIncrementNonSpatialPl,
-                             BasalAreaIncrementNonSpatialSb,
-                             SCestimate)
-from asaCompileAgeGivenSpSiHt import (computeTreeAge,
-                                      ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge,
-                                      ComputeGypsySiteIndex)
+from asaCompileAgeGivenSpSiHt import (
+    computeTreeAge,
+    ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge,
+    ComputeGypsySiteIndex,
+)
 
 # TODO: replace acronyms with something more verbose
 # TODO: use pure functions or class instances to avoid mutating global state
