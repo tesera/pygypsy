@@ -8,15 +8,15 @@ It uses the non-spatial implementaion.
 """
 # TODO: remove sp_<speciesacroynm> from function args & update uses of function
 import numpy as np
-
+cimport numpy as np
 
 def increment_basal_area_aw(sp,
-                            double SC,
-                            double SI_bh,
-                            double N_bh,
-                            double N0,
-                            double bhage,
-                            double BA):
+                            np.float64_t SC,
+                            np.float64_t SI_bh,
+                            np.float64_t N_bh,
+                            np.float64_t N0,
+                            np.float64_t bhage,
+                            np.float64_t BA):
     '''Predicts the increment in basal area for the subsequent year for the
     species.
 
@@ -33,7 +33,7 @@ def increment_basal_area_aw(sp,
     :param float N0: initial density of species Aw at breast height age
 
     '''
-    cdef double BAinc, a1, a2, a3, a4, a5, X1, X2, X3, X4, X5, X6, d1, d2, \
+    cdef np.float64_t BAinc, a1, a2, a3, a4, a5, X1, X2, X3, X4, X5, X6, d1, d2, \
         k, n, d
     if N_bh == 0:
         BAinc = 0
@@ -66,12 +66,12 @@ def increment_basal_area_aw(sp,
 
 
 def increment_basal_area_sb(sp,
-                            double SC,
-                            double SI_bh,
-                            double N_bh,
-                            double N0,
-                            double bhage,
-                            double BA):
+                            np.float64_t SC,
+                            np.float64_t SI_bh,
+                            np.float64_t N_bh,
+                            np.float64_t N0,
+                            np.float64_t bhage,
+                            np.float64_t BA):
     '''Predicts the increment in basal area for the subsequent year for the
     species.
 
@@ -88,7 +88,7 @@ def increment_basal_area_sb(sp,
     :param float N0: initial density of species Sb at total age
 
     '''
-    cdef double BAinc, a1, a2, a3, k, k1
+    cdef np.float64_t BAinc, a1, a2, a3, k, k1
 
     if N_bh == 0:
         BAinc = 0
@@ -112,15 +112,15 @@ def increment_basal_area_sb(sp,
 
 
 def increment_basal_area_sw(sp,
-                            double SC,
-                            double SI_bh,
-                            double N_bh,
-                            double N0,
-                            double bhage,
-                            double SDF_Aw0,
-                            double SDF_Pl0,
-                            double SDF_Sb0,
-                            double BA):
+                            np.float64_t SC,
+                            np.float64_t SI_bh,
+                            np.float64_t N_bh,
+                            np.float64_t N0,
+                            np.float64_t bhage,
+                            np.float64_t SDF_Aw0,
+                            np.float64_t SDF_Pl0,
+                            np.float64_t SDF_Sb0,
+                            np.float64_t BA):
     '''Predicts the increment in basal area for the subsequent year for the
     species.
 
@@ -140,7 +140,7 @@ def increment_basal_area_sw(sp,
     :param float SDF_Sb0: Stand Density Factor of species Sb
 
     '''
-    cdef double BAinc, \
+    cdef np.float64_t BAinc, \
         a1, a2, a3, a4, a5, a6, \
         z1, z2, z3, k, k1, k2, m
 
@@ -184,15 +184,15 @@ def increment_basal_area_sw(sp,
 
 
 def increment_basal_area_pl(sp,
-                            double SC,
-                            double SI_bh,
-                            double N_bh,
-                            double N0,
-                            double bhage,
-                            double SDF_Aw0,
-                            double SDF_Sw0,
-                            double SDF_Sb0,
-                            double BA):
+                            np.float64_t SC,
+                            np.float64_t SI_bh,
+                            np.float64_t N_bh,
+                            np.float64_t N0,
+                            np.float64_t bhage,
+                            np.float64_t SDF_Aw0,
+                            np.float64_t SDF_Sw0,
+                            np.float64_t SDF_Sb0,
+                            np.float64_t BA):
     '''Predicts the increment in basal area for the subsequent year for the
     species.
 
@@ -212,7 +212,7 @@ def increment_basal_area_pl(sp,
     :param float SDF_Sb0: Stand Density Factor of species Sb
 
     '''
-    cdef double BAinc, a1, a2, a3, a4, a5, a6, \
+    cdef np.float64_t BAinc, a1, a2, a3, a4, a5, a6, \
         z1, z2, z3, k, k1, k2, m1, m2
 
     if N_bh == 0:
