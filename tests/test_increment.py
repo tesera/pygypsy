@@ -1,5 +1,6 @@
 from gypsy import increment
 
+
 def test_increment_basal_area_pl():
     args = []
     expected = None
