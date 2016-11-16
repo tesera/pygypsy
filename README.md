@@ -286,6 +286,19 @@ optimizations to better use of library functions.
 Do not attempt to optimize unless it is absolutely necessary, and discuss your
 ideas with other developers before trying to implement them.
 
+### Cython
+
+[Cython](cython.readthedocs.io) is used and aviable for use for performance
+limiting areas of the code. Familiarize yourself with cython before revising /
+adding code which uses cython.
+
+The implication of cython use is that the modules written in cython must be
+recompiled in order for changes in those modules to take effect (e.g. before
+running tests). This can be done in either of the following ways:
+
+    - `pip install -e .`
+    - `python setup.py build_ext --inplace`
+
 ### Ad-hoc analyses in `notebooks/`
 
 Sometimes it is useful to inlcude the results of ad-hoc analyses of gypsy's
