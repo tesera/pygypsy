@@ -7,6 +7,8 @@ It uses the non-spatial implementaion.
 
 """
 # TODO: remove sp from function args & update uses of function
+
+# NOTE: cython has a bug with ** and negative integer exponents, it coerces result to int
 import numpy as np
 cimport numpy as np
 
@@ -49,18 +51,18 @@ def increment_basal_area_aw(sp,
         a3 = 1.143762
         a4 = -0.03475
         a5 = 0.835189
-        X1 = a1* 10**(-4)
-        X2 = (bhage)**2
-        X3 = np.exp(-a2*bhage**(0.5+a1))
-        X4 = SC**a5
-        X5 = (np.log(1+N0*(1+bhage)**0.5))**2
+        X1 = a1 * pow(10, -4)
+        X2 = bhage ** 2
+        X3 = np.exp(-a2 * bhage ** (0.5 + a1))
+        X4 = SC ** a5
+        X5 = (np.log(1 + N0 * (1 + bhage) ** 0.5)) ** 2
         X6 = SI_bh
-        d1 = (1+BA)**a3
-        d2 = 1+np.exp(1 -np.log(1+SC**2)/2.0)
-        k = a4*np.log(0.01+bhage/10.0)
-        n = X1*X2*X3*X4*X5*X6
-        d = d1*d2
-        BAinc = (n/d) + k
+        d1 = (1 + BA) ** a3
+        d2 = 1 + np.exp(1 -np.log(1 + SC ** 2) / 2.0)
+        k = a4 * np.log(0.01 + bhage / 10.0)
+        n = X1 * X2 * X3 * X4 * X5 * X6
+        d = d1 * d2
+        BAinc = (n / d) + k
 
     return  BAinc
 
@@ -105,7 +107,7 @@ def increment_basal_area_sb(sp,
         a3 = 0.17191
         k = (1+((N0**0.5)*((1+bhage)**0.5)))*(np.exp(-(N0/4.0)/10000.0))*(np.log(1+SI_bh))/((1+BA)**a2)
 
-        k1 = (10**-4)*a1*(np.exp(-a2*bhage))*(SC**a3)*(bhage**(a2+np.sqrt(a1)))
+        k1 = (pow(10, -4))*a1*(np.exp(-a2*bhage))*(SC**a3)*(bhage**(a2+np.sqrt(a1)))
         BAinc = k*k1
 
     return BAinc
@@ -175,7 +177,7 @@ def increment_basal_area_sw(sp,
             z3 = 1
 
         k = (a4*z1*np.log(1+(SDF_Aw0/10000.0))) + (a5*z2*np.log(1+(SDF_Pl0/10000.0))) + (z3*np.log(1+(SDF_Sb0/10000.0)))
-        k1 = (10**-4)*a1*((a2+bhage)**2)*((1+bhage)**((a1**0.5)+a2-a3))*np.exp(-a2*bhage)*(SC**a6)
+        k1 = (pow(10, -4))*a1*((a2+bhage)**2)*((1+bhage)**((a1**0.5)+a2-a3))*np.exp(-a2*bhage)*(SC**a6)
         k2 = 1 + np.exp(1 + k + ((np.log(1+((N0**0.5)/10000.0)))/2.0)  + (a3 * np.log(1+BA)))
         m = (np.log(1+(N0*((1+bhage)**0.5)))**2)* ((SI_bh)**0.5)* np.exp(-(N0/10.0)/10000.0)
         BAinc = k1*m/k2
@@ -247,7 +249,7 @@ def increment_basal_area_pl(sp,
             z3 = 1
 
         k = (z1*np.log(1+(SDF_Aw0/1000.0))) + (z2*(np.log(1+(SDF_Sw0/1000.0)))/2.0)+ (z3*(np.log(1+(SDF_Sb0/1000.0)))/2.0)
-        k1 = (10**-4)*a1*bhage * np.exp(-a2* bhage) * (1 + ((np.log(1+ bhage))/2.0))
+        k1 = (pow(10, -4))*a1*bhage * np.exp(-a2* bhage) * (1 + ((np.log(1+ bhage))/2.0))
         k2 = 1+np.exp((k/2.0)+ np.log(1+((N0/3.0)/10000.0)) - (a3 * (SC**0.5)) + (a4*np.log(1+BA)))
         m1 = (1+a3+(SI_bh**a6)) * (N0**0.5) * np.exp(-(N0/3.0)/10000.0)
         m2 = a5 * np.log(0.01+(bhage/10.0))
