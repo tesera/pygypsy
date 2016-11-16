@@ -6,7 +6,7 @@ resolution.
 It uses the non-spatial implementaion.
 
 """
-# TODO: remove sp_<speciesacroynm> from function args & update uses of function
+# TODO: remove sp from function args & update uses of function
 import numpy as np
 cimport numpy as np
 
