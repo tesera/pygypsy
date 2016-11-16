@@ -38,4 +38,3 @@ def test_increment_basal_area_sw():
     # TODO: known value
     # TODO: 0 as an input
     # TODO: negative as an input
-
