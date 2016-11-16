@@ -1,10 +1,17 @@
 import numpy as np
 from codecs import open as codecs_open
+from distutils.extension import Extension
 from setuptools import setup, find_packages
 from Cython.Build import cythonize
 
 with codecs_open('README.md', encoding='utf-8') as f:
     LONG_DESCRIPTION = f.read()
+
+
+extensions = [
+    Extension("increment", ["gypsy/increment.pyx"],
+              include_dirs = [np.get_include()]),
+]
 
 
 setup(name='gypsy',
@@ -18,7 +25,7 @@ setup(name='gypsy',
       url='',
       license='',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
-      ext_modules=cythonize('gypsy/*.pyx', include_path=[np.get_include()]),
+      ext_modules=cythonize(extensions),
       zip_safe=False,
       include_package_data=True,
       package_data={
