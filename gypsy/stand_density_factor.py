@@ -1,7 +1,12 @@
 """Stand desnity factor estimators"""
+import logging
 import numpy as np
 
-def sdf_aw(sp, site_index, bhage, density, printWarnings=True):
+
+LOGGER = logging.getLogger(__name__)
+
+
+def sdf_aw(sp, site_index, bhage, density):
     '''Main purpose of this function is to estimate SDF for the species
 
     :param str sp: species name
@@ -43,15 +48,13 @@ def sdf_aw(sp, site_index, bhage, density, printWarnings=True):
             iterCount = iterCount + 1
 
             if iterCount == 1500:
-                if printWarnings:
-                    print '\n GYPSYNonSpatial.densityNonSpatialAw()'
-                    print ' Slow convergence'
+                    logger.warning('Slow convergence')
                 return density_est, SDF0
 
     return density_est, SDF0
 
 
-def sdf_sb(sp, site_index, tage, density, printWarnings=True):
+def sdf_sb(sp, site_index, tage, density):
     '''Main purpose of this function is to estimate SDF for the species
 
     :param str sp: species name
@@ -90,15 +93,13 @@ def sdf_sb(sp, site_index, tage, density, printWarnings=True):
                     iterCount = iterCount + 1
 
                     if iterCount == 150:
-                        if printWarnings:
-                            print '\n GYPSYNonSpatial.densityNonSpatialSb()'
-                            print ' Slow convergence'
+                            logger.warning('Slow convergence')
                         return density_est, SDF0
 
     return density_est, SDF0
 
 
-def sdf_sw(sp, site_index, tage, SDF0, density, printWarnings=True):
+def sdf_sw(sp, site_index, tage, SDF0, density):
     '''Main purpose of this function is to estimate SDF for the species
 
     :param str sp: species name
@@ -146,15 +147,13 @@ def sdf_sw(sp, site_index, tage, SDF0, density, printWarnings=True):
                     iterCount = iterCount + 1
 
                     if iterCount == 150:
-                        if printWarnings:
-                            print '\n GYPSYNonSpatial.densityNonSpatialSw()'
-                            print ' Slow convergence'
+                            logger.warning('Slow convergence')
                         return density_est, SDF0
 
     return density_est, SDF0
 
 
-def sdf_pl(sp, site_index, tage, SDF0_aw, SDF0_sw, SDF0_sb, density, printWarnings=True):
+def sdf_pl(sp, site_index, tage, SDF0_aw, SDF0_sw, SDF0_sb, density):
     '''Main purpose of this function is to estimate SDF for the species
 
     :param str sp: species name
@@ -217,9 +216,7 @@ def sdf_pl(sp, site_index, tage, SDF0_aw, SDF0_sw, SDF0_sb, density, printWarnin
                     iterCount = iterCount + 1
 
                     if iterCount == 150:
-                        if printWarnings:
-                            print '\n GYPSYNonSpatial.densityNonSpatialSw()'
-                            print ' Slow convergence'
+                            logger.warning('Slow convergence')
                         return density_est, SDF0
 
     return density_est, SDF0
