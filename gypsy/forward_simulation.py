@@ -10,16 +10,17 @@ from utils import _log_loop_progress
 from GYPSYNonSpatial import (
     SCestimate,
     BAfactorFinder_Aw,
-    BAfromZeroToDataAw,
     BAfactorFinder_Sb,
-    BAfromZeroToDataSb,
     BAfactorFinder_Sw,
-    BAfromZeroToDataSw,
     BAfactorFinder_Pl,
-    BAfromZeroToDataPl,
     densities_and_SCs_to_250,
 )
-
+from gypsy.basal_area_simulate import (
+    sim_basal_area_aw,
+    sim_basal_area_sw,
+    sim_basal_area_sb,
+    sim_basal_area_pl,
+)
 from gypsy.volume import(
     merchantable_volume,
     gross_total_volume,
@@ -256,10 +257,10 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         # we can't do simulation choice = no here for sb, sw, pl because the factor should not be applied for them
         # sw, sb, pl use the factor until the time of data. the subsequent years use the regular basal area increment formula
         # julianno sambatti, november 10, 2016
-        BA_0_to_data_Aw_arr = BAfromZeroToDataAw(startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice='no')
-        BA_0_to_data_Sb_arr = BAfromZeroToDataSb(startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice)
-        BA_0_to_data_Sw_arr = BAfromZeroToDataSw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice)
-        BA_0_to_data_Pl_arr = BAfromZeroToDataPl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice)
+        BA_0_to_data_Aw_arr = sim_basal_area_aw(startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice='no')
+        BA_0_to_data_Sb_arr = sim_basal_area_sb(startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice)
+        BA_0_to_data_Sw_arr = sim_basal_area_sw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice)
+        BA_0_to_data_Pl_arr = sim_basal_area_pl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice)
 
         output_DF_Aw = pd.DataFrame(BA_0_to_data_Aw_arr, columns=['BA_Aw'])
         output_DF_Sw = pd.DataFrame(BA_0_to_data_Sw_arr, columns=['BA_Sw'])

@@ -49,6 +49,31 @@ def setup_logging():
                 'level':'DEBUG',
                 'propagate': True,
             },
+            'gypsy.basal_area_simulate': {
+                'handlers':['file'],
+                'level':'DEBUG',
+                'propagate': True,
+            },
+            'gypsy.density': {
+                'handlers':['file'],
+                'level':'DEBUG',
+                'propagate': True,
+            },
+            'gypsy.plot': {
+                'handlers':['file'],
+                'level':'DEBUG',
+                'propagate': True,
+            },
+            'gypsy.stand_density_factor': {
+                'handlers':['file'],
+                'level':'DEBUG',
+                'propagate': True,
+            },
+            'gypsy.volume': {
+                'handlers':['file'],
+                'level':'DEBUG',
+                'propagate': True,
+            },
             'gypsy.GYPSYNonSpatial': {
                 'handlers':['file'],
                 'level':'INFO',
