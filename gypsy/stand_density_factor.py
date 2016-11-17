@@ -48,7 +48,7 @@ def sdf_aw(sp, site_index, bhage, density):
             iterCount = iterCount + 1
 
             if iterCount == 1500:
-                logger.warning('Slow convergence')
+                LOGGER.warning('Slow convergence')
                 break
 
     return density_est, SDF0
@@ -93,7 +93,7 @@ def sdf_sb(sp, site_index, tage, density):
                     iterCount = iterCount + 1
 
                     if iterCount == 150:
-                        logger.warning('Slow convergence')
+                        LOGGER.warning('Slow convergence')
                         break
 
     return density_est, SDF0
@@ -147,7 +147,7 @@ def sdf_sw(sp, site_index, tage, SDF0, density):
                     iterCount = iterCount + 1
 
                     if iterCount == 150:
-                        logger.warning('Slow convergence')
+                        LOGGER.warning('Slow convergence')
                         break
 
     return density_est, SDF0
@@ -216,7 +216,7 @@ def sdf_pl(sp, site_index, tage, SDF0_aw, SDF0_sw, SDF0_sb, density):
                     iterCount = iterCount + 1
 
                     if iterCount == 150:
-                        logger.warning('Slow convergence')
+                        LOGGER.warning('Slow convergence')
                         break
 
     return density_est, SDF0
