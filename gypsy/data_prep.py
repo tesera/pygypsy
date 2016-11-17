@@ -9,10 +9,10 @@ from copy import deepcopy
 
 import increment as incr
 from stand_density_factor import (
-    sdf_aw,
-    sdf_sb,
-    sdf_sw,
-    sdf_pl,
+    estimate_sdf_aw,
+    estimate_sdf_sb,
+    estimate_sdf_sw,
+    estimate_sdf_pl,
 )
 from GYPSYNonSpatial import (
     densityAw,
@@ -474,19 +474,19 @@ def prep_standtable(data):
         density_sw = sp_sw[4]
         density_pl = sp_pl[4]
 
-        y_aw = sdf_aw(sp_aw, site_index_bh_aw, bhage_aw, density_aw)
+        y_aw = estimate_sdf_aw(sp_aw, site_index_bh_aw, bhage_aw, density_aw)
         sdf_aw0 = y_aw[1]
         density_bh_aw = y_aw[0]
 
-        y_sb = sdf_sb(sp_sb, site_index_bh_sb, tage_sb, density_sb)
+        y_sb = estimate_sdf_sb(sp_sb, site_index_bh_sb, tage_sb, density_sb)
         sdf_sb0 = y_sb[1]
         density_bh_sb = y_sb[0]
 
-        y_sw = sdf_sw(sp_sw, site_index_bh_sw, tage_sw, sdf_aw0, density_sw)
+        y_sw = estimate_sdf_sw(sp_sw, site_index_bh_sw, tage_sw, sdf_aw0, density_sw)
         sdf_sw0 = y_sw[1]
         density_bh_sw = y_sw[0]
 
-        y_pl = sdf_pl(
+        y_pl = estimate_sdf_pl(
             sp_pl, site_index_bh_pl, tage_pl,
             sdf_aw0, sdf_sw0, sdf_sb0, density_pl
         )
