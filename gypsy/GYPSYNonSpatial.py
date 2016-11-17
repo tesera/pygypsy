@@ -130,16 +130,6 @@ def densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings=True):
     return N_est_Sb, SDF_Sb0
 
 
-def minimum_sdf_aw(bhage_aw, si_bh_aw):
-    """estimate N given that SDF have been estimated
-
-    """
-    x0 = [200.0]
-    optimize = fmin(densityAw, x0, args=(bhage_aw, si_bh_aw))
-
-    return optimize
-
-
 def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings=True):
     '''Main purpose of this function is to estimate SDF for the species
 
