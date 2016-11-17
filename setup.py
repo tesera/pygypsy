@@ -9,7 +9,7 @@ with codecs_open('README.md', encoding='utf-8') as f:
 
 
 extensions = [
-    Extension("increment", ["gypsy/increment.pyx"],
+    Extension("basal_area_increment", ["gypsy/basal_area_increment.pyx"],
               include_dirs = [np.get_include()]),
 ]
 

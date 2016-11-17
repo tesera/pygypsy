@@ -10,7 +10,7 @@ Alberta Sustainable Resource Development, 25.
 import os
 import matplotlib
 
-import increment
+import basal_area_increment
 
 # Force matplotlib to not use any Xwindows backend so that docker works
 matplotlib.use('Agg')
@@ -18,4 +18,4 @@ matplotlib.use('Agg')
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 
-__all__ = ['DATA_DIR', 'increment']
+__all__ = ['DATA_DIR', 'basal_area_increment']

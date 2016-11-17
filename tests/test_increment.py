@@ -1,4 +1,4 @@
-from gypsy import increment
+from gypsy import basal_area_increment
 
 
 def test_increment_basal_area_pl():

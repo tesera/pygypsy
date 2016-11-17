@@ -7,7 +7,7 @@ import logging
 import pandas as pd
 from copy import deepcopy
 
-import increment as incr
+import basal_area_increment as incr
 from gypsy.stand_density_factor import (
     estimate_sdf_aw,
     estimate_sdf_sb,

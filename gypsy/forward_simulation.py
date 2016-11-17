@@ -24,7 +24,7 @@ from gypsy.volume import(
     merchantable_volume,
     gross_total_volume,
 )
-import increment as incr
+import basal_area_increment as incr
 
 
 logger = logging.getLogger(__name__)
