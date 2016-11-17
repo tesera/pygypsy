@@ -18,6 +18,12 @@ import numpy as np
 import pandas as pd
 
 import increment as incr
+from gypsy.density import(
+    estimate_density_aw,
+    estimate_density_pl,
+    estimate_density_sb,
+    estimate_density_sw,
+)
 from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
 
 
