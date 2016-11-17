@@ -33,16 +33,16 @@ sp_Pl = ['Pl', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 sp_Sw = ['Sw', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 
 
-def densityAw(SDF_Aw0, bhage_Aw, SI_bh_Aw):
+def densityAw(SDF_Aw0, bhage_Aw, SI_bh_Aw, ret_detail = False):
     '''Main purpose of this function is to project densities forward and backward
     in time for the species
 
     :param float SI_bh_Aw: site index of species Aw
     :param float bhage_Aw: breast height age of species Aw
-    :param floar SDF_Aw0: Stand Density Factor of species Aw
-
+    :param float SDF_Aw0: Stand Density Factor of species Aw
+    :param bool ret_detail: whether additional values should be returned - used
+    by other functions to iteratively solve this function for SDF
     '''
-
     if SDF_Aw0 > 0:
         c0 = 0.717966
         c1 = 6.67468
@@ -55,9 +55,17 @@ def densityAw(SDF_Aw0, bhage_Aw, SI_bh_Aw):
     else:
         N_bh_Aw = 0
 
+    if ret_detail:
+        return {
+            'k1': k1,
+            'k2': k2,
+            'sdf': SDF_Aw0,
+            'density': N_bh_Aw,
+        }
+
     return N_bh_Aw
 
-def densitySb(SDF_Sb0, tage_Sb, SI_bh_Sb):
+def densitySb(SDF_Sb0, tage_Sb, SI_bh_Sb, ret_detail=False):
     '''Main purpose of this function is to project densities forward and backward
     in time for the species
 
@@ -65,9 +73,10 @@ def densitySb(SDF_Sb0, tage_Sb, SI_bh_Sb):
     :param float tage_Sb: total age of species Sb
     :param float SDF_Sb0: Stand Density Factor of species Sb
     :param float SDF_Aw0: Stand Density Factor of species Aw
+    :param bool ret_detail: whether additional values should be returned - used
+    by other functions to iteratively solve this function for SDF
 
     '''
-
     if SDF_Sb0 > 0:
         c1 = -26.3836
         c2 = 0.166483
@@ -78,14 +87,21 @@ def densitySb(SDF_Sb0, tage_Sb, SI_bh_Sb):
         k1 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sb))+(b3*numpy.log(1+50)))
         k2 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sb))+(b3*numpy.log(1+tage_Sb)))
         N_bh_Sb = SDF_Sb0*k1/k2
-
     else:
         N_bh_Sb = 0
+
+    if ret_detail:
+        return {
+            'k1': k1,
+            'k2': k2,
+            'sdf': SDF_Sb0,
+            'density': N_bh_Sb,
+        }
 
     return N_bh_Sb
 
 
-def densitySw(SDF_Sw0, SDF_Aw0, tage_Sw, SI_bh_Sw):
+def densitySw(SDF_Sw0, SDF_Aw0, tage_Sw, SI_bh_Sw, ret_detail=False):
     '''Main purpose of this function is to project densities forward and backward
     in time for the species
 
@@ -93,11 +109,11 @@ def densitySw(SDF_Sw0, SDF_Aw0, tage_Sw, SI_bh_Sw):
     :param float tage_Sw: total age of species Sw
     :param float SDF_Sw0: Stand Density Factor of species Sw
     :param float SDF_Aw0: Stand Density Factor of species Aw
+    :param bool ret_detail: whether additional values should be returned - used
+    by other functions to iteratively solve this function for SDF
 
     '''
-
     if SDF_Sw0 > 0:
-
         if SDF_Aw0 == 0:
             z1 = 0
         elif SDF_Aw0 > 0:
@@ -111,16 +127,22 @@ def densitySw(SDF_Sw0, SDF_Aw0, tage_Sw, SI_bh_Sw):
         b1 = (c1/((numpy.log(SDF_Sw0)+numpy.log(50+1))**c2))+(z1*((1+(SDF_Aw0/1000.0))**0.5))
         k1 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sw))+(b3*numpy.log(50+1)))
         k2 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sw))+(b3*numpy.log(1+tage_Sw)))
-
         N_bh_Sw = SDF_Sw0*k1/k2
-
     else:
         N_bh_Sw = 0
+
+    if ret_detail:
+        return {
+            'k1': k1,
+            'k2': k2,
+            'sdf': SDF_Sw0,
+            'density': N_bh_Sw,
+        }
 
     return N_bh_Sw
 
 
-def densityPl(SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl, SI_bh_Pl):
+def densityPl(SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl, SI_bh_Pl, ret_detail=False):
     '''Main purpose of this function is to project densities forward and backward
     in time for the species
 
@@ -130,9 +152,10 @@ def densityPl(SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl, SI_bh_Pl):
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float SDF_Sb0: Stand Density Factor of species Sb
     :param float SDF_Sw0: Stand Density Factor of species Sw
+    :param bool ret_detail: whether additional values should be returned - used
+    by other functions to iteratively solve this function for SDF
 
     '''
-
     if SDF_Pl0 > 0:
         c1 = -5.25144
         c2 = -483.195
@@ -145,10 +168,12 @@ def densityPl(SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl, SI_bh_Pl):
             z1 = 0
         elif SDF_Aw0 > 0:
             z1 = 1
+
         if SDF_Sw0 == 0:
             z2 = 0
         elif SDF_Sw0 > 0:
             z2 = 1
+
         if SDF_Sb0 == 0:
             z3 = 0
         elif SDF_Sb0 > 0:
@@ -163,6 +188,14 @@ def densityPl(SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl, SI_bh_Pl):
         N_bh_Pl = SDF_Pl0*k1/k2
     else:
         N_bh_Pl = 0
+
+    if ret_detail:
+        return {
+            'k1': k1,
+            'k2': k2,
+            'sdf': SDF_Pl0,
+            'density': N_bh_Pl,
+        }
 
     return N_bh_Pl
 
