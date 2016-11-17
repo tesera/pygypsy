@@ -28,11 +28,11 @@ def sdf_aw(sp, site_index, bhage, density):
         c0 = 0.717966
         c1 = 6.67468
         SDF0 = density # best SDF guess
-        acceptableDiff = 0.00001
-        NDiffFlag = False
-        iterCount = 0
+        tolerance = 0.00001
+        within_tolerance = False
+        iter_count = 0
 
-        while NDiffFlag == False:
+        while not within_tolerance:
             b3 = (1+c0) * SDF0**((c1 + np.log(SDF0))/SDF0)
             b2 = (c0/4) * (SDF0**0.5)**(1/(SDF0))
             b1 = -((1/((SDF0/1000)**(0.5))) + np.sqrt(1+np.sqrt(50/(np.sqrt(SDF0)*np.log(50+1))))) * np.log(50+1)
@@ -40,14 +40,14 @@ def sdf_aw(sp, site_index, bhage, density):
             k2 = 1+np.exp(b1 + (b2*site_index) + (b3*np.log(1+bhage)))
             density_est = SDF0*k1/k2
 
-            if abs(density-density_est) < acceptableDiff:
-                NDiffFlag = True
+            if abs(density-density_est) < tolerance:
+                within_tolerance = True
             else:
                 density_est = (density + density_est)/2
                 SDF0 = density_est *k2/k1
-            iterCount = iterCount + 1
+            iter_count += 1
 
-            if iterCount == 1500:
+            if iter_count == 1500:
                 LOGGER.warning('Slow convergence')
                 break
 
@@ -73,11 +73,11 @@ def sdf_sb(sp, site_index, tage, density):
                 c2 = 0.166483
                 c3 = 2.738569
                 SDF0 = density # best SDF guess
-                acceptableDiff = 0.00001
-                NDiffFlag = False
-                iterCount = 0
+                tolerance = 0.00001
+                within_tolerance = False
+                iter_count = 0
 
-                while abs(density-density_est) > acceptableDiff:
+                while not within_tolerance:
                     b2 = c3
                     b3 = c3*(SDF0**(1/SDF0))
                     b1 = c1/ ((((SDF0/1000.0)**0.5)+np.log(50+1))**c2)
@@ -85,14 +85,14 @@ def sdf_sb(sp, site_index, tage, density):
                     k2 = 1+np.exp(b1+(b2*np.log(site_index))+(b3*np.log(1+tage)))
                     density_est = SDF0*k1/k2
 
-                    if abs(density-density_est) < acceptableDiff:
-                        NDiffFlag = True
+                    if abs(density-density_est) < tolerance:
+                        within_tolerance = True
                     else:
                         density_est = (density + density_est)/2
                         SDF0 = density_est * k2/k1
-                    iterCount = iterCount + 1
+                    iter_count += 1
 
-                    if iterCount == 150:
+                    if iter_count == 150:
                         LOGGER.warning('Slow convergence')
                         break
 
@@ -126,11 +126,11 @@ def sdf_sw(sp, site_index, tage, SDF0, density):
                 c2 = 1.176995
                 c3 = 1.733601
                 SDF0 = density # best SDF guess
-                acceptableDiff = 0.00001
-                NDiffFlag = False
-                iterCount = 0
+                tolerance = 0.00001
+                within_tolerance = False
+                iter_count = 0
 
-                while abs(density-density_est) > acceptableDiff:
+                while not within_tolerance:
                     b3 = c3*(SDF0**(1/SDF0))
                     b2 = c3
                     b1 = (c1/((np.log(SDF0)+np.log(50+1))**c2))+(z1*((1+(SDF0/1000.0))**0.5))
@@ -138,15 +138,15 @@ def sdf_sw(sp, site_index, tage, SDF0, density):
                     k2 = 1+np.exp(b1+(b2*np.log(site_index))+(b3*np.log(1+tage)))
                     density_est = SDF0*k1/k2
 
-                    if abs(density-density_est) < acceptableDiff:
-                        NDiffFlag = True
+                    if abs(density-density_est) < tolerance:
+                        within_tolerance = True
                     else:
                         density_est = (density + density_est)/2
                         SDF0 = density_est * k2/k1
 
-                    iterCount = iterCount + 1
+                    iter_count += 1
 
-                    if iterCount == 150:
+                    if iter_count == 150:
                         LOGGER.warning('Slow convergence')
                         break
 
@@ -194,11 +194,11 @@ def sdf_pl(sp, site_index, tage, SDF0_aw, SDF0_sw, SDF0_sb, density):
                     z3 = 1
 
                 SDF0 = density # best SDF guess
-                acceptableDiff = 0.00001
-                NDiffFlag = False
-                iterCount = 0
+                tolerance = 0.00001
+                within_tolerance = False
+                iter_count = 0
 
-                while abs(density-density_est) > acceptableDiff:
+                while not within_tolerance:
                     k = (1+(c6*(SDF0**0.5)))/SDF0
                     b3 = c4*(SDF0**k)
                     b2 = c4/((SDF0**0.5)**c5)
@@ -207,15 +207,15 @@ def sdf_pl(sp, site_index, tage, SDF0_aw, SDF0_sw, SDF0_sb, density):
                     k2 = 1+np.exp(b1+(b2*np.log(site_index))+(b3*np.log(1+tage)))
                     density_est = SDF0*k1/k2
 
-                    if abs(density-density_est) < acceptableDiff:
-                        NDiffFlag = True
+                    if abs(density-density_est) < tolerance:
+                        within_tolerance = True
                     else:
                         density_est = (density + density_est)/2
                         SDF0 = density_est * k2/k1
 
-                    iterCount = iterCount + 1
+                    iter_count += 1
 
-                    if iterCount == 150:
+                    if iter_count == 150:
                         LOGGER.warning('Slow convergence')
                         break
 
