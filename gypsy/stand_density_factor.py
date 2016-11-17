@@ -7,7 +7,7 @@ def sdf_aw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
     :param str sp_Aw: species name
     :param float SI_bh_Aw: site index of species Aw
     :param float bhage_Aw: breast height age of speceis Aw
-    :param float N_Aw: densit of species Aw
+    :param float N_Aw: density of species Aw
 
     '''
     N_est_Aw = 0
@@ -57,7 +57,7 @@ def sdf_sb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings=True):
     :param str sp_Sb: species name
     :param float SI_bh_Sb: site index of species Sb
     :param float tage_Sb: total age of species Sb
-    :param float N_Sb: densit of species Sb
+    :param float N_Sb: density of species Sb
 
     '''
     N_est_Sb = 0
@@ -106,7 +106,7 @@ def sdf_sw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings=True):
     :param float tage_Sw: total age of species Sw
     :param float SDF_Aw0: Stand Density Factor of species Aw, this parameter indicates that the density of Sw
     depends on the density of Aw
-    :param float N_Sw: densit of species Sw
+    :param float N_Sw: density of species Sw
 
     '''
     N_est_Sw = 0
@@ -165,7 +165,7 @@ def sdf_pl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, N_Pl, printWarni
     :param float SDF_Pl0: Stand Density Factor of species Pl
     these parameters SDF above indicate that the density of Pl
     depends on the density of all otehr species
-    :param float N_Pl: densit of species Pl
+    :param float N_Pl: density of species Pl
 
     '''
     N_est_Pl = 0
