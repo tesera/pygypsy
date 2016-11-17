@@ -8,21 +8,21 @@ import pandas as pd
 from copy import deepcopy
 
 import increment as incr
-from stand_density_factor import (
+from gypsy.stand_density_factor import (
     estimate_sdf_aw,
     estimate_sdf_sb,
     estimate_sdf_sw,
     estimate_sdf_pl,
 )
-from GYPSYNonSpatial import (
-    densityAw,
-    densitySw,
-    densitySb,
-    densityPl,
-    SCestimate,
+from gypsy.density import (
+    estimate_density_aw,
+    estimate_density_sw,
+    estimate_density_sb,
+    estimate_density_pl,
 )
 from utils import _log_loop_progress
-from asaCompileAgeGivenSpSiHt import (
+from gypsy.GYPSYNonSpatial import SCestimate
+from gypsy.asaCompileAgeGivenSpSiHt import (
     computeTreeAge,
     ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge,
     ComputeGypsySiteIndex,
@@ -494,10 +494,10 @@ def prep_standtable(data):
         density_bh_pl = y_pl[0]
 
         # estimating species densities at time zero
-        initial_density_aw = densityAw(sdf_aw0, 0, site_index_bh_aw)
-        initial_density_sb = densitySb(sdf_sb0, 0, site_index_bh_sb)
-        initial_density_sw = densitySw(sdf_sw0, sdf_aw0, 0, site_index_bh_sw)
-        initial_density_pl = densityPl(
+        initial_density_aw = estimate_density_aw(sdf_aw0, 0, site_index_bh_aw)
+        initial_density_sb = estimate_density_sb(sdf_sb0, 0, site_index_bh_sb)
+        initial_density_sw = estimate_density_sw(sdf_sw0, sdf_aw0, 0, site_index_bh_sw)
+        initial_density_pl = estimate_density_pl(
             sdf_aw0, sdf_sw0, sdf_sb0, sdf_pl0, 0, site_index_bh_pl
         )
 
