@@ -3,6 +3,7 @@
 Calculates and joins parameters required for GYPSY to a plot table
 
 """
+#pylint: disable=no-member
 import logging
 import pandas as pd
 from copy import deepcopy
@@ -28,10 +29,8 @@ from gypsy.asaCompileAgeGivenSpSiHt import (
     ComputeGypsySiteIndex,
 )
 
-# TODO: replace acronyms with something more verbose
 # TODO: use pure functions or class instances to avoid mutating global state
-# TODO: formal docstrings so we can generate nice documentation
-# TODO: more subroutines and wrapper functions for easier readability
+# TODO: don't nest functions
 
 
 LOGGER = logging.getLogger(__name__)
@@ -97,7 +96,7 @@ def get_species_site_indices(dominant_species, site_index):
             site_index_fb = 0.92* site_index_pl + 1.68
             site_index_fb = 0.92 * site_index_sw + 1.68
             site_index_sb = 0.64 * site_index_pl + 2.76
-        
+
         elif dominant_species == 'Sb':
             site_index_sb = site_index
             site_index_pl = 1.57 * site_index_sb - 4.33
@@ -106,13 +105,13 @@ def get_species_site_indices(dominant_species, site_index):
             site_index_sw = 1.16 * site_index_pl - 2.47
             site_index_white_aspen = 1.18 * site_index_pl - 4.02
             site_index_pb = site_index_white_aspen
-            
+
 
     return site_index_white_aspen, site_index_pl, site_index_sw, site_index_sb
 
 
 def prep_standtable(data):
-    ''' 
+    '''
     define site_index of all other species given the dominant species
 
     :param data:
@@ -587,7 +586,7 @@ def prep_standtable(data):
             'StumpDOB_Pl': stump_dob_pl,
             'StumpHeight_Aw': stump_height_aw,
             'StumpHeight_Sb': stump_height_sb,
-            'StumpHeight_Sw': stump_height_sw,
+            'Stumpheight_Sw': stump_height_sw,
             'StumpHeight_Pl': stump_height_pl,
             'TopDib_Aw': top_dib_aw,
             'TopDib_Sb': top_dib_sb,

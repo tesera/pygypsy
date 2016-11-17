@@ -9,11 +9,13 @@ from collections import OrderedDict
 from utils import _log_loop_progress
 from GYPSYNonSpatial import (
     SCestimate,
-    BAfactorFinder_Aw,
-    BAfactorFinder_Sb,
-    BAfactorFinder_Sw,
-    BAfactorFinder_Pl,
     densities_and_SCs_to_250,
+)
+from gypsy.basal_area_factor import (
+    estimate_basal_area_factor_aw,
+    estimate_basal_area_factor_sb,
+    estimate_basal_area_factor_sw,
+    estimate_basal_area_factor_pl,
 )
 from gypsy.basal_area_simulate import (
     sim_basal_area_aw,
@@ -97,16 +99,16 @@ def get_factors_for_all_species(**kwargs):
     f_Pl = 0
 
     if kwargs['N0_Aw'] > 0:
-        f_Aw = BAfactorFinder_Aw(**kwargs)
+        f_Aw = estimate_basal_area_factor_aw(**kwargs)
 
     if kwargs['N0_Sb'] > 0:
-        f_Sb = BAfactorFinder_Sb(**kwargs)
+        f_Sb = estimate_basal_area_factor_sb(**kwargs)
 
     if kwargs['N0_Sw'] > 0:
-        f_Sw = BAfactorFinder_Sw(**kwargs)
+        f_Sw = estimate_basal_area_factor_sw(**kwargs)
 
     if kwargs['N0_Pl'] > 0:
-        f_Pl = BAfactorFinder_Pl(**kwargs)
+        f_Pl = estimate_basal_area_factor_pl(**kwargs)
 
     return {'f_Aw':f_Aw,
             'f_Sb':f_Sb,

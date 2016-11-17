@@ -56,6 +56,11 @@ def setup_logging():
                 'level':'DEBUG',
                 'propagate': True,
             },
+            'gypsy.basal_area_factor': {
+                'handlers':['file'],
+                'level':'DEBUG',
+                'propagate': True,
+            },
             'gypsy.density': {
                 'handlers':['file'],
                 'level':'DEBUG',
