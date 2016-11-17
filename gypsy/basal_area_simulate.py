@@ -1,4 +1,5 @@
 """Basal Area Simulation"""
+#pylint: disable=no-member
 import logging
 import numpy as np
 
@@ -8,225 +9,250 @@ from gypsy import basal_area_increment as incr
 LOGGER = logging.getLogger(__name__)
 
 
-def sim_basal_area_aw(startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw,
-                       densities, simulation_choice):
-    '''This is a function that supports factor finder functions.
+def sim_basal_area_aw(initial_age, site_index, density_at_bh_age,
+                      basal_area_at_bh_age, sdf_aw, correction_factor,
+                      densities, simulation_choice):
+    '''Simlulate basal area forward in time for White Aspen
 
     It creates the trajectory of basal area from bhage up to the inventory year
     given a correction factor that is being optimized
 
-    :param float startTage: Clock that uses the oldest species as a reference to become the stand age
-    :param float SI_bh_Aw: site index of species Aw
-    :param float BA_Aw0: basal area of Aw at breast height age, assumed to be very small
+    :param float initial_age: Clock that uses the oldest species as a reference
+                              to become the stand age
+    :param float site_index: site index of species Aw
+    :param float basal_area_at_bh_age: basal area of Aw at breast height age
     :param float SDF_Aw0: Stand Density Factor of species Aw
-    :param float N0_Aw: initial density of species Aw at breast height age
-    :param str simulation_choice: switch that determines whether simulation will stop at the
-    date of the inventory or will continue until year 250
-    :param float f_Aw: correction factor that guarantees that trajectory passes through
-    data obtained with inventory
+    :param float density_at_bh_age: initial density of species Aw at breast height age
+    :param str simulation_choice: switch that determines whether simulation will stop
+                                  at the date of the inventory or will continue until
+                                  year 250
+    :param float correction_factor: correction factor that guarantees that trajectory
+                                    passes through data obtained with inventory
 
     '''
     if simulation_choice == 'yes':
-        max_age = startTage
+        max_age = initial_age
     elif simulation_choice == 'no':
         max_age = 250
 
     basal_area_aw_arr = np.zeros(max_age)
-    BA_tempAw = BA_Aw0
+    basal_area_temp = basal_area_at_bh_age
 
-    for i, SC_Dict in enumerate(densities[0: max_age]):
-        bhage_Aw = SC_Dict['bhage_Aw']
-        SC_Aw = SC_Dict['SC_Aw']
-        N_bh_AwT = SC_Dict['N_bh_AwT']
+    for i, spec_comp_dict in enumerate(densities[0: max_age]):
+        bh_age_aw = spec_comp_dict['bhage_Aw']
+        spec_comp = spec_comp_dict['SC_Aw']
+        present_density = spec_comp_dict['N_bh_AwT']
 
-        if N0_Aw > 0:
-            if bhage_Aw > 0:
-                SC_Aw = (SC_Aw) * f_Aw
-                BAinc_Aw = incr.increment_basal_area_aw('Aw', SC_Aw, SI_bh_Aw, N_bh_AwT,
-                                                          N0_Aw, bhage_Aw, BA_tempAw)
-                BA_tempAw = BA_tempAw + BAinc_Aw
-                BA_AwB = BA_tempAw
-                if BA_AwB < 0:
-                    BA_AwB = 0
+        if density_at_bh_age > 0:
+            if bh_age_aw > 0:
+                spec_comp = spec_comp * correction_factor
+                basal_area_increment = incr.increment_basal_area_aw(
+                    'Aw', spec_comp, site_index, present_density,
+                    density_at_bh_age, bh_age_aw, basal_area_temp
+                )
+                basal_area_temp = basal_area_temp + basal_area_increment
+                new_basal_area = basal_area_temp
+
+                if new_basal_area < 0:
+                    new_basal_area = 0
             else:
-                BA_AwB = 0
+                new_basal_area = 0
         else:
-            BA_tempAw = 0
-            BA_AwB = 0
+            basal_area_temp = 0
+            new_basal_area = 0
 
-        basal_area_aw_arr[i] = BA_AwB
+        basal_area_aw_arr[i] = new_basal_area
 
     return basal_area_aw_arr
 
 
-def sim_basal_area_sb(startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb,
-                       N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice):
-    '''This is a function that supports factor finder functions.
+def sim_basal_area_sb(initial_age, initial_age_sb, years_to_bh_sb, spec_comp, site_index,
+                      present_density, density_at_bh_age, basal_area_at_bh_age,
+                      correction_factor, simulation_choice):
+    '''Simlulate basal area forward in time for Black Spruce
 
     It creates the trajectory of basal area from bhage up to the inventory year
     given a correction factor that is being optimized
 
-    :param float startTage: Clock that uses the oldest species as a reference to become the stand age
-    :param float startTageSb: species specific age counted independently
-    :param float y2bh_Sb: time elapseed in years from zero to breast height age of sp Sb
-    :param float SI_bh_Sb: site index of species Sb
-    :param float BA_Sb0: basal area of Sb at breast height age, assumed to be very small
-    :param float N_bh_SbT: density of species Sb at time T
-    :param float N0_Sb: initial density of species Sb at breast height age
-    :param str simulation_choice: switch that determines whether simulation will stop at the
-    date of the inventory or will continue until year 250
-    :param float f_Sb: correction factor that guarantees that trajectory passes through
-    data obtained with inventory
+    :param float initial_age: Clock that uses the oldest species as a reference to become
+                              the stand age
+    :param float initial_age_sb: species specific age counted independently
+    :param float years_to_bh_sb: time elapseed in years from zero to breast height age
+                                 of Sb
+    :param float spec_comp: proportion of basal area for Sb
+    :param float site_index: site index of species Sb
+    :param float basal_area_at_bh_age: basal area of Sb at breast height age
+    :param float present_density: density of species Sb at time T
+    :param float density_at_bh_age: initial density of species Sb at breast height age
+    :param str simulation_choice: switch that determines whether simulation will stop at
+                                  the date of the inventory or continue until year 250
+    :param float correction_factor: correction factor that guarantees that trajectory
+                                    passes through data obtained with inventory
 
     '''
     if simulation_choice == 'yes':
-        max_age = startTage
+        max_age = initial_age
     elif simulation_choice == 'no':
         max_age = 250
 
-    t = 0
+    year = 0
     basal_area_arr = np.zeros(max_age)
-    BA_tempSb = BA_Sb0
+    basal_area_temp = basal_area_at_bh_age
 
-    while t < max_age:
-        tage_Sb = startTageSb - startTage
-        bhage_Sb = tage_Sb - y2bh_Sb
+    while year < max_age:
+        tage_sb = initial_age_sb - initial_age
+        bh_age_sb = tage_sb - years_to_bh_sb
 
-        if N0_Sb > 0:
-            if bhage_Sb > 0:
-                SC_Sb = (SC_Sb) * f_Sb
-                BAinc_Sb = incr.increment_basal_area_sb('Sb', SC_Sb, SI_bh_Sb, N_bh_SbT,
-                                                          N0_Sb, bhage_Sb, BA_tempSb)
-                BA_tempSb = BA_tempSb + BAinc_Sb
-                BA_SbB = BA_tempSb
-                if BA_SbB < 0:
-                    BA_SbB = 0
+        if density_at_bh_age > 0:
+            if bh_age_sb > 0:
+                spec_comp = spec_comp * correction_factor
+                basal_area_increment = incr.increment_basal_area_sb(
+                    'Sb', spec_comp, site_index, present_density,
+                    density_at_bh_age, bh_age_sb, basal_area_temp
+                )
+                basal_area_temp = basal_area_temp + basal_area_increment
+                new_basal_area = basal_area_temp
+
+                if new_basal_area < 0:
+                    new_basal_area = 0
             else:
-                BA_SbB = 0
+                new_basal_area = 0
         else:
-            BA_tempSb = 0
-            BA_SbB = 0
+            basal_area_temp = 0
+            new_basal_area = 0
 
-        basal_area_arr[t] = BA_SbB
+        basal_area_arr[year] = new_basal_area
 
-        t += 1
-        startTageSb += 1
+        year += 1
+        initial_age_sb += 1
 
     return basal_area_arr
 
 
-def sim_basal_area_sw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw,
-                       N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0,
-                       f_Sw, simulation_choice):
-    '''This is a function that supports factor finder functions.
-
+def sim_basal_area_sw(initial_age, intial_age_sw, years_to_bh, spec_comp, site_index,
+                      present_density, density_at_bh_age, sdf_aw, sdf_pl, sdf_sb,
+                      basal_area_at_bh_age, correction_factor, simulation_choice):
+    '''Simlulate basal area forward in time for White Spruce
     It created the trajectory of basal area from bhage up to the inventory year
     given a correction factor that is being optimized
 
-    :param float startTage: Clock that uses the oldest species as a reference to become the stand age
-    :param float startTageSw: species specific age counted independently
-    :param float y2bh_Sw: time elapseed in years from zero to breast height age of sp Sw
-    :param float SI_bh_Sw: site index of species Sw
-    :param float BA_Sw0: basal area of Sw at breast height age, assumed to be very small
-    :param float N_bh_SwT: density of species Sw at time T
-    :param float N0_Sw: initial density of species Sw at breast height age
-    :param str simulation_choice: switch that determines whether simulation will stop at the
-    date of the inventory or will continue until year 250
-    :param float f_Sw: correction factor that guarantees that trajectory passes through
-    data obtained with inventory
-    :param float SDF_Pl0: Stand Density Factor of species Pl
-    :param float SDF_Aw0: Stand Density Factor of species Aw
-    :param float SDF_Sb0: Stand Density Factor of species Sb
+    :param float initial_age: Clock that uses the oldest species as a reference to
+                              become the stand age
+    :param float intial_age: species specific age counted independently
+    :param float years_to_bh: time elapseed in years from zero to breast height
+                              age of sp Sw
+    :param float spec_comp: proportion of basal area for Sw
+    :param float site_index: site index of species Sw
+    :param float basal_area_at_bh_age: basal area of Sw at breast height age
+    :param float present_density: density of species Sw at time T
+    :param float density_at_bh_age: initial density of species Sw at breast height age
+    :param str simulation_choice: switch that determines whether simulation will stop
+                                  at the date of the inventory or will continue until
+                                  year 250
+    :param float correction_factor: correction factor that guarantees that trajectory
+                                    passes through data obtained with inventory
+    :param float sdf_pl: Stand Density Factor of species Pl
+    :param float sdf_aw: Stand Density Factor of species Aw
+    :param float sdf_sb: Stand Density Factor of species Sb
 
     '''
     if simulation_choice == 'yes':
-        max_age = startTage
+        max_age = initial_age
     elif simulation_choice == 'no':
         max_age = 250
 
     basal_area_arr = np.zeros(max_age)
-    t = 0
-    BA_tempSw = BA_Sw0
+    year = 0
+    basal_area_temp = basal_area_at_bh_age
 
-    while t < max_age:
-        tage_Sw = startTageSw - startTage
-        bhage_Sw = tage_Sw - y2bh_Sw
+    while year < max_age:
+        tage = intial_age_sw - initial_age
+        bh_age_sw = tage - years_to_bh
 
-        if N0_Sw > 0:
-            if bhage_Sw > 0:
-                SC_Sw = (SC_Sw) * f_Sw
-                BAinc_Sw = incr.increment_basal_area_sw('Sw', SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_tempSw)
-                BA_tempSw = BA_tempSw + BAinc_Sw
-                BA_SwB = BA_tempSw
-                if BA_SwB < 0:
-                    BA_SwB = 0
+        if density_at_bh_age > 0:
+            if bh_age_sw > 0:
+                spec_comp = spec_comp * correction_factor
+                basal_area_increment = incr.increment_basal_area_sw(
+                    'Sw', spec_comp, site_index, present_density, density_at_bh_age,
+                    bh_age_sw, sdf_aw, sdf_pl, sdf_sb, basal_area_temp
+                )
+                basal_area_temp = basal_area_temp + basal_area_increment
+                new_basal_area = basal_area_temp
+
+                if new_basal_area < 0:
+                    new_basal_area = 0
             else:
-                BA_SwB = 0
+                new_basal_area = 0
         else:
-            BA_tempSw = 0
-            BA_SwB = 0
+            basal_area_temp = 0
+            new_basal_area = 0
 
-        basal_area_arr[t] = BA_SwB
+        basal_area_arr[year] = new_basal_area
 
-        t += 1
-        startTageSw += 1
+        year += 1
+        intial_age_sw += 1
 
     return basal_area_arr
 
 
-def sim_basal_area_pl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl,
-                       N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0,
-                       f_Pl, simulation_choice):
-    '''This is a function that supports factor finder functions.
+def sim_basal_area_pl(initial_age, initial_age_pl, years_to_bh, spec_comp, site_index,
+                      present_density, density_at_bh_age, sdf_aw, sdf_sw, sdf_sb,
+                      basal_area_at_bh_age, correction_factor, simulation_choice):
+    '''Simlulate basal area forward in time for Lodgepole Pine
 
-    It created the trajectory of basal area from bhage up to the inventory year
-    given a correction factor that is being optimized
-
-    :param float startTage: Clock that uses the oldest species as a reference to become the stand age
-    :param float startTagePl: species specific age counted independently
-    :param float y2bh_Pl: time elapseed in years from zero to breast height age of sp Pl
-    :param float SI_bh_Pl: site index of species Pl
-    :param float BA_Pl0: basal area of Pl at breast height age, assumed to be very small
-    :param float N_bh_PlT: density of species Pl at time T
-    :param float N0_Pl: initial density of species Pl at breast height age
-    :param str simulation_choice: switch that determines whether simulation will stop at the
-    date of the inventory or will continue until year 250
-    :param float f_Pl: correction factor that guarantees that trajectory passes through
-    data obtained with inventory
-    :param float SDF_Sw0: Stand Density Factor of species Sw
-    :param float SDF_Aw0: Stand Density Factor of species Aw
-    :param float SDF_Sb0: Stand Density Factor of species Sb
+    :param float initial_age: Clock that uses the oldest species as a reference to
+                              become the stand age
+    :param float initial_age: species specific age counted independently
+    :param float years_to_bh: time elapseed in years from zero to breast height age for
+                              species Pl
+    :param float spec_comp: proportion of basal area for Pl
+    :param float site_index: site index of species Pl
+    :param float basal_area_at_bh_age: basal area of Pl at breast height age
+    :param float present_density: density of species Pl at time T
+    :param float density_at_bh_age: initial density of species Pl at breast height age
+    :param str simulation_choice: switch that determines whether simulation will stop at
+                                  the date of the inventory or continue until year 250
+    :param float correction_factor: correction factor that guarantees that trajectory
+                                    passes through data obtained with inventory
+    :param float sdf_sw: Stand Density Factor of species Sw
+    :param float sdf_aw: Stand Density Factor of species Aw
+    :param float sdf_sb: Stand Density Factor of species Sb
 
     '''
     if simulation_choice == 'yes':
-        max_age = startTage
+        max_age = initial_age
     elif simulation_choice == 'no':
         max_age = 250
 
     basal_area_arr = np.zeros(max_age)
-    t = 0
-    BA_tempPl = BA_Pl0
+    year = 0
+    basal_area_temp = basal_area_at_bh_age
 
-    while t < max_age:
-        tage_Pl = startTagePl - startTage
-        bhage_Pl = tage_Pl - y2bh_Pl
-        if N0_Pl > 0:
-            if bhage_Pl > 0:
-                BAinc_Pl = f_Pl * incr.increment_basal_area_pl('Pl', SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,
-                                                                 bhage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_tempPl)
-                BA_tempPl = BA_tempPl + BAinc_Pl
-                BA_PlB = BA_tempPl
-                if BA_PlB < 0:
-                    BA_PlB = 0
+    while year < max_age:
+        tage = initial_age_pl - initial_age
+        bh_age_pl = tage - years_to_bh
+        if density_at_bh_age > 0:
+            if bh_age_pl > 0:
+                basal_area_increment = correction_factor \
+                                       * incr.increment_basal_area_pl(
+                                           'Pl', spec_comp, site_index, present_density,
+                                           density_at_bh_age, bh_age_pl, sdf_aw, sdf_sw,
+                                           sdf_sb, basal_area_temp
+                                       )
+                basal_area_temp = basal_area_temp + basal_area_increment
+                new_basal_area = basal_area_temp
+
+                if new_basal_area < 0:
+                    new_basal_area = 0
             else:
-                BA_PlB = 0
+                new_basal_area = 0
         else:
-            BA_tempPl = 0
-            BA_PlB = 0
+            basal_area_temp = 0
+            new_basal_area = 0
 
-        basal_area_arr[t] = BA_PlB
+        basal_area_arr[year] = new_basal_area
 
-        t += 1
-        startTagePl += 1
+        year += 1
+        initial_age_pl += 1
 
     return basal_area_arr
