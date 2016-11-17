@@ -1,9 +1,7 @@
-""" Density estimation functions
-"""
+"""Stand desnity factor estimators"""
+import numpy
 
-import numpy as np
-
-def densityNonSpatialAw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
+def sdf_aw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
     '''Main purpose of this function is to estimate SDF for the species
 
     :param str sp_Aw: species name
@@ -53,7 +51,7 @@ def densityNonSpatialAw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
     return N_est_Aw, SDF_Aw0
 
 
-def densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings=True):
+def sdf_sb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings=True):
     '''Main purpose of this function is to estimate SDF for the species
 
     :param str sp_Sb: species name
@@ -100,7 +98,7 @@ def densityNonSpatialSb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings=True):
     return N_est_Sb, SDF_Sb0
 
 
-def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings=True):
+def sdf_sw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings=True):
     '''Main purpose of this function is to estimate SDF for the species
 
     :param str sp_Sw: species name
@@ -156,7 +154,7 @@ def densityNonSpatialSw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings=T
     return N_est_Sw, SDF_Sw0
 
 
-def densityNonSpatialPl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, N_Pl, printWarnings=True):
+def sdf_pl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, N_Pl, printWarnings=True):
     '''Main purpose of this function is to estimate SDF for the species
 
     :param str sp_Pl: species name
