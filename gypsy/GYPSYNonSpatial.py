@@ -33,173 +33,6 @@ sp_Pl = ['Pl', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 sp_Sw = ['Sw', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
 
 
-def densityAw(SDF_Aw0, bhage_Aw, SI_bh_Aw, ret_detail = False):
-    '''Main purpose of this function is to project densities forward and backward
-    in time for the species
-
-    :param float SI_bh_Aw: site index of species Aw
-    :param float bhage_Aw: breast height age of species Aw
-    :param float SDF_Aw0: Stand Density Factor of species Aw
-    :param bool ret_detail: whether additional values should be returned - used
-    by other functions to iteratively solve this function for SDF
-    '''
-    if SDF_Aw0 > 0:
-        c0 = 0.717966
-        c1 = 6.67468
-        b3 = (1+c0) * SDF_Aw0**((c1+numpy.log(SDF_Aw0))/SDF_Aw0)
-        b2 = (c0/4)*(SDF_Aw0**0.5)**(1/(SDF_Aw0))
-        b1 = -((1/((SDF_Aw0/1000.0)**(0.5))) + (numpy.sqrt(1+numpy.sqrt(50/(numpy.sqrt(SDF_Aw0)*numpy.log(50+1)))))) * numpy.log(50+1)
-        k1 = 1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(50+1)))
-        k2 = 1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(1+bhage_Aw)))
-        N_bh_Aw = SDF_Aw0*k1/k2
-    else:
-        N_bh_Aw = 0
-
-    if ret_detail:
-        return {
-            'k1': k1,
-            'k2': k2,
-            'sdf': SDF_Aw0,
-            'density': N_bh_Aw,
-        }
-
-    return N_bh_Aw
-
-def densitySb(SDF_Sb0, tage_Sb, SI_bh_Sb, ret_detail=False):
-    '''Main purpose of this function is to project densities forward and backward
-    in time for the species
-
-    :param float SI_bh_Sb: site index of species Sb
-    :param float tage_Sb: total age of species Sb
-    :param float SDF_Sb0: Stand Density Factor of species Sb
-    :param float SDF_Aw0: Stand Density Factor of species Aw
-    :param bool ret_detail: whether additional values should be returned - used
-    by other functions to iteratively solve this function for SDF
-
-    '''
-    if SDF_Sb0 > 0:
-        c1 = -26.3836
-        c2 = 0.166483
-        c3 = 2.738569
-        b2 = c3
-        b3 = c3*(SDF_Sb0**(1/SDF_Sb0))
-        b1 = c1/((((SDF_Sb0/1000.0)**0.5)+numpy.log(50+1))**c2)
-        k1 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sb))+(b3*numpy.log(1+50)))
-        k2 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sb))+(b3*numpy.log(1+tage_Sb)))
-        N_bh_Sb = SDF_Sb0*k1/k2
-    else:
-        N_bh_Sb = 0
-
-    if ret_detail:
-        return {
-            'k1': k1,
-            'k2': k2,
-            'sdf': SDF_Sb0,
-            'density': N_bh_Sb,
-        }
-
-    return N_bh_Sb
-
-
-def densitySw(SDF_Sw0, SDF_Aw0, tage_Sw, SI_bh_Sw, ret_detail=False):
-    '''Main purpose of this function is to project densities forward and backward
-    in time for the species
-
-    :param float SI_bh_Sw: site index of species Sw
-    :param float tage_Sw: total age of species Sw
-    :param float SDF_Sw0: Stand Density Factor of species Sw
-    :param float SDF_Aw0: Stand Density Factor of species Aw
-    :param bool ret_detail: whether additional values should be returned - used
-    by other functions to iteratively solve this function for SDF
-
-    '''
-    if SDF_Sw0 > 0:
-        if SDF_Aw0 == 0:
-            z1 = 0
-        elif SDF_Aw0 > 0:
-            z1 = 1
-
-        c1 = -231.617
-        c2 = 1.176995
-        c3 = 1.733601
-        b3 = c3*(SDF_Sw0**(1/SDF_Sw0))
-        b2 = c3
-        b1 = (c1/((numpy.log(SDF_Sw0)+numpy.log(50+1))**c2))+(z1*((1+(SDF_Aw0/1000.0))**0.5))
-        k1 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sw))+(b3*numpy.log(50+1)))
-        k2 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sw))+(b3*numpy.log(1+tage_Sw)))
-        N_bh_Sw = SDF_Sw0*k1/k2
-    else:
-        N_bh_Sw = 0
-
-    if ret_detail:
-        return {
-            'k1': k1,
-            'k2': k2,
-            'sdf': SDF_Sw0,
-            'density': N_bh_Sw,
-        }
-
-    return N_bh_Sw
-
-
-def densityPl(SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl, SI_bh_Pl, ret_detail=False):
-    '''Main purpose of this function is to project densities forward and backward
-    in time for the species
-
-    :param float SI_bh_Pl: site index of species Pl
-    :param float tage_Pl: total age of species Pl
-    :param float SDF_Pl0: Stand Density Factor of species Pl
-    :param float SDF_Aw0: Stand Density Factor of species Aw
-    :param float SDF_Sb0: Stand Density Factor of species Sb
-    :param float SDF_Sw0: Stand Density Factor of species Sw
-    :param bool ret_detail: whether additional values should be returned - used
-    by other functions to iteratively solve this function for SDF
-
-    '''
-    if SDF_Pl0 > 0:
-        c1 = -5.25144
-        c2 = -483.195
-        c3 = 1.138167
-        c4 = 1.017479
-        c5 = -0.05471
-        c6 = 4.11215
-
-        if SDF_Aw0 == 0:
-            z1 = 0
-        elif SDF_Aw0 > 0:
-            z1 = 1
-
-        if SDF_Sw0 == 0:
-            z2 = 0
-        elif SDF_Sw0 > 0:
-            z2 = 1
-
-        if SDF_Sb0 == 0:
-            z3 = 0
-        elif SDF_Sb0 > 0:
-            z3 = 1
-
-        k = (1+(c6*(SDF_Pl0**0.5)))/SDF_Pl0
-        b3 = c4*(SDF_Pl0**k)
-        b2 = c4/(numpy.sqrt(SDF_Pl0)**c5)
-        b1 = (c1+(z1*(SDF_Aw0/1000.0)/2.0) + (z2*(SDF_Sw0/1000.0)/3.0) + (z3*(SDF_Sb0/1000.0)/4.0)) + (c2/((SDF_Pl0**0.5)**c3))
-        k1 = 1+numpy.exp(b1 + (b2*numpy.log(SI_bh_Pl)) + (b3*numpy.log(50+1)))
-        k2 = 1+numpy.exp(b1 + (b2*numpy.log(SI_bh_Pl)) + (b3*numpy.log(1+tage_Pl)))
-        N_bh_Pl = SDF_Pl0*k1/k2
-    else:
-        N_bh_Pl = 0
-
-    if ret_detail:
-        return {
-            'k1': k1,
-            'k2': k2,
-            'sdf': SDF_Pl0,
-            'density': N_bh_Pl,
-        }
-
-    return N_bh_Pl
-
-
 def SCestimate(N_Aw, N_Sb, N_Sw, N_Pl):
     '''This function calculates species composition based on their densities
     Constraint -> SC_Aw + SC_Sw + SC_Sb + SC_Pl ~1
@@ -280,22 +113,22 @@ def densities_and_SCs_to_250(**kwargs):
         if bhage_Aw < 0:
             N_bh_AwT = 0
         else:
-            N_bh_AwT = densityAw(SDF_Aw0, bhage_Aw, SI_bh_Aw)
+            N_bh_AwT = estimate_density_aw(SDF_Aw0, bhage_Aw, SI_bh_Aw)
 
         if tage_Sb < 0:
             N_bh_SbT = 0
         else:
-            N_bh_SbT = densitySb(SDF_Sb0, tage_Sb, SI_bh_Sb)
+            N_bh_SbT = estimate_density_sb(SDF_Sb0, tage_Sb, SI_bh_Sb)
 
         if tage_Sw < 0:
             N_bh_SwT = 0
         else:
-            N_bh_SwT = densitySw(SDF_Sw0, SDF_Aw0, tage_Sw, SI_bh_Sw)
+            N_bh_SwT = estimate_density_sw(SDF_Sw0, SDF_Aw0, tage_Sw, SI_bh_Sw)
 
         if tage_Pl < 0:
             N_bh_PlT = 0
         else:
-            N_bh_PlT = densityPl(SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl, SI_bh_Pl)
+            N_bh_PlT = estimate_density_pl(SDF_Aw0, SDF_Sw0, SDF_Sb0, SDF_Pl0, tage_Pl, SI_bh_Pl)
 
 
 
