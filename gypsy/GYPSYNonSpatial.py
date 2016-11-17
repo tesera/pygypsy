@@ -12,15 +12,12 @@ N_bh_Aw = estimated N and should be equal N_Aw (for Aspen in this case Aw)
 """
 # TODO: split these functions into appropriate other modules
 # TODO: make all factor find functions use kwargs in the manner of AW
-import os
 import logging
 import numpy
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 import increment as incr
-from utils import _mkdir_p
 from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
 
 
@@ -1280,102 +1277,3 @@ def merchantable_volume(species, *args, **kwargs):
         'Sb': MerchantableVolumeSb,
         'Pl': MerchantableVolumePl,
     }[species](*args, **kwargs)
-
-
-def _plot_simulation_variables(simulation_df, ax=None, plot_vars=None, y_lab=''):
-    """
-    Keyword Arguments:
-    simulation_df -- output of gypsy simulation
-    axes          -- axes object ????
-    plot_vars     -- list of strings identifying variable (column names) to plot
-    """
-
-    if plot_vars is None:
-        raise ValueError('Variable to plot must be specified')
-
-    simulation_vars = simulation_df.loc[:, plot_vars]
-    simulation_vars.plot(ax=ax)
-    ax.set_xlabel('Year', fontsize=10)
-    ax.set_ylabel(y_lab, fontsize=10)
-    ax.legend(loc=2, prop={'size':6})
-    ax.tick_params(axis='both', which='major', labelsize=8)
-
-
-
-def plot_BA(output_DF, ax=None):
-    _plot_simulation_variables(output_DF, ax=ax,
-                               plot_vars=['BA_Aw', 'BA_Sw', 'BA_Sb', 'BA_Pl'],
-                               y_lab='BA (m2)')
-
-def plot_merchantableVol(output_DF, ax):
-    _plot_simulation_variables(output_DF, ax=ax,
-                               plot_vars=['MerchantableVolumeAw', 'MerchantableVolumeSw',
-                                          'MerchantableVolumeSb', 'MerchantableVolumePl'],
-                               y_lab='Merc. Vo. (m3)')
-
-def plot_merchantableVol_Con_Dec(output_DF, ax):
-    _plot_simulation_variables(output_DF, ax=ax,
-                               plot_vars=['MerchantableVolume_Con',
-                                          'MerchantableVolume_Dec',
-                                          'MerchantableVolume_Tot'],
-                               y_lab='Merc. Vo. (m3)')
-
-def plot_topHeight(output_DF, ax=None):
-    _plot_simulation_variables(output_DF, ax=ax,
-                               plot_vars=['topHeight_Aw', 'topHeight_Sw',
-                                          'topHeight_Sb', 'topHeight_Pl'],
-                               y_lab='Top Height (m)')
-
-
-def plot_GrTotVol(output_DF, ax):
-    _plot_simulation_variables(output_DF, ax=ax,
-                               plot_vars=['Gross_Total_Volume_Aw', 'Gross_Total_Volume_Sw',
-                                          'Gross_Total_Volume_Sb', 'Gross_Total_Volume_Pl'],
-                               y_lab='Gr. Tot. Vol. (m3)')
-
-def plot_GrTotVol_Con_Dec(output_DF, ax):
-    _plot_simulation_variables(output_DF, ax=ax,
-                               plot_vars=['Gross_Total_Volume_Con',
-                                          'Gross_Total_Volume_Dec',
-                                          'Gross_Total_Volume_Tot'],
-                               y_lab='Gr. Tot. Vol. (m3)')
-
-
-def plot_SC(output_DF, ax):
-    _plot_simulation_variables(output_DF, ax=ax,
-                               plot_vars=['SC_Aw', 'SC_Sw', 'SC_Sb', 'SC_Pl'],
-                               y_lab='Sp. Comp.')
-
-def plot_N(output_DF, ax):
-    _plot_simulation_variables(output_DF, ax=ax,
-                               plot_vars=['N_bh_AwT', 'N_bh_SwT', 'N_bh_SbT', 'N_bh_PlT'],
-                               y_lab='Density')
-
-def save_plot(output_DF, path):
-    '''Save plots of gypsy simulation output
-
-    Creates a panel and includes all plots generated as gypsy outputs
-    (output_DF) and saves the panel on a folder determined byt path
-
-    '''
-    _mkdir_p(os.path.dirname(path))
-    fig = plt.figure(1)
-    sub1 = fig.add_subplot(321)
-    sub2 = fig.add_subplot(322)
-    sub3 = fig.add_subplot(323)
-    sub4 = fig.add_subplot(324)
-    sub5 = fig.add_subplot(325)
-    sub6 = fig.add_subplot(326)
-
-    plot_BA(output_DF, ax=sub1)
-    plot_merchantableVol_Con_Dec(output_DF, ax=sub2)
-    plot_topHeight(output_DF, ax=sub3)
-    plot_GrTotVol_Con_Dec(output_DF, ax=sub4)
-    plot_SC(output_DF, ax=sub5)
-
-    plot_N(output_DF, ax=sub6)
-    plt.tight_layout()
-    plt.savefig(path) #TODO: specify page size here to reduce legend size
-    plt.close()
-
-    return True
