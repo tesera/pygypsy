@@ -9,7 +9,7 @@ LOGGER = logging.getLogger(__name__)
 def sdf_aw(sp, site_index, bhage, density):
     '''Main purpose of this function is to estimate SDF for the species
 
-    :param str sp: species name
+    :param str sp: species list
     :param float site_index: site index of species Aw
     :param float bhage: breast height age of speceis Aw
     :param float density: density of species Aw
@@ -57,7 +57,7 @@ def sdf_aw(sp, site_index, bhage, density):
 def sdf_sb(sp, site_index, tage, density):
     '''Main purpose of this function is to estimate SDF for the species
 
-    :param str sp: species name
+    :param str sp: species list
     :param float site_index: site index of species Sb
     :param float tage: total age of species Sb
     :param float density: density of species Sb
@@ -102,7 +102,7 @@ def sdf_sb(sp, site_index, tage, density):
 def sdf_sw(sp, site_index, tage, SDF0, density):
     '''Main purpose of this function is to estimate SDF for the species
 
-    :param str sp: species name
+    :param str sp: species list
     :param float site_index: site index of species Sw
     :param float tage: total age of species Sw
     :param float SDF0: Stand Density Factor of species Aw, this parameter indicates that the density of Sw
@@ -156,7 +156,7 @@ def sdf_sw(sp, site_index, tage, SDF0, density):
 def sdf_pl(sp, site_index, tage, SDF0_aw, SDF0_sw, SDF0_sb, density):
     '''Main purpose of this function is to estimate SDF for the species
 
-    :param str sp: species name
+    :param str sp: species list
     :param float site_index: site index of species Pl
     :param float tage: total age of species Pl
     :param float SDF0_aw: Stand Density Factor of species Aw
