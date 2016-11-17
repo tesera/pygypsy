@@ -1,11 +1,11 @@
 """Stand density factor estimators"""
 import logging
 
-from gypsy.GYPSYNonSpatial import (
-    densityAw,
-    densitySw,
-    densitySb,
-    densityPl,
+from gypsy.density import (
+    estimate_density_aw,
+    estimate_density_sw,
+    estimate_density_sb,
+    estimate_density_pl,
 )
 
 LOGGER = logging.getLogger(__name__)
@@ -33,7 +33,7 @@ def estimate_sdf_aw(spc, site_index, bhage, density):
         iter_count = 0
 
         while not within_tolerance:
-            result = densityAw(sdf, bhage, site_index, ret_detail=True)
+            result = estimate_density_aw(sdf, bhage, site_index, ret_detail=True)
             k1 = result['k1'] #pylint: disable=invalid-name
             k2 = result['k2'] #pylint: disable=invalid-name
             density_est = result['density']
@@ -73,7 +73,7 @@ def estimate_sdf_sb(spc, site_index, tage, density):
             iter_count = 0
 
             while not within_tolerance:
-                result = densitySb(sdf, tage, site_index, ret_detail=True)
+                result = estimate_density_sb(sdf, tage, site_index, ret_detail=True)
                 k1 = result['k1'] #pylint: disable=invalid-name
                 k2 = result['k2'] #pylint: disable=invalid-name
                 density_est = result['density']
@@ -114,7 +114,7 @@ def estimate_sdf_sw(spc, site_index, tage, sdfaw, density):
             iter_count = 0
 
             while not within_tolerance:
-                result = densitySw(sdf, sdfaw, tage, site_index, ret_detail=True)
+                result = estimate_density_sw(sdf, sdfaw, tage, site_index, ret_detail=True)
                 k1 = result['k1'] #pylint: disable=invalid-name
                 k2 = result['k2'] #pylint: disable=invalid-name
                 density_est = result['density']
@@ -159,8 +159,8 @@ def estimate_sdf_pl(spc, site_index, tage, sdfaw, sdfsw, sdfsb, density):
             iter_count = 0
 
             while not within_tolerance:
-                result = densityPl(sdfaw, sdfsw, sdfsb, sdf,
-                                   tage, site_index, ret_detail=True)
+                result = estimate_density_pl(sdfaw, sdfsw, sdfsb, sdf,
+                                             tage, site_index, ret_detail=True)
                 k1 = result['k1'] #pylint: disable=invalid-name
                 k2 = result['k2'] #pylint: disable=invalid-name
                 density_est = result['density']
