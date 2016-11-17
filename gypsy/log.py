@@ -1,10 +1,12 @@
+"""Package Loggers"""
 import logging.config
 
 CONSOLE_LOGGER_NAME = 'console'
 FILE_LOGGER_NAME = 'file'
 
 def setup_logging():
-    LOGGING = {
+    """Initialize logging for gypsy package"""
+    log_conf = {
         'version': 1,
         'disable_existing_loggers': False,
         'formatters': {
@@ -92,4 +94,4 @@ def setup_logging():
         }
     }
 
-    logging.config.dictConfig(LOGGING)
+    logging.config.dictConfig(log_conf)
