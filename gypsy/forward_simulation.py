@@ -17,8 +17,11 @@ from GYPSYNonSpatial import (
     BAfromZeroToDataSw,
     BAfactorFinder_Pl,
     BAfromZeroToDataPl,
-    merchantable_volume,
     densities_and_SCs_to_250,
+)
+
+from gypsy.volume import(
+    merchantable_volume,
     gross_total_volume,
 )
 import increment as incr
