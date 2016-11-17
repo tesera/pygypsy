@@ -1,5 +1,5 @@
 """Stand desnity factor estimators"""
-import numpy
+import numpy as np
 
 def sdf_aw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
     '''Main purpose of this function is to estimate SDF for the species
@@ -28,11 +28,11 @@ def sdf_aw(sp_Aw, SI_bh_Aw, bhage_Aw, N_Aw, printWarnings=True):
         iterCount = 0
 
         while NDiffFlag == False:
-            b3 = (1+c0) * SDF_Aw0**((c1 + numpy.log(SDF_Aw0))/SDF_Aw0)
+            b3 = (1+c0) * SDF_Aw0**((c1 + np.log(SDF_Aw0))/SDF_Aw0)
             b2 = (c0/4) * (SDF_Aw0**0.5)**(1/(SDF_Aw0))
-            b1 = -((1/((SDF_Aw0/1000)**(0.5))) + numpy.sqrt(1+numpy.sqrt(50/(numpy.sqrt(SDF_Aw0)*numpy.log(50+1))))) * numpy.log(50+1)
-            k1 = 1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(50+1)))
-            k2 = 1+numpy.exp(b1 + (b2*SI_bh_Aw) + (b3*numpy.log(1+bhage_Aw)))
+            b1 = -((1/((SDF_Aw0/1000)**(0.5))) + np.sqrt(1+np.sqrt(50/(np.sqrt(SDF_Aw0)*np.log(50+1))))) * np.log(50+1)
+            k1 = 1+np.exp(b1 + (b2*SI_bh_Aw) + (b3*np.log(50+1)))
+            k2 = 1+np.exp(b1 + (b2*SI_bh_Aw) + (b3*np.log(1+bhage_Aw)))
             N_est_Aw = SDF_Aw0*k1/k2
 
             if abs(N_Aw-N_est_Aw) < acceptableDiff:
@@ -77,9 +77,9 @@ def sdf_sb(sp_Sb, SI_bh_Sb, tage_Sb, N_Sb, printWarnings=True):
                 while abs(N_Sb-N_est_Sb) > acceptableDiff:
                     b2 = c3
                     b3 = c3*(SDF_Sb0**(1/SDF_Sb0))
-                    b1 = c1/ ((((SDF_Sb0/1000.0)**0.5)+numpy.log(50+1))**c2)
-                    k1 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sb))+(b3*numpy.log(1+50)))
-                    k2 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sb))+(b3*numpy.log(1+tage_Sb)))
+                    b1 = c1/ ((((SDF_Sb0/1000.0)**0.5)+np.log(50+1))**c2)
+                    k1 = 1+np.exp(b1+(b2*np.log(SI_bh_Sb))+(b3*np.log(1+50)))
+                    k2 = 1+np.exp(b1+(b2*np.log(SI_bh_Sb))+(b3*np.log(1+tage_Sb)))
                     N_est_Sb = SDF_Sb0*k1/k2
 
                     if abs(N_Sb-N_est_Sb) < acceptableDiff:
@@ -132,9 +132,9 @@ def sdf_sw(sp_Sw, SI_bh_Sw, tage_Sw, SDF_Aw0, N_Sw, printWarnings=True):
                 while abs(N_Sw-N_est_Sw) > acceptableDiff:
                     b3 = c3*(SDF_Sw0**(1/SDF_Sw0))
                     b2 = c3
-                    b1 = (c1/((numpy.log(SDF_Sw0)+numpy.log(50+1))**c2))+(z1*((1+(SDF_Aw0/1000.0))**0.5))
-                    k1 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sw))+(b3*numpy.log(50+1)))
-                    k2 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Sw))+(b3*numpy.log(1+tage_Sw)))
+                    b1 = (c1/((np.log(SDF_Sw0)+np.log(50+1))**c2))+(z1*((1+(SDF_Aw0/1000.0))**0.5))
+                    k1 = 1+np.exp(b1+(b2*np.log(SI_bh_Sw))+(b3*np.log(50+1)))
+                    k2 = 1+np.exp(b1+(b2*np.log(SI_bh_Sw))+(b3*np.log(1+tage_Sw)))
                     N_est_Sw = SDF_Sw0*k1/k2
 
                     if abs(N_Sw-N_est_Sw) < acceptableDiff:
@@ -204,8 +204,8 @@ def sdf_pl(sp_Pl, SI_bh_Pl, tage_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, N_Pl, printWarni
                     b3 = c4*(SDF_Pl0**k)
                     b2 = c4/((SDF_Pl0**0.5)**c5)
                     b1 = (c1+(z1*(SDF_Aw0/1000.0)/2)+(z2*(SDF_Sw0/1000.0)/3)+(z3*(SDF_Sb0/1000.0)/4.0))+(c2/((SDF_Pl0**0.5)**c3))
-                    k1 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Pl))+(b3*numpy.log(50+1)))
-                    k2 = 1+numpy.exp(b1+(b2*numpy.log(SI_bh_Pl))+(b3*numpy.log(1+tage_Pl)))
+                    k1 = 1+np.exp(b1+(b2*np.log(SI_bh_Pl))+(b3*np.log(50+1)))
+                    k2 = 1+np.exp(b1+(b2*np.log(SI_bh_Pl))+(b3*np.log(1+tage_Pl)))
                     N_est_Pl = SDF_Pl0*k1/k2
 
                     if abs(N_Pl-N_est_Pl) < acceptableDiff:
