@@ -17,9 +17,10 @@ RUN pip install virtualenv \
     && virtualenv -p python2.7 venv \
     && . venv/bin/activate \
     && pip install --upgrade pip \
-    && pip install numpy==1.11.2 \
-    && pip install cython==0.25.1
+    && pip install numpy==1.11.2 cython==0.25.1
 
 COPY . /opt/gypsy
 
-RUN pip install --upgrade -e .[docs,lint,test]
+RUN . venv/bin/activate \
+    && python setup.py bdist_wheel \
+    && pip install dist/gypsy-0.0.1.dev0-cp27-cp27mu-linux_x86_64.whl[test,lint,docs]
