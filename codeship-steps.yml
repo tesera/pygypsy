@@ -6,3 +6,6 @@
   - name: lint
     service: gypsy
     command: bash ./bin/lint.sh
+  - name: docs
+    service: gypsy
+    command: bash ./bin/make_docs.sh
