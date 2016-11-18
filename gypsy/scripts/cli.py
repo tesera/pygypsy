@@ -8,7 +8,7 @@ from gypsy.log import setup_logging, CONSOLE_LOGGER_NAME
 from gypsy.forward_simulation import simulate_forwards_df
 from gypsy.data_prep import prep_standtable
 from gypsy.utils import _log_loop_progress
-from gypsy.GYPSYNonSpatial import save_plot
+from gypsy.plot import save_plot
 
 
 setup_logging()
