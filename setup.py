@@ -40,7 +40,7 @@ setup(name='gypsy',
           'matplotlib>=1.5.2',
           'colorlog>=2.7.0',
       ],
-      exrtas_require={
+      extras_require={
           'test': ['pytest==2.9.1', 'pytest-cov==2.4.0'],
           'lint': ['pylint==1.5.4'],
           'docs': ['sphinx==1.4.1'],
