@@ -1,7 +1,10 @@
-import numpy as np
 from codecs import open as codecs_open
-from distutils.extension import Extension
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Extension
+try:
+    import numpy as np
+except ImportError:
+    msg = 'Numpy must be installed to install gypsy'
+    raise ImportError(msg)
 from Cython.Build import cythonize
 
 with codecs_open('README.md', encoding='utf-8') as f:
@@ -9,7 +12,7 @@ with codecs_open('README.md', encoding='utf-8') as f:
 
 
 extensions = [
-    Extension("basal_area_increment", ["gypsy/basal_area_increment.pyx"],
+    Extension("gypsy.basal_area_increment", ["gypsy/basal_area_increment.pyx"],
               include_dirs = [np.get_include()]),
 ]
 
