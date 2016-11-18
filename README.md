@@ -4,6 +4,10 @@
 
 GYPSY is a Growth and Yield Projection SYstem for trees.
 
+## Getting help
+
+If you are interesting in using or developing Gyspy, and need help, open an issue on the [issue tracker](https://github.com/tesera/gypsy/issues).
+
 ## Usage
 
 ### Installation
@@ -15,6 +19,17 @@ There are two supported options for installation of GYPSY:
 
 If an option you are familiar with is missing, please search for it in the
 issue tracker; if it is not there add a new issue if your preferred option.
+
+#### Build Dependencies
+
+First, install build dependencies:
+
+```
+pip install cython==0.25.1 numpy==1.11.2
+```
+
+Contributions to distribute wheels are welcome, so users will not be required
+to compile the C extensions.
 
 #### Quick Start
 
@@ -122,7 +137,6 @@ gyspy simulate your_stand_data.csv.prepped
 The complete documentation can be accessed with `gypsy -h`, documentation for
 subcommands is available via `gypsy SUBCOMMAND -h`:
 
-
 ```
 Usage: gypsy [OPTIONS] COMMAND [ARGS]...
 
@@ -138,6 +152,7 @@ Usage: gypsy [OPTIONS] COMMAND [ARGS]...
     prep      Prepare stand data for use in GYPSY...
     simulate  Run GYPSY simulation
 ```
+
 ## Development
 ### Getting Started
 
@@ -161,7 +176,8 @@ ln -s "$(pwd)/git-hooks/pre-commit.sh" .git/hooks/pre-commit
   - or update tests
   - or update and build docs
   - or update README
-- Submit a pull request against the dev branch of the upstream repository
+- Run the [tests](#tests), [linter](#linting), and [build](#cython-and-compiling-extensions) the package
+- Submit a pull request against the dev branch of the upstream repository (the pull request will be against dev by default)
 - Select a peer reviewer and schedule a review
 - Conduct the review. Please keep comments in the pull request. An outline of a good review procedure is given [here](http://blog.fogcreek.com/increase-defect-detection-with-our-code-review-checklist-example/).
 - Revise pull request if necessary and continue reviewing-revising loop until
@@ -260,16 +276,19 @@ make coverage
 
 ### Commit hooks
 
-Commit hooks run automatically when committing to the repository for the following quality control items:
+Commit hooks run automatically when committing to the repository for the
+following quality control items:
 
 - debug breakpoints
 - linting
 
 Once the test suite has been sped it, it will also be run as a pre-commit hook.
 
-You have to symlink from the commit hooks provided to your local git hooks directory as described in [Getting Started](#getting-started):
+You have to symlink from the commit hooks provided to your local git hooks
+directory as described in [Getting Started](#getting-started):
 
-You can override the commit hook by using the `-n` option when running `git commit`. This is however discouraged!
+You can override the commit hook by using the `-n` option when running `git
+commit`. This is however discouraged!
 
 ### Profiling
 
@@ -286,7 +305,7 @@ optimizations to better use of library functions.
 Do not attempt to optimize unless it is absolutely necessary, and discuss your
 ideas with other developers before trying to implement them.
 
-### Cython
+### Cython and Compiling Extensions
 
 [Cython](cython.readthedocs.io) is used and aviable for use for performance
 limiting areas of the code. Familiarize yourself with cython before revising /
