@@ -36,6 +36,7 @@ setup(name='gypsy',
           'pandas>=0.18.1',
           'matplotlib>=1.5.2',
           'colorlog>=2.7.0',
+          'numpy>=1.11.2',
       ],
       exrtas_require={
           'test': ['pytest==2.9.1', 'pytest-cov==2.4.0'],
