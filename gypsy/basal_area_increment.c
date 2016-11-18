@@ -11,7 +11,7 @@
             "/opt/gypsy/venv/lib/python2.7/site-packages/numpy/core/include"
         ]
     }, 
-    "module_name": "basal_area_increment"
+    "module_name": "gypsy.basal_area_increment"
 }
 END: Cython Metadata */
 

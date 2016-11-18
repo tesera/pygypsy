@@ -232,10 +232,10 @@ def increment_basal_area_pl(sp,
     factor for the species.
 
     :param str sp: species name
+    :param float SC: proportion of species Pl in the stand
     :param float SI_bh: site index of species Pl
     :param float bhage: breast height age of species Pl
     :param float N_bh: density of species Pl
-    :param float SC: proportion of species Pl in the stand
     :param float BA: Basal area of the species Pl
     :param float N0: initial density of species Pl at total age
     :param float SDFSw0: Stand Density Factor of species Sw

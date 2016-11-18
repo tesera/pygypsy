@@ -3,6 +3,8 @@
 # The invalid name linting is disabled since this is a math heavy module
 # it makes sense to use short names. Please still use sensible names for non
 # mathematical variables
+# TODO: Merchantable volume should call the gross total volume functions
+from __future__ import division
 import numpy as np
 
 def _gross_totalvolume_aw(basal_area, top_height):
