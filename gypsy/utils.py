@@ -31,3 +31,24 @@ def _log_loop_progress(i, length, n_reports=10):
         progress = i/length*100
         CONSOLE_LOGGER.info('%.0f%% complete', progress)
 
+
+def estimate_species_composition(n_aw, n_sb, n_sw, n_pl):
+    '''Calculates species composition based on their densities
+
+    :param float N_Aw, N_Sb, N_Sw, and N_Pl: densities of the respective species
+
+    '''
+    n_total = n_aw + n_sb + n_sw + n_pl
+
+    if n_total == 0:
+        sc_aw = 0
+        sc_sw = 0
+        sc_sb = 0
+        sc_pl = 0
+    else:
+        sc_aw = n_aw/n_total
+        sc_sw = n_sw/n_total
+        sc_sb = n_sb/n_total
+        sc_pl = n_pl/n_total
+
+    return sc_aw, sc_sw, sc_sb, sc_pl

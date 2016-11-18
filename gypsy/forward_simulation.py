@@ -6,11 +6,9 @@ import numpy as np
 import pandas as pd
 from collections import OrderedDict
 
-from utils import _log_loop_progress
-from GYPSYNonSpatial import (
-    SCestimate,
-    densities_and_SCs_to_250,
-)
+import basal_area_increment as incr
+from GYPSYNonSpatial import densities_and_SCs_to_250
+from utils import _log_loop_progress, estimate_species_composition
 from gypsy.basal_area_factor import (
     estimate_basal_area_factor_aw,
     estimate_basal_area_factor_sb,
@@ -27,7 +25,6 @@ from gypsy.volume import(
     merchantable_volume,
     gross_total_volume,
 )
-import basal_area_increment as incr
 
 
 logger = logging.getLogger(__name__)
@@ -167,7 +164,7 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
         BA_Sw0 = BA0_lower_BAT_Sw(BA_SwT)
         BA_Sb0 = BA0_lower_BAT_Sb(BA_SbT)
         BA_Pl0 = BA0_lower_BAT_Pl(BA_PlT)
-        SC_Aw, SC_Sw, SC_Sb, SC_Pl = SCestimate(N0_Aw, N0_Sb, N0_Sw, N0_Pl)
+        SC_Aw, SC_Sw, SC_Sb, SC_Pl = estimate_species_composition(N0_Aw, N0_Sb, N0_Sw, N0_Pl)
 
         tageData = [tage_AwT, tage_SwT, tage_PlT, tage_SbT]
         startTageAw = tageData[0]

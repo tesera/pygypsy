@@ -1,21 +1,5 @@
-"""Density
-
-Acronyms:
-
-b_hage = Breast Height Age
-tage = Total age
-si_Aw  =  estimated Site intex according to the paper in this case for Aspen (Aw)
-y2bh = years until breast height age can be measured
-SI_bh_Aw = Site index estimated with breast heigh age
-N_bh_Aw = estimated N and should be equal N_Aw (for Aspen in this case Aw)
-
-"""
-# TODO: split these functions into appropriate other modules
-# TODO: make all factor find functions use kwargs in the manner of AW
+"""Density"""
 import logging
-import numpy
-import numpy as np
-import pandas as pd
 
 from gypsy.density import (
     estimate_density_aw,
@@ -23,42 +7,11 @@ from gypsy.density import (
     estimate_density_sb,
     estimate_density_sw,
 )
+from gypsy.utils import estimate_species_composition
 from asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
 
 
 LOGGER = logging.getLogger(__name__)
-
-
-# input - species, top height, total age, BHage (from the function),
-#N (or density), current Basal Area,  Measured Percent Stocking,
-#StumpDOB , StumpHeight, TopDib, SI, sp proportion
-sp_Aw = ['Aw', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
-sp_Sb = ['Sb', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
-sp_Pl = ['Pl', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
-sp_Sw = ['Sw', 0, 0, 0, 0, 0, 0, 13, 0.3, 7, 0, 0]
-
-
-def SCestimate(N_Aw, N_Sb, N_Sw, N_Pl):
-    '''This function calculates species composition based on their densities
-    Constraint -> SC_Aw + SC_Sw + SC_Sb + SC_Pl ~1
-
-    :param float N_Aw, N_Sb, N_Sw, and N_Pl: densities of the species Aw, Sb, Sw, and Pl
-
-    '''
-    N_total = N_Aw + N_Sb + N_Sw + N_Pl
-
-    if N_total == 0:
-        SC_Aw = 0
-        SC_Sw = 0
-        SC_Sb = 0
-        SC_Pl = 0
-    else:
-        SC_Aw = N_Aw/N_total
-        SC_Sw = N_Sw/N_total
-        SC_Sb = N_Sb/N_total
-        SC_Pl = N_Pl/N_total
-
-    return SC_Aw, SC_Sw, SC_Sb, SC_Pl
 
 
 def densities_and_SCs_to_250(**kwargs):
@@ -158,7 +111,7 @@ def densities_and_SCs_to_250(**kwargs):
             topHeight_Pl = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge('Pl', SI_bh_Pl, tage_Pl)
 
 
-        SC_Aw, SC_Sw, SC_Sb, SC_Pl = SCestimate(N_bh_AwT, N_bh_SbT, N_bh_SwT, N_bh_PlT)
+        SC_Aw, SC_Sw, SC_Sb, SC_Pl = estimate_species_composition(N_bh_AwT, N_bh_SbT, N_bh_SwT, N_bh_PlT)
 
         densities_along_time.append({'N_bh_AwT': N_bh_AwT, 'N_bh_SwT': N_bh_SwT, 'N_bh_SbT': N_bh_SbT, 'N_bh_PlT': N_bh_PlT,
                                      'SC_Aw': SC_Aw, 'SC_Sw': SC_Sw, 'SC_Sb':SC_Sb, 'SC_Pl': SC_Pl,

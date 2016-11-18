@@ -22,7 +22,7 @@ from gypsy.density import (
     estimate_density_pl,
 )
 from utils import _log_loop_progress
-from gypsy.GYPSYNonSpatial import SCestimate
+from gypsy.utils import estimate_species_composition
 from gypsy.asaCompileAgeGivenSpSiHt import (
     computeTreeAge,
     ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge,
@@ -501,7 +501,7 @@ def prep_standtable(data):
         )
 
         # estimating species-specific Basal area increment from Densities
-        species_composition = SCestimate(density_bh_aw, density_bh_sb, density_bh_sw, density_bh_pl)
+        species_composition = estimate_species_composition(density_bh_aw, density_bh_sb, density_bh_sw, density_bh_pl)
 
         species_composition_aw = species_composition[0]
         species_composition_sw = species_composition[1]
