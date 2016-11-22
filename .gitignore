@@ -76,4 +76,4 @@ gypsy-output/
 data/figures/
 /data/private/
 private-data/
-notebooks/.ipynb_checkpoints/
+*.ipynb_checkpoints/

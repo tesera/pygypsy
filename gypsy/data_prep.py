@@ -1,32 +1,36 @@
-# -*- coding: utf-8 -*-
-""" Data Preparation
+"""Data Preparation
+
+Calculates and joins parameters required for GYPSY to a plot table
+
 """
+#pylint: disable=no-member
 import logging
 import pandas as pd
 from copy import deepcopy
 
+import basal_area_increment as incr
+from gypsy.stand_density_factor import (
+    estimate_sdf_aw,
+    estimate_sdf_sb,
+    estimate_sdf_sw,
+    estimate_sdf_pl,
+)
+from gypsy.density import (
+    estimate_density_aw,
+    estimate_density_sw,
+    estimate_density_sb,
+    estimate_density_pl,
+)
 from utils import _log_loop_progress
-from GYPSYNonSpatial import (densityNonSpatialAw,
-                             densityNonSpatialSb,
-                             densityNonSpatialSw,
-                             densityNonSpatialPl,
-                             densityAw,
-                             densitySw,
-                             densitySb,
-                             densityPl,
-                             BasalAreaIncrementNonSpatialAw,
-                             BasalAreaIncrementNonSpatialSw,
-                             BasalAreaIncrementNonSpatialPl,
-                             BasalAreaIncrementNonSpatialSb,
-                             SCestimate)
-from asaCompileAgeGivenSpSiHt import (computeTreeAge,
-                                      ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge,
-                                      ComputeGypsySiteIndex)
+from gypsy.utils import estimate_species_composition
+from gypsy.asaCompileAgeGivenSpSiHt import (
+    computeTreeAge,
+    ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge,
+    ComputeGypsySiteIndex,
+)
 
-# TODO: replace acronyms with something more verbose
 # TODO: use pure functions or class instances to avoid mutating global state
-# TODO: formal docstrings so we can generate nice documentation
-# TODO: more subroutines and wrapper functions for easier readability
+# TODO: don't nest functions
 
 
 LOGGER = logging.getLogger(__name__)
@@ -92,7 +96,7 @@ def get_species_site_indices(dominant_species, site_index):
             site_index_fb = 0.92* site_index_pl + 1.68
             site_index_fb = 0.92 * site_index_sw + 1.68
             site_index_sb = 0.64 * site_index_pl + 2.76
-        
+
         elif dominant_species == 'Sb':
             site_index_sb = site_index
             site_index_pl = 1.57 * site_index_sb - 4.33
@@ -101,13 +105,13 @@ def get_species_site_indices(dominant_species, site_index):
             site_index_sw = 1.16 * site_index_pl - 2.47
             site_index_white_aspen = 1.18 * site_index_pl - 4.02
             site_index_pb = site_index_white_aspen
-            
+
 
     return site_index_white_aspen, site_index_pl, site_index_sw, site_index_sb
 
 
 def prep_standtable(data):
-    ''' 
+    '''
     define site_index of all other species given the dominant species
 
     :param data:
@@ -469,19 +473,19 @@ def prep_standtable(data):
         density_sw = sp_sw[4]
         density_pl = sp_pl[4]
 
-        y_aw = densityNonSpatialAw(sp_aw, site_index_bh_aw, bhage_aw, density_aw)
+        y_aw = estimate_sdf_aw(sp_aw, site_index_bh_aw, bhage_aw, density_aw)
         sdf_aw0 = y_aw[1]
         density_bh_aw = y_aw[0]
 
-        y_sb = densityNonSpatialSb(sp_sb, site_index_bh_sb, tage_sb, density_sb)
+        y_sb = estimate_sdf_sb(sp_sb, site_index_bh_sb, tage_sb, density_sb)
         sdf_sb0 = y_sb[1]
         density_bh_sb = y_sb[0]
 
-        y_sw = densityNonSpatialSw(sp_sw, site_index_bh_sw, tage_sw, sdf_aw0, density_sw)
+        y_sw = estimate_sdf_sw(sp_sw, site_index_bh_sw, tage_sw, sdf_aw0, density_sw)
         sdf_sw0 = y_sw[1]
         density_bh_sw = y_sw[0]
 
-        y_pl = densityNonSpatialPl(
+        y_pl = estimate_sdf_pl(
             sp_pl, site_index_bh_pl, tage_pl,
             sdf_aw0, sdf_sw0, sdf_sb0, density_pl
         )
@@ -489,15 +493,15 @@ def prep_standtable(data):
         density_bh_pl = y_pl[0]
 
         # estimating species densities at time zero
-        initial_density_aw = densityAw(sdf_aw0, 0, site_index_bh_aw)
-        initial_density_sb = densitySb(sdf_sb0, 0, site_index_bh_sb)
-        initial_density_sw = densitySw(sdf_sw0, sdf_aw0, 0, site_index_bh_sw)
-        initial_density_pl = densityPl(
+        initial_density_aw = estimate_density_aw(sdf_aw0, 0, site_index_bh_aw)
+        initial_density_sb = estimate_density_sb(sdf_sb0, 0, site_index_bh_sb)
+        initial_density_sw = estimate_density_sw(sdf_sw0, sdf_aw0, 0, site_index_bh_sw)
+        initial_density_pl = estimate_density_pl(
             sdf_aw0, sdf_sw0, sdf_sb0, sdf_pl0, 0, site_index_bh_pl
         )
 
         # estimating species-specific Basal area increment from Densities
-        species_composition = SCestimate(density_bh_aw, density_bh_sb, density_bh_sw, density_bh_pl)
+        species_composition = estimate_species_composition(density_bh_aw, density_bh_sb, density_bh_sw, density_bh_pl)
 
         species_composition_aw = species_composition[0]
         species_composition_sw = species_composition[1]
@@ -509,19 +513,19 @@ def prep_standtable(data):
         basal_area_sw = sp_sw[5]
         basal_area_pl = sp_pl[5]
 
-        basal_area_increment_aw = BasalAreaIncrementNonSpatialAw(
+        basal_area_increment_aw = incr.increment_basal_area_aw(
             sp_aw, species_composition_aw, site_index_bh_aw, density_bh_aw,
             initial_density_aw, bhage_aw, basal_area_aw
         )
-        basal_area_increment_sb = BasalAreaIncrementNonSpatialSb(
+        basal_area_increment_sb = incr.increment_basal_area_sb(
             sp_sb, species_composition_sb, site_index_bh_sb, density_bh_sb,
             initial_density_sb, bhage_sb, basal_area_sb
         )
-        basal_area_increment_sw = BasalAreaIncrementNonSpatialSw(
+        basal_area_increment_sw = incr.increment_basal_area_sw(
             sp_sw, species_composition_sw, site_index_bh_sw, density_bh_sw,
             initial_density_sw, bhage_sw, sdf_aw0, sdf_pl0, sdf_sb0, basal_area_sw
         )
-        basal_area_increment_pl = BasalAreaIncrementNonSpatialPl(
+        basal_area_increment_pl = incr.increment_basal_area_pl(
             sp_pl, species_composition_pl, site_index_bh_pl, density_bh_pl,
             initial_density_pl, bhage_pl, sdf_aw0, sdf_sw0, sdf_sb0, basal_area_pl
         )
@@ -582,7 +586,7 @@ def prep_standtable(data):
             'StumpDOB_Pl': stump_dob_pl,
             'StumpHeight_Aw': stump_height_aw,
             'StumpHeight_Sb': stump_height_sb,
-            'StumpHeight_Sw': stump_height_sw,
+            'Stumpheight_Sw': stump_height_sw,
             'StumpHeight_Pl': stump_height_pl,
             'TopDib_Aw': top_dib_aw,
             'TopDib_Sb': top_dib_sb,

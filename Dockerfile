@@ -16,8 +16,10 @@ ENV HISTFILE $WD/.bash_history
 RUN pip install virtualenv \
     && virtualenv -p python2.7 venv \
     && . venv/bin/activate \
-    && pip install --upgrade pip
+    && pip install --upgrade pip \
+    && pip install numpy==1.11.2 cython==0.25.1
 
 COPY . /opt/gypsy
 
-RUN pip install --upgrade -e .[docs,lint,test]
+RUN . venv/bin/activate \
+    && pip install -e .[test,lint,docs]

@@ -1,10 +1,12 @@
+"""Package Loggers"""
 import logging.config
 
 CONSOLE_LOGGER_NAME = 'console'
 FILE_LOGGER_NAME = 'file'
 
 def setup_logging():
-    LOGGING = {
+    """Initialize logging for gypsy package"""
+    log_conf = {
         'version': 1,
         'disable_existing_loggers': False,
         'formatters': {
@@ -49,6 +51,36 @@ def setup_logging():
                 'level':'DEBUG',
                 'propagate': True,
             },
+            'gypsy.basal_area_simulate': {
+                'handlers':['file'],
+                'level':'DEBUG',
+                'propagate': True,
+            },
+            'gypsy.basal_area_factor': {
+                'handlers':['file'],
+                'level':'DEBUG',
+                'propagate': True,
+            },
+            'gypsy.density': {
+                'handlers':['file'],
+                'level':'DEBUG',
+                'propagate': True,
+            },
+            'gypsy.plot': {
+                'handlers':['file'],
+                'level':'DEBUG',
+                'propagate': True,
+            },
+            'gypsy.stand_density_factor': {
+                'handlers':['file'],
+                'level':'DEBUG',
+                'propagate': True,
+            },
+            'gypsy.volume': {
+                'handlers':['file'],
+                'level':'DEBUG',
+                'propagate': True,
+            },
             'gypsy.GYPSYNonSpatial': {
                 'handlers':['file'],
                 'level':'INFO',
@@ -67,4 +99,4 @@ def setup_logging():
         }
     }
 
-    logging.config.dictConfig(LOGGING)
+    logging.config.dictConfig(log_conf)

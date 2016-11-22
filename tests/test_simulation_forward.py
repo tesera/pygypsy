@@ -4,8 +4,9 @@ import pandas as pd
 from glob import glob
 import numpy as np
 
-from gypsy import DATA_DIR
 from gypsy.forward_simulation import simulate_forwards_df
+
+from conftest import DATA_DIR
 
 
 TEST_FILES = glob(os.path.join(DATA_DIR, 'forward_simulation_files', '*.csv'))
@@ -28,8 +29,9 @@ def test_compare_forward_simulation(test_file):
     expected = pd.read_csv(expected_data_path, index_col=0)
 
     assert isinstance(result, pd.DataFrame)
-    assert np.allclose(
-        expected.values.astype(np.float64), result.values.astype(np.float64),
+    np.testing.assert_allclose(
+        expected.values, result.values,
+        rtol=0.01, atol=0.1,
         equal_nan=True
     )
 

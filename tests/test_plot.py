@@ -3,8 +3,9 @@ import pytest
 import pandas as pd
 from glob import glob
 
-from gypsy import DATA_DIR
-from gypsy.GYPSYNonSpatial import save_plot
+from gypsy.plot import save_plot
+
+from conftest import DATA_DIR
 
 
 CHART_FILES = glob(os.path.join(DATA_DIR, 'output', 'comparisons*.csv'))
