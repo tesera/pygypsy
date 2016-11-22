@@ -2,8 +2,9 @@ import os
 import pandas as pd
 import numpy.testing as npt
 
-from gypsy import DATA_DIR
 from gypsy.data_prep import prep_standtable
+
+from conftest import DATA_DIR
 
 
 def test_prep_standtable():

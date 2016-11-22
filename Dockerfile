@@ -22,5 +22,4 @@ RUN pip install virtualenv \
 COPY . /opt/gypsy
 
 RUN . venv/bin/activate \
-    && python setup.py bdist_wheel \
-    && pip install dist/gypsy-0.0.1.dev0-cp27-cp27mu-linux_x86_64.whl[test,lint,docs]
+    && pip install -e .[test,lint,docs]

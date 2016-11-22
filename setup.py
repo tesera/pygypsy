@@ -32,7 +32,7 @@ setup(name='gypsy',
       zip_safe=False,
       include_package_data=True,
       package_data={
-          'gypsy': ['data/*'],
+          'gypsy': [],
       },
       install_requires=[
           'click>=6.6',

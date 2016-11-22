@@ -4,8 +4,9 @@ import pandas as pd
 from glob import glob
 import numpy as np
 
-from gypsy import DATA_DIR
 from gypsy.forward_simulation import simulate_forwards_df
+
+from conftest import DATA_DIR
 
 
 TEST_FILES = glob(os.path.join(DATA_DIR, 'forward_simulation_files', '*.csv'))
