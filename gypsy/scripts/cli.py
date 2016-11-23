@@ -2,6 +2,7 @@
 import os
 import click
 import logging
+import ConfigParser
 import pandas as pd
 from glob import glob
 
@@ -12,13 +13,12 @@ from gypsy.utils import _log_loop_progress
 from gypsy.plot import save_plot
 
 
-setup_logging()
 LOGGER = logging.getLogger(CONSOLE_LOGGER_NAME)
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
 
-def create_output_path(ctx, param, value): #pylint: disable=unused-argument
+def _create_output_path(ctx, param, value): #pylint: disable=unused-argument, missing-docstring
     path = value
     if path is None:
         path = ctx.params.get('standtable')
@@ -30,24 +30,49 @@ def create_output_path(ctx, param, value): #pylint: disable=unused-argument
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.option('--verbose', '-v', is_flag=True)
 @click.option('--config-file', '-c', type=click.Path(exists=True))
-def cli(verbose, config_file):
+@click.pass_context
+def cli(ctx, verbose, config_file):
     """Growth and Yield Projection System
 
-    Data prep must be run before simulating
+    Note: 'prep' subcommand must be run before 'simulate'
 
     """
+    setup_logging()
+
     if verbose:
         LOGGER.setLevel(logging.DEBUG)
         for handler in LOGGER.handlers:
             handler.setLevel(logging.DEBUG)
+
     LOGGER.debug('Starting gypsy')
+    LOGGER.debug('Using config file: %s', config_file)
+
+    # TODO: have a handler callback for this parameter
+    # instead of putting this logic here. then we can also
+    # use bada parameter exception
+    conf = ConfigParser.ConfigParser()
+    if config_file is not None:
+        try:
+            conf.read(config_file)
+        except ConfigParser.Error as err:
+            LOGGER.error((
+                'There was an error reading the config file. '
+                'See the log file for more details.'
+            ))
+            LOGGER.debug(err)
+        raise click.Abort()
+
+        ctx.obj = {'config': conf}
+        ctx.params['config_file'] = config_file
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('standtable', type=click.Path(exists=True))
 @click.option('--stand-id', '-n', multiple=True, type=int)
 @click.option('--id-field', '-i', type=str)
-@click.option('--output-path', '-o', type=click.Path(), callback=create_output_path)
-def prep(standtable, stand_id, id_field, output_path):
+@click.option('--output-path', '-o', type=click.Path(),
+              callback=_create_output_path)
+@click.pass_context
+def prep(ctx, standtable, stand_id, id_field, output_path):
     """Prepare stand data for use in GYPSY simulation"""
     LOGGER.info('Running prep...')
     standtable_df = pd.read_csv(standtable)
@@ -69,8 +94,10 @@ def prep(standtable, stand_id, id_field, output_path):
 @click.option('--output-dir', '-o', type=click.Path(exists=False),
               default='./gypsy-output')
 @click.option('--output-filename', type=str, default='gypsy-projection.csv')
-def simulate(data, stand_id, generate_plots, output_fields, output_timestep,
-             id_field, write_id, output_dir, output_filename):
+@click.pass_context
+def simulate(ctx, data, stand_id, generate_plots, output_fields,
+             output_timestep, id_field, write_id, output_dir,
+             output_filename):
     """Run GYPSY simulation
 
     """

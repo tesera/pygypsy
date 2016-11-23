@@ -10,7 +10,7 @@ def cli_config_file():
     path = os.path.join(DATA_DIR, 'cli_config.txt')
 
     with open(path, 'w') as f:
-        f.write('key=value')
+        f.write('[section]\nkey=value')
 
     yield path
 

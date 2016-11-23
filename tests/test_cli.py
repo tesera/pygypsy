@@ -27,7 +27,6 @@ def test_prep():
     result = runner.invoke(cli, ['prep', input_data_path])
 
     assert result.exit_code == 0
-    assert result.output == ""
     assert os.path.exists(expected_output_path)
 
 def test_simulate():
@@ -40,5 +39,4 @@ def test_simulate():
     result = runner.invoke(cli, ['simulate', data_path])
 
     assert result.exit_code == 0
-    assert result.output == ""
     assert os.path.exists(expected_output_path)
