@@ -1,0 +1,162 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "tolerance": {
+      "type": "object",
+      "properties": {
+        "basalAreaFactor": {
+          "type": "object",
+          "properties": {
+            "aw": {
+              "$ref": "#/definitions/tolerance"
+            },
+            "sp": {
+              "$ref": "#/definitions/tolerance"
+            },
+            "pl": {
+              "$ref": "#/definitions/tolerance"
+            },
+            "sw": {
+              "$ref": "#/definitions/tolerance"
+            }
+          },
+          "required": [
+            "aw",
+            "sp",
+            "pl",
+            "sw"
+          ]
+        },
+        "siteDensityFactor": {
+          "type": "object",
+          "properties": {
+            "aw": {
+              "$ref": "#/definitions/tolerance"
+            },
+            "sp": {
+              "$ref": "#/definitions/tolerance"
+            },
+            "pl": {
+              "$ref": "#/definitions/tolerance"
+            },
+            "sw": {
+              "$ref": "#/definitions/tolerance"
+            }
+          },
+          "required": [
+            "aw",
+            "sp",
+            "pl",
+            "sw"
+          ]
+        }
+      },
+      "required": [
+        "basalAreaFactor",
+        "siteDensityFactor"
+      ]
+    },
+    "simulation": {
+      "type": "object",
+      "properties": {
+        "years": {
+          "type": "integer",
+          "multipleOf": 1,
+          "maximum": 500,
+          "minimum": 1
+        }
+      },
+      "required": [
+        "years"
+      ]
+    },
+    "deadwood": {
+      "type": "object",
+      "properties": {
+        "include": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "include"
+      ]
+    },
+    "dataReduction": {
+      "type": "object",
+      "properties": {
+        "outputResolution": {
+          "type": "integer",
+          "multipleOf": 1,
+          "maximum": 10,
+          "minimum": 1
+        }
+      },
+      "required": [
+        "outputResolution"
+      ]
+    },
+    "utilization": {
+      "type": "object",
+      "properties": {
+        "aw": {
+          "$ref": "#/definitions/utlization"
+        },
+        "sw": {
+          "$ref": "#/definitions/utlization"
+        },
+        "sb": {
+          "$ref": "#/definitions/utlization"
+        },
+        "pl": {
+          "$ref": "#/definitions/utlization"
+        }
+      },
+      "required": [
+        "aw",
+        "sw",
+        "sb",
+        "pl"
+      ]
+    }
+  },
+  "required": [
+    "tolerance",
+    "simulation",
+    "deadwood",
+    "dataReduction",
+    "utilization"
+  ],
+  "definitions": {
+    "tolerance": {
+      "type": "number",
+      "maximum": 1,
+      "minimum": 0.0001
+    },
+    "utlization": {
+      "type": "object",
+      "properties": {
+        "topDiamInsideBark": {
+          "type": "number",
+          "maximum": 100,
+          "minimum": 0
+        },
+        "stumpDiamOutsideBark": {
+          "type": "number",
+          "maximum": 100,
+          "minimum": 0
+        },
+        "stumpHeight": {
+          "type": "number",
+          "maximum": 2,
+          "minimum": 0
+        }
+      },
+      "required": [
+        "topDiamInsideBark",
+        "stumpDiamOutsideBark",
+        "stumpHeight"
+      ]
+    }
+  }
+}

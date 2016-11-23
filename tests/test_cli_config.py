@@ -1,11 +1,11 @@
 from click.testing import CliRunner
 
 from gypsy.scripts.cli import cli
+from gypsy.scripts import DEFAULT_CONF_FILE
 
-
-def test_cli_config_file(cli_config_file): #pylint: disable=missing-docstring
+def test_cli_config_file(): #pylint: disable=missing-docstring
     runner = CliRunner()
-    result = runner.invoke(cli, ['--config-file', cli_config_file,
+    result = runner.invoke(cli, ['--config-file', DEFAULT_CONF_FILE,
                                  'prep', '-h'])
 
     assert result.exit_code == 0

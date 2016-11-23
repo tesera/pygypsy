@@ -4,7 +4,6 @@ import logging
 import datetime
 import numpy as np
 import pandas as pd
-from collections import OrderedDict
 
 import basal_area_increment as incr
 from GYPSYNonSpatial import densities_and_SCs_to_250
@@ -29,11 +28,8 @@ from gypsy.volume import(
 
 logger = logging.getLogger(__name__)
 
-#input - species, top height, total age, BHage (from the function),
-#N (or density), current Basal Area,
-#Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
-
 SPECIES = ('Aw', 'Sw', 'Sb', 'Pl')
+
 
 def BA_zeroAw(BA_Aw0, BA_AwT):
     while BA_Aw0 > BA_AwT * 0.5:

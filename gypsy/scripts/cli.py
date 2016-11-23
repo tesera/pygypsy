@@ -1,16 +1,18 @@
 """Command Line Interface"""
 import os
+import json
 import click
 import logging
-import ConfigParser
+import jsonschema
 import pandas as pd
 from glob import glob
 
+from gypsy.scripts import DEFAULT_CONF_FILE, CONF_SCHEMA_FILE
+from gypsy.plot import save_plot
+from gypsy.utils import _log_loop_progress
+from gypsy.data_prep import prep_standtable
 from gypsy.log import setup_logging, CONSOLE_LOGGER_NAME
 from gypsy.forward_simulation import simulate_forwards_df
-from gypsy.data_prep import prep_standtable
-from gypsy.utils import _log_loop_progress
-from gypsy.plot import save_plot
 
 
 LOGGER = logging.getLogger(CONSOLE_LOGGER_NAME)
@@ -29,7 +31,8 @@ def _create_output_path(ctx, param, value): #pylint: disable=unused-argument, mi
 
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.option('--verbose', '-v', is_flag=True)
-@click.option('--config-file', '-c', type=click.Path(exists=True))
+@click.option('--config-file', '-c', type=click.File(encoding='utf8'),
+              default=DEFAULT_CONF_FILE)
 @click.pass_context
 def cli(ctx, verbose, config_file):
     """Growth and Yield Projection System
@@ -50,20 +53,21 @@ def cli(ctx, verbose, config_file):
     # TODO: have a handler callback for this parameter
     # instead of putting this logic here. then we can also
     # use bada parameter exception
-    conf = ConfigParser.ConfigParser()
-    if config_file is not None:
-        try:
-            conf.read(config_file)
-        except ConfigParser.Error as err:
-            LOGGER.error((
-                'There was an error reading the config file. '
-                'See the log file for more details.'
-            ))
-            LOGGER.debug(err)
+    with open(CONF_SCHEMA_FILE) as f:
+        schema = json.load(f)
+    try:
+        conf = json.load(config_file)
+        jsonschema.validate(conf, schema)
+    except Exception as err:
+        LOGGER.error((
+            'There was an error reading the config file. '
+            'See the log file for more details.'
+        ))
+        LOGGER.debug(err)
         raise click.Abort()
 
-        ctx.obj = {'config': conf}
-        ctx.params['config_file'] = config_file
+    ctx.obj = {'config': conf}
+    ctx.params['config_file'] = config_file
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('standtable', type=click.Path(exists=True))
