@@ -92,8 +92,8 @@ def setup_logging():
                 'propagate': True,
             },
             CONSOLE_LOGGER_NAME: {
-                'handlers': ['console'],
-                'level': 'INFO',
+                'handlers': ['console', 'file'],
+                'level': 'DEBUG',
                 'propagate': True,
             },
         }
