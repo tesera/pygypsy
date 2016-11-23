@@ -1,11 +1,13 @@
 """Command Line Interface"""
 import os
 import json
-import click
 import logging
+from glob import glob
+from shutil import copyfile
+
+import click
 import jsonschema
 import pandas as pd
-from glob import glob
 
 from gypsy.scripts import DEFAULT_CONF_FILE, CONF_SCHEMA_FILE
 from gypsy.plot import save_plot
@@ -71,37 +73,31 @@ def cli(ctx, verbose, config_file):
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('standtable', type=click.Path(exists=True))
-@click.option('--stand-id', '-n', multiple=True, type=int)
-@click.option('--id-field', '-i', type=str)
 @click.option('--output-path', '-o', type=click.Path(),
               callback=_create_output_path)
 @click.pass_context
-def prep(ctx, standtable, stand_id, id_field, output_path):
+def prep(ctx, standtable, output_path):
     """Prepare stand data for use in GYPSY simulation"""
     LOGGER.info('Running prep...')
     standtable_df = pd.read_csv(standtable)
-
-    # TODO: filter id by stand id
 
     prepped_data = prep_standtable(standtable_df)
     prepped_data.to_csv(output_path)
 
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
+@click.argument('dest', type=click.Path())
+def generate_config(dest):
+    """Generate a configuration file"""
+    copyfile(DEFAULT_CONF_FILE, dest)
+
+
+@cli.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('data', type=click.Path(exists=True))
-@click.option('--output-fields', '-f', multiple=True, type=str)
-@click.option('--stand-id', '-n', multiple=True, type=int)
-@click.option('--output-timestep', '-t', type=int)
-@click.option('--id-field', '-i', type=str)
-@click.option('--generate-plots', '-p', is_flag=True)
-@click.option('--write-id', '-w', is_flag=True)
 @click.option('--output-dir', '-o', type=click.Path(exists=False),
               default='./gypsy-output')
-@click.option('--output-filename', type=str, default='gypsy-projection.csv')
 @click.pass_context
-def simulate(ctx, data, stand_id, generate_plots, output_fields,
-             output_timestep, id_field, write_id, output_dir,
-             output_filename):
+def simulate(ctx, data, output_dir):
     """Run GYPSY simulation
 
     """
@@ -110,32 +106,29 @@ def simulate(ctx, data, stand_id, generate_plots, output_fields,
 
     standtable = pd.read_csv(data)
 
-    # TODO: filter stand data to ages > 25
     min_age = 25
 
-    old_query_str = 'tage_Sw > {a} or tage_Sb > {a} or tage_Pl > {a} or tage_Aw > {a}' .format(a=min_age)
+    old_query_str = ('tage_Sw > {a} '
+                     'or tage_Sb > {a} '
+                     'or tage_Pl > {a} '
+                     'or tage_Aw > {a}').format(a=min_age)
     old_ids = standtable.query(old_query_str).index
     standtable_old = standtable[standtable.index.isin(old_ids)]
     standtable_young = standtable[~standtable.index.isin(old_ids)]
 
-    # TODO: validate that its had dataprep filter id by stand id
-
     LOGGER.info('Running simulation...')
     result = simulate_forwards_df(standtable_old)
 
-    # TODO: subset to timestep add id column to data and fix output path
-
     LOGGER.info('Saving output data')
     os.makedirs(output_dir)
-    for plot_id, df in result.items():
+    for plot_id, data in result.items():
         filename = '%s.csv' % plot_id
         output_path = os.path.join(output_dir, filename)
-        df.to_csv(output_path)
+        data.to_csv(output_path)
 
     standtable_young_path = os.path.join(output_dir, 'skipped_plots.csv')
     standtable_young.to_csv(standtable_young_path, columns=['PlotID'])
 
-    # TODO: plot must have onlu plot ID
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('simulation-output-dir', type=click.Path(exists=True))
