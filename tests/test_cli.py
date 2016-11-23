@@ -7,7 +7,7 @@ from gypsy.scripts.cli import cli
 from conftest import DATA_DIR
 
 
-def remove_path_if_exists(*paths):
+def remove_path_if_exists(*paths): #pylint: disable=missing-docstring
     for path in paths:
         try:
             if os.path.isdir(path):
@@ -17,10 +17,9 @@ def remove_path_if_exists(*paths):
         except OSError:
             pass
 
-
 def test_prep():
     input_data_path = os.path.join(DATA_DIR, 'raw_standtable.csv')
-    expected_output_path = '%s.prepped' %input_data_path
+    expected_output_path = os.path.splitext(input_data_path)[0] + '_prepped.csv'
 
     remove_path_if_exists(expected_output_path)
 
@@ -31,9 +30,8 @@ def test_prep():
     assert result.output == ""
     assert os.path.exists(expected_output_path)
 
-
 def test_simulate():
-    data_path = os.path.join(DATA_DIR, 'raw_standtable.csv.prepped')
+    data_path = os.path.join(DATA_DIR, 'raw_standtable_prepped.csv')
     expected_output_path = os.path.join(os.getcwd(), 'gypsy-output')
 
     remove_path_if_exists(expected_output_path)
