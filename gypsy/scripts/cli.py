@@ -10,7 +10,7 @@ import pandas as pd
 from gypsy.scripts import DEFAULT_CONF_FILE
 from gypsy.scripts.callbacks import _load_and_validate_config
 from gypsy.plot import save_plot
-from gypsy.utils import _log_loop_progress
+from gypsy.utils import _log_loop_progress, _filter_young_stands
 from gypsy.data_prep import prep_standtable
 from gypsy.log import setup_logging, CONSOLE_LOGGER_NAME
 from gypsy.forward_simulation import simulate_forwards_df
@@ -103,20 +103,18 @@ def simulate(ctx, data, config_file):
     min_age = 25
     LOGGER.info('Filtering plots to those with a species older than %d years',
                 min_age)
-    old_query_str = ('tage_Sw > {a} '
-                     'or tage_Sb > {a} '
-                     'or tage_Pl > {a} '
-                     'or tage_Aw > {a}').format(a=min_age)
-    old_ids = standtable.query(old_query_str).index
-    standtable_old = standtable[standtable.index.isin(old_ids)]
+    standtable_old, standtable_young = _filter_young_stands(standtable,
+                                                            min_age=25)
 
-    if all(old_ids):
-        standtable_young = standtable[~standtable.index.isin(old_ids)]
+    if standtable_young.shape[0] > 0:
         skipped_plots_filename = 'skipped-plots.csv'
         LOGGER.info('%d young plots were removed. IDs saved to %s',
-                    standtable_young.shape[0], skipped_plots_filename)
-        standtable_young_path = os.path.join(output_dir, skipped_plots_filename)
-        standtable_young.to_csv(standtable_young_path, columns=['PlotID'])
+                    standtable_young.shape[0],
+                    skipped_plots_filename)
+        standtable_young_path = os.path.join(output_dir,
+                                             skipped_plots_filename)
+        standtable_young.to_csv(standtable_young_path,
+                                columns=['PlotID'])
     else:
         LOGGER.info('No plots less than %d years old present', min_age)
 
