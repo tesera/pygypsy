@@ -45,10 +45,6 @@ def cli(ctx, verbose, output_dir):
                     default_output_dir)
         output_dir = default_output_dir
 
-    if os.path.exists(output_dir):
-        msg = 'output_dir: %s would be overwritten!' % output_dir
-        raise click.UsageError(msg)
-
     if not os.path.isdir(output_dir):
         LOGGER.info('Output directory %s does not exist.')
         os.mkdir(output_dir)
@@ -119,7 +115,8 @@ def simulate(ctx, data, config_file):
         LOGGER.info('No plots less than %d years old present', min_age)
 
     LOGGER.info('Running simulation...')
-    result = simulate_forwards_df(standtable_old)
+    result = simulate_forwards_df(standtable_old,
+                                  utiliz_params=config_file['utilization'])
 
     LOGGER.info('Saving output data')
     simulation_output_dir = os.path.join(output_dir, 'simulation-data')
