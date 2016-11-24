@@ -3,6 +3,7 @@ import shutil
 from click.testing import CliRunner
 
 from gypsy.scripts.cli import cli
+from gypsy.scripts import DEFAULT_CONF_FILE
 
 from conftest import DATA_DIR
 
@@ -34,7 +35,6 @@ def test_prep():
     input_data_path = './raw_standtable.csv'
     expected_output_path = os.path.join(output_dir,
                                         'plot_table_prepped.csv')
-
     runner = CliRunner()
 
     with runner.isolated_filesystem():
@@ -50,6 +50,63 @@ def test_prep():
 
         assert result.exit_code == 0
         assert os.path.exists(expected_output_path)
+
+def test_valid_config():
+    input_data_path = './raw_standtable.csv'
+    runner = CliRunner()
+
+    with runner.isolated_filesystem():
+        shutil.copy(
+            os.path.join(DATA_DIR, 'raw_standtable.csv'),
+            input_data_path
+        )
+
+        result = runner.invoke(cli, [
+            'prep',
+            '--config-file', DEFAULT_CONF_FILE,
+            input_data_path
+        ])
+
+        assert result.exit_code == 0
+
+
+def test_invalid_config(invalid_cli_config_file):
+    input_data_path = './raw_standtable.csv'
+    runner = CliRunner()
+
+    with runner.isolated_filesystem():
+        shutil.copy(
+            os.path.join(DATA_DIR, 'raw_standtable.csv'),
+            input_data_path
+        )
+
+        result = runner.invoke(cli, [
+            'prep',
+            '--config-file', invalid_cli_config_file,
+            input_data_path
+        ])
+
+        assert result.exit_code != 0
+
+def test_schema_violating_config():
+    input_data_path = './raw_standtable.csv'
+    runner = CliRunner()
+
+    with runner.isolated_filesystem():
+        shutil.copy(os.path.join(DATA_DIR, 'raw_standtable.csv'),
+                    input_data_path)
+        shutil.copy(os.path.join(DATA_DIR, 'invalid-config.json'),
+                    'config.json')
+
+        result = runner.invoke(cli, [
+            'prep',
+            '--config-file', 'config.json',
+            input_data_path
+        ])
+
+        assert result.exit_code != 0
+        assert 'Invalid value for "--config-file"' in result.output
+
 
 def test_simulate():
     output_dir = 'gypsy-output'
