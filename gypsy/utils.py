@@ -4,6 +4,7 @@ from __future__ import division
 
 import os
 import errno
+import shutil
 import logging
 
 from log import CONSOLE_LOGGER_NAME
@@ -67,3 +68,8 @@ def _filter_young_stands(prepped_plot_table, min_age=25):
     ]
 
     return prepped_plot_table_old, prepped_plot_table_young
+
+def _append_file(source, dest):
+    with open(dest, 'wb') as dfd:
+        with open(source, 'rb') as sfd:
+            shutil.copyfileobj(sfd, dfd)

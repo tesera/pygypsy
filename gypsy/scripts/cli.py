@@ -10,7 +10,7 @@ import pandas as pd
 from gypsy.scripts import DEFAULT_CONF_FILE
 from gypsy.scripts.callbacks import _load_and_validate_config
 from gypsy.plot import save_plot
-from gypsy.utils import _log_loop_progress, _filter_young_stands
+from gypsy.utils import _log_loop_progress, _filter_young_stands, _append_file
 from gypsy.data_prep import prep_standtable
 from gypsy.log import setup_logging, CONSOLE_LOGGER_NAME
 from gypsy.forward_simulation import simulate_forwards_df
@@ -18,8 +18,7 @@ from gypsy.forward_simulation import simulate_forwards_df
 
 LOGGER = logging.getLogger(CONSOLE_LOGGER_NAME)
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
-
-setup_logging()
+LOG_FILE_NAME = 'gypsy.log'
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
@@ -32,6 +31,7 @@ def cli(ctx, verbose, output_dir):
     Note: 'prep' subcommand must be run before 'simulate'
 
     """
+    setup_logging()
     if verbose:
         LOGGER.setLevel(logging.DEBUG)
         for handler in LOGGER.handlers:
@@ -65,6 +65,8 @@ def generate_config(ctx):
     output_path = os.path.join(output_dir, 'gypsy-config.json')
     copyfile(DEFAULT_CONF_FILE, output_path)
     LOGGER.info('Config file saved at %s', output_path)
+    _append_file(LOG_FILE_NAME,
+                 os.path.join(output_dir, LOG_FILE_NAME))
 
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
@@ -83,6 +85,7 @@ def prep(ctx, standtable, config_file):
     prepped_data = prep_standtable(standtable_df)
 
     prepped_data.to_csv(output_path)
+    _append_file(LOG_FILE_NAME, os.path.join(output_dir, LOG_FILE_NAME))
 
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
@@ -126,16 +129,19 @@ def simulate(ctx, data, config_file):
         output_path = os.path.join(simulation_output_dir, filename)
         data.to_csv(output_path)
 
+    _append_file(LOG_FILE_NAME, os.path.join(output_dir, LOG_FILE_NAME))
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('simulation-output-dir', type=click.Path(exists=True))
 @click.option('--config-file', '-c', type=click.Path(exists=False),
               default=DEFAULT_CONF_FILE,
               callback=_load_and_validate_config)
-def plot(simulation_output_dir, config_file):
+@click.pass_context
+def plot(ctx, simulation_output_dir, config_file):
     """Create charts for all files in gypsy simulation output directory
 
     """
+    output_dir = ctx.obj['output-dir']
     chart_files = glob(os.path.join(simulation_output_dir, '*.csv'))
     LOGGER.info('Plotting all csv files at %s...', simulation_output_dir)
 
@@ -146,3 +152,5 @@ def plot(simulation_output_dir, config_file):
         figure_path = os.path.join(simulation_output_dir, 'figures', output_filename)
 
         save_plot(chart_df, path=figure_path)
+
+    _append_file(LOG_FILE_NAME, os.path.join(output_dir, LOG_FILE_NAME))

@@ -111,9 +111,13 @@ def test_schema_violating_config():
 def test_simulate():
     output_dir = 'gypsy-output'
     input_data_path = './data.csv'
-    expected_files = ['1614424.csv', '1008174.csv']
+    expected_files = [
+        os.path.join('simulation-data', '1614424.csv'),
+        os.path.join('simulation-data', '1008174.csv'),
+        'gypsy.log'
+    ]
     expected_output_paths = [
-        os.path.join(output_dir, 'simulation-data', item) \
+        os.path.join(output_dir, item) \
         for item in expected_files
     ]
 
@@ -129,5 +133,6 @@ def test_simulate():
             '--output-dir', output_dir,
             'simulate', input_data_path
         ])
+
         assert result.exit_code == 0
         assert all([os.path.exists(i) for i in expected_output_paths])
