@@ -132,7 +132,7 @@ def get_factors_for_all_species(**kwargs):
             'f_Pl':f_Pl,}
 
 def simulate_forwards_df(plot_df, simulation_choice='yes',
-                         utiliz_params=DEFAULT_UTILIZATIONS):
+                         utiliz_params=None):
     """Run forwards simulation
 
     Keyword Arguments:
@@ -141,6 +141,9 @@ def simulate_forwards_df(plot_df, simulation_choice='yes',
     Return:
     !TODO!
     """
+    if utiliz_params is None:
+        utiliz_params = DEFAULT_UTILIZATIONS
+
     output_dict = {}
     logger.debug('Starting forwards simulation')
     n_rows = plot_df.shape[0]
