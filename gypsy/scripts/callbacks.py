@@ -14,7 +14,7 @@ LOGGER = logging.getLogger(CONSOLE_LOGGER_NAME)
 
 
 def _load_and_validate_config(ctx, param, value): #pylint: disable=unused-argument, missing-docstring
-    with open(CONF_SCHEMA_FILE) as schema_file: #pylint: disable=invalid-name
+    with open(CONF_SCHEMA_FILE) as schema_file:
         schema = json.load(schema_file)
 
     if value == DEFAULT_CONF_FILE:
