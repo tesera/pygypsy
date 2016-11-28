@@ -4,7 +4,6 @@ import logging
 import datetime
 import numpy as np
 import pandas as pd
-from collections import OrderedDict
 
 import basal_area_increment as incr
 from GYPSYNonSpatial import densities_and_SCs_to_250
@@ -29,11 +28,31 @@ from gypsy.volume import(
 
 logger = logging.getLogger(__name__)
 
-#input - species, top height, total age, BHage (from the function),
-#N (or density), current Basal Area,
-#Measured Percent Stocking, StumpDOB , StumpHeight, TopDib, SI, sp proportion
-
 SPECIES = ('Aw', 'Sw', 'Sb', 'Pl')
+
+DEFAULT_UTILIZATIONS = {
+    "aw": {
+        "topDiamInsideBark": 7,
+        "stumpDiamOutsideBark": 13,
+        "stumpHeight": 0.3
+    },
+    "sw": {
+        "topDiamInsideBark": 7,
+        "stumpDiamOutsideBark": 13,
+        "stumpHeight": 0.3
+    },
+    "sb": {
+        "topDiamInsideBark": 7,
+        "stumpDiamOutsideBark": 13,
+        "stumpHeight": 0.3
+    },
+    "pl": {
+        "topDiamInsideBark": 7,
+        "stumpDiamOutsideBark": 13,
+        "stumpHeight": 0.3
+    }
+}
+
 
 def BA_zeroAw(BA_Aw0, BA_AwT):
     while BA_Aw0 > BA_AwT * 0.5:
@@ -112,7 +131,8 @@ def get_factors_for_all_species(**kwargs):
             'f_Sw':f_Sw,
             'f_Pl':f_Pl,}
 
-def simulate_forwards_df(plot_df, simulation_choice='yes'):
+def simulate_forwards_df(plot_df, simulation_choice='yes',
+                         utiliz_params=None):
     """Run forwards simulation
 
     Keyword Arguments:
@@ -121,6 +141,9 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
     Return:
     !TODO!
     """
+    if utiliz_params is None:
+        utiliz_params = DEFAULT_UTILIZATIONS
+
     output_dict = {}
     logger.debug('Starting forwards simulation')
     n_rows = plot_df.shape[0]
@@ -369,7 +392,10 @@ def simulate_forwards_df(plot_df, simulation_choice='yes'):
                 output_DF['N_bh_%sT' % spec],
                 output_DF['BA_%s' % spec],
                 output_DF['topHeight_%s' % spec],
-                output_DF['Gross_Total_Volume_%s' % spec]
+                output_DF['Gross_Total_Volume_%s' % spec],
+                top_dib=utiliz_params[spec.lower()]['topDiamInsideBark'],
+                stump_dob=utiliz_params[spec.lower()]['stumpDiamOutsideBark'],
+                stump_height=utiliz_params[spec.lower()]['stumpHeight']
             )
 
         output_DF['MerchantableVolume_Con'] = output_DF['MerchantableVolumeSw'] \

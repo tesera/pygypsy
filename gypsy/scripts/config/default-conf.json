@@ -1,0 +1,47 @@
+{
+    "tolerance": {
+        "basalAreaFactor": {
+            "aw": 0.1,
+            "sp": 0.1,
+            "pl": 0.1,
+            "sw": 0.1
+        },
+        "siteDensityFactor": {
+            "aw": 0.1,
+            "sp": 0.1,
+            "pl": 0.1,
+            "sw": 0.1
+        }
+    },
+    "simulation": {
+        "years": 250
+    },
+    "deadwood": {
+        "include": true
+    },
+    "dataReduction": {
+        "outputResolution": 5
+    },
+    "utilization": {
+        "aw": {
+            "topDiamInsideBark": 7,
+            "stumpDiamOutsideBark": 13,
+            "stumpHeight": 0.3
+        },
+        "sw": {
+            "topDiamInsideBark": 7,
+            "stumpDiamOutsideBark": 13,
+            "stumpHeight": 0.3
+        },
+        "sb": {
+            "topDiamInsideBark": 7,
+            "stumpDiamOutsideBark": 13,
+            "stumpHeight": 0.3
+        },
+        "pl": {
+            "topDiamInsideBark": 7,
+            "stumpDiamOutsideBark": 13,
+            "stumpHeight": 0.3
+        }
+    }
+}

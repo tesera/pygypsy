@@ -4,6 +4,7 @@ from __future__ import division
 
 import os
 import errno
+import shutil
 import logging
 
 from log import CONSOLE_LOGGER_NAME
@@ -52,3 +53,23 @@ def estimate_species_composition(n_aw, n_sb, n_sw, n_pl):
         sc_pl = n_pl/n_total
 
     return sc_aw, sc_sw, sc_sb, sc_pl
+
+def _filter_young_stands(prepped_plot_table, min_age=25):
+    old_query_str = ('tage_Sw > {a} '
+                     'or tage_Sb > {a} '
+                     'or tage_Pl > {a} '
+                     'or tage_Aw > {a}').format(a=min_age)
+    old_ids = prepped_plot_table.query(old_query_str).index
+    prepped_plot_table_old = prepped_plot_table[
+        prepped_plot_table.index.isin(old_ids)
+    ]
+    prepped_plot_table_young = prepped_plot_table[
+        ~prepped_plot_table.index.isin(old_ids)
+    ]
+
+    return prepped_plot_table_old, prepped_plot_table_young
+
+def _append_file(source, dest):
+    with open(dest, 'wb') as dfd:
+        with open(source, 'rb') as sfd:
+            shutil.copyfileobj(sfd, dfd)

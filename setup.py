@@ -32,13 +32,14 @@ setup(name='gypsy',
       zip_safe=False,
       include_package_data=True,
       package_data={
-          'gypsy': [],
+          'gypsy': ['scripts/config/*'],
       },
       install_requires=[
           'click>=6.6',
           'pandas>=0.18.1',
           'matplotlib>=1.5.2',
           'colorlog>=2.7.0',
+          'jsonschema>=2.5.1',
       ],
       extras_require={
           'test': ['pytest==2.9.1', 'pytest-cov==2.4.0'],
