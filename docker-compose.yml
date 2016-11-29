@@ -1,12 +1,14 @@
 dev:
   container_name: gypsy
   build: .
+  env_file: ./env/dev.env
   volumes:
     - ./:/opt/gypsy
   command: ["/bin/bash", "--rcfile", "/opt/gypsy/venv/bin/activate"]
 test:
   container_name: gypsy
   build: .
+  env_file: ./env/dev.env
   volumes:
     - ./:/opt/gypsy
   command: 'bash bin/run_tests.sh'
