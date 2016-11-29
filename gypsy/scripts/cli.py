@@ -77,16 +77,19 @@ def generate_config(ctx):
     Generates a configuration file, gypsy-config.json, under DEST directory.
 
     """
-    output_dir = ctx.obj['output-dir']
-    output_path = os.path.join(output_dir, 'gypsy-config.json')
-    copyfile(DEFAULT_CONF_FILE, output_path)
+    s3_prefix = ctx.obj['s3-prefix']
+    output_dir = s3_prefix if s3_prefix else ctx.obj['output-dir']
+    output_path = gyppath._join(output_dir, 'gypsy-config.json') #pylint: disable=protected-access
+    _copy_file(DEFAULT_CONF_FILE, output_path, bucket_conn=ctx.obj['s3-bucket-conn'])
     LOGGER.info('Config file saved at %s', output_path)
-    _append_file(LOG_FILE_NAME,
-                 os.path.join(output_dir, LOG_FILE_NAME))
+
+    # TODO: won't work with s3
+    if ctx.obj['s3-bucket-name'] is None:
+        _append_file(LOG_FILE_NAME, os.path.join(output_dir, LOG_FILE_NAME))
 
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
-@click.argument('standtable', type=click.Path(exists=True))
+@click.argument('standtable', type=click.Path(exists=False))
 @click.option('--config-file', '-c', type=click.Path(exists=False),
               default=DEFAULT_CONF_FILE,
               callback=_load_and_validate_config)
