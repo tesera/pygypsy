@@ -26,7 +26,7 @@ def invalid_cli_config_file():
 def s3_bucket_path():
     return 's3://' + BUCKET
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='function')
 def s3_bucket_conn():
     s3 = boto3.resource('s3')
     bucket_conn = s3.Bucket(BUCKET)
@@ -46,16 +46,16 @@ def s3_config_output_dir(s3_bucket_path, s3_bucket_conn):
 @pytest.yield_fixture(scope='function')
 def s3_prep_output_dir(s3_bucket_path, s3_bucket_conn):
     prefix = 'test/prep/gypsy-output'
+    out_dir = '%s/%s' % (s3_bucket_path, prefix)
     files = [
         (os.path.join(DATA_DIR, 'raw_standtable.csv'),
          '/'.join([prefix, 'raw-data.csv'])),
         (DEFAULT_CONF_FILE,
          '/'.join([prefix, 'config.json'])),
     ]
+
     for item in files:
         _copy_file(item[0], item[1], bucket_conn=s3_bucket_conn)
-
-    out_dir = '%s/%s' % (s3_bucket_path, prefix)
     data_path = '/'.join([s3_bucket_path, files[0][1]])
 
     yield {
@@ -68,12 +68,27 @@ def s3_prep_output_dir(s3_bucket_path, s3_bucket_conn):
 
 
 @pytest.yield_fixture(scope='function')
-def s3_simulate_output_dir(s3_for_prep, s3_bucket_path, s3_bucket_conn):
+def s3_simulate_output_dir(s3_bucket_path, s3_bucket_conn):
     # TODO: copy data to s3
     prefix = 'test/simulate/gypsy-output'
     out_dir = '%s/%s' % (s3_bucket_path, prefix)
+    files = [
+        (os.path.join(DATA_DIR, 'raw_standtable_prepped.csv'),
+         '/'.join([prefix, 'raw-data-prepped.csv'])),
+        (os.path.join(DATA_DIR, 'raw_standtable.csv'),
+         '/'.join([prefix, 'raw-data.csv'])),
+        (DEFAULT_CONF_FILE,
+         '/'.join([prefix, 'config.json'])),
+    ]
 
-    yield out_dir
+    for item in files:
+        _copy_file(item[0], item[1], bucket_conn=s3_bucket_conn)
+    data_path = '/'.join([s3_bucket_path, files[0][1]])
+
+    yield {
+        'out-dir': out_dir,
+        'data-path': data_path,
+    }
 
     for key in s3_bucket_conn.objects.filter(Prefix=prefix):
         key.delete()
