@@ -2,18 +2,25 @@
 import os
 import logging
 from glob import glob
-from shutil import copyfile
 
+import boto3
 import click
 import pandas as pd
 
 from gypsy.scripts import DEFAULT_CONF_FILE
 from gypsy.scripts.callbacks import _load_and_validate_config
 from gypsy.plot import save_plot
-from gypsy.utils import _log_loop_progress, _filter_young_stands, _append_file
+from gypsy.utils import (
+    _log_loop_progress,
+    _filter_young_stands,
+    _append_file,
+    _parse_s3_url,
+    _copy_file,
+)
 from gypsy.data_prep import prep_standtable
 from gypsy.log import setup_logging, CONSOLE_LOGGER_NAME
 from gypsy.forward_simulation import simulate_forwards_df
+import gypsy.path as gyppath
 
 
 LOGGER = logging.getLogger(CONSOLE_LOGGER_NAME)
@@ -23,7 +30,8 @@ LOG_FILE_NAME = 'gypsy.log'
 
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.option('--verbose', '-v', is_flag=True)
-@click.option('--output-dir', '-o', type=click.Path(exists=False))
+@click.option('--output-dir', '-o', type=click.Path(exists=False),
+              default='gypsy-output')
 @click.pass_context
 def cli(ctx, verbose, output_dir):
     """Growth and Yield Projection System
@@ -36,21 +44,29 @@ def cli(ctx, verbose, output_dir):
         LOGGER.setLevel(logging.DEBUG)
         for handler in LOGGER.handlers:
             handler.setLevel(logging.DEBUG)
-
     LOGGER.debug('Starting gypsy')
-    default_output_dir = 'gypsy-output'
 
-    if not output_dir:
-        LOGGER.info('option "--output-dir" not specified, using default: %s',
-                    default_output_dir)
-        output_dir = default_output_dir
+    s3_params = _parse_s3_url(output_dir)
+    bucket_name = s3_params['bucket']
+    key_prefix = s3_params['prefix']
+    bucket_conn = None
 
-    if not os.path.isdir(output_dir):
-        LOGGER.info('Output directory %s does not exist.')
-        os.mkdir(output_dir)
-        LOGGER.info('Output directory: %s', os.path.abspath(output_dir))
+    if bucket_name and key_prefix:
+        s3 = boto3.resource('s3')
+        bucket_conn = s3.Bucket(bucket_name)
+    elif bucket_name is None and key_prefix is None:
+        if not os.path.isdir(output_dir):
+            LOGGER.info('Output directory %s does not exist. Creating it.')
+            os.mkdir(output_dir)
+    else:
+        click.Abort('s3 output-dir: %s, is missing a prefix')
 
-    ctx.obj = {'output-dir': output_dir}
+    ctx.obj = {
+        'output-dir': output_dir,
+        's3-bucket-name': bucket_name,
+        's3-prefix': key_prefix,
+        's3-bucket-conn': bucket_conn,
+    }
 
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
