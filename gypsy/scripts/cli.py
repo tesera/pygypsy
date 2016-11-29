@@ -2,6 +2,7 @@
 import os
 import logging
 from glob import glob
+from StringIO import StringIO
 
 import boto3
 import click
@@ -60,6 +61,8 @@ def cli(ctx, verbose, output_dir):
             os.mkdir(output_dir)
     else:
         click.Abort('s3 output-dir: %s, is missing a prefix')
+
+    output_dir = key_prefix if key_prefix else ctx.obj['output-dir']
 
     ctx.obj = {
         'output-dir': output_dir,
