@@ -1,8 +1,9 @@
 """Command Line Interface"""
+# TODO: handling s3/local is clumsy/repetitive in this module
+# should factor it out
 import os
 import logging
 from glob import glob
-from StringIO import StringIO
 
 import boto3
 import click
@@ -18,6 +19,7 @@ from gypsy.utils import (
     _parse_s3_url,
     _copy_file,
 )
+from gypsy.io import df_to_s3_bucket
 from gypsy.data_prep import prep_standtable
 from gypsy.log import setup_logging, CONSOLE_LOGGER_NAME
 from gypsy.forward_simulation import simulate_forwards_df
@@ -67,7 +69,6 @@ def cli(ctx, verbose, output_dir):
     ctx.obj = {
         'output-dir': output_dir,
         's3-bucket-name': bucket_name,
-        's3-prefix': key_prefix,
         's3-bucket-conn': bucket_conn,
     }
 
@@ -80,8 +81,7 @@ def generate_config(ctx):
     Generates a configuration file, gypsy-config.json, under DEST directory.
 
     """
-    s3_prefix = ctx.obj['s3-prefix']
-    output_dir = s3_prefix if s3_prefix else ctx.obj['output-dir']
+    output_dir = ctx.obj['output-dir']
     output_path = gyppath._join(output_dir, 'gypsy-config.json') #pylint: disable=protected-access
     _copy_file(DEFAULT_CONF_FILE, output_path, bucket_conn=ctx.obj['s3-bucket-conn'])
     LOGGER.info('Config file saved at %s', output_path)
@@ -100,25 +100,39 @@ def generate_config(ctx):
 def prep(ctx, standtable, config_file):
     """Prepare stand data for use in GYPSY simulation"""
     LOGGER.info('Running prep...')
-    output_dir = ctx.obj['output-dir']
-    output_path = os.path.join(output_dir, 'plot_table_prepped.csv')
 
     standtable_df = pd.read_csv(standtable)
     prepped_data = prep_standtable(standtable_df)
 
-    prepped_data.to_csv(output_path)
-    _append_file(LOG_FILE_NAME, os.path.join(output_dir, LOG_FILE_NAME))
+    bucket_name = ctx.obj['s3-bucket-name']
+    bucket_conn = ctx.obj['s3-bucket-conn']
+    output_dir = ctx.obj['output-dir']
+    output_path = gyppath._join(output_dir, 'plot_table_prepped.csv') #pylint: disable=protected-access
+
+    # TODO: could we do with bytes io and use upload_file instead of object.put?
+    if bucket_name:
+        df_to_s3_bucket(prepped_data, bucket_conn, output_path)
+    else:
+        prepped_data.to_csv(output_path)
+
+    # TODO: won't work with s3
+    if bucket_name is None:
+        _append_file(LOG_FILE_NAME, os.path.join(output_dir, LOG_FILE_NAME))
 
 
+# TODO: needs refactor
 @cli.command(context_settings=CONTEXT_SETTINGS)
-@click.argument('data', type=click.Path(exists=True))
+@click.argument('data', type=click.Path(exists=False))
 @click.option('--config-file', '-c', type=click.Path(exists=False),
               default=DEFAULT_CONF_FILE,
               callback=_load_and_validate_config)
 @click.pass_context
 def simulate(ctx, data, config_file):
     """Run GYPSY simulation"""
+    bucket_name = ctx.obj['s3-bucket-name']
+    bucket_conn = ctx.obj['s3-bucket-conn']
     output_dir = ctx.obj['output-dir']
+
     standtable = pd.read_csv(data)
 
     min_age = 25
@@ -134,8 +148,11 @@ def simulate(ctx, data, config_file):
                     skipped_plots_filename)
         standtable_young_path = os.path.join(output_dir,
                                              skipped_plots_filename)
-        standtable_young.to_csv(standtable_young_path,
-                                columns=['PlotID'])
+        if bucket_name:
+            df_to_s3_bucket(standtable_young, bucket_conn, standtable_young_path)
+        else:
+            standtable_young.to_csv(standtable_young_path,
+                                    columns=['PlotID'])
     else:
         LOGGER.info('No plots less than %d years old present', min_age)
 
@@ -144,14 +161,23 @@ def simulate(ctx, data, config_file):
                                   utiliz_params=config_file['utilization'])
 
     LOGGER.info('Saving output data')
+
     simulation_output_dir = os.path.join(output_dir, 'simulation-data')
-    os.mkdir(simulation_output_dir)
+
+    if bucket_name is None:
+        os.mkdir(simulation_output_dir)
+
     for plot_id, data in result.items():
         filename = '%s.csv' % plot_id
         output_path = os.path.join(simulation_output_dir, filename)
-        data.to_csv(output_path)
+        if bucket_name:
+            df_to_s3_bucket(data, bucket_conn, output_path)
+        else:
+            data.to_csv(output_path)
 
-    _append_file(LOG_FILE_NAME, os.path.join(output_dir, LOG_FILE_NAME))
+    if bucket_name is None:
+        _append_file(LOG_FILE_NAME, os.path.join(output_dir, LOG_FILE_NAME))
+
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('simulation-output-dir', type=click.Path(exists=True))
