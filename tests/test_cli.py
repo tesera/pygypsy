@@ -103,7 +103,7 @@ def test_simulate():
     expected_files = [
         os.path.join('simulation-data', '1614424.csv'),
         os.path.join('simulation-data', '1008174.csv'),
-        'gypsy.log'
+        'simulate.log'
     ]
     expected_output_paths = [
         os.path.join(output_dir, item) \
