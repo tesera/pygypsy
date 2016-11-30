@@ -95,3 +95,25 @@ def s3_simulate_output_dir(s3_bucket_path, s3_bucket_conn):
 
     for key in s3_bucket_conn.objects.filter(Prefix=prefix):
         key.delete()
+
+
+@pytest.yield_fixture(scope='function')
+def config_on_s3(s3_bucket_path, s3_bucket_conn):
+    prefix = 'test/_load_and_validate_config/gypsy-ouptput'
+    out_dir = '%s/%s' % (s3_bucket_path, prefix)
+    files = [
+        (DEFAULT_CONF_FILE,
+         '/'.join([prefix, 'config.json'])),
+    ]
+
+    for item in files:
+        _copy_file(item[0], item[1], bucket_conn=s3_bucket_conn)
+
+    config_path = '/'.join([s3_bucket_path, files[0][1]])
+
+    yield config_path
+
+    for key in s3_bucket_conn.objects.filter(Prefix=prefix):
+        key.delete()
+
+
