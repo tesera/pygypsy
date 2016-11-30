@@ -30,7 +30,7 @@ def test_generate_config(s3_config_output_dir, s3_bucket_conn):
     runner = CliRunner()
     expected_output_paths = [
         '%s/%s' % (s3_config_output_dir.lstrip(S3_BKT_PREFIX), f) \
-        for f in ['gypsy-config.json', 'gypsy-generate-config.log']
+        for f in ['gypsy-config.json', 'generate-config.log']
     ]
 
     with runner.isolated_filesystem():
@@ -49,7 +49,7 @@ def test_prep(s3_prep_output_dir, s3_bucket_conn):
     runner = CliRunner()
     expected_output_paths = [
         '%s/%s' % (s3_prep_output_dir['out-dir'].lstrip(S3_BKT_PREFIX), f) \
-        for f in ['plot_table_prepped.csv', 'gypsy-prep.log']
+        for f in ['plot_table_prepped.csv', 'prep.log']
     ]
 
     with runner.isolated_filesystem():
@@ -72,7 +72,7 @@ def test_simulate(s3_simulate_output_dir, s3_bucket_conn):
     expected_files = [
         'simulation-data/1614424.csv',
         'simulation-data/1008174.csv',
-        'gypsy-simulate.log',
+        'simulate.log',
     ]
     expected_output_paths = [
         '%s/%s' %(output_dir.lstrip(S3_BKT_PREFIX), f) \
@@ -88,4 +88,27 @@ def test_simulate(s3_simulate_output_dir, s3_bucket_conn):
         ])
 
         assert result.exit_code == 0
+        assert all([s3_obj_exists(s3_bucket_conn, i) for i in expected_output_paths])
+
+@SKIP_IF_NO_S3
+def test_simulate_log_present_if_err(s3_simulate_output_dir, s3_bucket_conn):
+    input_data_path = s3_simulate_output_dir['prepped-data-path']
+    output_dir = s3_simulate_output_dir['out-dir']
+    expected_files = [
+        'simulate.log',
+    ]
+    expected_output_paths = [
+        '%s/%s' %(output_dir.lstrip(S3_BKT_PREFIX), f) \
+        for f in expected_files
+    ]
+
+    runner = CliRunner()
+
+    with runner.isolated_filesystem():
+        result = runner.invoke(cli, [
+            '--output-dir', output_dir,
+            'simulate', input_data_path
+        ])
+
+        assert result.exit_code != 0
         assert all([s3_obj_exists(s3_bucket_conn, i) for i in expected_output_paths])
