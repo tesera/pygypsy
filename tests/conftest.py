@@ -83,11 +83,14 @@ def s3_simulate_output_dir(s3_bucket_path, s3_bucket_conn):
 
     for item in files:
         _copy_file(item[0], item[1], bucket_conn=s3_bucket_conn)
+
     data_path = '/'.join([s3_bucket_path, files[0][1]])
+    prepped_data_path = '/'.join([s3_bucket_path, files[1][1]])
 
     yield {
         'out-dir': out_dir,
         'data-path': data_path,
+        'prepped-data-path': prepped_data_path,
     }
 
     for key in s3_bucket_conn.objects.filter(Prefix=prefix):
