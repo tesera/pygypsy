@@ -13,16 +13,15 @@ BUCKET = os.getenv('GYPSY_BUCKET')
 SKIP_IF_NO_S3 = pytest.mark.skipif(os.getenv('GYPSY_BUCKET') is None,
                                    reason="S3 tests are not configured locally")
 
-def skip_if_no_s3(func):
+def yield_none_if_no_s3(func):
     @wraps(func)
     def func_wrapper(*args):
         if BUCKET is None:
-            return
+            yield
         func(*args)
     return func_wrapper
 
 @pytest.yield_fixture(scope='module')
-@skip_if_no_s3
 def invalid_cli_config_file():
     path = os.path.join(DATA_DIR, 'invalid_cli_config.txt')
 
@@ -34,7 +33,7 @@ def invalid_cli_config_file():
     os.remove(path)
 
 @pytest.fixture(scope='session')
-@skip_if_no_s3
+@yield_none_if_no_s3
 def s3_bucket_path():
     if BUCKET is None:
         return
@@ -42,7 +41,7 @@ def s3_bucket_path():
     return 's3://' + BUCKET
 
 @pytest.fixture(scope='function')
-@skip_if_no_s3
+@yield_none_if_no_s3
 def s3_bucket_conn():
     if BUCKET is None:
         return
@@ -53,7 +52,7 @@ def s3_bucket_conn():
     return bucket_conn
 
 @pytest.yield_fixture(scope='function')
-@skip_if_no_s3
+@yield_none_if_no_s3
 def s3_config_output_dir(s3_bucket_path, s3_bucket_conn):
     if BUCKET is None:
         return
@@ -67,7 +66,7 @@ def s3_config_output_dir(s3_bucket_path, s3_bucket_conn):
         key.delete()
 
 @pytest.yield_fixture(scope='function')
-@skip_if_no_s3
+@yield_none_if_no_s3
 def s3_prep_output_dir(s3_bucket_path, s3_bucket_conn):
     if BUCKET is None:
         return
@@ -94,7 +93,7 @@ def s3_prep_output_dir(s3_bucket_path, s3_bucket_conn):
         key.delete()
 
 @pytest.yield_fixture(scope='function')
-@skip_if_no_s3
+@yield_none_if_no_s3
 def s3_simulate_output_dir(s3_bucket_path, s3_bucket_conn):
     if BUCKET is None:
         return
@@ -126,7 +125,7 @@ def s3_simulate_output_dir(s3_bucket_path, s3_bucket_conn):
         key.delete()
 
 @pytest.yield_fixture(scope='function')
-@skip_if_no_s3
+@yield_none_if_no_s3
 def config_on_s3(s3_bucket_path, s3_bucket_conn):
     if BUCKET is None:
         return
