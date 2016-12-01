@@ -10,9 +10,6 @@ from gypsy.utils import _copy_file
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
 BUCKET = os.getenv('GYPSY_BUCKET')
 
-SKIP_IF_NO_S3 = pytest.mark.skipif(os.getenv('GYPSY_BUCKET') is None,
-                                   reason="S3 tests are not configured locally")
-
 def yield_none_if_no_s3(func):
     @wraps(func)
     def func_wrapper(*args):
