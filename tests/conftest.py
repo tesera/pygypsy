@@ -8,9 +8,12 @@ from gypsy.utils import _copy_file
 
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
-BUCKET = os.getenv('GYPSY_BUCKET', '')
+BUCKET = os.getenv('GYPSY_BUCKET')
 
+SKIP_IF_NO_S3 = pytest.mark.skipif(os.getenv('GYPSY_BUCKET') is None,
+                                   reason="S3 tests are not configured locally")
 
+@SKIP_IF_NO_S3
 @pytest.yield_fixture(scope='module')
 def invalid_cli_config_file():
     path = os.path.join(DATA_DIR, 'invalid_cli_config.txt')
@@ -22,10 +25,12 @@ def invalid_cli_config_file():
 
     os.remove(path)
 
+@SKIP_IF_NO_S3
 @pytest.fixture(scope='session')
 def s3_bucket_path():
     return 's3://' + BUCKET
 
+@SKIP_IF_NO_S3
 @pytest.fixture(scope='function')
 def s3_bucket_conn():
     s3 = boto3.resource('s3')
@@ -33,6 +38,7 @@ def s3_bucket_conn():
 
     return bucket_conn
 
+@SKIP_IF_NO_S3
 @pytest.yield_fixture(scope='function')
 def s3_config_output_dir(s3_bucket_path, s3_bucket_conn):
     prefix = 'test/generate-config/gypsy-output'
@@ -43,6 +49,7 @@ def s3_config_output_dir(s3_bucket_path, s3_bucket_conn):
     for key in s3_bucket_conn.objects.filter(Prefix=prefix):
         key.delete()
 
+@SKIP_IF_NO_S3
 @pytest.yield_fixture(scope='function')
 def s3_prep_output_dir(s3_bucket_path, s3_bucket_conn):
     prefix = 'test/prep/gypsy-output'
@@ -67,6 +74,7 @@ def s3_prep_output_dir(s3_bucket_path, s3_bucket_conn):
         key.delete()
 
 
+@SKIP_IF_NO_S3
 @pytest.yield_fixture(scope='function')
 def s3_simulate_output_dir(s3_bucket_path, s3_bucket_conn):
     # TODO: copy data to s3
@@ -97,6 +105,7 @@ def s3_simulate_output_dir(s3_bucket_path, s3_bucket_conn):
         key.delete()
 
 
+@SKIP_IF_NO_S3
 @pytest.yield_fixture(scope='function')
 def config_on_s3(s3_bucket_path, s3_bucket_conn):
     prefix = 'test/_load_and_validate_config/gypsy-ouptput'
