@@ -8,7 +8,7 @@ from gypsy.utils import _copy_file
 
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
-BUCKET = os.getenv('GYPSY_BUCKET')
+BUCKET = os.getenv('GYPSY_BUCKET', '')
 
 
 @pytest.yield_fixture(scope='module')
