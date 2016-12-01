@@ -1,7 +1,7 @@
 import os
 import pytest
 import boto3
-
+from functools import wraps
 
 from gypsy.scripts import DEFAULT_CONF_FILE
 from gypsy.utils import _copy_file
@@ -13,8 +13,16 @@ BUCKET = os.getenv('GYPSY_BUCKET')
 SKIP_IF_NO_S3 = pytest.mark.skipif(os.getenv('GYPSY_BUCKET') is None,
                                    reason="S3 tests are not configured locally")
 
-@SKIP_IF_NO_S3
+def skip_if_no_s3(func):
+    @wraps(func)
+    def func_wrapper(*args):
+        if BUCKET is None:
+            return
+        func(*args)
+    return func_wrapper
+
 @pytest.yield_fixture(scope='module')
+@skip_if_no_s3
 def invalid_cli_config_file():
     path = os.path.join(DATA_DIR, 'invalid_cli_config.txt')
 
@@ -25,22 +33,31 @@ def invalid_cli_config_file():
 
     os.remove(path)
 
-@SKIP_IF_NO_S3
 @pytest.fixture(scope='session')
+@skip_if_no_s3
 def s3_bucket_path():
+    if BUCKET is None:
+        return
+
     return 's3://' + BUCKET
 
-@SKIP_IF_NO_S3
 @pytest.fixture(scope='function')
+@skip_if_no_s3
 def s3_bucket_conn():
+    if BUCKET is None:
+        return
+
     s3 = boto3.resource('s3')
     bucket_conn = s3.Bucket(BUCKET)
 
     return bucket_conn
 
-@SKIP_IF_NO_S3
 @pytest.yield_fixture(scope='function')
+@skip_if_no_s3
 def s3_config_output_dir(s3_bucket_path, s3_bucket_conn):
+    if BUCKET is None:
+        return
+
     prefix = 'test/generate-config/gypsy-output'
     out_dir = '%s/%s' % (s3_bucket_path, prefix)
 
@@ -49,9 +66,12 @@ def s3_config_output_dir(s3_bucket_path, s3_bucket_conn):
     for key in s3_bucket_conn.objects.filter(Prefix=prefix):
         key.delete()
 
-@SKIP_IF_NO_S3
 @pytest.yield_fixture(scope='function')
+@skip_if_no_s3
 def s3_prep_output_dir(s3_bucket_path, s3_bucket_conn):
+    if BUCKET is None:
+        return
+
     prefix = 'test/prep/gypsy-output'
     out_dir = '%s/%s' % (s3_bucket_path, prefix)
     files = [
@@ -73,11 +93,12 @@ def s3_prep_output_dir(s3_bucket_path, s3_bucket_conn):
     for key in s3_bucket_conn.objects.filter(Prefix=prefix):
         key.delete()
 
-
-@SKIP_IF_NO_S3
 @pytest.yield_fixture(scope='function')
+@skip_if_no_s3
 def s3_simulate_output_dir(s3_bucket_path, s3_bucket_conn):
-    # TODO: copy data to s3
+    if BUCKET is None:
+        return
+
     prefix = 'test/simulate/gypsy-output'
     out_dir = '%s/%s' % (s3_bucket_path, prefix)
     files = [
@@ -104,10 +125,12 @@ def s3_simulate_output_dir(s3_bucket_path, s3_bucket_conn):
     for key in s3_bucket_conn.objects.filter(Prefix=prefix):
         key.delete()
 
-
-@SKIP_IF_NO_S3
 @pytest.yield_fixture(scope='function')
+@skip_if_no_s3
 def config_on_s3(s3_bucket_path, s3_bucket_conn):
+    if BUCKET is None:
+        return
+
     prefix = 'test/_load_and_validate_config/gypsy-ouptput'
     out_dir = '%s/%s' % (s3_bucket_path, prefix)
     files = [
@@ -124,5 +147,3 @@ def config_on_s3(s3_bucket_path, s3_bucket_conn):
 
     for key in s3_bucket_conn.objects.filter(Prefix=prefix):
         key.delete()
-
-
