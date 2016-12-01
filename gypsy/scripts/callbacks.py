@@ -1,13 +1,16 @@
 """CLI option callbacks"""
+# this should probably not be tied to click exceptions
 import json
 import codecs
 import logging
 
 import click
+import boto3
 import jsonschema
 
 from gypsy.scripts import CONF_SCHEMA_FILE, DEFAULT_CONF_FILE
 from gypsy.log import CONSOLE_LOGGER_NAME
+from gypsy.utils import _parse_s3_url
 
 
 LOGGER = logging.getLogger(CONSOLE_LOGGER_NAME)
@@ -23,8 +26,17 @@ def _load_and_validate_config(ctx, param, value): #pylint: disable=unused-argume
         )
 
     try:
-        with codecs.open(value, encoding='utf-8') as conf_file:
-            conf = json.load(conf_file)
+        if value.startswith('s3://'):
+            s3_params = _parse_s3_url(value)
+            client = boto3.client('s3')
+            data = client.get_object(
+                Bucket=s3_params['bucket'],
+                Key=s3_params['prefix']
+            )["Body"].read().decode('utf-8')
+            conf = json.loads(data)
+        else:
+            with codecs.open(value, encoding='utf-8') as conf_file:
+                conf = json.load(conf_file)
     except (IOError, ValueError) as err:
         LOGGER.error('Error reading config file: %s', value)
         raise click.BadParameter('Missing or incorrect filetype.')
