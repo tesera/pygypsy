@@ -1,7 +1,7 @@
+#pylint: disable=redefined-outer-name,missing-docstring
 import os
 import pytest
 import boto3
-from functools import wraps
 
 from gypsy.scripts import DEFAULT_CONF_FILE
 from gypsy.utils import _copy_file
@@ -9,14 +9,6 @@ from gypsy.utils import _copy_file
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
 BUCKET = os.getenv('GYPSY_BUCKET')
-
-def yield_none_if_no_s3(func):
-    @wraps(func)
-    def func_wrapper(*args):
-        if BUCKET is None:
-            yield
-        func(*args)
-    return func_wrapper
 
 @pytest.yield_fixture(scope='module')
 def invalid_cli_config_file():
@@ -30,7 +22,6 @@ def invalid_cli_config_file():
     os.remove(path)
 
 @pytest.fixture(scope='session')
-@yield_none_if_no_s3
 def s3_bucket_path():
     if BUCKET is None:
         return
@@ -38,7 +29,6 @@ def s3_bucket_path():
     return 's3://' + BUCKET
 
 @pytest.fixture(scope='function')
-@yield_none_if_no_s3
 def s3_bucket_conn():
     if BUCKET is None:
         return
@@ -49,7 +39,6 @@ def s3_bucket_conn():
     return bucket_conn
 
 @pytest.yield_fixture(scope='function')
-@yield_none_if_no_s3
 def s3_config_output_dir(s3_bucket_path, s3_bucket_conn):
     if BUCKET is None:
         return
@@ -63,36 +52,37 @@ def s3_config_output_dir(s3_bucket_path, s3_bucket_conn):
         key.delete()
 
 @pytest.yield_fixture(scope='function')
-@yield_none_if_no_s3
 def s3_prep_output_dir(s3_bucket_path, s3_bucket_conn):
     if BUCKET is None:
-        return
+        val = None
+    else:
+        prefix = 'test/prep/gypsy-output'
+        out_dir = '%s/%s' % (s3_bucket_path, prefix)
+        files = [
+            (os.path.join(DATA_DIR, 'raw_standtable.csv'),
+             '/'.join([prefix, 'raw-data.csv'])),
+            (DEFAULT_CONF_FILE,
+             '/'.join([prefix, 'config.json'])),
+        ]
 
-    prefix = 'test/prep/gypsy-output'
-    out_dir = '%s/%s' % (s3_bucket_path, prefix)
-    files = [
-        (os.path.join(DATA_DIR, 'raw_standtable.csv'),
-         '/'.join([prefix, 'raw-data.csv'])),
-        (DEFAULT_CONF_FILE,
-         '/'.join([prefix, 'config.json'])),
-    ]
+        for item in files:
+            _copy_file(item[0], item[1], bucket_conn=s3_bucket_conn)
+            data_path = '/'.join([s3_bucket_path, files[0][1]])
 
-    for item in files:
-        _copy_file(item[0], item[1], bucket_conn=s3_bucket_conn)
-    data_path = '/'.join([s3_bucket_path, files[0][1]])
+            val = {
+                'out-dir': out_dir,
+                'data-path': data_path
+            }
 
-    yield {
-        'out-dir': out_dir,
-        'data-path': data_path
-    }
+    yield val
 
     for key in s3_bucket_conn.objects.filter(Prefix=prefix):
         key.delete()
 
 @pytest.yield_fixture(scope='function')
-@yield_none_if_no_s3
 def s3_simulate_output_dir(s3_bucket_path, s3_bucket_conn):
     if BUCKET is None:
+        yield
         return
 
     prefix = 'test/simulate/gypsy-output'
@@ -122,13 +112,12 @@ def s3_simulate_output_dir(s3_bucket_path, s3_bucket_conn):
         key.delete()
 
 @pytest.yield_fixture(scope='function')
-@yield_none_if_no_s3
 def config_on_s3(s3_bucket_path, s3_bucket_conn):
     if BUCKET is None:
+        yield
         return
 
     prefix = 'test/_load_and_validate_config/gypsy-ouptput'
-    out_dir = '%s/%s' % (s3_bucket_path, prefix)
     files = [
         (DEFAULT_CONF_FILE,
          '/'.join([prefix, 'config.json'])),
