@@ -7,7 +7,6 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-env/
 build/
 develop-eggs/
 dist/
@@ -54,7 +53,10 @@ target/
 
 # Virtualenv
 venv/
+
+# deployment
 *dev.env
+codeship.aes
 
 # temporary files
 *.swo
