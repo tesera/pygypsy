@@ -1,21 +1,23 @@
 [![Codeship Status for tesera/pygypsy](https://app.codeship.com/projects/79989040-748f-0134-c8fb-56e5180c42b3/status?branch=master)](https://app.codeship.com/projects/179242)
 
-# GYPSY
+# pygypsy
 
-GYPSY is a Growth and Yield Projection SYstem for trees.
+pygypsy is a python implementation
+[Growth and Yield Projection SYstem](http://www1.agric.gov.ab.ca/$department/deptdocs.nsf/all/formain15784/$file/GYPSY-Natural-PostHarvestStands-Alberta-May21-2009.pdf?OpenElement)
+for Western Canada Forests.
 
 ## Getting help
 
-If you are interesting in using or developing Gyspy, and need help, open an issue on the [issue tracker](https://github.com/tesera/pygypsy/issues).
+If you are interesting in using or developing pygypsy, and need help, open an issue on the [issue tracker](https://github.com/tesera/pygypsy/issues).
 
 ## Usage
 
 ### Installation
 
-There are two supported options for installation of GYPSY:
+There are two supported options for installation of pygypsy:
 
 1. installation with pip inside of a [virtualenv](#virtualenv)
-2. use of a GYPSY [docker](#docker) image
+2. use of a pygypsy [docker](#docker) image
 
 If an option you are familiar with is missing, please search for it in the
 issue tracker; if it is not there add a new issue if your preferred option.
@@ -33,7 +35,7 @@ to compile the C extensions.
 
 #### Quick Start
 
-You can get started right away by installing GYPSY as follows:
+You can get started right away by installing pygypsy as follows:
 
 ```
 pip install git+ssh://git@github.com/tesera/pygypsy.git@dev # if you have ssh setup with github
@@ -41,7 +43,7 @@ pip install git+https://github.com/tesera/pygypsy.git@dev # if you don't have ss
 ```
 
 However, maintainers may not be able to provide support for issues encountered
-using this method of installation as it does not isolate GYPSY from other
+using this method of installation as it does not isolate pygypsy from other
 python packages on the system.
 
 #### Virtualenv
@@ -55,7 +57,7 @@ If you are not familiar with virtualenv, see the
 [user guide](https://virtualenv.pypa.io/en/stable/userguide/) to get started.
 
 Once you have virtualenv installed on your system, create a project directory
-and virtualenv for your work with GYPSY.
+and virtualenv for your work with pygypsy.
 
 ```
 mkdir pygypsy-project && cd pygypsy-project
@@ -72,7 +74,7 @@ pip install git+ssh://git@github.com/tesera/pygypsy.git@dev # if you have ssh se
 pip install git+https://github.com/tesera/pygypsy.git@dev # if you don't have ssh setup with github
 ```
 
-Once the installation is finished, test that GYPSY runs inside the virtualenv.
+Once the installation is finished, test that pygypsy runs inside the virtualenv.
 
 ```
 pygypsy --help
@@ -82,21 +84,21 @@ The first run will be slow as matplotlib builds a font cache. Subsequent runs ar
 
 #### Docker
 
-Presently, GYPSY is not hosted on a docker image repository, so you will first
+Presently, pygypsy is not hosted on a docker image repository, so you will first
 have to clone this repository
 
 ```
 git clone git@github.com:tesera/pygypsy.git
 ```
 
-Then enter the cloned directory and build the GYPSY image as follows:
+Then enter the cloned directory and build the pygypsy image as follows:
 
 ```
 cd pygypsy
 docker build -t pygypsy .
 ```
 
-Start a container using the GYPSY image and activate the virtual environment
+Start a container using the pygypsy image and activate the virtual environment
 inside the container as follows:
 
 ```
@@ -104,13 +106,13 @@ docker run -t pygypsy -v /path/to/your/data/dir:/data -i /bin/bash
 . venv/bin/activate
 ```
 
-That starts an isolated environment where GYPSY can be run. Note the `-v
+That starts an isolated environment where pygypsy can be run. Note the `-v
 path/to/your/data/dir:/data`, which makes the folder `/path/to/your/data/dir`
 available in the docker image at the `/data` directory. This is required to run
 pygypsy in the container on data that you have on your local computer (the docker
 host). The paths should be absolute, not relative.
 
-Finally, test that GYPSY runs in the container:
+Finally, test that pygypsy runs in the container:
 
 ```
 root@de6cccb1a217:/opt/pygypsy# pygypsy --help
@@ -120,7 +122,7 @@ The first run will be slow as matplotlib builds a font cache. Subsequent runs ar
 
 ### CLI
 
-Gypsy provides a command line interface for convenient usage
+pygypsy provides a command line interface for convenient usage
 
 Prepared your stand data:
 
@@ -128,7 +130,7 @@ Prepared your stand data:
 gyspy prep your_stand_data.csv
 ```
 
-Run GYPSY on the prepped data from the `pygypsy prep` command:
+Run pygypsy on the prepped data from the `pygypsy prep` command:
 
 ```
 gyspy simulate your_stand_data.csv.prepped
@@ -149,8 +151,8 @@ Usage: pygypsy [OPTIONS] COMMAND [ARGS]...
     -h, --help     Show this message and exit.
 
   Commands:
-    prep      Prepare stand data for use in GYPSY...
-    simulate  Run GYPSY simulation
+    prep      Prepare stand data for use in pygypsy...
+    simulate  Run pygypsy simulation
 ```
 
 ## Development

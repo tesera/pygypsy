@@ -1,6 +1,6 @@
 """Data Preparation
 
-Calculates and joins parameters required for GYPSY to a plot table
+Calculates and joins parameters required for pygypsy to a plot table
 
 """
 #pylint: disable=no-member

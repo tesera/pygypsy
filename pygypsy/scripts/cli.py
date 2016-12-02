@@ -107,7 +107,7 @@ def generate_config(ctx):
               callback=_load_and_validate_config)
 @click.pass_context
 def prep(ctx, standtable, config_file):
-    """Prepare stand data for use in GYPSY simulation"""
+    """Prepare stand data for use in pygpysy simulation"""
     LOGGER.info('Running prep...')
     bucket_name = ctx.obj['s3-bucket-name']
     bucket_conn = ctx.obj['s3-bucket-conn']
@@ -142,7 +142,7 @@ def prep(ctx, standtable, config_file):
               callback=_load_and_validate_config)
 @click.pass_context
 def simulate(ctx, data, config_file):
-    """Run GYPSY simulation"""
+    """Run pygypsy simulation"""
     bucket_name = ctx.obj['s3-bucket-name']
     bucket_conn = ctx.obj['s3-bucket-conn']
     output_dir = ctx.obj['output-dir']

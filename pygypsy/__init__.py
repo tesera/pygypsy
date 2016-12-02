@@ -1,4 +1,4 @@
-"""GYPSY
+"""pygypsy
 
 Based on Hueng et all (2009)
 
