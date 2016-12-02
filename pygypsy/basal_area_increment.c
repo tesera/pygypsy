@@ -1406,11 +1406,11 @@ static const char __pyx_k_increment_basal_area_aw[] = "increment_basal_area_aw";
 static const char __pyx_k_increment_basal_area_pl[] = "increment_basal_area_pl";
 static const char __pyx_k_increment_basal_area_sb[] = "increment_basal_area_sb";
 static const char __pyx_k_increment_basal_area_sw[] = "increment_basal_area_sw";
-static const char __pyx_k_pygypsy_basal_area_increment[] = "pygypsy.basal_area_increment";
 static const char __pyx_k_ndarray_is_not_C_contiguous[] = "ndarray is not C contiguous";
+static const char __pyx_k_pygypsy_basal_area_increment[] = "pygypsy.basal_area_increment";
+static const char __pyx_k_opt_pygypsy_pygypsy_basal_area[] = "/opt/pygypsy/pygypsy/basal_area_increment.pyx";
 static const char __pyx_k_Increment_functions_This_module[] = "Increment functions\n\nThis module contains functions to increment plot characteristics at an annual\nresolution.\n\nIt uses the non-spatial implementaion.\n\n";
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
-static const char __pyx_k_opt_pygypsy_pygypsy_basal_area_incr[] = "/opt/pygypsy/pygypsy/basal_area_increment.pyx";
 static const char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
 static const char __pyx_k_Format_string_allocated_too_shor[] = "Format string allocated too short, see comment in numpy.pxd";
 static const char __pyx_k_Non_native_byte_order_not_suppor[] = "Non-native byte order not supported";
@@ -1450,7 +1450,6 @@ static PyObject *__pyx_n_s_d;
 static PyObject *__pyx_n_s_d1;
 static PyObject *__pyx_n_s_d2;
 static PyObject *__pyx_n_s_exp;
-static PyObject *__pyx_n_s_pygypsy_basal_area_increment;
 static PyObject *__pyx_n_s_import;
 static PyObject *__pyx_n_s_increment_basal_area_aw;
 static PyObject *__pyx_n_s_increment_basal_area_pl;
@@ -1471,7 +1470,8 @@ static PyObject *__pyx_n_s_np;
 static PyObject *__pyx_n_s_numpy;
 static PyObject *__pyx_kp_s_numpy_core_multiarray_failed_to;
 static PyObject *__pyx_kp_s_numpy_core_umath_failed_to_impor;
-static PyObject *__pyx_kp_s_opt_pygypsy_pygypsy_basal_area_incr;
+static PyObject *__pyx_kp_s_opt_pygypsy_pygypsy_basal_area;
+static PyObject *__pyx_n_s_pygypsy_basal_area_increment;
 static PyObject *__pyx_n_s_range;
 static PyObject *__pyx_n_s_sp;
 static PyObject *__pyx_n_s_sqrt;
@@ -1480,10 +1480,10 @@ static PyObject *__pyx_kp_u_unknown_dtype_code_in_numpy_pxd;
 static PyObject *__pyx_n_s_z1;
 static PyObject *__pyx_n_s_z2;
 static PyObject *__pyx_n_s_z3;
-static PyObject *__pyx_pf_5pygypsy_20basal_area_increment_increment_basal_area_aw(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_sp, __pyx_t_5numpy_float64_t __pyx_v_SC, __pyx_t_5numpy_float64_t __pyx_v_SI_bh, __pyx_t_5numpy_float64_t __pyx_v_N_bh, __pyx_t_5numpy_float64_t __pyx_v_N0, __pyx_t_5numpy_float64_t __pyx_v_bhage, __pyx_t_5numpy_float64_t __pyx_v_BA); /* proto */
-static PyObject *__pyx_pf_5pygypsy_20basal_area_increment_2increment_basal_area_sb(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_sp, __pyx_t_5numpy_float64_t __pyx_v_SC, __pyx_t_5numpy_float64_t __pyx_v_SI_bh, __pyx_t_5numpy_float64_t __pyx_v_N_bh, __pyx_t_5numpy_float64_t __pyx_v_N0, __pyx_t_5numpy_float64_t __pyx_v_bhage, __pyx_t_5numpy_float64_t __pyx_v_BA); /* proto */
-static PyObject *__pyx_pf_5pygypsy_20basal_area_increment_4increment_basal_area_sw(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_sp, __pyx_t_5numpy_float64_t __pyx_v_SC, __pyx_t_5numpy_float64_t __pyx_v_SI_bh, __pyx_t_5numpy_float64_t __pyx_v_N_bh, __pyx_t_5numpy_float64_t __pyx_v_N0, __pyx_t_5numpy_float64_t __pyx_v_bhage, __pyx_t_5numpy_float64_t __pyx_v_SDF_Aw0, __pyx_t_5numpy_float64_t __pyx_v_SDF_Pl0, __pyx_t_5numpy_float64_t __pyx_v_SDF_Sb0, __pyx_t_5numpy_float64_t __pyx_v_BA); /* proto */
-static PyObject *__pyx_pf_5pygypsy_20basal_area_increment_6increment_basal_area_pl(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_sp, __pyx_t_5numpy_float64_t __pyx_v_SC, __pyx_t_5numpy_float64_t __pyx_v_SI_bh, __pyx_t_5numpy_float64_t __pyx_v_N_bh, __pyx_t_5numpy_float64_t __pyx_v_N0, __pyx_t_5numpy_float64_t __pyx_v_bhage, __pyx_t_5numpy_float64_t __pyx_v_SDF_Aw0, __pyx_t_5numpy_float64_t __pyx_v_SDF_Sw0, __pyx_t_5numpy_float64_t __pyx_v_SDF_Sb0, __pyx_t_5numpy_float64_t __pyx_v_BA); /* proto */
+static PyObject *__pyx_pf_7pygypsy_20basal_area_increment_increment_basal_area_aw(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_sp, __pyx_t_5numpy_float64_t __pyx_v_SC, __pyx_t_5numpy_float64_t __pyx_v_SI_bh, __pyx_t_5numpy_float64_t __pyx_v_N_bh, __pyx_t_5numpy_float64_t __pyx_v_N0, __pyx_t_5numpy_float64_t __pyx_v_bhage, __pyx_t_5numpy_float64_t __pyx_v_BA); /* proto */
+static PyObject *__pyx_pf_7pygypsy_20basal_area_increment_2increment_basal_area_sb(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_sp, __pyx_t_5numpy_float64_t __pyx_v_SC, __pyx_t_5numpy_float64_t __pyx_v_SI_bh, __pyx_t_5numpy_float64_t __pyx_v_N_bh, __pyx_t_5numpy_float64_t __pyx_v_N0, __pyx_t_5numpy_float64_t __pyx_v_bhage, __pyx_t_5numpy_float64_t __pyx_v_BA); /* proto */
+static PyObject *__pyx_pf_7pygypsy_20basal_area_increment_4increment_basal_area_sw(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_sp, __pyx_t_5numpy_float64_t __pyx_v_SC, __pyx_t_5numpy_float64_t __pyx_v_SI_bh, __pyx_t_5numpy_float64_t __pyx_v_N_bh, __pyx_t_5numpy_float64_t __pyx_v_N0, __pyx_t_5numpy_float64_t __pyx_v_bhage, __pyx_t_5numpy_float64_t __pyx_v_SDF_Aw0, __pyx_t_5numpy_float64_t __pyx_v_SDF_Pl0, __pyx_t_5numpy_float64_t __pyx_v_SDF_Sb0, __pyx_t_5numpy_float64_t __pyx_v_BA); /* proto */
+static PyObject *__pyx_pf_7pygypsy_20basal_area_increment_6increment_basal_area_pl(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_sp, __pyx_t_5numpy_float64_t __pyx_v_SC, __pyx_t_5numpy_float64_t __pyx_v_SI_bh, __pyx_t_5numpy_float64_t __pyx_v_N_bh, __pyx_t_5numpy_float64_t __pyx_v_N0, __pyx_t_5numpy_float64_t __pyx_v_bhage, __pyx_t_5numpy_float64_t __pyx_v_SDF_Aw0, __pyx_t_5numpy_float64_t __pyx_v_SDF_Sw0, __pyx_t_5numpy_float64_t __pyx_v_SDF_Sb0, __pyx_t_5numpy_float64_t __pyx_v_BA); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static PyObject *__pyx_float_2_0;
@@ -1518,10 +1518,10 @@ static PyObject *__pyx_codeobj__17;
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pygypsy_20basal_area_increment_1increment_basal_area_aw(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pygypsy_20basal_area_increment_increment_basal_area_aw[] = "Predicts the increment in basal area for the subsequent year for the\n    species.\n\n    This function is also used to make basal area projections and as a function\n    called by factor finder functions during estimation of correction factor\n    for the species.\n\n    :param str sp: species name\n    :param float SI_bh: site index of species Aw\n    :param float bhage: breast height age of speceis Aw\n    :param float N_bh: density of species Aw\n    :param float SC: proportion of species Aw in the stand\n    :param float BA: Basal area of the species Aw\n    :param float N0: initial density of species Aw at breast height age\n\n    ";
-static PyMethodDef __pyx_mdef_5pygypsy_20basal_area_increment_1increment_basal_area_aw = {"increment_basal_area_aw", (PyCFunction)__pyx_pw_5pygypsy_20basal_area_increment_1increment_basal_area_aw, METH_VARARGS|METH_KEYWORDS, __pyx_doc_5pygypsy_20basal_area_increment_increment_basal_area_aw};
-static PyObject *__pyx_pw_5pygypsy_20basal_area_increment_1increment_basal_area_aw(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_7pygypsy_20basal_area_increment_1increment_basal_area_aw(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_7pygypsy_20basal_area_increment_increment_basal_area_aw[] = "Predicts the increment in basal area for the subsequent year for the\n    species.\n\n    This function is also used to make basal area projections and as a function\n    called by factor finder functions during estimation of correction factor\n    for the species.\n\n    :param str sp: species name\n    :param float SI_bh: site index of species Aw\n    :param float bhage: breast height age of speceis Aw\n    :param float N_bh: density of species Aw\n    :param float SC: proportion of species Aw in the stand\n    :param float BA: Basal area of the species Aw\n    :param float N0: initial density of species Aw at breast height age\n\n    ";
+static PyMethodDef __pyx_mdef_7pygypsy_20basal_area_increment_1increment_basal_area_aw = {"increment_basal_area_aw", (PyCFunction)__pyx_pw_7pygypsy_20basal_area_increment_1increment_basal_area_aw, METH_VARARGS|METH_KEYWORDS, __pyx_doc_7pygypsy_20basal_area_increment_increment_basal_area_aw};
+static PyObject *__pyx_pw_7pygypsy_20basal_area_increment_1increment_basal_area_aw(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   CYTHON_UNUSED PyObject *__pyx_v_sp = 0;
   __pyx_t_5numpy_float64_t __pyx_v_SC;
   __pyx_t_5numpy_float64_t __pyx_v_SI_bh;
@@ -1615,14 +1615,14 @@ static PyObject *__pyx_pw_5pygypsy_20basal_area_increment_1increment_basal_area_
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_5pygypsy_20basal_area_increment_increment_basal_area_aw(__pyx_self, __pyx_v_sp, __pyx_v_SC, __pyx_v_SI_bh, __pyx_v_N_bh, __pyx_v_N0, __pyx_v_bhage, __pyx_v_BA);
+  __pyx_r = __pyx_pf_7pygypsy_20basal_area_increment_increment_basal_area_aw(__pyx_self, __pyx_v_sp, __pyx_v_SC, __pyx_v_SI_bh, __pyx_v_N_bh, __pyx_v_N0, __pyx_v_bhage, __pyx_v_BA);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pygypsy_20basal_area_increment_increment_basal_area_aw(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_sp, __pyx_t_5numpy_float64_t __pyx_v_SC, __pyx_t_5numpy_float64_t __pyx_v_SI_bh, __pyx_t_5numpy_float64_t __pyx_v_N_bh, __pyx_t_5numpy_float64_t __pyx_v_N0, __pyx_t_5numpy_float64_t __pyx_v_bhage, __pyx_t_5numpy_float64_t __pyx_v_BA) {
+static PyObject *__pyx_pf_7pygypsy_20basal_area_increment_increment_basal_area_aw(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_sp, __pyx_t_5numpy_float64_t __pyx_v_SC, __pyx_t_5numpy_float64_t __pyx_v_SI_bh, __pyx_t_5numpy_float64_t __pyx_v_N_bh, __pyx_t_5numpy_float64_t __pyx_v_N0, __pyx_t_5numpy_float64_t __pyx_v_bhage, __pyx_t_5numpy_float64_t __pyx_v_BA) {
   __pyx_t_5numpy_float64_t __pyx_v_BAinc;
   __pyx_t_5numpy_float64_t __pyx_v_a1;
   __pyx_t_5numpy_float64_t __pyx_v_a2;
@@ -2271,10 +2271,10 @@ static PyObject *__pyx_pf_5pygypsy_20basal_area_increment_increment_basal_area_a
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pygypsy_20basal_area_increment_3increment_basal_area_sb(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pygypsy_20basal_area_increment_2increment_basal_area_sb[] = "Predicts the increment in basal area for the subsequent year for the\n    species.\n\n    This function is used to make basal area projections and as a function\n    called by factor finder functions during estimation of correction factor\n    for the species.\n\n    :param str sp: species name\n    :param float SI_bh: site index of species Sb\n    :param float bhage: breast height age of speceis Sb\n    :param float N_bh: density of species Sb\n    :param float SC: proportion of species Sb in the stand\n    :param float BA: Basal area of the species Sb\n    :param float N0: initial density of species Sb at total age\n\n    ";
-static PyMethodDef __pyx_mdef_5pygypsy_20basal_area_increment_3increment_basal_area_sb = {"increment_basal_area_sb", (PyCFunction)__pyx_pw_5pygypsy_20basal_area_increment_3increment_basal_area_sb, METH_VARARGS|METH_KEYWORDS, __pyx_doc_5pygypsy_20basal_area_increment_2increment_basal_area_sb};
-static PyObject *__pyx_pw_5pygypsy_20basal_area_increment_3increment_basal_area_sb(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_7pygypsy_20basal_area_increment_3increment_basal_area_sb(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_7pygypsy_20basal_area_increment_2increment_basal_area_sb[] = "Predicts the increment in basal area for the subsequent year for the\n    species.\n\n    This function is used to make basal area projections and as a function\n    called by factor finder functions during estimation of correction factor\n    for the species.\n\n    :param str sp: species name\n    :param float SI_bh: site index of species Sb\n    :param float bhage: breast height age of speceis Sb\n    :param float N_bh: density of species Sb\n    :param float SC: proportion of species Sb in the stand\n    :param float BA: Basal area of the species Sb\n    :param float N0: initial density of species Sb at total age\n\n    ";
+static PyMethodDef __pyx_mdef_7pygypsy_20basal_area_increment_3increment_basal_area_sb = {"increment_basal_area_sb", (PyCFunction)__pyx_pw_7pygypsy_20basal_area_increment_3increment_basal_area_sb, METH_VARARGS|METH_KEYWORDS, __pyx_doc_7pygypsy_20basal_area_increment_2increment_basal_area_sb};
+static PyObject *__pyx_pw_7pygypsy_20basal_area_increment_3increment_basal_area_sb(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   CYTHON_UNUSED PyObject *__pyx_v_sp = 0;
   __pyx_t_5numpy_float64_t __pyx_v_SC;
   __pyx_t_5numpy_float64_t __pyx_v_SI_bh;
@@ -2368,14 +2368,14 @@ static PyObject *__pyx_pw_5pygypsy_20basal_area_increment_3increment_basal_area_
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_5pygypsy_20basal_area_increment_2increment_basal_area_sb(__pyx_self, __pyx_v_sp, __pyx_v_SC, __pyx_v_SI_bh, __pyx_v_N_bh, __pyx_v_N0, __pyx_v_bhage, __pyx_v_BA);
+  __pyx_r = __pyx_pf_7pygypsy_20basal_area_increment_2increment_basal_area_sb(__pyx_self, __pyx_v_sp, __pyx_v_SC, __pyx_v_SI_bh, __pyx_v_N_bh, __pyx_v_N0, __pyx_v_bhage, __pyx_v_BA);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pygypsy_20basal_area_increment_2increment_basal_area_sb(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_sp, __pyx_t_5numpy_float64_t __pyx_v_SC, __pyx_t_5numpy_float64_t __pyx_v_SI_bh, __pyx_t_5numpy_float64_t __pyx_v_N_bh, __pyx_t_5numpy_float64_t __pyx_v_N0, __pyx_t_5numpy_float64_t __pyx_v_bhage, __pyx_t_5numpy_float64_t __pyx_v_BA) {
+static PyObject *__pyx_pf_7pygypsy_20basal_area_increment_2increment_basal_area_sb(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_sp, __pyx_t_5numpy_float64_t __pyx_v_SC, __pyx_t_5numpy_float64_t __pyx_v_SI_bh, __pyx_t_5numpy_float64_t __pyx_v_N_bh, __pyx_t_5numpy_float64_t __pyx_v_N0, __pyx_t_5numpy_float64_t __pyx_v_bhage, __pyx_t_5numpy_float64_t __pyx_v_BA) {
   __pyx_t_5numpy_float64_t __pyx_v_BAinc;
   __pyx_t_5numpy_float64_t __pyx_v_a1;
   __pyx_t_5numpy_float64_t __pyx_v_a2;
@@ -2943,10 +2943,10 @@ static PyObject *__pyx_pf_5pygypsy_20basal_area_increment_2increment_basal_area_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pygypsy_20basal_area_increment_5increment_basal_area_sw(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pygypsy_20basal_area_increment_4increment_basal_area_sw[] = "Predicts the increment in basal area for the subsequent year for the\n    species.\n\n    This function is used to make basal area projections and as a function\n    called by factor finder functions during estimation of correction factor\n    for the species.\n\n    :param str sp: species name\n    :param float SI_bh: site index of species Sw\n    :param float bhage: breast height age of speceis Sw\n    :param float N_bh: density of species Sw\n    :param float SC: proportion of species Sw in the stand\n    :param float BA: Basal area of the species Sw\n    :param float N0: initial density of species Sw at total age\n    :param float SDF_Pl0: Stand Density Factor of species Pl\n    :param float SDF_Aw0: Stand Density Factor of species Aw\n    :param float SDF_Sb0: Stand Density Factor of species Sb\n\n    ";
-static PyMethodDef __pyx_mdef_5pygypsy_20basal_area_increment_5increment_basal_area_sw = {"increment_basal_area_sw", (PyCFunction)__pyx_pw_5pygypsy_20basal_area_increment_5increment_basal_area_sw, METH_VARARGS|METH_KEYWORDS, __pyx_doc_5pygypsy_20basal_area_increment_4increment_basal_area_sw};
-static PyObject *__pyx_pw_5pygypsy_20basal_area_increment_5increment_basal_area_sw(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_7pygypsy_20basal_area_increment_5increment_basal_area_sw(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_7pygypsy_20basal_area_increment_4increment_basal_area_sw[] = "Predicts the increment in basal area for the subsequent year for the\n    species.\n\n    This function is used to make basal area projections and as a function\n    called by factor finder functions during estimation of correction factor\n    for the species.\n\n    :param str sp: species name\n    :param float SI_bh: site index of species Sw\n    :param float bhage: breast height age of speceis Sw\n    :param float N_bh: density of species Sw\n    :param float SC: proportion of species Sw in the stand\n    :param float BA: Basal area of the species Sw\n    :param float N0: initial density of species Sw at total age\n    :param float SDF_Pl0: Stand Density Factor of species Pl\n    :param float SDF_Aw0: Stand Density Factor of species Aw\n    :param float SDF_Sb0: Stand Density Factor of species Sb\n\n    ";
+static PyMethodDef __pyx_mdef_7pygypsy_20basal_area_increment_5increment_basal_area_sw = {"increment_basal_area_sw", (PyCFunction)__pyx_pw_7pygypsy_20basal_area_increment_5increment_basal_area_sw, METH_VARARGS|METH_KEYWORDS, __pyx_doc_7pygypsy_20basal_area_increment_4increment_basal_area_sw};
+static PyObject *__pyx_pw_7pygypsy_20basal_area_increment_5increment_basal_area_sw(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   CYTHON_UNUSED PyObject *__pyx_v_sp = 0;
   __pyx_t_5numpy_float64_t __pyx_v_SC;
   __pyx_t_5numpy_float64_t __pyx_v_SI_bh;
@@ -3067,14 +3067,14 @@ static PyObject *__pyx_pw_5pygypsy_20basal_area_increment_5increment_basal_area_
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_5pygypsy_20basal_area_increment_4increment_basal_area_sw(__pyx_self, __pyx_v_sp, __pyx_v_SC, __pyx_v_SI_bh, __pyx_v_N_bh, __pyx_v_N0, __pyx_v_bhage, __pyx_v_SDF_Aw0, __pyx_v_SDF_Pl0, __pyx_v_SDF_Sb0, __pyx_v_BA);
+  __pyx_r = __pyx_pf_7pygypsy_20basal_area_increment_4increment_basal_area_sw(__pyx_self, __pyx_v_sp, __pyx_v_SC, __pyx_v_SI_bh, __pyx_v_N_bh, __pyx_v_N0, __pyx_v_bhage, __pyx_v_SDF_Aw0, __pyx_v_SDF_Pl0, __pyx_v_SDF_Sb0, __pyx_v_BA);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pygypsy_20basal_area_increment_4increment_basal_area_sw(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_sp, __pyx_t_5numpy_float64_t __pyx_v_SC, __pyx_t_5numpy_float64_t __pyx_v_SI_bh, __pyx_t_5numpy_float64_t __pyx_v_N_bh, __pyx_t_5numpy_float64_t __pyx_v_N0, __pyx_t_5numpy_float64_t __pyx_v_bhage, __pyx_t_5numpy_float64_t __pyx_v_SDF_Aw0, __pyx_t_5numpy_float64_t __pyx_v_SDF_Pl0, __pyx_t_5numpy_float64_t __pyx_v_SDF_Sb0, __pyx_t_5numpy_float64_t __pyx_v_BA) {
+static PyObject *__pyx_pf_7pygypsy_20basal_area_increment_4increment_basal_area_sw(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_sp, __pyx_t_5numpy_float64_t __pyx_v_SC, __pyx_t_5numpy_float64_t __pyx_v_SI_bh, __pyx_t_5numpy_float64_t __pyx_v_N_bh, __pyx_t_5numpy_float64_t __pyx_v_N0, __pyx_t_5numpy_float64_t __pyx_v_bhage, __pyx_t_5numpy_float64_t __pyx_v_SDF_Aw0, __pyx_t_5numpy_float64_t __pyx_v_SDF_Pl0, __pyx_t_5numpy_float64_t __pyx_v_SDF_Sb0, __pyx_t_5numpy_float64_t __pyx_v_BA) {
   __pyx_t_5numpy_float64_t __pyx_v_BAinc;
   __pyx_t_5numpy_float64_t __pyx_v_a1;
   __pyx_t_5numpy_float64_t __pyx_v_a2;
@@ -4230,10 +4230,10 @@ static PyObject *__pyx_pf_5pygypsy_20basal_area_increment_4increment_basal_area_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pygypsy_20basal_area_increment_7increment_basal_area_pl(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pygypsy_20basal_area_increment_6increment_basal_area_pl[] = "Predicts the increment in basal area for the subsequent year for the\n    species.\n\n    This function is used to make basal area projections and as a\n    function called by factor finder functions during estimation of correction\n    factor for the species.\n\n    :param str sp: species name\n    :param float SI_bh: site index of species Pl\n    :param float bhage: breast height age of species Pl\n    :param float N_bh: density of species Pl\n    :param float SC: proportion of species Pl in the stand\n    :param float BA: Basal area of the species Pl\n    :param float N0: initial density of species Pl at total age\n    :param float SDFSw0: Stand Density Factor of species Sw\n    :param float SDF_Aw0: Stand Density Factor of species Aw\n    :param float SDF_Sb0: Stand Density Factor of species Sb\n\n    ";
-static PyMethodDef __pyx_mdef_5pygypsy_20basal_area_increment_7increment_basal_area_pl = {"increment_basal_area_pl", (PyCFunction)__pyx_pw_5pygypsy_20basal_area_increment_7increment_basal_area_pl, METH_VARARGS|METH_KEYWORDS, __pyx_doc_5pygypsy_20basal_area_increment_6increment_basal_area_pl};
-static PyObject *__pyx_pw_5pygypsy_20basal_area_increment_7increment_basal_area_pl(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_7pygypsy_20basal_area_increment_7increment_basal_area_pl(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_7pygypsy_20basal_area_increment_6increment_basal_area_pl[] = "Predicts the increment in basal area for the subsequent year for the\n    species.\n\n    This function is used to make basal area projections and as a\n    function called by factor finder functions during estimation of correction\n    factor for the species.\n\n    :param str sp: species name\n    :param float SC: proportion of species Pl in the stand\n    :param float SI_bh: site index of species Pl\n    :param float bhage: breast height age of species Pl\n    :param float N_bh: density of species Pl\n    :param float BA: Basal area of the species Pl\n    :param float N0: initial density of species Pl at total age\n    :param float SDFSw0: Stand Density Factor of species Sw\n    :param float SDF_Aw0: Stand Density Factor of species Aw\n    :param float SDF_Sb0: Stand Density Factor of species Sb\n\n    ";
+static PyMethodDef __pyx_mdef_7pygypsy_20basal_area_increment_7increment_basal_area_pl = {"increment_basal_area_pl", (PyCFunction)__pyx_pw_7pygypsy_20basal_area_increment_7increment_basal_area_pl, METH_VARARGS|METH_KEYWORDS, __pyx_doc_7pygypsy_20basal_area_increment_6increment_basal_area_pl};
+static PyObject *__pyx_pw_7pygypsy_20basal_area_increment_7increment_basal_area_pl(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   CYTHON_UNUSED PyObject *__pyx_v_sp = 0;
   __pyx_t_5numpy_float64_t __pyx_v_SC;
   __pyx_t_5numpy_float64_t __pyx_v_SI_bh;
@@ -4354,14 +4354,14 @@ static PyObject *__pyx_pw_5pygypsy_20basal_area_increment_7increment_basal_area_
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_5pygypsy_20basal_area_increment_6increment_basal_area_pl(__pyx_self, __pyx_v_sp, __pyx_v_SC, __pyx_v_SI_bh, __pyx_v_N_bh, __pyx_v_N0, __pyx_v_bhage, __pyx_v_SDF_Aw0, __pyx_v_SDF_Sw0, __pyx_v_SDF_Sb0, __pyx_v_BA);
+  __pyx_r = __pyx_pf_7pygypsy_20basal_area_increment_6increment_basal_area_pl(__pyx_self, __pyx_v_sp, __pyx_v_SC, __pyx_v_SI_bh, __pyx_v_N_bh, __pyx_v_N0, __pyx_v_bhage, __pyx_v_SDF_Aw0, __pyx_v_SDF_Sw0, __pyx_v_SDF_Sb0, __pyx_v_BA);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pygypsy_20basal_area_increment_6increment_basal_area_pl(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_sp, __pyx_t_5numpy_float64_t __pyx_v_SC, __pyx_t_5numpy_float64_t __pyx_v_SI_bh, __pyx_t_5numpy_float64_t __pyx_v_N_bh, __pyx_t_5numpy_float64_t __pyx_v_N0, __pyx_t_5numpy_float64_t __pyx_v_bhage, __pyx_t_5numpy_float64_t __pyx_v_SDF_Aw0, __pyx_t_5numpy_float64_t __pyx_v_SDF_Sw0, __pyx_t_5numpy_float64_t __pyx_v_SDF_Sb0, __pyx_t_5numpy_float64_t __pyx_v_BA) {
+static PyObject *__pyx_pf_7pygypsy_20basal_area_increment_6increment_basal_area_pl(CYTHON_UNUSED PyObject *__pyx_self, CYTHON_UNUSED PyObject *__pyx_v_sp, __pyx_t_5numpy_float64_t __pyx_v_SC, __pyx_t_5numpy_float64_t __pyx_v_SI_bh, __pyx_t_5numpy_float64_t __pyx_v_N_bh, __pyx_t_5numpy_float64_t __pyx_v_N0, __pyx_t_5numpy_float64_t __pyx_v_bhage, __pyx_t_5numpy_float64_t __pyx_v_SDF_Aw0, __pyx_t_5numpy_float64_t __pyx_v_SDF_Sw0, __pyx_t_5numpy_float64_t __pyx_v_SDF_Sb0, __pyx_t_5numpy_float64_t __pyx_v_BA) {
   __pyx_t_5numpy_float64_t __pyx_v_BAinc;
   __pyx_t_5numpy_float64_t __pyx_v_a1;
   __pyx_t_5numpy_float64_t __pyx_v_a2;
@@ -8164,7 +8164,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_d1, __pyx_k_d1, sizeof(__pyx_k_d1), 0, 0, 1, 1},
   {&__pyx_n_s_d2, __pyx_k_d2, sizeof(__pyx_k_d2), 0, 0, 1, 1},
   {&__pyx_n_s_exp, __pyx_k_exp, sizeof(__pyx_k_exp), 0, 0, 1, 1},
-  {&__pyx_n_s_pygypsy_basal_area_increment, __pyx_k_pygypsy_basal_area_increment, sizeof(__pyx_k_pygypsy_basal_area_increment), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
   {&__pyx_n_s_increment_basal_area_aw, __pyx_k_increment_basal_area_aw, sizeof(__pyx_k_increment_basal_area_aw), 0, 0, 1, 1},
   {&__pyx_n_s_increment_basal_area_pl, __pyx_k_increment_basal_area_pl, sizeof(__pyx_k_increment_basal_area_pl), 0, 0, 1, 1},
@@ -8185,7 +8184,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},
   {&__pyx_kp_s_numpy_core_multiarray_failed_to, __pyx_k_numpy_core_multiarray_failed_to, sizeof(__pyx_k_numpy_core_multiarray_failed_to), 0, 0, 1, 0},
   {&__pyx_kp_s_numpy_core_umath_failed_to_impor, __pyx_k_numpy_core_umath_failed_to_impor, sizeof(__pyx_k_numpy_core_umath_failed_to_impor), 0, 0, 1, 0},
-  {&__pyx_kp_s_opt_pygypsy_pygypsy_basal_area_incr, __pyx_k_opt_pygypsy_pygypsy_basal_area_incr, sizeof(__pyx_k_opt_pygypsy_pygypsy_basal_area_incr), 0, 0, 1, 0},
+  {&__pyx_kp_s_opt_pygypsy_pygypsy_basal_area, __pyx_k_opt_pygypsy_pygypsy_basal_area, sizeof(__pyx_k_opt_pygypsy_pygypsy_basal_area), 0, 0, 1, 0},
+  {&__pyx_n_s_pygypsy_basal_area_increment, __pyx_k_pygypsy_basal_area_increment, sizeof(__pyx_k_pygypsy_basal_area_increment), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
   {&__pyx_n_s_sp, __pyx_k_sp, sizeof(__pyx_k_sp), 0, 0, 1, 1},
   {&__pyx_n_s_sqrt, __pyx_k_sqrt, sizeof(__pyx_k_sqrt), 0, 0, 1, 1},
@@ -8317,7 +8317,7 @@ static int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__10 = PyTuple_Pack(24, __pyx_n_s_sp, __pyx_n_s_SC, __pyx_n_s_SI_bh, __pyx_n_s_N_bh, __pyx_n_s_N0, __pyx_n_s_bhage, __pyx_n_s_BA, __pyx_n_s_BAinc, __pyx_n_s_a1, __pyx_n_s_a2, __pyx_n_s_a3, __pyx_n_s_a4, __pyx_n_s_a5, __pyx_n_s_X1, __pyx_n_s_X2, __pyx_n_s_X3, __pyx_n_s_X4, __pyx_n_s_X5, __pyx_n_s_X6, __pyx_n_s_d1, __pyx_n_s_d2, __pyx_n_s_k, __pyx_n_s_n, __pyx_n_s_d); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 16, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__10);
   __Pyx_GIVEREF(__pyx_tuple__10);
-  __pyx_codeobj__11 = (PyObject*)__Pyx_PyCode_New(7, 0, 24, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__10, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_opt_pygypsy_pygypsy_basal_area_incr, __pyx_n_s_increment_basal_area_aw, 16, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__11)) __PYX_ERR(0, 16, __pyx_L1_error)
+  __pyx_codeobj__11 = (PyObject*)__Pyx_PyCode_New(7, 0, 24, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__10, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_opt_pygypsy_pygypsy_basal_area, __pyx_n_s_increment_basal_area_aw, 16, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__11)) __PYX_ERR(0, 16, __pyx_L1_error)
 
   /* "pygypsy/basal_area_increment.pyx":71
  * 
@@ -8329,7 +8329,7 @@ static int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__12 = PyTuple_Pack(13, __pyx_n_s_sp, __pyx_n_s_SC, __pyx_n_s_SI_bh, __pyx_n_s_N_bh, __pyx_n_s_N0, __pyx_n_s_bhage, __pyx_n_s_BA, __pyx_n_s_BAinc, __pyx_n_s_a1, __pyx_n_s_a2, __pyx_n_s_a3, __pyx_n_s_k, __pyx_n_s_k1); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__12);
   __Pyx_GIVEREF(__pyx_tuple__12);
-  __pyx_codeobj__13 = (PyObject*)__Pyx_PyCode_New(7, 0, 13, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__12, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_opt_pygypsy_pygypsy_basal_area_incr, __pyx_n_s_increment_basal_area_sb, 71, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__13)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_codeobj__13 = (PyObject*)__Pyx_PyCode_New(7, 0, 13, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__12, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_opt_pygypsy_pygypsy_basal_area, __pyx_n_s_increment_basal_area_sb, 71, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__13)) __PYX_ERR(0, 71, __pyx_L1_error)
 
   /* "pygypsy/basal_area_increment.pyx":126
  * 
@@ -8341,7 +8341,7 @@ static int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__14 = PyTuple_Pack(24, __pyx_n_s_sp, __pyx_n_s_SC, __pyx_n_s_SI_bh, __pyx_n_s_N_bh, __pyx_n_s_N0, __pyx_n_s_bhage, __pyx_n_s_SDF_Aw0, __pyx_n_s_SDF_Pl0, __pyx_n_s_SDF_Sb0, __pyx_n_s_BA, __pyx_n_s_BAinc, __pyx_n_s_a1, __pyx_n_s_a2, __pyx_n_s_a3, __pyx_n_s_a4, __pyx_n_s_a5, __pyx_n_s_a6, __pyx_n_s_z1, __pyx_n_s_z2, __pyx_n_s_z3, __pyx_n_s_k, __pyx_n_s_k1, __pyx_n_s_k2, __pyx_n_s_m); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(0, 126, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__14);
   __Pyx_GIVEREF(__pyx_tuple__14);
-  __pyx_codeobj__15 = (PyObject*)__Pyx_PyCode_New(10, 0, 24, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__14, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_opt_pygypsy_pygypsy_basal_area_incr, __pyx_n_s_increment_basal_area_sw, 126, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__15)) __PYX_ERR(0, 126, __pyx_L1_error)
+  __pyx_codeobj__15 = (PyObject*)__Pyx_PyCode_New(10, 0, 24, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__14, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_opt_pygypsy_pygypsy_basal_area, __pyx_n_s_increment_basal_area_sw, 126, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__15)) __PYX_ERR(0, 126, __pyx_L1_error)
 
   /* "pygypsy/basal_area_increment.pyx":217
  * 
@@ -8353,7 +8353,7 @@ static int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__16 = PyTuple_Pack(25, __pyx_n_s_sp, __pyx_n_s_SC, __pyx_n_s_SI_bh, __pyx_n_s_N_bh, __pyx_n_s_N0, __pyx_n_s_bhage, __pyx_n_s_SDF_Aw0, __pyx_n_s_SDF_Sw0, __pyx_n_s_SDF_Sb0, __pyx_n_s_BA, __pyx_n_s_BAinc, __pyx_n_s_a1, __pyx_n_s_a2, __pyx_n_s_a3, __pyx_n_s_a4, __pyx_n_s_a5, __pyx_n_s_a6, __pyx_n_s_z1, __pyx_n_s_z2, __pyx_n_s_z3, __pyx_n_s_k, __pyx_n_s_k1, __pyx_n_s_k2, __pyx_n_s_m1, __pyx_n_s_m2); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(0, 217, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__16);
   __Pyx_GIVEREF(__pyx_tuple__16);
-  __pyx_codeobj__17 = (PyObject*)__Pyx_PyCode_New(10, 0, 25, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__16, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_opt_pygypsy_pygypsy_basal_area_incr, __pyx_n_s_increment_basal_area_pl, 217, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__17)) __PYX_ERR(0, 217, __pyx_L1_error)
+  __pyx_codeobj__17 = (PyObject*)__Pyx_PyCode_New(10, 0, 25, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__16, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_opt_pygypsy_pygypsy_basal_area, __pyx_n_s_increment_basal_area_pl, 217, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__17)) __PYX_ERR(0, 217, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -8496,7 +8496,7 @@ PyMODINIT_FUNC PyInit_basal_area_increment(void)
  *                             np.float64_t SC,
  *                             np.float64_t SI_bh,
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_5pygypsy_20basal_area_increment_1increment_basal_area_aw, NULL, __pyx_n_s_pygypsy_basal_area_increment); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 16, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7pygypsy_20basal_area_increment_1increment_basal_area_aw, NULL, __pyx_n_s_pygypsy_basal_area_increment); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 16, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_increment_basal_area_aw, __pyx_t_1) < 0) __PYX_ERR(0, 16, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -8508,7 +8508,7 @@ PyMODINIT_FUNC PyInit_basal_area_increment(void)
  *                             np.float64_t SC,
  *                             np.float64_t SI_bh,
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_5pygypsy_20basal_area_increment_3increment_basal_area_sb, NULL, __pyx_n_s_pygypsy_basal_area_increment); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7pygypsy_20basal_area_increment_3increment_basal_area_sb, NULL, __pyx_n_s_pygypsy_basal_area_increment); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_increment_basal_area_sb, __pyx_t_1) < 0) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -8520,7 +8520,7 @@ PyMODINIT_FUNC PyInit_basal_area_increment(void)
  *                             np.float64_t SC,
  *                             np.float64_t SI_bh,
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_5pygypsy_20basal_area_increment_5increment_basal_area_sw, NULL, __pyx_n_s_pygypsy_basal_area_increment); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 126, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7pygypsy_20basal_area_increment_5increment_basal_area_sw, NULL, __pyx_n_s_pygypsy_basal_area_increment); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 126, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_increment_basal_area_sw, __pyx_t_1) < 0) __PYX_ERR(0, 126, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -8532,7 +8532,7 @@ PyMODINIT_FUNC PyInit_basal_area_increment(void)
  *                             np.float64_t SC,
  *                             np.float64_t SI_bh,
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_5pygypsy_20basal_area_increment_7increment_basal_area_pl, NULL, __pyx_n_s_pygypsy_basal_area_increment); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 217, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7pygypsy_20basal_area_increment_7increment_basal_area_pl, NULL, __pyx_n_s_pygypsy_basal_area_increment); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 217, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_increment_basal_area_pl, __pyx_t_1) < 0) __PYX_ERR(0, 217, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;

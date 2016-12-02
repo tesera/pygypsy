@@ -1,10 +1,12 @@
 from codecs import open as codecs_open
 from setuptools import setup, find_packages, Extension
+
 try:
     import numpy as np
 except ImportError:
     msg = 'Numpy must be installed to install pygypsy'
     raise ImportError(msg)
+
 from Cython.Build import cythonize
 
 with codecs_open('README.md', encoding='utf-8') as f:
@@ -50,6 +52,7 @@ setup(name='pygypsy',
           'dev': [
               'git-pylint-commit-hook==2.1.1',
               'Cython==0.25.1',
+              'configparser==3.5.0', # compat for git-pylint-commit-hook
           ],
           'analysis': [
               'jupyter>=1.0.0',
