@@ -1,10 +1,12 @@
 from codecs import open as codecs_open
 from setuptools import setup, find_packages, Extension
+
 try:
     import numpy as np
 except ImportError:
-    msg = 'Numpy must be installed to install gypsy'
+    msg = 'Numpy must be installed to install pygypsy'
     raise ImportError(msg)
+
 from Cython.Build import cythonize
 
 with codecs_open('README.md', encoding='utf-8') as f:
@@ -12,12 +14,12 @@ with codecs_open('README.md', encoding='utf-8') as f:
 
 
 extensions = [
-    Extension("gypsy.basal_area_increment", ["gypsy/basal_area_increment.pyx"],
+    Extension("pygypsy.basal_area_increment", ["pygypsy/basal_area_increment.pyx"],
               include_dirs = [np.get_include()]),
 ]
 
 
-setup(name='gypsy',
+setup(name='pygypsy',
       version='0.0.1',
       description=u"Forestry Growth and Yield Projection System",
       long_description=LONG_DESCRIPTION,
@@ -32,7 +34,7 @@ setup(name='gypsy',
       zip_safe=False,
       include_package_data=True,
       package_data={
-          'gypsy': ['scripts/config/*'],
+          'pygypsy': ['scripts/config/*'],
       },
       install_requires=[
           'click>=6.6',
@@ -50,6 +52,7 @@ setup(name='gypsy',
           'dev': [
               'git-pylint-commit-hook==2.1.1',
               'Cython==0.25.1',
+              'configparser==3.5.0', # compat for git-pylint-commit-hook
           ],
           'analysis': [
               'jupyter>=1.0.0',
@@ -59,6 +62,6 @@ setup(name='gypsy',
       },
       entry_points="""
       [console_scripts]
-      gypsy=gypsy.scripts.cli:cli
+      pygypsy=pygypsy.scripts.cli:cli
       """
      )

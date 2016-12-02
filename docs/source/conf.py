@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# gypsy documentation build configuration file, created by
+# pygypsy documentation build configuration file, created by
 # sphinx-quickstart on Wed Apr 27 17:42:37 2016.
 #
 # This file is execfile()d with the current directory set to its
@@ -49,7 +49,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'gypsy'
+project = u'pygypsy'
 copyright = u'2016, Jotham Apaloo'
 author = u'Jotham Apaloo'
 
@@ -124,7 +124,7 @@ html_theme = 'alabaster'
 
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
-#html_title = u'gypsy v0.0.1'
+#html_title = u'pygypsy v0.0.1'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -206,7 +206,7 @@ html_static_path = ['_static']
 #html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'gypsydoc'
+htmlhelp_basename = 'pygypsydoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -228,7 +228,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'gypsy.tex', u'gypsy Documentation',
+    (master_doc, 'pygypsy.tex', u'pygypsy Documentation',
      u'Jotham Apaloo', 'manual'),
 ]
 
@@ -258,7 +258,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'gypsy', u'gypsy Documentation',
+    (master_doc, 'pygypsy', u'pygypsy Documentation',
      [author], 1)
 ]
 
@@ -272,8 +272,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'gypsy', u'gypsy Documentation',
-     author, 'gypsy', 'One line description of project.',
+    (master_doc, 'pygypsy', u'pygypsy Documentation',
+     author, 'pygypsy', 'One line description of project.',
      'Miscellaneous'),
 ]
 

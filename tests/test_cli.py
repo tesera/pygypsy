@@ -2,25 +2,25 @@ import os
 import shutil
 from click.testing import CliRunner
 
-from gypsy.scripts.cli import cli
-from gypsy.scripts import DEFAULT_CONF_FILE
+from pygypsy.scripts.cli import cli
+from pygypsy.scripts import DEFAULT_CONF_FILE
 
 from conftest import DATA_DIR
 
 
 def test_generate_config():
     runner = CliRunner()
-    output_dir = 'gypsy-output'
+    output_dir = 'pygypsy-output'
 
     with runner.isolated_filesystem():
         result = runner.invoke(cli, ['--output-dir', output_dir, 'generate_config'])
 
         assert result.exit_code == 0
-        assert os.path.exists('./gypsy-output/gypsy-config.json')
+        assert os.path.exists('./pygypsy-output/pygypsy-config.json')
 
 
 def test_prep():
-    output_dir = 'gypsy-output'
+    output_dir = 'pygypsy-output'
     input_data_path = './raw_standtable.csv'
     expected_output_path = os.path.join(output_dir,
                                         'plot_table_prepped.csv')
@@ -98,7 +98,7 @@ def test_schema_violating_config():
 
 
 def test_simulate():
-    output_dir = 'gypsy-output'
+    output_dir = 'pygypsy-output'
     input_data_path = './data.csv'
     expected_files = [
         os.path.join('simulation-data', '1614424.csv'),

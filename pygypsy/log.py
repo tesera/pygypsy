@@ -5,7 +5,7 @@ CONSOLE_LOGGER_NAME = 'console'
 FILE_LOGGER_NAME = 'file'
 
 def setup_logging():
-    """Initialize logging for gypsy package"""
+    """Initialize logging for pygypsy package"""
     log_conf = {
         'version': 1,
         'disable_existing_loggers': False,
@@ -31,62 +31,62 @@ def setup_logging():
                 'level': 'DEBUG',
                 'formatter': 'standard',
                 'class': 'logging.FileHandler',
-                'filename': './gypsy.log',
+                'filename': './pygypsy.log',
                 'mode': 'w',
             },
         },
         'loggers': {
-            'gypsy.forward_simulation': {
+            'pygypsy.forward_simulation': {
                 'handlers':['file'],
                 'level':'INFO',
                 'propagate': True,
             },
-            'gypsy.data_prep': {
+            'pygypsy.data_prep': {
                 'handlers':['file'],
                 'level':'DEBUG',
                 'propagate': True,
             },
-            'gypsy.utils': {
+            'pygypsy.utils': {
                 'handlers':['file'],
                 'level':'DEBUG',
                 'propagate': True,
             },
-            'gypsy.basal_area_simulate': {
+            'pygypsy.basal_area_simulate': {
                 'handlers':['file'],
                 'level':'DEBUG',
                 'propagate': True,
             },
-            'gypsy.basal_area_factor': {
+            'pygypsy.basal_area_factor': {
                 'handlers':['file'],
                 'level':'DEBUG',
                 'propagate': True,
             },
-            'gypsy.density': {
+            'pygypsy.density': {
                 'handlers':['file'],
                 'level':'DEBUG',
                 'propagate': True,
             },
-            'gypsy.plot': {
+            'pygypsy.plot': {
                 'handlers':['file'],
                 'level':'DEBUG',
                 'propagate': True,
             },
-            'gypsy.stand_density_factor': {
+            'pygypsy.stand_density_factor': {
                 'handlers':['file'],
                 'level':'DEBUG',
                 'propagate': True,
             },
-            'gypsy.volume': {
+            'pygypsy.volume': {
                 'handlers':['file'],
                 'level':'DEBUG',
                 'propagate': True,
             },
-            'gypsy.GYPSYNonSpatial': {
+            'pygypsy.GYPSYNonSpatial': {
                 'handlers':['file'],
                 'level':'INFO',
                 'propagate': True,
             },
-            'gypsy.site_index': {
+            'pygypsy.site_index': {
                 'handlers':['file'],
                 'level':'DEBUG',
                 'propagate': True,

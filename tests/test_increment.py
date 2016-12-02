@@ -1,6 +1,6 @@
 # TODO: 0 as an input
 # TODO: negative as an input
-from gypsy import basal_area_increment as incr
+from pygypsy import basal_area_increment as incr
 
 def test_increment_basal_area_aw():
     args = []

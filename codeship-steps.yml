@@ -1,14 +1,14 @@
 - type: parallel
   steps:
   - name: test
-    service: gypsy
+    service: pygypsy
     command: bash ./bin/run_tests.sh
   - name: lint
-    service: gypsy
+    service: pygypsy
     command: bash ./bin/lint.sh
   - name: docs
-    service: gypsy
+    service: pygypsy
     command: bash ./bin/make_docs.sh
   - name: build
-    service: gypsy
+    service: pygypsy
     command: bash ./bin/build.sh

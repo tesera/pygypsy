@@ -3,7 +3,7 @@ import pytest
 from click.testing import CliRunner
 import botocore
 
-from gypsy.scripts.cli import cli
+from pygypsy.scripts.cli import cli
 from conftest import BUCKET
 
 S3_BKT_PREFIX = 's3://%s/' % BUCKET
@@ -31,7 +31,7 @@ def test_generate_config(s3_config_output_dir, s3_bucket_conn):
     prefix = re.sub(r'^%s' % S3_BKT_PREFIX, '', s3_config_output_dir)
     expected_output_paths = [
         '%s/%s' % (prefix, f) \
-        for f in ['gypsy-config.json', 'generate-config.log']
+        for f in ['pygypsy-config.json', 'generate-config.log']
     ]
 
     with runner.isolated_filesystem():

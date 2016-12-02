@@ -1,6 +1,6 @@
 # TODO: test merchantable volume with 0 and negative values
 
-from gypsy.volume import (
+from pygypsy.volume import (
     gross_total_volume as gtv,
     merchantable_volume as mv,
 )

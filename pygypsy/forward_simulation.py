@@ -8,19 +8,19 @@ import pandas as pd
 import basal_area_increment as incr
 from GYPSYNonSpatial import densities_and_SCs_to_250
 from utils import _log_loop_progress, estimate_species_composition
-from gypsy.basal_area_factor import (
+from pygypsy.basal_area_factor import (
     estimate_basal_area_factor_aw,
     estimate_basal_area_factor_sb,
     estimate_basal_area_factor_sw,
     estimate_basal_area_factor_pl,
 )
-from gypsy.basal_area_simulate import (
+from pygypsy.basal_area_simulate import (
     sim_basal_area_aw,
     sim_basal_area_sw,
     sim_basal_area_sb,
     sim_basal_area_pl,
 )
-from gypsy.volume import(
+from pygypsy.volume import(
     merchantable_volume,
     gross_total_volume,
 )

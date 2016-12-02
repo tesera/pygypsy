@@ -7,10 +7,10 @@ RUN apt-get update && \
     && apt-get autoclean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git config --global user.email "docker@gypsy" && git config --global user.name "docker"
+RUN git config --global user.email "docker@pygypsy" && git config --global user.name "docker"
 
-ENV WD=/opt/gypsy
-WORKDIR /opt/gypsy
+ENV WD=/opt/pygypsy
+WORKDIR /opt/pygypsy
 ENV HISTFILE $WD/.bash_history
 
 RUN pip install virtualenv \
@@ -19,7 +19,7 @@ RUN pip install virtualenv \
     && pip install --upgrade pip \
     && pip install numpy==1.11.2 cython==0.25.1
 
-COPY . /opt/gypsy
+COPY . /opt/pygypsy
 
 RUN . venv/bin/activate \
     && pip install -e .[test,lint,docs]

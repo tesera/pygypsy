@@ -1,7 +1,7 @@
 import os
 import pytest
 
-from gypsy.scripts.callbacks import _load_and_validate_config
+from pygypsy.scripts.callbacks import _load_and_validate_config
 
 @pytest.mark.skipif(os.getenv('GYPSY_BUCKET') is None,
                    reason="S3 tests are not configured locally")

@@ -1,6 +1,6 @@
 import pytest
 
-from gypsy.site_index import (
+from pygypsy.site_index import (
     get_site_indices_from_dominant_species,
     _get_temporary_dominant_species,
     _estimate_dominant_species_site_index,

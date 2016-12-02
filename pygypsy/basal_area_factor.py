@@ -2,7 +2,7 @@
 import logging
 import numpy as np
 
-from gypsy.basal_area_simulate import (
+from pygypsy.basal_area_simulate import (
     sim_basal_area_aw,
     sim_basal_area_sw,
     sim_basal_area_sb,

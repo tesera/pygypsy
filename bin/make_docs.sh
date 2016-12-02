@@ -2,5 +2,5 @@
 
 . venv/bin/activate
 cd docs
-sphinx-apidoc -o ./source ../gypsy
+sphinx-apidoc -o ./source ../pygypsy
 make html

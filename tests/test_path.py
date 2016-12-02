@@ -1,4 +1,4 @@
-from gypsy.path import _join
+from pygypsy.path import _join
 
 def test_join():
     assert _join('s3://', 'bucket', 'prefix') == 's3://bucket/prefix'

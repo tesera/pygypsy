@@ -3,8 +3,8 @@ import os
 import pytest
 import boto3
 
-from gypsy.scripts import DEFAULT_CONF_FILE
-from gypsy.utils import _copy_file
+from pygypsy.scripts import DEFAULT_CONF_FILE
+from pygypsy.utils import _copy_file
 
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
@@ -43,7 +43,7 @@ def s3_config_output_dir(s3_bucket_path, s3_bucket_conn):
     if BUCKET is None:
         return
 
-    prefix = 'test/generate-config/gypsy-output'
+    prefix = 'test/generate-config/pygypsy-output'
     out_dir = '%s/%s' % (s3_bucket_path, prefix)
 
     yield out_dir
@@ -56,7 +56,7 @@ def s3_prep_output_dir(s3_bucket_path, s3_bucket_conn):
     if BUCKET is None:
         val = None
     else:
-        prefix = 'test/prep/gypsy-output'
+        prefix = 'test/prep/pygypsy-output'
         out_dir = '%s/%s' % (s3_bucket_path, prefix)
         files = [
             (os.path.join(DATA_DIR, 'raw_standtable.csv'),
@@ -85,7 +85,7 @@ def s3_simulate_output_dir(s3_bucket_path, s3_bucket_conn):
         yield
         return
 
-    prefix = 'test/simulate/gypsy-output'
+    prefix = 'test/simulate/pygypsy-output'
     out_dir = '%s/%s' % (s3_bucket_path, prefix)
     files = [
         (os.path.join(DATA_DIR, 'raw_standtable_prepped.csv'),
@@ -117,7 +117,7 @@ def config_on_s3(s3_bucket_path, s3_bucket_conn):
         yield
         return
 
-    prefix = 'test/_load_and_validate_config/gypsy-ouptput'
+    prefix = 'test/_load_and_validate_config/pygypsy-ouptput'
     files = [
         (DEFAULT_CONF_FILE,
          '/'.join([prefix, 'config.json'])),

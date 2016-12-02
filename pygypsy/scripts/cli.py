@@ -10,32 +10,32 @@ import boto3
 import click
 import pandas as pd
 
-from gypsy.scripts import DEFAULT_CONF_FILE
-from gypsy.scripts.callbacks import _load_and_validate_config
-from gypsy.plot import save_plot
-from gypsy.utils import (
+from pygypsy.scripts import DEFAULT_CONF_FILE
+from pygypsy.scripts.callbacks import _load_and_validate_config
+from pygypsy.plot import save_plot
+from pygypsy.utils import (
     _log_loop_progress,
     _filter_young_stands,
     _append_file,
     _parse_s3_url,
     _copy_file,
 )
-from gypsy.io import df_to_s3_bucket
-from gypsy.data_prep import prep_standtable
-from gypsy.log import setup_logging, CONSOLE_LOGGER_NAME
-from gypsy.forward_simulation import simulate_forwards_df
-import gypsy.path as gyppath
+from pygypsy.io import df_to_s3_bucket
+from pygypsy.data_prep import prep_standtable
+from pygypsy.log import setup_logging, CONSOLE_LOGGER_NAME
+from pygypsy.forward_simulation import simulate_forwards_df
+import pygypsy.path as gyppath
 
 
 LOGGER = logging.getLogger(CONSOLE_LOGGER_NAME)
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
-LOG_FILE_NAME = 'gypsy.log'
+LOG_FILE_NAME = 'pygypsy.log'
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.option('--verbose', '-v', is_flag=True)
 @click.option('--output-dir', '-o', type=click.Path(exists=False),
-              default='gypsy-output')
+              default='pygypsy-output')
 @click.pass_context
 def cli(ctx, verbose, output_dir):
     """Growth and Yield Projection System
@@ -48,7 +48,7 @@ def cli(ctx, verbose, output_dir):
         LOGGER.setLevel(logging.DEBUG)
         for handler in LOGGER.handlers:
             handler.setLevel(logging.DEBUG)
-    LOGGER.debug('Starting gypsy')
+    LOGGER.debug('Starting pygypsy')
 
     s3_params = _parse_s3_url(output_dir)
     bucket_name = s3_params['bucket']
@@ -79,14 +79,14 @@ def cli(ctx, verbose, output_dir):
 def generate_config(ctx):
     """Generate a configuration file
 
-    Generates a configuration file, gypsy-config.json, under DEST directory.
+    Generates a configuration file, pygypsy-config.json, under DEST directory.
 
     """
     try:
         output_dir = ctx.obj['output-dir']
         bucket_name = ctx.obj['s3-bucket-name']
         bucket_conn = ctx.obj['s3-bucket-conn']
-        output_path = gyppath._join(output_dir, 'gypsy-config.json')
+        output_path = gyppath._join(output_dir, 'pygypsy-config.json')
         _copy_file(DEFAULT_CONF_FILE, output_path, bucket_conn=bucket_conn)
         LOGGER.info('Config file saved at %s', output_path)
     except:
@@ -107,7 +107,7 @@ def generate_config(ctx):
               callback=_load_and_validate_config)
 @click.pass_context
 def prep(ctx, standtable, config_file):
-    """Prepare stand data for use in GYPSY simulation"""
+    """Prepare stand data for use in pygpysy simulation"""
     LOGGER.info('Running prep...')
     bucket_name = ctx.obj['s3-bucket-name']
     bucket_conn = ctx.obj['s3-bucket-conn']
@@ -142,7 +142,7 @@ def prep(ctx, standtable, config_file):
               callback=_load_and_validate_config)
 @click.pass_context
 def simulate(ctx, data, config_file):
-    """Run GYPSY simulation"""
+    """Run pygypsy simulation"""
     bucket_name = ctx.obj['s3-bucket-name']
     bucket_conn = ctx.obj['s3-bucket-conn']
     output_dir = ctx.obj['output-dir']
@@ -207,7 +207,7 @@ def simulate(ctx, data, config_file):
               callback=_load_and_validate_config)
 @click.pass_context
 def plot(ctx, simulation_output_dir, config_file):
-    """Create charts for all files in gypsy simulation output directory
+    """Create charts for all files in pygypsy simulation output directory
 
     """
     output_dir = ctx.obj['output-dir']
