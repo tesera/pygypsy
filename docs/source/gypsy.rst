@@ -1,4 +1,4 @@
-gypsy package
+pygypsy package
 =============
 
 Subpackages
@@ -6,23 +6,23 @@ Subpackages
 
 .. toctree::
 
-    gypsy.scripts
+    pygypsy.scripts
 
 Submodules
 ----------
 
-gypsy.log module
+pygypsy.log module
 ----------------
 
-.. automodule:: gypsy.log
+.. automodule:: pygypsy.log
     :members:
     :undoc-members:
     :show-inheritance:
 
-gypsy.skel module
+pygypsy.skel module
 -----------------
 
-.. automodule:: gypsy.skel
+.. automodule:: pygypsy.skel
     :members:
     :undoc-members:
     :show-inheritance:
@@ -31,7 +31,7 @@ gypsy.skel module
 Module contents
 ---------------
 
-.. automodule:: gypsy
+.. automodule:: pygypsy
     :members:
     :undoc-members:
     :show-inheritance:

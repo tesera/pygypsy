@@ -1,7 +1,7 @@
 """Stand density factor estimators"""
 import logging
 
-from gypsy.density import (
+from pygypsy.density import (
     estimate_density_aw,
     estimate_density_sw,
     estimate_density_sb,

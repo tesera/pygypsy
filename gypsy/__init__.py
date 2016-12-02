@@ -21,7 +21,7 @@ y2bh = years until breast height age can be measured
 import os
 import matplotlib
 
-import gypsy.basal_area_increment
+import pygypsy.basal_area_increment
 
 # Force matplotlib to not use any Xwindows backend so that docker works
 matplotlib.use('Agg')

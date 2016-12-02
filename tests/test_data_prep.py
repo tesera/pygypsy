@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import numpy.testing as npt
 
-from gypsy.data_prep import prep_standtable
+from pygypsy.data_prep import prep_standtable
 
 from conftest import DATA_DIR
 

@@ -3,7 +3,7 @@ import pytest
 import pandas as pd
 from glob import glob
 
-from gypsy.plot import save_plot
+from pygypsy.plot import save_plot
 
 from conftest import DATA_DIR
 

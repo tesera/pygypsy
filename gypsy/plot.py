@@ -7,7 +7,7 @@ from utils import _mkdir_p
 
 def _plot_simulation_variables(simulation_df, axis=None, plot_vars=None, y_lab=''):
     """
-    :param simulation_df: output of gypsy simulation
+    :param simulation_df: output of pygypsy simulation
     :param axis: axes object
     :param plot_vars: list of strings identifying variable (column names) to plot
     :param y_lab: y axis label
@@ -73,9 +73,9 @@ def _plot_density(simulation_dataframe, axis): #pylint: disable=missing-docstrin
                                y_lab='Density')
 
 def save_plot(simulation_dataframe, path):
-    '''Save plots of gypsy simulation output
+    '''Save plots of pygypsy simulation output
 
-    Creates a panel and includes all plots generated as gypsy outputs
+    Creates a panel and includes all plots generated as pygypsy outputs
     (simulation_dataframe) and saves the panel on a folder determined byt path
 
     '''

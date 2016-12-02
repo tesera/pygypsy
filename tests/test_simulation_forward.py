@@ -4,7 +4,7 @@ import pandas as pd
 from glob import glob
 import numpy as np
 
-from gypsy.forward_simulation import simulate_forwards_df
+from pygypsy.forward_simulation import simulate_forwards_df
 
 from conftest import DATA_DIR
 

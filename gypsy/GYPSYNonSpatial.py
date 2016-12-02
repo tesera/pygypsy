@@ -1,14 +1,14 @@
 """Density"""
 import logging
 
-from gypsy.density import (
+from pygypsy.density import (
     estimate_density_aw,
     estimate_density_pl,
     estimate_density_sb,
     estimate_density_sw,
 )
-from gypsy.utils import estimate_species_composition
-from gypsy.asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
+from pygypsy.utils import estimate_species_composition
+from pygypsy.asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
 
 
 LOGGER = logging.getLogger(__name__)

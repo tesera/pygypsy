@@ -1,13 +1,13 @@
-gypsy.scripts package
+pygypsy.scripts package
 =====================
 
 Submodules
 ----------
 
-gypsy.scripts.cli module
+pygypsy.scripts.cli module
 ------------------------
 
-.. automodule:: gypsy.scripts.cli
+.. automodule:: pygypsy.scripts.cli
     :members:
     :undoc-members:
     :show-inheritance:
@@ -16,7 +16,7 @@ gypsy.scripts.cli module
 Module contents
 ---------------
 
-.. automodule:: gypsy.scripts
+.. automodule:: pygypsy.scripts
     :members:
     :undoc-members:
     :show-inheritance:

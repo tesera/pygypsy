@@ -3,7 +3,7 @@
 import logging
 import numpy as np
 
-from gypsy import basal_area_increment as incr
+from pygypsy import basal_area_increment as incr
 
 
 LOGGER = logging.getLogger(__name__)

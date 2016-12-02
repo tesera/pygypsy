@@ -8,9 +8,9 @@ import click
 import boto3
 import jsonschema
 
-from gypsy.scripts import CONF_SCHEMA_FILE, DEFAULT_CONF_FILE
-from gypsy.log import CONSOLE_LOGGER_NAME
-from gypsy.utils import _parse_s3_url
+from pygypsy.scripts import CONF_SCHEMA_FILE, DEFAULT_CONF_FILE
+from pygypsy.log import CONSOLE_LOGGER_NAME
+from pygypsy.utils import _parse_s3_url
 
 
 LOGGER = logging.getLogger(CONSOLE_LOGGER_NAME)
@@ -22,7 +22,7 @@ def _load_and_validate_config(ctx, param, value): #pylint: disable=unused-argume
 
     if value == DEFAULT_CONF_FILE:
         LOGGER.warning(
-            'Using gypsy default config file.'
+            'Using pygypsy default config file.'
         )
 
     try:

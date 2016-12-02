@@ -9,21 +9,21 @@ import pandas as pd
 from copy import deepcopy
 
 import basal_area_increment as incr
-from gypsy.stand_density_factor import (
+from pygypsy.stand_density_factor import (
     estimate_sdf_aw,
     estimate_sdf_sb,
     estimate_sdf_sw,
     estimate_sdf_pl,
 )
-from gypsy.density import (
+from pygypsy.density import (
     estimate_density_aw,
     estimate_density_sw,
     estimate_density_sb,
     estimate_density_pl,
 )
 from utils import _log_loop_progress
-from gypsy.utils import estimate_species_composition
-from gypsy.asaCompileAgeGivenSpSiHt import (
+from pygypsy.utils import estimate_species_composition
+from pygypsy.asaCompileAgeGivenSpSiHt import (
     computeTreeAge,
     ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge,
     ComputeGypsySiteIndex,
@@ -245,8 +245,8 @@ def prep_standtable(data):
         # it should be immutable
         def sort_species(species_perc_list, species_perc_dict={'Aw':0, 'Pl':0, 'Sw':0, 'Sb':0}):
             '''
-            re-classification of species that are not considered in gypsy as
-            one of the species considered in gypsy (Aw, Sw, Sb, or Pl)
+            re-classification of species that are not considered in pygypsy as
+            one of the species considered in pygypsy (Aw, Sw, Sb, or Pl)
             and sort the species to obtain the dominant species in the plot
             '''
             for species in species_perc_list:
