@@ -40,6 +40,8 @@ setup(name='gypsy',
           'matplotlib>=1.5.2',
           'colorlog>=2.7.0',
           'jsonschema>=2.5.1',
+          'boto3>=1.4.1',
+          'boto>=2.43.0',
       ],
       extras_require={
           'test': ['pytest==2.9.1', 'pytest-cov==2.4.0'],

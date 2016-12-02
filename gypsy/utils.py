@@ -6,6 +6,7 @@ import os
 import errno
 import shutil
 import logging
+from urlparse import urlparse
 
 from log import CONSOLE_LOGGER_NAME
 
@@ -23,6 +24,7 @@ def _mkdir_p(path):
             pass
         else:
             raise
+
 
 def _log_loop_progress(i, length, n_reports=10):
     step = int(length/n_reports) if length > 10 else 1
@@ -54,6 +56,7 @@ def estimate_species_composition(n_aw, n_sb, n_sw, n_pl):
 
     return sc_aw, sc_sw, sc_sb, sc_pl
 
+
 def _filter_young_stands(prepped_plot_table, min_age=25):
     old_query_str = ('tage_Sw > {a} '
                      'or tage_Sb > {a} '
@@ -69,7 +72,33 @@ def _filter_young_stands(prepped_plot_table, min_age=25):
 
     return prepped_plot_table_old, prepped_plot_table_young
 
+
 def _append_file(source, dest):
     with open(dest, 'wb') as dfd:
         with open(source, 'rb') as sfd:
             shutil.copyfileobj(sfd, dfd)
+
+
+def _parse_s3_url(url):
+    s3_bucket, s3_prefix = None, None
+
+    if url.startswith('s3://'):
+        outdir_url = urlparse(url)
+        s3_bucket = outdir_url.netloc
+        s3_prefix = outdir_url.path.strip('/')
+
+    return {
+        'bucket': s3_bucket,
+        'prefix': s3_prefix,
+    }
+
+
+def _copy_file_to_s3(bucket_conn, source, dest):
+    bucket_conn.upload_file(source, dest)
+
+
+def _copy_file(source, dest, bucket_conn=None):
+    if bucket_conn is None:
+        shutil.copyfile(source, dest)
+    else:
+        _copy_file_to_s3(bucket_conn, source, dest)

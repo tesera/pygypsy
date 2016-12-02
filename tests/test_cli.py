@@ -8,17 +8,6 @@ from gypsy.scripts import DEFAULT_CONF_FILE
 from conftest import DATA_DIR
 
 
-def remove_path_if_exists(*paths): #pylint: disable=missing-docstring
-    for path in paths:
-        try:
-            if os.path.isdir(path):
-                shutil.rmtree(path)
-            else:
-                os.remove(path)
-        except OSError:
-            pass
-
-
 def test_generate_config():
     runner = CliRunner()
     output_dir = 'gypsy-output'
@@ -114,7 +103,7 @@ def test_simulate():
     expected_files = [
         os.path.join('simulation-data', '1614424.csv'),
         os.path.join('simulation-data', '1008174.csv'),
-        'gypsy.log'
+        'simulate.log'
     ]
     expected_output_paths = [
         os.path.join(output_dir, item) \

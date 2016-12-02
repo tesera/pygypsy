@@ -1,10 +1,10 @@
 run_lint(){
     PYLINT_RC_PATH="../.pylintrc"
     LINT_FILE='lint-output.txt'
-    LINT_LIMIT=8.0
+    LINT_LIMIT=7.5
     echo "Running lint check using pylintrc ${PYLINT_RC_PATH}"
     git-pylint-commit-hook \
-        --pylintrc ${PYLINT_RC_PATH} \
+        --pylintrc "${PYLINT_RC_PATH}" \
         >"${LINT_FILE}" 2>&1
     success=$?
 
