@@ -1,4 +1,5 @@
-[![Codeship Status for tesera/pygypsy](https://app.codeship.com/projects/79989040-748f-0134-c8fb-56e5180c42b3/status?branch=master)](https://app.codeship.com/projects/179242)
+# Build Status
+[ ![Codeship Status for tesera/gypsy](https://app.codeship.com/projects/79989040-748f-0134-c8fb-56e5180c42b3/status?branch=dev)](https://app.codeship.com/projects/179242)
 [![Documentation Status](https://readthedocs.org/projects/pygypsy/badge/?version=latest)](http://pygypsy.readthedocs.io/en/latest/?badge=latest)
 
 # pygypsy
