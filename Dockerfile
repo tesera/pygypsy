@@ -22,4 +22,4 @@ RUN pip install virtualenv \
 COPY . /opt/pygypsy
 
 RUN . venv/bin/activate \
-    && pip install -e .[test,lint,docs]
+    && pip install -e .[test,lint,docs,dev]
