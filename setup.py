@@ -1,3 +1,4 @@
+import versioneer
 from codecs import open as codecs_open
 from setuptools import setup, find_packages, Extension
 
@@ -20,7 +21,8 @@ extensions = [
 
 
 setup(name='pygypsy',
-      version='0.0.1',
+      version=versioneer.get_version(),
+      cmdclass=versioneer.get_cmdclass(),
       description=u"Forestry Growth and Yield Projection System",
       long_description=LONG_DESCRIPTION,
       classifiers=[],
@@ -29,7 +31,7 @@ setup(name='pygypsy',
       author_email='julianno.sambatti@tesera.com',
       url='',
       license='',
-      packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
+      packages=find_packages(exclude=['tests']),
       ext_modules=cythonize(extensions),
       zip_safe=False,
       include_package_data=True,
@@ -53,6 +55,7 @@ setup(name='pygypsy',
               'git-pylint-commit-hook==2.1.1',
               'Cython==0.25.1',
               'configparser==3.5.0', # compat for git-pylint-commit-hook
+              'versioneer==0.17',
           ],
           'analysis': [
               'jupyter>=1.0.0',
