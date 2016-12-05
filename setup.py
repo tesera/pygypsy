@@ -56,6 +56,7 @@ setup(name='pygypsy',
               'Cython==0.25.1',
               'configparser==3.5.0', # compat for git-pylint-commit-hook
               'versioneer==0.17',
+              'twine>=1.8.1',
           ],
           'analysis': [
               'jupyter>=1.0.0',

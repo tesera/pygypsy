@@ -12,3 +12,7 @@
   - name: build
     service: pygypsy
     command: bash ./bin/build.sh
+- service: pygypsy
+  name: pypi-deploy
+  tag: "^(master|dev)$"
+  command: bash ./bin/pypi-deploy.sh
