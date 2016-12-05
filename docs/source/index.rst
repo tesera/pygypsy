@@ -11,7 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   gypsy
+   pygypsy
 
 
 Indices and tables
