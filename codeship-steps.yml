@@ -12,7 +12,12 @@
   - name: build
     service: pygypsy
     command: bash ./bin/build.sh
-- service: pygypsy
-  name: pypi-deploy
-  tag: "^(master|dev)$"
-  command: bash ./bin/pypi-deploy.sh
+- type: parallel
+  steps:
+  - service: pygypsy
+    name: pypi-deploy
+    tag: "^(master|dev)$"
+    command: bash ./bin/pypi-deploy.sh
+  - service: pygypsy
+    name: coveralls
+    command: bash ./bin/run-coveralls.sh
