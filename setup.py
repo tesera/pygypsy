@@ -1,21 +1,20 @@
-import versioneer
 from codecs import open as codecs_open
 from setuptools import setup, find_packages, Extension
-
+from Cython.Build import cythonize
 try:
     import numpy as np
 except ImportError:
     msg = 'Numpy must be installed to install pygypsy'
     raise ImportError(msg)
 
-from Cython.Build import cythonize
+import versioneer
+
 
 with codecs_open('README.md', encoding='utf-8') as f:
     LONG_DESCRIPTION = f.read()
 
-
 extensions = [
-    Extension("pygypsy.basal_area_increment", ["pygypsy/basal_area_increment.pyx"],
+    Extension('pygypsy.basal_area_increment', ['pygypsy/basal_area_increment.pyx'],
               include_dirs = [np.get_include()]),
 ]
 
@@ -23,12 +22,14 @@ extensions = [
 setup(name='pygypsy',
       version=versioneer.get_version(),
       cmdclass=versioneer.get_cmdclass(),
-      description=u"Forestry Growth and Yield Projection System",
+      description=u'Forestry Growth and Yield Projection System',
       long_description=LONG_DESCRIPTION,
       classifiers=[],
       keywords='',
-      author=u"Julianno Sambatti, Jotham Apaloo, Ian Moss",
+      author=u'Julianno Sambatti, Jotham Apaloo, Ian Moss',
       author_email='julianno.sambatti@tesera.com',
+      maintainer=u'Jotham Apaloo',
+      maintainer_email=u'jotham.apaloo@tesera.com',
       url='',
       license='',
       packages=find_packages(exclude=['tests']),
@@ -64,8 +65,8 @@ setup(name='pygypsy',
               'snakeviz>=0.4.1',
           ],
       },
-      entry_points="""
+      entry_points='''
       [console_scripts]
       pygypsy=pygypsy.scripts.cli:cli
-      """
+      '''
      )
