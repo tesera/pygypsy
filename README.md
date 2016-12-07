@@ -26,12 +26,6 @@ pygypsy is a python implementation of the forest
 Its main usage mode is a command line interface; it also has a an API for
 programmetric use.
 
-## Getting help
-
-If you are interesting in using or developing pygypsy and would like
-assistance, open an issue on the
-[issue tracker](https://github.com/tesera/pygypsy/issues).
-
 ## Installation
 
 pygypsy is available in the following package repositories
@@ -60,16 +54,16 @@ to avoid clobbering system or other projects' python pacakges.
 
 pygypsy provides a command line interface for convenient usage
 
-Prepared your stand data:
+Prepared your plot data:
 
 ```
-gyspy prep your_stand_data.csv
+gyspy prep your_plot_data.csv
 ```
 
 Run pygypsy on the prepped data from the `pygypsy prep` command:
 
 ```
-gyspy simulate your_stand_data.csv.prepped
+gyspy simulate your_plot_data.csv.prepped
 ```
 
 The complete documentation can be accessed with `pygypsy -h`, documentation for
@@ -87,9 +81,15 @@ Usage: pygypsy [OPTIONS] COMMAND [ARGS]...
     -h, --help     Show this message and exit.
 
   Commands:
-    prep      Prepare stand data for use in pygypsy...
+    prep      Prepare plot data for use in pygypsy...
     simulate  Run pygypsy simulation
 ```
+
+## Getting help
+
+If you are interesting in using or developing pygypsy and would like
+assistance, create an issue on the
+[issue tracker](https://github.com/tesera/pygypsy/issues).
 
 ## Development
 ### Getting Started
@@ -173,7 +173,7 @@ are actively working. This can be done as follows
 docker-compose run test bash # only run this if you are using docker
 
 py.test -s -v tests/test_data_prep.py # test one file
-py.test -s -v tests/test_data_prep.py::test_prep_standtable # test one function
+py.test -s -v tests/test_data_prep.py::test_prep_plottable # test one function
 ```
 
 ### Linting
@@ -232,7 +232,7 @@ There are many strategies suitable for profiling.
 
 A good initial strategy is to run `cProfile` on a script as follows:
 
-    python -m cProfile -s cumtime  "$(which pygypsy)" simulate data/raw_standtable.csv.prepped > profile.txt
+    python -m cProfile -s cumtime  "$(which pygypsy)" simulate data/raw_plottable.csv.prepped > profile.txt
 
 It is very easy to be misled by the profiler, cProfile has 2x overhead, and
 there a multitude of possible solutions to performance issues from internal
