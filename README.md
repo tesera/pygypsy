@@ -3,6 +3,8 @@
 [![Documentation Status](https://readthedocs.org/projects/pygypsy/badge/?version=latest)](http://pygypsy.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/pygypsy.svg)](https://badge.fury.io/py/pygypsy)
 [![Coverage Status](https://coveralls.io/repos/github/tesera/pygypsy/badge.svg?branch=dev)](https://coveralls.io/github/tesera/pygypsy?branch=dev)
+[![PyPI License](https://img.shields.io/pypi/l/pygypsy.svg)]()
+[![PyPI Python Versions](https://img.shields.io/pypi/pyversions/pygypsy.svg)]()
 
 # pygypsy
 
@@ -12,7 +14,9 @@ for Western Canada Forests.
 
 ## Getting help
 
-If you are interesting in using or developing pygypsy, and need help, open an issue on the [issue tracker](https://github.com/tesera/pygypsy/issues).
+If you are interesting in using or developing pygypsy and would like
+assistance, open an issue on the
+[issue tracker](https://github.com/tesera/pygypsy/issues).
 
 ## Usage
 
