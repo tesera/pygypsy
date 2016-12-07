@@ -2,22 +2,18 @@
 [![Coverage Status](https://coveralls.io/repos/github/tesera/pygypsy/badge.svg?branch=dev)](https://coveralls.io/github/tesera/pygypsy?branch=dev)
 [![Documentation Status](https://readthedocs.org/projects/pygypsy/badge/?version=latest)](http://pygypsy.readthedocs.io/en/latest/?badge=latest)
 
-# Builds
 ## Conda-forge
-
 Linux: [![Circle CI](https://circleci.com/gh/conda-forge/pygypsy-feedstock.svg?style=shield)](https://circleci.com/gh/conda-forge/pygypsy-feedstock)
 OSX: [![TravisCI](https://travis-ci.org/conda-forge/pygypsy-feedstock.svg?branch=master)](https://travis-ci.org/conda-forge/pygypsy-feedstock)
 Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/conda-forge/pygypsy-feedstock?svg=True)](https://ci.appveyor.com/project/conda-forge/pygypsy-feedstock/branch/master)
+Version: [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pygypsy/badges/version.svg)](https://anaconda.org/conda-forge/pygypsy)
+Downloads: [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pygypsy/badges/downloads.svg)](https://anaconda.org/conda-forge/pygypsy)
 
-# PYPI
+## PyPI
 [![PyPI version](https://badge.fury.io/py/pygypsy.svg)](https://badge.fury.io/py/pygypsy)
 [![PyPI License](https://img.shields.io/pypi/l/pygypsy.svg)]()
 [![PyPI Python Versions](https://img.shields.io/pypi/pyversions/pygypsy.svg)]()
 
-Current release info
-====================
-Version: [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pygypsy/badges/version.svg)](https://anaconda.org/conda-forge/pygypsy)
-Downloads: [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pygypsy/badges/downloads.svg)](https://anaconda.org/conda-forge/pygypsy)
 
 # pygypsy
 
