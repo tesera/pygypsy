@@ -40,7 +40,7 @@ pip install pygypsy
 
 ```
 conda config --add channels conda-forge
-conda install gypsy
+conda install pygypsy
 ```
 
 Conda is the recommended environment for using gypsy. Installation from PyPI
