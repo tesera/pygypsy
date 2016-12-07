@@ -5,23 +5,24 @@
 
 **Conda-forge**
 
-Linux: [![Circle CI](https://circleci.com/gh/conda-forge/pygypsy-feedstock.svg?style=shield)](https://circleci.com/gh/conda-forge/pygypsy-feedstock)
-OSX: [![TravisCI](https://travis-ci.org/conda-forge/pygypsy-feedstock.svg?branch=master)](https://travis-ci.org/conda-forge/pygypsy-feedstock)
-Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/conda-forge/pygypsy-feedstock?svg=True)](https://ci.appveyor.com/project/conda-forge/pygypsy-feedstock/branch/master)
 Version: [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pygypsy/badges/version.svg)](https://anaconda.org/conda-forge/pygypsy)
 Downloads: [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pygypsy/badges/downloads.svg)](https://anaconda.org/conda-forge/pygypsy)
 
+Linux: [![Circle CI](https://circleci.com/gh/conda-forge/pygypsy-feedstock.svg?style=shield)](https://circleci.com/gh/conda-forge/pygypsy-feedstock)
+OSX: [![TravisCI](https://travis-ci.org/conda-forge/pygypsy-feedstock.svg?branch=master)](https://travis-ci.org/conda-forge/pygypsy-feedstock)
+Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/conda-forge/pygypsy-feedstock?svg=True)](https://ci.appveyor.com/project/conda-forge/pygypsy-feedstock/branch/master)
+
 **PyPI**
+
+[![PyPI](https://img.shields.io/pypi/dm/pygypsy.svg)]()
 [![PyPI version](https://badge.fury.io/py/pygypsy.svg)](https://badge.fury.io/py/pygypsy)
 [![PyPI Python Versions](https://img.shields.io/pypi/pyversions/pygypsy.svg)]()
-[![PyPI](https://img.shields.io/pypi/dm/pygypsy.svg)]()
 [![PyPI](https://img.shields.io/pypi/format/pygypsy.svg)]()
 
 # pygypsy
 
-pygypsy is a python implementation
-[Growth and Yield Projection SYstem](http://www1.agric.gov.ab.ca/$department/deptdocs.nsf/all/formain15784/$file/GYPSY-Natural-PostHarvestStands-Alberta-May21-2009.pdf?OpenElement)
-for Western Canada Forests.
+pygypsy is a python implementation of the forest
+[Growth and Yield Projection SYstem](http://www1.agric.gov.ab.ca/$department/deptdocs.nsf/all/formain15784/$file/GYPSY-Natural-PostHarvestStands-Alberta-May21-2009.pdf?OpenElement).
 
 ## Getting help
 
