@@ -23,123 +23,40 @@ Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/conda-f
 pygypsy is a python implementation of the forest
 [Growth and Yield Projection SYstem](http://www1.agric.gov.ab.ca/$department/deptdocs.nsf/all/formain15784/$file/GYPSY-Natural-PostHarvestStands-Alberta-May21-2009.pdf?OpenElement).
 
+Its main usage mode is a command line interface; it also has a an API for
+programmetric use.
+
 ## Getting help
 
 If you are interesting in using or developing pygypsy and would like
 assistance, open an issue on the
 [issue tracker](https://github.com/tesera/pygypsy/issues).
 
+## Installation
+
+pygypsy is available in the following package repositories
+
+1. PyPI
+
+```
+pip install pygypsy
+```
+
+2. conda-forge
+
+```
+conda config --add channels conda-forge
+conda install gypsy
+```
+
+Conda is the recommended environment for using gypsy. Installation from PyPI
+currently requires compilation of cython extensions and C code; on Linux and OSX this is generally not problematic.
+
+It is recommended to install in a
+[virtualenv](https://virtualenv.pypa.io/en/stable/userguide/) or [conda env](http://conda.pydata.org/docs/using/envs.html)
+to avoid clobbering system or other projects' python pacakges.
+
 ## Usage
-
-### Installation
-
-There are two supported options for installation of pygypsy:
-
-1. installation with pip inside of a [virtualenv](#virtualenv)
-2. use of a pygypsy [docker](#docker) image
-
-If an option you are familiar with is missing, please search for it in the
-issue tracker; if it is not there add a new issue if your preferred option.
-
-#### Build Dependencies
-
-First, install build dependencies:
-
-```
-pip install cython==0.25.1 numpy==1.11.2
-```
-
-Contributions to distribute wheels are welcome, so users will not be required
-to compile the C extensions.
-
-#### Quick Start
-
-You can get started right away by installing pygypsy as follows:
-
-```
-pip install git+ssh://git@github.com/tesera/pygypsy.git@dev # if you have ssh setup with github
-pip install git+https://github.com/tesera/pygypsy.git@dev # if you don't have ssh setup with github
-```
-
-However, maintainers may not be able to provide support for issues encountered
-using this method of installation as it does not isolate pygypsy from other
-python packages on the system.
-
-#### Virtualenv
-
-Virtual environments protect system-wide python packages from being clobbered
-by user packages and their dependencies, and vice versa. They also enable
-python projects on the same machine to easily use python2 **or** python3.
-
-If you are not familiar with virtualenv, see the
-[installation](https://virtualenv.pypa.io/en/stable/installation/) and
-[user guide](https://virtualenv.pypa.io/en/stable/userguide/) to get started.
-
-Once you have virtualenv installed on your system, create a project directory
-and virtualenv for your work with pygypsy.
-
-```
-mkdir pygypsy-project && cd pygypsy-project
-virtualenv venv
-. venv/bin/activate
-```
-
-Now you can install pygypsy. Note the `@dev` tag at the end - this installs the
-latest development version. To install the latest stable release, leave `@dev`
-out.
-
-```
-pip install git+ssh://git@github.com/tesera/pygypsy.git@dev # if you have ssh setup with github
-pip install git+https://github.com/tesera/pygypsy.git@dev # if you don't have ssh setup with github
-```
-
-Once the installation is finished, test that pygypsy runs inside the virtualenv.
-
-```
-pygypsy --help
-```
-
-The first run will be slow as matplotlib builds a font cache. Subsequent runs are faster.
-
-#### Docker
-
-Presently, pygypsy is not hosted on a docker image repository, so you will first
-have to clone this repository
-
-```
-git clone git@github.com:tesera/pygypsy.git
-```
-
-Then enter the cloned directory and build the pygypsy image as follows:
-
-```
-cd pygypsy
-docker build -t pygypsy .
-```
-
-Start a container using the pygypsy image and activate the virtual environment
-inside the container as follows:
-
-```
-docker run -t pygypsy -v /path/to/your/data/dir:/data -i /bin/bash
-. venv/bin/activate
-```
-
-That starts an isolated environment where pygypsy can be run. Note the `-v
-path/to/your/data/dir:/data`, which makes the folder `/path/to/your/data/dir`
-available in the docker image at the `/data` directory. This is required to run
-pygypsy in the container on data that you have on your local computer (the docker
-host). The paths should be absolute, not relative.
-
-Finally, test that pygypsy runs in the container:
-
-```
-root@de6cccb1a217:/opt/pygypsy# pygypsy --help
-```
-
-The first run will be slow as matplotlib builds a font cache. Subsequent runs are faster.
-
-### CLI
 
 pygypsy provides a command line interface for convenient usage
 
