@@ -54,36 +54,29 @@ to avoid clobbering system or other projects' python pacakges.
 
 pygypsy provides a command line interface for convenient usage
 
-Prepared your plot data:
 
-```
-gyspy prep your_plot_data.csv
-```
-
-Run pygypsy on the prepped data from the `pygypsy prep` command:
-
-```
-gyspy simulate your_plot_data.csv.prepped
-```
-
-The complete documentation can be accessed with `pygypsy -h`, documentation for
-subcommands is available via `pygypsy SUBCOMMAND -h`:
+The complete documentation can be accessed with `pygypsy -h`:
 
 ```
 Usage: pygypsy [OPTIONS] COMMAND [ARGS]...
 
   Growth and Yield Projection System
 
-  Data prep must be run before simulating
+  Note: 'prep' subcommand must be run before 'simulate'
 
   Options:
     -v, --verbose
-    -h, --help     Show this message and exit.
+    -o, --output-dir PATH
+    -h, --help             Show this message and exit.
 
   Commands:
-    prep      Prepare plot data for use in pygypsy...
-    simulate  Run pygypsy simulation
+    generate_config  Generate a configuration file Generates a...
+    plot             Create charts for all files in pygypsy...
+    prep             Prepare stand data for use in pygpysy...
+    simulate         Run pygypsy simulation
 ```
+
+Documentation for subcommands is available via `pygypsy SUBCOMMAND -h`:
 
 ## Getting help
 
