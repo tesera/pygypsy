@@ -388,3 +388,27 @@ jupyter notebook --notebook-dir notebooks # if not using docker
 Do note commit your data used in your analysis
 
 Notebooks are /not/ a replacement for unit tests! It is required to make suitable unit tests for the finding of an analysis before a pull request associated with an analysis will be merged.
+### Release Process
+-   Create a new branch - release-x.y.z from dev
+    -   x.y.z is the version increment using [semantic versioning](http://semver.org/), familiarize with
+        semantic versioning before doing a release
+    -   in short, x,y,z should be incrememnted for backwards incompatible public
+        api changes, backwards compatible public api changes, and backwards
+        compatible bug fixes
+-   Make sure all issues tagged with the release's milestone are closed or moved
+    to a future milestone
+-   Make sure dependencies listed in setup.py are up to date, including their
+    minimum versions
+-   Make sure tests are passing
+-   Update changelog with summary of changes since previous release
+    -   the command below can be used to get a list of changes since the previous
+        release; summarize and prepend
+    -   \`git log $(git tag -l | grep -E '\d(\\.\d){1,2}' | tail -n 1)&#x2026; &#x2013;oneline &#x2013;decorate &#x2013;reverse\`
+-   Open pull request with target of master
+-   When pull request is merged, create a release on github
+    -   when this is done, a build will be released to PYPI via the CI service
+-   Merge master back to dev
+
+Once the new release is on PyPI, the [conda-forge feedstock](https://github.com/conda-forge/pygypsy-feedstock) conda-forge release
+should be updated to build and deploy for conda. This can be done by bumping
+the version in the [meta.yaml](https://github.com/conda-forge/pygypsy-feedstock/blob/master/recipe/meta.yaml) file.

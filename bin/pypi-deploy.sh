@@ -4,5 +4,5 @@
 
 python setup.py sdist
 # upload to pypi, ignoring failures
-twine upload -u "${PYPI_USER}" -p "${PYPI_PASSWORD}" dist/* || :
+twine upload -u "${PYPI_USER}" -p "${PYPI_PASSWORD}" dist/*
 
