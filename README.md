@@ -191,8 +191,9 @@ ln -s "$(pwd)/git-hooks/pre-commit.sh" .git/hooks/pre-commit
 ```
 ### Development Process Overview
 
-- Fork the repository
-- Create a branch in your fork
+- Fork the repository (if you are not in the Tesera organization)
+- Clone to your local machine
+- Create a branch
 - Make a change: update code (and docs, tests, and README if appropriate)
   - or update tests
   - or update and build docs
@@ -216,8 +217,7 @@ Note - the base directory is mounted to a volume in the container -
 /opt/pygypsy. This way you do not need to rebuild the image every time you
 change a file or requirement.
 
-Start the dev container and setup a venv; the venv will be persisted to your
-local storage but will probably not run on your system!
+Start the dev container and setup a venv
 
 ```
 docker-compose run dev
@@ -303,8 +303,6 @@ following quality control items:
 - debug breakpoints
 - linting
 
-Once the test suite has been sped it, it will also be run as a pre-commit hook.
-
 You have to symlink from the commit hooks provided to your local git hooks
 directory as described in [Getting Started](#getting-started):
 
@@ -388,6 +386,38 @@ jupyter notebook --notebook-dir notebooks # if not using docker
 Do note commit your data used in your analysis
 
 Notebooks are /not/ a replacement for unit tests! It is required to make suitable unit tests for the finding of an analysis before a pull request associated with an analysis will be merged.
+### Environment variables in `env/dev.env`
+
+The `env/dev.env` file is not required for most developers. It is required to
+deploy on PyPI, update coveralls, and to run the S3 tests. PyPI and coveralls
+should never be used locall - they should only be used from the continuous
+integration service. If you would like to run the tests for data on S3, you can
+create a `env/dev.env` file in your clone with the appropriate variables. Make
+sure not to commit it to the repository!
+
+```
+GYPSY_BUCKET=secrets
+AWS_ACCESS_KEY_ID=secrets
+AWS_SECRET_ACCESS_KEY=secrets
+AWS_REGION=secrets
+PYPI_USER=secrets
+PYPI_PASSWORD=secrets
+COVERALLS_REPO_TOKEN=secrets
+```
+
+### Security Considerations
+
+This repository is open - do not commit sensitive data if you do not want it to
+become publicly accessible!
+
+The project continuious integration service authenticates against AWS, PyPI,
+and the coveralls service.
+
+**Credentials for those services are limited to this project and they are
+encrypted. However,they are available unencrypted in the continuous
+integration environment; maintainers be warned!**
+
+
 ### Release Process
 -   Create a new branch - release-x.y.z from dev
     -   x.y.z is the version increment using [semantic versioning](http://semver.org/), familiarize with
