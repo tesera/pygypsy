@@ -403,7 +403,7 @@ Notebooks are /not/ a replacement for unit tests! It is required to make suitabl
 -   Update changelog with summary of changes since previous release
     -   the command below can be used to get a list of changes since the previous
         release; summarize and prepend
-    -   \`git log $(git tag -l | grep -E '\d(\\.\d){1,2}' | tail -n 1)&#x2026; &#x2013;oneline &#x2013;decorate &#x2013;reverse\`
+    -   \`git log $(git tag -l | grep -E '\d(\.\d){1,2}' | tail -n 1)&#x2026; &#x2013;oneline &#x2013;decorate &#x2013;reverse\`
 -   Open pull request with target of master
 -   When pull request is merged, create a release on github
     -   when this is done, a build will be released to PYPI via the CI service
