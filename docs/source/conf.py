@@ -14,6 +14,10 @@
 
 import sys
 import os
+import datetime
+
+# Get package directory on path in order to use version module
+sys.path.insert(0, os.path.abspath('../..'))
 from pygypsy._version import get_versions
 
 pygypsy_version = get_versions()['version']
@@ -52,7 +56,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'pygypsy'
-copyright = u'2016, Tesera Systems Inc'
+copyright = '%s, Tesera Systems Inc' % datetime.datetime.utcnow().year
 author = u'Julianno Sambatti, Jotham Apaloo, Ian Moss'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -116,10 +120,17 @@ todo_include_todos = False
 # a list of builtin themes.
 html_theme = 'alabaster'
 
+
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#html_theme_options = {}
+html_theme_options = {
+    'description': 'Forestry Growth and Yield Projection SYstem',
+    'github_user': 'tesera',
+    'github_repo': 'pygypsy',
+    'github_banner': True,
+}
+
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
@@ -133,7 +144,8 @@ html_theme = 'alabaster'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-#html_logo = None
+html_logo = '_source/logo.png'
+
 
 # The name of an image file (relative to this directory) to use as a favicon of
 # the docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
