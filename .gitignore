@@ -7,7 +7,6 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-env/
 build/
 develop-eggs/
 dist/
@@ -54,4 +53,29 @@ target/
 
 # Virtualenv
 venv/
+
+# deployment
 *dev.env
+codeship.aes
+
+# temporary files
+*.swo
+*.swp
+*.tmp
+
+# working data
+*.doc*
+*.ppt*
+*.xls*
+
+# docker
+/.bash_history
+
+# ephemeral test data
+gypsy-output/
+/data/raw_standtable.csv.prepped
+/lint-output.txt
+data/figures/
+/data/private/
+private-data/
+*.ipynb_checkpoints/

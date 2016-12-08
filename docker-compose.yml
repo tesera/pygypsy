@@ -1,20 +1,48 @@
 dev:
-  container_name: gypsy
+  container_name: pygypsy
   build: .
-  env_file: env/dev.env
+  env_file: ./env/dev.env
   volumes:
-    - ./:/opt/gypsy
-  command: ["/bin/bash", "--rcfile", "/opt/gypsy/venv/bin/activate"]
+    - ./:/opt/pygypsy
+  command: ["/bin/bash", "--rcfile", "/opt/pygypsy/venv/bin/activate"]
 test:
-  container_name: gypsy
+  container_name: pygypsy
   build: .
-  env_file: env/dev.env
+  env_file: ./env/dev.env
   volumes:
-    - ./:/opt/gypsy
+    - ./:/opt/pygypsy
   command: 'bash bin/run_tests.sh'
 docs:
-  container_name: gypsy
+  container_name: pygypsy
   build: .
   volumes:
-    - ./:/opt/gypsy
+    - ./:/opt/pygypsy
   command: 'bash bin/make_docs.sh'
+lint:
+  container_name: pygypsy
+  build: .
+  volumes:
+    - ./:/opt/pygypsy
+  command: 'bash bin/lint.sh'
+pre-commit:
+  container_name: pygypsy
+  build: .
+  volumes:
+    - ./:/opt/pygypsy
+  command: 'bash bin/pre-commit.sh'
+notebook:
+  container_name: pygypsy
+  build: .
+  volumes:
+    - ./:/opt/pygypsy
+  ports:
+    - '8888:8888'
+  command: 'bash bin/run-notebook.sh'
+snakeviz:
+  container_name: pygypsy
+  build: .
+  volumes:
+    - ./:/opt/pygypsy
+  ports:
+    - '8889:8889'
+  entrypoint: 'bash bin/run-snakeviz.sh'

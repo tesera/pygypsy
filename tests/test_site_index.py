@@ -1,6 +1,6 @@
 import pytest
 
-from gypsy.site_index import (
+from pygypsy.site_index import (
     get_site_indices_from_dominant_species,
     _get_temporary_dominant_species,
     _estimate_dominant_species_site_index,
@@ -22,7 +22,7 @@ def test_get_site_indices_from_dominant_species():
 
 def test_get_site_indices_from_dominant_species_raises():
     with pytest.raises(ValueError) as err:
-#        get_site_indices_from_dominant_species('nosuchspecies', 1)
+        get_site_indices_from_dominant_species('nosuchspecies', 1)
 
     assert str(err.value) == ('No function is available to calculate '
                               'site index from species nosuchspecies')

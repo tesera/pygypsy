@@ -1,0 +1,23 @@
+- type: parallel
+  steps:
+  - name: test
+    service: pygypsy
+    command: bash ./bin/run_tests.sh
+  - name: lint
+    service: pygypsy
+    command: bash ./bin/lint.sh
+  - name: docs
+    service: pygypsy
+    command: bash ./bin/make_docs.sh
+  - name: build
+    service: pygypsy
+    command: bash ./bin/build.sh
+- type: parallel
+  steps:
+  - service: pygypsy
+    name: pypi-deploy
+    tag: "^\\d(\\.\\d){1,2}$"
+    command: bash ./bin/pypi-deploy.sh
+  - service: pygypsy
+    name: coveralls
+    command: bash ./bin/run-coveralls.sh

@@ -1,0 +1,6 @@
+pygypsy:
+  build:
+    image: pygypsy
+    dockerfile_path: Dockerfile
+  cached: true
+  encrypted_env_file: env/dev.env.encrypted

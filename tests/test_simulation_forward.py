@@ -1,38 +1,39 @@
 import os
 import pytest
 import pandas as pd
+from glob import glob
+import numpy as np
 
-from gypsy import DATA_DIR
-from gypsy.forward_simulation import simulate_forwards_df
-from gypsy.GypsyDataPrep import dataPrepGypsy
+from pygypsy.forward_simulation import simulate_forwards_df
 
-
-#def test_forward_simulation():
-#    data_file_name = '1841096_raw.csv'
-#    plot_data = pd.read_csv(os.path.join(DATA_DIR, data_file_name))
-#
-#    fplotSim = dataPrepGypsy(plot_data)[0]
-#    inputDF = pd.DataFrame(fplotSim)
-#    inputDF = inputDF.transpose()
-#    
-#    inputDF.to_csv (os.path.join(DATA_DIR, 'output', '1841096.csv' ))
-    
+from conftest import DATA_DIR
 
 
-    #assert simulate_forwards_df(inputDF, simulation_choice='no')
-    #assert simulate_forwards_df(inputDF, simulation_choice='yes')
+TEST_FILES = glob(os.path.join(DATA_DIR, 'forward_simulation_files', '*.csv'))
+TEST_FILES = [(item) for item in TEST_FILES]
+CHART_FILES = glob(os.path.join(DATA_DIR, 'output', 'comparisons*.csv'))
+CHART_FILES = [(item) for item in CHART_FILES]
 
-test_files = os.listdir(os.path.join(DATA_DIR, 'forward_simulation_files'))
-test_files = [(item) for item in test_files]
 
-@pytest.mark.parametrize("test_file", test_files)
+@pytest.mark.parametrize("test_file", TEST_FILES)
 def test_compare_forward_simulation(test_file):
-    data_file_name = test_file
-    inputDF = pd.read_csv(os.path.join(DATA_DIR, 'forward_simulation_files',
-                                       data_file_name))
+    input_df = pd.read_csv(test_file)
+    expected_data_path = os.path.join(
+        DATA_DIR, 'output',
+        'comparisons_{}'.format(os.path.basename(test_file))
+    )
 
-    result = simulate_forwards_df(inputDF, simulation_choice='no')
-    assert type(result) == pd.DataFrame
+    plot_id = str(int(input_df.loc[0, 'PlotID']))
 
-    result.to_csv(os.path.join(DATA_DIR, 'output',
-                               'comparisons_{}'.format(test_file)))
+    result = simulate_forwards_df(input_df, simulation_choice='yes')[plot_id]
+    expected = pd.read_csv(expected_data_path, index_col=0)
+
+    assert isinstance(result, pd.DataFrame)
+    np.testing.assert_allclose(
+        expected.values, result.values,
+        rtol=0.01, atol=0.1,
+        equal_nan=True
+    )
+
+    # regenerate output files
+    # result.to_csv(expected_data_path)
