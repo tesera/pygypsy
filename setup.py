@@ -10,11 +10,12 @@ except ImportError:
 import versioneer
 
 
-with codecs_open('README.md', encoding='utf-8') as f:
+with codecs_open('README.rst', encoding='utf-8') as f:
     LONG_DESCRIPTION = f.read()
 
 extensions = [
-    Extension('pygypsy.basal_area_increment', ['pygypsy/basal_area_increment.pyx'],
+    Extension('pygypsy.basal_area_increment',
+              ['pygypsy/basal_area_increment.pyx'],
               include_dirs = [np.get_include()]),
 ]
 
