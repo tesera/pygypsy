@@ -6,18 +6,26 @@
 Welcome to pygypsy's documentation!
 ===================================
 
-Contents:
+Guide
+-----
 
 .. toctree::
    :maxdepth: 2
 
-   pygypsy
+   usage
+
+API
+---
+
+.. toctree::
+   :maxdepth: 3
+
+   modules
 
 
-Indices and tables
-==================
+Development
+-----------
+.. toctree::
+   :maxdepth: 1
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+   contributing

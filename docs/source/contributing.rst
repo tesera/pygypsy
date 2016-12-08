@@ -1,6 +1,3 @@
-Contributing
-------------
-
 Getting Started
 ~~~~~~~~~~~~~~~
 
@@ -232,12 +229,14 @@ with ``docker-compose run dev``.
 General guidelines
 ^^^^^^^^^^^^^^^^^^
 
-Do note commit your data used in your analysis
+Do not commit your data used in your analysis
 
 Notebooks are /not/ a replacement for unit tests! It is required to make
 suitable unit tests for the finding of an analysis before a pull request
-associated with an analysis will be merged. ### Environment variables in
-``env/dev.env``
+associated with an analysis will be merged.
+
+Environment variables in ``env/dev.env``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``env/dev.env`` file is not required for most developers. It is
 required to deploy on PyPI, update coveralls, and to run the S3 tests.
