@@ -13,11 +13,13 @@ Status| |PyPI License|
 pygypsy
 =======
 
-pygypsy is a python implementation of the forest `Growth and Yield Projection
-SYstem [HuangEtAl2009]_.
+pygypsy is a python implementation of the forest 'Growth and Yield Projection
+SYstem' HuangEtAl2009_.
 
 Its main usage mode is a command line interface; it also has a an API for
-programmetric use.
+programmatic use.
+
+.. [HuangEtAll2009] Huang, Meng, Yang (2009). A Growth and Yield Projection System for Natural and Post-Harvest Stands in Alberta. Retrieved from http://www1.agric.gov.ab.ca/$department/deptdocs.nsf/all/formain15784/$file/GYPSY-Natural-PostHarvestStands-Alberta-May21-2009.pdf?OpenElement
 
 Installation
 ------------
@@ -115,5 +117,3 @@ If you would like to contribute to pygypsy, start by reviewing the `contributing
    :target: https://img.shields.io/pypi/pyversions/pygypsy.svg
 .. |PyPI Format| image:: https://img.shields.io/pypi/format/pygypsy.svg
    :target: https://img.shields.io/pypi/format/pygypsy.svg
-
-.. [HuangEtAll2009] Huang, Meng, Yang (2009). A Growth and Yield Projection System for Natural and Post-Harvest Stands in Alberta. Retrieved from http://www1.agric.gov.ab.ca/$department/deptdocs.nsf/all/formain15784/$file/GYPSY-Natural-PostHarvestStands-Alberta-May21-2009.pdf?OpenElement
