@@ -1,10 +1,12 @@
-Master: |Codeship Status for tesera/gypsy master| Dev: |Codeship Status for tesera/gypsy dev| |Coverage Status| |Documentation
-Status| |PyPI License| |DOI|
+Master: |Codeship Status for tesera/gypsy master| Dev: |Codeship Status for tesera/gypsy dev|
+
+|Coverage Status| |Documentation Status| |PyPI License| |DOI|
 
 **Conda-forge**
 
-|Anaconda-Server Version| |Anaconda-Server Downloads| Linux: |Circle CI| OSX:
-|TravisCI| Windows: |AppVeyor|
+|Anaconda-Server Version| |Anaconda-Server Downloads|
+
+Linux: |Circle CI| OSX: |TravisCI| Windows: |AppVeyor|
 
 **PyPI**
 
