@@ -17,21 +17,19 @@ Setup the commit hooks
 Development Process Overview
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Fork the repository (if you are not in the Tesera organization)
--  Clone to your local machine
+-  Fork the repository
+-  Clone your fork to your development machine
 -  Create a branch
--  Make a change: update code (and docs, tests, and README if
+-  Make a change: update code, update docs, update tests, and update README if
    appropriate)
--  or update tests
--  or update and build docs
--  or update README
 -  Run the `tests <#tests>`__, `linter <#linting>`__, and
    `build <#cython-and-compiling-extensions>`__ the package
 -  Submit a pull request against the dev branch of the upstream
    repository (the pull request will be against dev by default)
 -  Select a peer reviewer and schedule a review
--  Conduct the review. Please keep comments in the pull request. An
-   outline of a good review procedure is given
+-  Conduct the review.
+   - Please record as much as possible in the pull request using comments and review feature on github.
+   - An outline of a good review procedure is given
    `here <http://blog.fogcreek.com/increase-defect-detection-with-our-code-review-checklist-example/>`__.
 -  Revise pull request if necessary and continue reviewing-revising loop
    until reviewer(s) are satisfied.
@@ -110,17 +108,16 @@ Run the linter as follows
 If you are familiar with pylint, you can use the ``pylint`` command
 directly.
 
-All new code must satisfy the linting standards.
+All new code should satisfy the linting standards!
 
 Documentation
 ~~~~~~~~~~~~~
 
-Documentation is built automatically from docstrings
+Documentation is built automatically from docstrings and hosted at |pygypsy docs| and administration is done at |read the docs|.
 
 See http://www.sphinx-doc.org/en/stable/rest.html for the syntax
 
-If you change function arguments, or the docstrings are otherwise
-updated, you should rebuild the docs as follows:
+You can build the docs locally as follows:
 
 ::
 
@@ -299,6 +296,7 @@ Release Process
       service
 
 -  Merge master back to dev
+- In |read the docs|, activate and build the documentation for the release
 
 Once the new release is on PyPI, the `conda-forge
 feedstock <https://github.com/conda-forge/pygypsy-feedstock>`__
@@ -306,3 +304,6 @@ conda-forge release should be updated to build and deploy for conda.
 This can be done by bumping the version in the
 `meta.yaml <https://github.com/conda-forge/pygypsy-feedstock/blob/master/recipe/meta.yaml>`__
 file.
+
+.. |pygypsy docs| replace:: `pygypsy docs <https://pygypsy.readthedocs.io/en/latest>`__
+.. |read the docs| replace:: `Read The Docs <http://readthedocs.org/>`__

@@ -81,13 +81,21 @@ Getting help
 ------------
 
 If you are interesting in using or developing pygypsy and would like
-assistance, create an issue on the `issue
-tracker <https://github.com/tesera/pygypsy/issues>`__.
+assistance:
+
+1. Check the |pygypsy docs|
+2. Check the |pygypsy issue tracker|
+3. Open a |new pygypsy issue|
 
 Contributing
 ------------
 
-If you would like to contribute to pygypsy, start by reviewing the `contributing guide <https://github.com/tesera/pygypsy/blob/dev/docs/source/contributing.rst>`__.
+If you would like to contribute to pygypsy, start by reviewing the `contributing guide <https://github.com/tesera/pygypsy/blob/dev/docs/source/contributing.rst>`__. If you need help getting started, see `Getting help`__.
+
+
+.. |pygypsy issue tracker| replace:: `pygypsy issue tracker <https://github.com/tesera/pygypsy/issues>`__
+.. |new pygypsy issue| replace:: `new pygypsy issue <https://github.com/tesera/pygypsy/issues/new>`__
+.. |pygypsy docs| replace:: `pygypsy docs <https://pygypsy.readthedocs.io/en/latest>`__
 
 .. |Codeship Status for tesera/gypsy master| image:: https://app.codeship.com/projects/79989040-748f-0134-c8fb-56e5180c42b3/status?branch=master
    :target: https://app.codeship.com/projects/179242
