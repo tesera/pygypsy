@@ -297,6 +297,7 @@ Release Process
 
 -  Merge master back to dev
 - In |read the docs|, activate and build the documentation for the release
+- Publish the pygypsy release on `zenodo <https://zenodo.org/>`__ as described `here https://guides.github.com/activities/citable-code/>`__
 
 Once the new release is on PyPI, the `conda-forge
 feedstock <https://github.com/conda-forge/pygypsy-feedstock>`__
