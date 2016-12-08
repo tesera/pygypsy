@@ -12,12 +12,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
-import os
 import datetime
 
-# Get package directory on path in order to use version module
-sys.path.insert(0, os.path.abspath('../..'))
 from pygypsy._version import get_versions
 
 pygypsy_version = get_versions()['version']
