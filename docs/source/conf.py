@@ -16,6 +16,14 @@ import sys
 import os
 import datetime
 
+## Mock pygpsy modules that require c extensions
+import mock
+
+MOCK_MODULES = ['numpy', 'pandas', 'matplotlib', 'matplotlib.pyplot',
+                'gypsy.basal_area_increment']
+for mod_name in MOCK_MODULES:
+    sys.modules[mod_name] = mock.Mock()
+
 # Get package directory on path in order to use version module
 sys.path.insert(0, os.path.abspath('../..'))
 from pygypsy._version import get_versions
