@@ -1,4 +1,4 @@
-|Codeship Status for tesera/gypsy| |Coverage Status| |Documentation
+Master: |Codeship Status for tesera/gypsy master| Dev: |Codeship Status for tesera/gypsy dev| |Coverage Status| |Documentation
 Status| |PyPI License|
 
 **Conda-forge**
@@ -87,7 +87,9 @@ Contributing
 
 If you would like to contribute to pygypsy, start by reviewing the `contributing guide <https://github.com/tesera/pygypsy/blob/dev/docs/source/contributing.rst>`__.
 
-.. |Codeship Status for tesera/gypsy| image:: https://app.codeship.com/projects/79989040-748f-0134-c8fb-56e5180c42b3/status?branch=dev
+.. |Codeship Status for tesera/gypsy master| image:: https://app.codeship.com/projects/79989040-748f-0134-c8fb-56e5180c42b3/status?branch=master
+   :target: https://app.codeship.com/projects/179242
+.. |Codeship Status for tesera/gypsy dev| image:: https://app.codeship.com/projects/79989040-748f-0134-c8fb-56e5180c42b3/status?branch=dev
    :target: https://app.codeship.com/projects/179242
 .. |Coverage Status| image:: https://coveralls.io/repos/github/tesera/pygypsy/badge.svg?branch=dev
    :target: https://coveralls.io/github/tesera/pygypsy?branch=dev
