@@ -10,7 +10,6 @@ from conftest import DATA_DIR
 
 def test_version():
     runner = CliRunner()
-    output_dir = 'pygypsy-output'
 
     with runner.isolated_filesystem():
         result = runner.invoke(cli, ['--version'])

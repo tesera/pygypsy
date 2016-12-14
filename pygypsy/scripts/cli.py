@@ -40,7 +40,7 @@ LOG_FILE_NAME = 'pygypsy.log'
 @click.option('--output-dir', '-o', type=click.Path(exists=False),
               default='pygypsy-output')
 @click.pass_context
-def cli(ctx, verbose, output_dir):
+def cli(ctx, verbose, output_dir, version):  #pylint: disable=unused-argument
     """Growth and Yield Projection System
 
     Note: 'prep' subcommand must be run before 'simulate'
