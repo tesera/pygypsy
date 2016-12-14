@@ -151,7 +151,7 @@ def simulate_forwards_df(plot_df, simulation_choice='yes',
     for _, row in plot_df.iterrows():
         start = datetime.datetime.now()
         _log_loop_progress(_, n_rows)
-        plot_id = str(int(row['PlotID']))
+        plot_id = str(int(row['id_l1']))
 
         logger.info('Starting simulation for plot: %s', plot_id)
         SI_bh_Aw = row.at['SI_Aw']

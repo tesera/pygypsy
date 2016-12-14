@@ -35,9 +35,8 @@ setup(name='pygypsy',
       packages=find_packages(exclude=['tests']),
       ext_modules=cythonize(extensions),
       zip_safe=False,
-      include_package_data=True,
       package_data={
-          'pygypsy': ['scripts/config/*'],
+          'pygypsy': ['scripts/config/*', '*.c', '*.pyx'],
       },
       install_requires=[
           'click>=6.6',

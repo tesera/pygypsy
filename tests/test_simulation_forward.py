@@ -23,7 +23,7 @@ def test_compare_forward_simulation(test_file):
         'comparisons_{}'.format(os.path.basename(test_file))
     )
 
-    plot_id = str(int(input_df.loc[0, 'PlotID']))
+    plot_id = str(int(input_df.loc[0, 'id_l1']))
 
     result = simulate_forwards_df(input_df, simulation_choice='yes')[plot_id]
     expected = pd.read_csv(expected_data_path, index_col=0)
