@@ -16,7 +16,7 @@
   steps:
   - service: pygypsy
     name: pypi-deploy
-    tag: "^\\d(\\.\\d){1,2}$"
+    tag: "^\\d(\\.\\d{1,2}){1,2}$"
     command: bash ./bin/pypi-deploy.sh
   - service: pygypsy
     name: coveralls
