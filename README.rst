@@ -1,10 +1,12 @@
-Master: |Codeship Status for tesera/gypsy master| Dev: |Codeship Status for tesera/gypsy dev| |Coverage Status| |Documentation
-Status| |PyPI License|
+Master: |Codeship Status for tesera/gypsy master| Dev: |Codeship Status for tesera/gypsy dev|
+
+|Coverage Status| |Documentation Status| |PyPI License| |DOI|
 
 **Conda-forge**
 
-|Anaconda-Server Version| |Anaconda-Server Downloads| Linux: |Circle CI| OSX:
-|TravisCI| Windows: |AppVeyor|
+|Anaconda-Server Version| |Anaconda-Server Downloads|
+
+Linux: |Circle CI| OSX: |TravisCI| Windows: |AppVeyor|
 
 **PyPI**
 
@@ -125,3 +127,5 @@ If you would like to contribute to pygypsy, start by reviewing the `contributing
    :target: https://img.shields.io/pypi/pyversions/pygypsy.svg
 .. |PyPI Format| image:: https://img.shields.io/pypi/format/pygypsy.svg
    :target: https://img.shields.io/pypi/format/pygypsy.svg
+.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.197110.svg
+   :target: https://doi.org/10.5281/zenodo.197110

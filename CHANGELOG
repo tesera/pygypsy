@@ -13,6 +13,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 - n/a
 
+## [0.2.9] - 2016-12-14
+### Changed
+- The name of the column giving unique IDs for each plot is now preserved through the prep and simulate steps. It was previously changed from id_l1 to PlotID.
+
+### Fixed
+- The default configuration file was not included in the build because include_package_data was set to True and the config was specified in package_data instead of manifest.in.
+
 ## 0.2.8 - 2016-12-08
 ### Changed
 - Polished documentation and readme
