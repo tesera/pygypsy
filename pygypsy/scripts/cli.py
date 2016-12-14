@@ -24,6 +24,7 @@ from pygypsy.io import df_to_s3_bucket
 from pygypsy.data_prep import prep_standtable
 from pygypsy.log import setup_logging, CONSOLE_LOGGER_NAME
 from pygypsy.forward_simulation import simulate_forwards_df
+from pygypsy._version import get_versions
 import pygypsy.path as gyppath
 
 
@@ -33,7 +34,9 @@ LOG_FILE_NAME = 'pygypsy.log'
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
+@click.decorators.version_option(version=get_versions()['version'])
 @click.option('--verbose', '-v', is_flag=True)
+@click.option('--version', is_flag=True)
 @click.option('--output-dir', '-o', type=click.Path(exists=False),
               default='pygypsy-output')
 @click.pass_context
