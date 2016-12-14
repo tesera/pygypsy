@@ -22,4 +22,6 @@ RUN pip install virtualenv \
 COPY . /opt/pygypsy
 
 RUN . venv/bin/activate \
-    && pip install -e .[test,lint,docs,dev]
+    && python setup.py sdist \
+    && mv dist/* dist/pygypsy.tar.gz \
+    && pip install dist/pygypsy.tar.gz[test,lint,docs,dev]
