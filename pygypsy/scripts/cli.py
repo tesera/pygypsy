@@ -63,7 +63,8 @@ def cli(ctx, verbose, output_dir, version):  #pylint: disable=unused-argument
         bucket_conn = s3.Bucket(bucket_name)
     elif bucket_name is None and key_prefix is None:
         if not os.path.isdir(output_dir):
-            LOGGER.info('Output directory %s does not exist. Creating it.')
+            LOGGER.info('Output directory %s does not exist. Creating it.',
+                        output_dir)
             os.mkdir(output_dir)
     else:
         click.Abort('s3 output-dir: %s, is missing a prefix')
