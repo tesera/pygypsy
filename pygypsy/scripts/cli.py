@@ -117,14 +117,17 @@ def prep(ctx, standtable, config_file):
     bucket_conn = ctx.obj['s3-bucket-conn']
     output_dir = ctx.obj['output-dir']
     output_path = gyppath._join(output_dir, 'plot_table_prepped.csv')
+    index_label = 'id_l1'
+
     try:
         standtable_df = pd.read_csv(standtable)
         prepped_data = prep_standtable(standtable_df)
 
         if bucket_name:
-            df_to_s3_bucket(prepped_data, bucket_conn, output_path)
+            df_to_s3_bucket(prepped_data, bucket_conn, output_path,
+                            index_label=index_label)
         else:
-            prepped_data.to_csv(output_path)
+            prepped_data.to_csv(output_path, index_label=index_label)
 
     except:
         _copy_file(LOG_FILE_NAME,
@@ -150,6 +153,7 @@ def simulate(ctx, data, config_file):
     bucket_name = ctx.obj['s3-bucket-name']
     bucket_conn = ctx.obj['s3-bucket-conn']
     output_dir = ctx.obj['output-dir']
+    index_label = 'id_l1'
 
     try:
         standtable = pd.read_csv(data)
@@ -169,10 +173,11 @@ def simulate(ctx, data, config_file):
                                                  skipped_plots_filename)
             if bucket_name:
                 df_to_s3_bucket(standtable_young, bucket_conn,
-                                standtable_young_path)
+                                standtable_young_path, index_label=index_label)
             else:
                 standtable_young.to_csv(standtable_young_path,
-                                    columns=['PlotID'])
+                                        columns=['PlotID'],
+                                        idex_label=index_label)
         else:
             LOGGER.info('No plots less than %d years old present', min_age)
 
@@ -191,9 +196,10 @@ def simulate(ctx, data, config_file):
             filename = '%s.csv' % plot_id
             output_path = os.path.join(simulation_output_dir, filename)
             if bucket_name:
-                df_to_s3_bucket(data, bucket_conn, output_path)
+                df_to_s3_bucket(data, bucket_conn, output_path,
+                                index_label=index_label)
             else:
-                data.to_csv(output_path)
+                data.to_csv(output_path, index_label=index_label)
     except:
         _copy_file(LOG_FILE_NAME, gyppath._join(output_dir, 'simulate.log'),
                    bucket_conn)
@@ -201,7 +207,6 @@ def simulate(ctx, data, config_file):
 
     _copy_file(LOG_FILE_NAME, gyppath._join(output_dir, 'simulate.log'),
                bucket_conn)
-    
 
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
