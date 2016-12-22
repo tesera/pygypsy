@@ -179,6 +179,45 @@ def get_other_species_site_index(fplot, dominant_species,
     return fplot
 
 
+# TODO: split into 2 functions
+def reclassify_and_sort_species(species_abbrev_perc_tuples_list):
+    '''Classify all species in valid gypsy species and sort by percent
+
+    re-classification of species that are not considered in pygypsy as one of
+    the species considered in pygypsy (Aw, Sw, Sb, or Pl) and sort the species
+    to obtain the dominant species in the plot
+
+    '''
+    species_perc_dict = {'Aw':0, 'Pl':0, 'Sw':0, 'Sb':0}
+    for species_abbrev_perc_tup in species_abbrev_perc_tuples_list:
+        species_abbrev = species_abbrev_perc_tup[0]
+        species_perc = species_abbrev_perc_tup[1]
+
+        if species_abbrev in ['Aw', 'Pb']:
+            species_perc_dict['Aw'] = species_perc_dict['Aw'] + species_perc
+
+        elif species_abbrev in ['Sw', 'Fb', 'Fd']:
+            species_perc_dict['Sw'] = species_perc_dict['Sw'] + species_perc
+
+        elif species_abbrev == 'Pl':
+            species_perc_dict['Pl'] = species_perc_dict['Pl'] + species_perc
+
+        elif species_abbrev == 'Sb':
+            species_perc_dict['Sb'] = species_perc_dict['Sb'] + species_perc
+
+    sorted_species_perc_list = [(k, v) for v, k in sorted(
+        [(v, k) for k, v in species_perc_dict.items()]
+    )]
+    sorted_species_perc_list.reverse()
+
+    check_prop1 = sum(species_perc_dict.values())
+    if check_prop1 != 100:
+        raise ValueError(('Species proportions after grouping '
+                          'into 4 species is not correct: %s') % check_prop1)
+
+    return sorted_species_perc_list, species_perc_dict
+
+
 def prep_standtable(data):
     '''Define site_index of all other species given the dominant species
 
@@ -248,44 +287,8 @@ def prep_standtable(data):
         fplot = get_other_species_site_index(fplot, temp_dominant_species,
                                              site_index, site_index_x)
 
-        # TODO: does species perc dict need to be an argument? if so
-        # it should be immutable
-        def sort_species(species_perc_list, species_perc_dict={'Aw':0, 'Pl':0, 'Sw':0, 'Sb':0}):
-            '''
-            re-classification of species that are not considered in pygypsy as
-            one of the species considered in pygypsy (Aw, Sw, Sb, or Pl)
-            and sort the species to obtain the dominant species in the plot
-            '''
-            for species in species_perc_list:
-                if species[0] in ['Aw', 'Pb']:
-                    species_perc_dict['Aw'] = species_perc_dict['Aw'] + species[1]
-
-                elif species[0] in ['Sw', 'Fb', 'Fd']:
-                    species_perc_dict['Sw'] = species_perc_dict['Sw'] + species[1]
-
-                elif species[0] == 'Pl':
-                    species_perc_dict['Pl'] = species_perc_dict['Pl'] + species[1]
-
-                elif species[0] == 'Sb':
-                    species_perc_dict['Sb'] = species_perc_dict['Sb'] + species[1]
-
-            sorted_species_perc_list = [(k, v) for v, k in sorted(
-                [(v, k) for k, v in species_perc_dict.items()]
-            )]
-
-            sorted_species_perc_list.reverse()
-
-            check_prop1 = sum(species_perc_dict.values())
-            if check_prop1 != 100:
-                raise ValueError(
-                    ('Species proportions after grouping '
-                     'into 4 species is not correct: %s') % check_prop1
-                )
-
-            return sorted_species_perc_list, species_perc_dict
-
         outer_sorted_species_perc_list, outer_species_perc_dict = \
-            sort_species(species_abbrev_percent_list)
+            reclassify_and_sort_species(species_abbrev_percent_list)
 
         fplot['Aw']['PCT'] = outer_species_perc_dict['Aw']
         fplot['Pl']['PCT'] = outer_species_perc_dict['Pl']
