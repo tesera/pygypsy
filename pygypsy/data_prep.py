@@ -110,11 +110,40 @@ def get_species_site_indices(dominant_species, site_index):
     return site_index_white_aspen, site_index_pl, site_index_sw, site_index_sb
 
 
-def prep_standtable(data):
-    '''
-    define site_index of all other species given the dominant species
+def initsite_index_estimation(temporary_dominant_species):
+    # TODO: docstring
+    if temporary_dominant_species == 'Pb':
+        temporary_dominant_species = 'Aw'
+    elif temporary_dominant_species in ['Fd', 'Fb']:
+        temporary_dominant_species = 'Sw'
 
-    :param data:
+    return temporary_dominant_species
+
+
+def dominant_species_site_index_estim(dominant_species,
+                                      dominant_species_current_age,
+                                      dominant_species_current_height):
+    dom_si = ComputeGypsySiteIndex(
+        dominant_species,
+        dominant_species_current_height,
+        0,
+        dominant_species_current_age
+    )
+    site_index = dom_si[2]
+
+    return site_index
+
+
+def prep_standtable(data):
+    '''Define site_index of all other species given the dominant species
+
+    The site index is only defined for the dominant species in a plot. This
+    function uses the dominant species and its site index to estimate the site
+    indices for other species. It estimates other values and returns a data
+    frame of all of the values for all plots input.
+
+    :param data: input data frame
+
     '''
     n_rows = data.shape[0]
     for i, row in data.iterrows():
@@ -138,15 +167,7 @@ def prep_standtable(data):
 
         plot_id = row['id_l1']
 
-        temporary_dominant_species = row['SP1']
-
-        # TODO: pull these functions out of the outer function
-        def initsite_index_estimation(temporary_dominant_species):
-            if temporary_dominant_species == 'Pb':
-                temporary_dominant_species = 'Aw'
-            elif temporary_dominant_species in ['Fd', 'Fb']:
-                temporary_dominant_species = 'Sw'
-            return temporary_dominant_species
+        plot_dominant_species = row['SP1']
 
         # estimate site_index Dom from inventory Age and HD !!!!
         # Use this site_index to estimate the other species SIs
@@ -158,28 +179,14 @@ def prep_standtable(data):
         dominant_species_current_height = row['HD']
 
 
-        def dominant_species_site_index_estim(
-                temporary_dominant_species,
-                dominant_species_current_age,
-                dominant_species_current_height
-            ):
-            dom_si = ComputeGypsySiteIndex(
-                temporary_dominant_species,
-                dominant_species_current_height,
-                0,
-                dominant_species_current_age
-            )
-            site_index = dom_si[2]
-            return site_index
-
-
         site_index = dominant_species_site_index_estim(
-            temporary_dominant_species,
+            plot_dominant_species,
             dominant_species_current_age,
             dominant_species_current_height
         )
-        dominant_species = initsite_index_estimation(temporary_dominant_species)
-        site_index_x = get_species_site_indices(dominant_species, site_index)
+
+        temp_dominant_species = initsite_index_estimation(plot_dominant_species)
+        site_index_x = get_species_site_indices(temp_dominant_species, site_index)
 
         # TODO: this function uses variables from the enclosing scope
         # need to pass the variable into the function instead
@@ -191,25 +198,25 @@ def prep_standtable(data):
 
             :param site_index:
             """
-            if dominant_species == 'Aw':
+            if temp_dominant_species == 'Aw':
                 fplot['Aw']['SI'] = site_index
                 fplot['Pl']['SI'] = site_index_x[1]
                 fplot['Sw']['SI'] = site_index_x[2]
                 fplot['Sb']['SI'] = site_index_x[3]
 
-            elif dominant_species == 'Sw':
+            elif temp_dominant_species == 'Sw':
                 fplot['Aw']['SI'] = site_index_x[0]
                 fplot['Pl']['SI'] = site_index_x[1]
                 fplot['Sw']['SI'] = site_index
                 fplot['Sb']['SI'] = site_index_x[3]
 
-            elif dominant_species == 'Pl':
+            elif temp_dominant_species == 'Pl':
                 fplot['Aw']['SI'] = site_index_x[0]
                 fplot['Pl']['SI'] = site_index
                 fplot['Sw']['SI'] = site_index_x[2]
                 fplot['Sb']['SI'] = site_index_x[3]
 
-            elif dominant_species == 'Sb':
+            elif temp_dominant_species == 'Sb':
                 fplot['Aw']['SI'] = site_index_x[0]
                 fplot['Pl']['SI'] = site_index_x[1]
                 fplot['Sw']['SI'] = site_index_x[2]
