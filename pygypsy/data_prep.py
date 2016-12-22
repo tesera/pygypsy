@@ -134,7 +134,7 @@ def dominant_species_site_index_estim(dominant_species,
     return site_index
 
 
-def get_other_species_site_index(fplot, dominant_species,
+def get_other_species_site_index(dominant_species,
                                  dominant_species_site_index,
                                  estimated_site_indices):
     """Fill the dictionary with estimated SIs
@@ -150,7 +150,22 @@ def get_other_species_site_index(fplot, dominant_species,
                                    get_species_site_indices function
 
     """
-    fplot = deepcopy(fplot)
+    # top height, total age, BH age, N (or density), current Basal Area,
+    # Measured Percent Stocking, StumpDOB, StumpHeight, TopDib, site_index,
+    # Proportion of the species
+    default_species_fplot_dict = {
+        'topHeight': 0, 'tage': 0, 'bhage': 0, 'N': 0, 'BA': 0,
+        'PS': 16.9, 'StumpDOB':13, 'StumpHeight': 0.3, 'TopDib': 7,
+        'site_index': 0, 'PCT': 0
+    }
+    # plot properties for each species, starting with default values
+    # defined above
+    fplot = {
+        'Aw': deepcopy(default_species_fplot_dict),
+        'Pl': deepcopy(default_species_fplot_dict),
+        'Sw': deepcopy(default_species_fplot_dict),
+        'Sb': deepcopy(default_species_fplot_dict),
+    }
 
     if dominant_species == 'Aw':
         fplot['Aw']['SI'] = dominant_species_site_index
@@ -252,23 +267,6 @@ def prep_standtable(data):
         if check_prop != 100:
             raise ValueError('Species proportions not correct: %s' % check_prop)
 
-        # top height, total age, BH age, N (or density), current Basal Area,
-        # Measured Percent Stocking, StumpDOB, StumpHeight, TopDib, site_index,
-        # Proportion of the species
-        _default_species_fplot_dict = {
-            'topHeight': 0, 'tage': 0, 'bhage': 0, 'N': 0, 'BA': 0,
-            'PS': 16.9, 'StumpDOB':13, 'StumpHeight': 0.3, 'TopDib': 7,
-            'site_index': 0, 'PCT': 0
-        }
-        # plot properties for each species, starting with default values
-        # defined above
-        fplot = {
-            'Aw': deepcopy(_default_species_fplot_dict),
-            'Pl': deepcopy(_default_species_fplot_dict),
-            'Sw': deepcopy(_default_species_fplot_dict),
-            'Sb': deepcopy(_default_species_fplot_dict),
-        }
-
         plot_id = row['id_l1']
         plot_dominant_species = row['SP1']
         dominant_species_current_age = row['AGE']
@@ -284,7 +282,7 @@ def prep_standtable(data):
         # TODO: rename
         site_index_x = get_species_site_indices(temp_dominant_species, site_index)
 
-        fplot = get_other_species_site_index(fplot, temp_dominant_species,
+        fplot = get_other_species_site_index(temp_dominant_species,
                                              site_index, site_index_x)
 
         outer_sorted_species_perc_list, outer_species_perc_dict = \
