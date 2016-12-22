@@ -547,7 +547,6 @@ def prep_standtable(data):
         top_dib_pl = sp_pl[9]
 
         PLOT_DICT[plot_id] = {
-            'id_l1': plot_id,
             'SI_Aw': site_index_white_aspen,
             'SI_Sw': site_index_sw,
             'SI_Pl': site_index_pl,
