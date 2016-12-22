@@ -187,6 +187,14 @@ def prep_standtable(data):
     indices for other species. It estimates other values and returns a data
     frame of all of the values for all plots input.
 
+    estimates site_index Dom from inventory Age and HD
+    this site_index is used to estimate the site index of the other species
+    for example:
+    - FD is dom species take HD and Age
+    - assume FD is Sw generate site_index for Sw
+    - get the SW site_index
+    - calculate the SIs for other species from the conversion formulas
+
     :param data: input data frame
 
     '''
@@ -201,7 +209,6 @@ def prep_standtable(data):
             (row['SP4'], row['PCT4']),
             (row['SP5'], row['PCT5'])
         ]
-
         check_prop = sum(zip(*species_abbrev_percent_list)[1])
         if check_prop != 100:
             raise ValueError('Species proportions not correct: %s' % check_prop)
@@ -224,18 +231,9 @@ def prep_standtable(data):
         }
 
         plot_id = row['id_l1']
-
         plot_dominant_species = row['SP1']
-
-        # estimate site_index Dom from inventory Age and HD !!!!
-        # Use this site_index to estimate the other species SIs
-        # ex: FD is dom species take HD and Age, assume FD is Sw generate site_index for Sw
-        # get the SW site_index
-        # calculate the SIs for other species from the conversion formulas
-
         dominant_species_current_age = row['AGE']
         dominant_species_current_height = row['HD']
-
 
         site_index = dominant_species_site_index_estim(
             plot_dominant_species,
