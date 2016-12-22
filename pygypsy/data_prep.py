@@ -134,6 +134,49 @@ def dominant_species_site_index_estim(dominant_species,
     return site_index
 
 
+def get_other_species_site_index(fplot, dominant_species,
+                                 dominant_species_site_index,
+                                 estimated_site_indices):
+    """Fill the dictionary with estimated SIs
+
+    Fill all the SIs to avoid IFs and loops. Some of them will not be
+    used.
+
+    :param fplot: dictionary used to store params for all species
+    :param dominant_species_site_index: site index for dominant species
+    :param dominant_species: abbreviation, dominant species for
+                             the plot
+    :param estimated_site_indices: array of estimated site indices from
+                                   get_species_site_indices function
+
+    """
+    if dominant_species == 'Aw':
+        fplot['Aw']['SI'] = dominant_species_site_index
+        fplot['Pl']['SI'] = estimated_site_indices[1]
+        fplot['Sw']['SI'] = estimated_site_indices[2]
+        fplot['Sb']['SI'] = estimated_site_indices[3]
+
+    elif dominant_species == 'Sw':
+        fplot['Aw']['SI'] = estimated_site_indices[0]
+        fplot['Pl']['SI'] = estimated_site_indices[1]
+        fplot['Sw']['SI'] = dominant_species_site_index
+        fplot['Sb']['SI'] = estimated_site_indices[3]
+
+    elif dominant_species == 'Pl':
+        fplot['Aw']['SI'] = estimated_site_indices[0]
+        fplot['Pl']['SI'] = dominant_species_site_index
+        fplot['Sw']['SI'] = estimated_site_indices[2]
+        fplot['Sb']['SI'] = estimated_site_indices[3]
+
+    elif dominant_species == 'Sb':
+        fplot['Aw']['SI'] = estimated_site_indices[0]
+        fplot['Pl']['SI'] = estimated_site_indices[1]
+        fplot['Sw']['SI'] = estimated_site_indices[2]
+        fplot['Sb']['SI'] = dominant_species_site_index
+
+    return fplot
+
+
 def prep_standtable(data):
     '''Define site_index of all other species given the dominant species
 
@@ -186,45 +229,11 @@ def prep_standtable(data):
         )
 
         temp_dominant_species = initsite_index_estimation(plot_dominant_species)
+        # TODO: rename
         site_index_x = get_species_site_indices(temp_dominant_species, site_index)
 
-        # TODO: this function uses variables from the enclosing scope
-        # need to pass the variable into the function instead
-        def get_other_species_site_index(site_index):
-            """
-            fill the dictionary with estimated SIs
-
-            fill all the SIs to avoid IFs and loops. Some of them will not be used.
-
-            :param site_index:
-            """
-            if temp_dominant_species == 'Aw':
-                fplot['Aw']['SI'] = site_index
-                fplot['Pl']['SI'] = site_index_x[1]
-                fplot['Sw']['SI'] = site_index_x[2]
-                fplot['Sb']['SI'] = site_index_x[3]
-
-            elif temp_dominant_species == 'Sw':
-                fplot['Aw']['SI'] = site_index_x[0]
-                fplot['Pl']['SI'] = site_index_x[1]
-                fplot['Sw']['SI'] = site_index
-                fplot['Sb']['SI'] = site_index_x[3]
-
-            elif temp_dominant_species == 'Pl':
-                fplot['Aw']['SI'] = site_index_x[0]
-                fplot['Pl']['SI'] = site_index
-                fplot['Sw']['SI'] = site_index_x[2]
-                fplot['Sb']['SI'] = site_index_x[3]
-
-            elif temp_dominant_species == 'Sb':
-                fplot['Aw']['SI'] = site_index_x[0]
-                fplot['Pl']['SI'] = site_index_x[1]
-                fplot['Sw']['SI'] = site_index_x[2]
-                fplot['Sb']['SI'] = site_index
-
-            return fplot
-
-        fplot = get_other_species_site_index(site_index)
+        fplot = get_other_species_site_index(fplot, temp_dominant_species,
+                                             site_index, site_index_x)
 
         sp1 = row['SP1']
         sp2 = row['SP2']
