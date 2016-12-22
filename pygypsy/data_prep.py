@@ -150,6 +150,8 @@ def get_other_species_site_index(fplot, dominant_species,
                                    get_species_site_indices function
 
     """
+    fplot = deepcopy(fplot)
+
     if dominant_species == 'Aw':
         fplot['Aw']['SI'] = dominant_species_site_index
         fplot['Pl']['SI'] = estimated_site_indices[1]
@@ -191,6 +193,19 @@ def prep_standtable(data):
     n_rows = data.shape[0]
     for i, row in data.iterrows():
         _log_loop_progress(i, n_rows)
+
+        species_abbrev_percent_list = [
+            (row['SP1'], row['PCT1']),
+            (row['SP2'], row['PCT2']),
+            (row['SP3'], row['PCT3']),
+            (row['SP4'], row['PCT4']),
+            (row['SP5'], row['PCT5'])
+        ]
+
+        check_prop = sum(zip(*species_abbrev_percent_list)[1])
+        if check_prop != 100:
+            raise ValueError('Species proportions not correct: %s' % check_prop)
+
         # top height, total age, BH age, N (or density), current Basal Area,
         # Measured Percent Stocking, StumpDOB, StumpHeight, TopDib, site_index,
         # Proportion of the species
@@ -234,28 +249,6 @@ def prep_standtable(data):
 
         fplot = get_other_species_site_index(fplot, temp_dominant_species,
                                              site_index, site_index_x)
-
-        sp1 = row['SP1']
-        sp2 = row['SP2']
-        sp3 = row['SP3']
-        sp4 = row['SP4']
-        sp5 = row['SP5']
-
-        pct1 = row['PCT1']
-        pct2 = row['PCT2']
-        pct3 = row['PCT3']
-        pct4 = row['PCT4']
-        pct5 = row['PCT5']
-
-
-
-        species_abbrev_percent_list = [
-            (sp1, pct1), (sp2, pct2), (sp3, pct3), (sp4, pct4), (sp5, pct5)
-        ]
-
-        check_prop = sum(zip(*species_abbrev_percent_list)[1])
-        if check_prop != 100:
-            raise ValueError('Species proportions not correct: %s' % check_prop)
 
         # TODO: does species perc dict need to be an argument? if so
         # it should be immutable
