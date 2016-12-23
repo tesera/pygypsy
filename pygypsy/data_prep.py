@@ -536,18 +536,6 @@ def prep_standtable(data):
         stump_height_aw = sp_aw[8]
         top_dib_aw = sp_aw[9]
 
-        stump_dob_sb = sp_sb[7]
-        stump_height_sb = sp_sb[8]
-        top_dib_sb = sp_sb[9]
-
-        stump_dob_sw = sp_sw[7]
-        stump_height_sw = sp_sw[8]
-        top_dib_sw = sp_sw[9]
-
-        stump_dob_pl = sp_pl[7]
-        stump_height_pl = sp_pl[8]
-        top_dib_pl = sp_pl[9]
-
         PLOT_DICT[plot_id] = {
             'SI_Aw': site_index_white_aspen,
             'SI_Sw': site_index_sw,
@@ -581,18 +569,18 @@ def prep_standtable(data):
             'N0_Sb': initial_density_sb,
             'N0_Sw': initial_density_sw,
             'N0_Pl': initial_density_pl,
-            'StumpDOB_Aw': stump_dob_aw,
-            'StumpDOB_Sb': stump_dob_sb,
-            'StumpDOB_Sw': stump_dob_sw,
-            'StumpDOB_Pl': stump_dob_pl,
-            'StumpHeight_Aw': stump_height_aw,
-            'StumpHeight_Sb': stump_height_sb,
-            'Stumpheight_Sw': stump_height_sw,
-            'StumpHeight_Pl': stump_height_pl,
-            'TopDib_Aw': top_dib_aw,
-            'TopDib_Sb': top_dib_sb,
-            'TopDib_Sw': top_dib_sw,
-            'TopDib_Pl': top_dib_pl,
+            'StumpDOB_Aw': fplot['Aw']['StumpDOB'],
+            'StumpDOB_Sb': fplot['Sb']['StumpDOB'],
+            'StumpDOB_Sw': fplot['Sw']['StumpDOB'],
+            'StumpDOB_Pl': fplot['Pl']['StumpDOB'],
+            'StumpHeight_Aw': fplot['Aw']['StumpHeight'],
+            'StumpHeight_Sb': fplot['Sb']['StumpHeight'],
+            'Stumpheight_Sw': fplot['Sw']['StumpHeight'],
+            'StumpHeight_Pl': fplot['Pl']['StumpHeight'],
+            'TopDib_Aw': fplot['Aw']['TopDib'],
+            'TopDib_Sb': fplot['Sb']['TopDib'],
+            'TopDib_Sw': fplot['Sw']['TopDib'],
+            'TopDib_Pl': fplot['Pl']['TopDib'],
             'topHeight_Aw': top_height_aw,
             'topHeight_Sw': top_height_sw,
             'topHeight_Sb': top_height_sb,
