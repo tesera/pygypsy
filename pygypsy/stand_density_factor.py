@@ -23,7 +23,7 @@ def estimate_sdf_aw(spc, site_index, bhage, density):
     density_est = 0
     sdf = 0
 
-    if density <= 0 or bhage <= 0 or site_index <= 0:
+    if density <= 0 or (bhage <= 0 and site_index <= 0):
         return density_est, sdf
 
     if spc[0] not in ('Aw', 'Bw', 'Pb', 'A', 'H'):
@@ -67,9 +67,8 @@ def estimate_sdf_sb(spc, site_index, tage, density):
     density_est = 0
     sdf = 0
 
-    if density <= 0 or
     if density <= 0 or (tage <= 0 and site_index <= 0):
-        return
+        return density_est, sdf
 
     if spc[0] not in ('Sb', 'Lt', 'La', 'Lw', 'L'):
         raise ValueError('%s is not a valid species', spc[0])
@@ -115,7 +114,7 @@ def estimate_sdf_sw(spc, site_index, tage, sdfaw, density):
     sdf = 0
 
     if density <= 0 or (tage <= 0 and site_index <= 0):
-        return
+        return density_est, sdf
 
     if spc[0] not in ('Sw', 'Se', 'Fd', 'Fb', 'Fa'):
         raise ValueError('%s is not a valid species', spc[0])
@@ -164,7 +163,7 @@ def estimate_sdf_pl(spc, site_index, tage, sdfaw, sdfsw, sdfsb, density):
     sdf = 0
 
     if density <= 0 or (tage <= 0 and site_index <= 0):
-        return
+        return density_est, sdf
 
     if spc[0] not in ('P', 'Pl', 'Pj', 'Pa', 'Pf'):
         raise ValueError('%s is not a valid species', spc[0])
