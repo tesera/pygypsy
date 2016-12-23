@@ -14,7 +14,7 @@ LOGGER = logging.getLogger(__name__)
 def estimate_sdf_aw(spc, site_index, bhage, density):
     '''Main purpose of this function is to estimate SDF for the species
 
-    :param str spc: species list
+    :param str spc: species_abbreviation
     :param float site_index: site index of species Aw
     :param float bhage: breast height age of speceis Aw
     :param float density: density of species Aw
@@ -26,8 +26,8 @@ def estimate_sdf_aw(spc, site_index, bhage, density):
     if density <= 0 or (bhage <= 0 and site_index <= 0):
         return density_est, sdf
 
-    if spc[0] not in ('Aw', 'Bw', 'Pb', 'A', 'H'):
-        raise ValueError('%s is not a valid species', spc[0])
+    if spc not in ('Aw', 'Bw', 'Pb', 'A', 'H'):
+        raise ValueError('%s is not a valid species', spc)
 
     sdf = density # best SDF guess
     tolerance = 0.00001
@@ -58,7 +58,7 @@ def estimate_sdf_aw(spc, site_index, bhage, density):
 def estimate_sdf_sb(spc, site_index, tage, density):
     '''Main purpose of this function is to estimate SDF for the species
 
-    :param str spc: species list
+    :param str spc: species_abbreviation
     :param float site_index: site index of species Sb
     :param float tage: total age of species Sb
     :param float density: density of species Sb
@@ -70,8 +70,8 @@ def estimate_sdf_sb(spc, site_index, tage, density):
     if density <= 0 or (tage <= 0 and site_index <= 0):
         return density_est, sdf
 
-    if spc[0] not in ('Sb', 'Lt', 'La', 'Lw', 'L'):
-        raise ValueError('%s is not a valid species', spc[0])
+    if spc not in ('Sb', 'Lt', 'La', 'Lw', 'L'):
+        raise ValueError('%s is not a valid species', spc)
 
     sdf = density # best SDF guess
     tolerance = 0.00001
@@ -102,7 +102,7 @@ def estimate_sdf_sb(spc, site_index, tage, density):
 def estimate_sdf_sw(spc, site_index, tage, sdfaw, density):
     '''Main purpose of this function is to estimate SDF for the species
 
-    :param str spc: species list
+    :param str spc: species_abbreviation
     :param float site_index: site index of species Sw
     :param float tage: total age of species Sw
     :param float sdfaw: Stand Density Factor of species Aw, this parameter indicates that
@@ -116,8 +116,8 @@ def estimate_sdf_sw(spc, site_index, tage, sdfaw, density):
     if density <= 0 or (tage <= 0 and site_index <= 0):
         return density_est, sdf
 
-    if spc[0] not in ('Sw', 'Se', 'Fd', 'Fb', 'Fa'):
-        raise ValueError('%s is not a valid species', spc[0])
+    if spc not in ('Sw', 'Se', 'Fd', 'Fb', 'Fa'):
+        raise ValueError('%s is not a valid species', spc)
 
     sdf = density # best SDF guess
     tolerance = 0.00001
@@ -148,7 +148,7 @@ def estimate_sdf_sw(spc, site_index, tage, sdfaw, density):
 def estimate_sdf_pl(spc, site_index, tage, sdfaw, sdfsw, sdfsb, density):
     '''Main purpose of this function is to estimate SDF for the species
 
-    :param str spc: species list
+    :param str spc: species_abbreviation
     :param float site_index: site index of species Pl
     :param float tage: total age of species Pl
     :param float sdfaw: Stand Density Factor of species Aw
@@ -165,8 +165,8 @@ def estimate_sdf_pl(spc, site_index, tage, sdfaw, sdfsw, sdfsb, density):
     if density <= 0 or (tage <= 0 and site_index <= 0):
         return density_est, sdf
 
-    if spc[0] not in ('P', 'Pl', 'Pj', 'Pa', 'Pf'):
-        raise ValueError('%s is not a valid species', spc[0])
+    if spc not in ('P', 'Pl', 'Pj', 'Pa', 'Pf'):
+        raise ValueError('%s is not a valid species', spc)
 
     sdf = density # best SDF guess
     tolerance = 0.00001

@@ -468,20 +468,20 @@ def prep_standtable(data):
             'Sw', site_index_sw, tage_sw
         )
 
-        y_aw = estimate_sdf_aw(sp_aw, site_index_aw, bhage_aw, density_aw)
+        y_aw = estimate_sdf_aw('Aw', site_index_aw, bhage_aw, density_aw)
         sdf_aw0 = y_aw[1]
         density_bh_aw = y_aw[0]
 
-        y_sb = estimate_sdf_sb(sp_sb, site_index_sb, tage_sb, density_sb)
+        y_sb = estimate_sdf_sb('Sb', site_index_sb, tage_sb, density_sb)
         sdf_sb0 = y_sb[1]
         density_bh_sb = y_sb[0]
 
-        y_sw = estimate_sdf_sw(sp_sw, site_index_sw, tage_sw, sdf_aw0, density_sw)
+        y_sw = estimate_sdf_sw('Sw', site_index_sw, tage_sw, sdf_aw0, density_sw)
         sdf_sw0 = y_sw[1]
         density_bh_sw = y_sw[0]
 
         y_pl = estimate_sdf_pl(
-            sp_pl, site_index_pl, tage_pl,
+            'Pl', site_index_pl, tage_pl,
             sdf_aw0, sdf_sw0, sdf_sb0, density_pl
         )
         sdf_pl0 = y_pl[1]
