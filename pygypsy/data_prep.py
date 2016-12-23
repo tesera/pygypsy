@@ -233,6 +233,66 @@ def reclassify_and_sort_species(species_abbrev_perc_tuples_list):
     return sorted_species_perc_list, species_perc_dict
 
 
+def populate_fplot(partial_fplot, sorted_species_abbrev_perc_tuples_list,
+                   dominant_species=None, row=None,
+                   dominant_species_current_age=None,
+                   dominant_species_current_height=None):
+    """Fill partial fplot
+
+    Given fplot with proportion filled out, add age, top height, basal area,
+    density
+
+    :param partial_fplot:
+    :param sorted_species_abbrev_perc_tuples_list:
+    :param dominant_species:
+    :param dominant_species_current_age:
+    :param dominant_species_current_height:
+
+    """
+    outer_sorted_species_perc_list = sorted_species_abbrev_perc_tuples_list
+    for species in outer_sorted_species_perc_list:
+        # TODO: continue or raise, not break? if this is true, there's no species at all, I think
+        if species[1] == 0:
+            break
+        # TODO: this is always true on first pass of the loop
+        elif species[0] == dominant_species[0]:
+            partial_fplot[species[0]]['tage'] = dominant_species_current_age
+            partial_fplot[species[0]]['topHeight'] = dominant_species_current_height
+            partial_fplot[species[0]]['N'] = row['TPH'] * species[1] / 100
+            partial_fplot[species[0]]['BA'] = row['BPH'] * species[1] / 100
+            x_si = ComputeGypsySiteIndex(
+                species[0],
+                partial_fplot[species[0]]['topHeight'],
+                0,
+                partial_fplot[species[0]]['tage']
+            )
+            partial_fplot[species[0]]['bhage'] = x_si[0]
+            # if, after re-arranging the proportions, dom species is another
+            # one then we need to re-estimate everything  even for the new
+            # dominant species
+        else:
+            si_sp = partial_fplot[species[0]]['SI']
+            partial_fplot[species[0]]['PCT'] = species[1]
+            partial_fplot[species[0]]['tage'] = computeTreeAge(
+                species[0],
+                treeHt=dominant_species_current_height,
+                treeSi=si_sp,
+                maxTreeAge=450,
+                rowIndex=0,
+                printWarnings=True
+            )
+            # density based on the proportion of the species
+            partial_fplot[species[0]]['N'] = row['TPH'] * species[1]/100
+            # Basal area from the species proportion as well
+            partial_fplot[species[0]]['BA'] = row['BPH'] * species[1]/100
+            # calling the ComputeGypsySiteIndex function, estimate bhage
+            x_si = ComputeGypsySiteIndex(
+                species[0], dominant_species_current_height, 0,
+                partial_fplot[species[0]]['tage']
+            )
+            partial_fplot[species[0]]['bhage'] = x_si[0]
+    return partial_fplot
+
 def prep_standtable(data):
     '''Define site_index of all other species given the dominant species
 
@@ -296,56 +356,24 @@ def prep_standtable(data):
         dominant_species = outer_sorted_species_perc_list[0]
 
 
+        # TODO: this section fills fplot with its parameters; when its the
+        # dominant species it cam simply use the plot data when its secondary
+        # species, the values of fplot must be calculated using compute tree
+        # age and compute site index functions. if instead we had a plot class,
+        # composed of species/plot_species perhaps it could hide some of this
+        # complexity
+        # thats essentially what fplot is
 
         # iterate over each ranked species - populate the dictionary with
         # values estimated from the dominant species' site_index
-        for species in outer_sorted_species_perc_list:
 
-            if species[1] == 0:
-                break
-            elif species[0] == dominant_species[0]:
-                fplot[species[0]]['tage'] = dominant_species_current_age
-                fplot[species[0]]['topHeight'] = dominant_species_current_height
-                fplot[species[0]]['N'] = row['TPH'] * species[1] / 100
-                fplot[species[0]]['BA'] = row['BPH'] * species[1] / 100
-                x_si = ComputeGypsySiteIndex(
-                    species[0],
-                    fplot[species[0]]['topHeight'],
-                    0,
-                    fplot[species[0]]['tage']
-                )
-                fplot[species[0]]['bhage'] = x_si[0]
-                # if, after re-arranging the proportions, dom species is another
-                # one then we need to re-estimate everything  even for the new
-                # dominant species
-
-            else:
-                si_sp = fplot[species[0]]['SI']
-                fplot[species[0]]['PCT'] = species[1]
-
-                fplot[species[0]]['tage'] = computeTreeAge(
-                    species[0],
-                    treeHt=dominant_species_current_height,
-                    treeSi=si_sp,
-                    maxTreeAge=450,
-                    rowIndex=0,
-                    printWarnings=True
-                )
-
-                # density based on the proportion of the species
-                fplot[species[0]]['N'] = row['TPH'] * species[1]/100
-
-                # Basal area from the species proportion as well
-                fplot[species[0]]['BA'] = row['BPH'] * species[1]/100
-
-                # calling the ComputeGypsySiteIndex function, estimate bhage
-                x_si = ComputeGypsySiteIndex(
-                    species[0], dominant_species_current_height, 0,
-                    fplot[species[0]]['tage']
-                )
-                fplot[species[0]]['bhage'] = x_si[0]
-
-
+        fplot = populate_fplot(
+            fplot, outer_sorted_species_perc_list,
+            dominant_species=dominant_species,
+            row=row,
+            dominant_species_current_age=dominant_species_current_age,
+            dominant_species_current_height=dominant_species_current_height
+        )
         # now we have different lists containing:
         # species, top height, total age, BHage (from the function),
         # N (or density), current Basal Area,  Measured Percent Stocking,
