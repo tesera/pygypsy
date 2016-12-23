@@ -47,7 +47,7 @@ def sim_basal_area_aw(initial_age, site_index, density_at_bh_age,
             if bh_age_aw > 0:
                 spec_comp = spec_comp * correction_factor
                 basal_area_increment = incr.increment_basal_area_aw(
-                    'Aw', spec_comp, site_index, present_density,
+                    spec_comp, site_index, present_density,
                     density_at_bh_age, bh_age_aw, basal_area_temp
                 )
                 basal_area_temp = basal_area_temp + basal_area_increment
@@ -107,7 +107,7 @@ def sim_basal_area_sb(initial_age, initial_age_sb, years_to_bh_sb, spec_comp, si
             if bh_age_sb > 0:
                 spec_comp = spec_comp * correction_factor
                 basal_area_increment = incr.increment_basal_area_sb(
-                    'Sb', spec_comp, site_index, present_density,
+                    spec_comp, site_index, present_density,
                     density_at_bh_age, bh_age_sb, basal_area_temp
                 )
                 basal_area_temp = basal_area_temp + basal_area_increment
@@ -173,7 +173,7 @@ def sim_basal_area_sw(initial_age, intial_age_sw, years_to_bh, spec_comp, site_i
             if bh_age_sw > 0:
                 spec_comp = spec_comp * correction_factor
                 basal_area_increment = incr.increment_basal_area_sw(
-                    'Sw', spec_comp, site_index, present_density, density_at_bh_age,
+                    spec_comp, site_index, present_density, density_at_bh_age,
                     bh_age_sw, sdf_aw, sdf_pl, sdf_sb, basal_area_temp
                 )
                 basal_area_temp = basal_area_temp + basal_area_increment
@@ -235,7 +235,7 @@ def sim_basal_area_pl(initial_age, initial_age_pl, years_to_bh, spec_comp, site_
             if bh_age_pl > 0:
                 basal_area_increment = correction_factor \
                                        * incr.increment_basal_area_pl(
-                                           'Pl', spec_comp, site_index, present_density,
+                                           spec_comp, site_index, present_density,
                                            density_at_bh_age, bh_age_pl, sdf_aw, sdf_sw,
                                            sdf_sb, basal_area_temp
                                        )

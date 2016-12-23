@@ -6,15 +6,12 @@ resolution.
 It uses the non-spatial implementaion.
 
 """
-# TODO: remove sp from function args & update uses of function
-
 # NOTE: cython has a bug with ** and negative integer exponents, it coerces result to int
 # pow(base, exponent) should be used if it is desired to use a negative integer with float
 import numpy as np
 cimport numpy as np
 
-def increment_basal_area_aw(sp,
-                            np.float64_t SC,
+def increment_basal_area_aw(np.float64_t SC,
                             np.float64_t SI_bh,
                             np.float64_t N_bh,
                             np.float64_t N0,
@@ -27,7 +24,6 @@ def increment_basal_area_aw(sp,
     called by factor finder functions during estimation of correction factor
     for the species.
 
-    :param str sp: species name
     :param float SI_bh: site index of species Aw
     :param float bhage: breast height age of speceis Aw
     :param float N_bh: density of species Aw
@@ -68,8 +64,7 @@ def increment_basal_area_aw(sp,
     return  BAinc
 
 
-def increment_basal_area_sb(sp,
-                            np.float64_t SC,
+def increment_basal_area_sb(np.float64_t SC,
                             np.float64_t SI_bh,
                             np.float64_t N_bh,
                             np.float64_t N0,
@@ -82,7 +77,6 @@ def increment_basal_area_sb(sp,
     called by factor finder functions during estimation of correction factor
     for the species.
 
-    :param str sp: species name
     :param float SI_bh: site index of species Sb
     :param float bhage: breast height age of speceis Sb
     :param float N_bh: density of species Sb
@@ -123,8 +117,7 @@ def increment_basal_area_sb(sp,
     return BAinc
 
 
-def increment_basal_area_sw(sp,
-                            np.float64_t SC,
+def increment_basal_area_sw(np.float64_t SC,
                             np.float64_t SI_bh,
                             np.float64_t N_bh,
                             np.float64_t N0,
@@ -140,7 +133,6 @@ def increment_basal_area_sw(sp,
     called by factor finder functions during estimation of correction factor
     for the species.
 
-    :param str sp: species name
     :param float SI_bh: site index of species Sw
     :param float bhage: breast height age of speceis Sw
     :param float N_bh: density of species Sw
@@ -214,8 +206,7 @@ def increment_basal_area_sw(sp,
     return BAinc
 
 
-def increment_basal_area_pl(sp,
-                            np.float64_t SC,
+def increment_basal_area_pl(np.float64_t SC,
                             np.float64_t SI_bh,
                             np.float64_t N_bh,
                             np.float64_t N0,
@@ -231,7 +222,6 @@ def increment_basal_area_pl(sp,
     function called by factor finder functions during estimation of correction
     factor for the species.
 
-    :param str sp: species name
     :param float SC: proportion of species Pl in the stand
     :param float SI_bh: site index of species Pl
     :param float bhage: breast height age of species Pl

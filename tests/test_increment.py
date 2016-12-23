@@ -7,7 +7,6 @@ def test_increment_basal_area_aw():
     expected = 0.010980296350305301
 
     params = [
-        ('sp', ['Aw']),
         ('SI_bh', 7.3878921344490012),
         ('bhage', 32.32),
         ('N_bh', 817.46),
@@ -27,7 +26,6 @@ def test_increment_basal_area_sb():
     expected = 0.0040928537767126495
 
     params = [
-        ('sp', ['Sb']),
         ('SI_bh', 7.3878921344490012),
         ('bhage', 32.32),
         ('N_bh', 817.46),
@@ -47,7 +45,6 @@ def test_increment_basal_area_pl():
     expected = 0.17167634370570872
 
     params = [
-        ('sp', ['Pl']),
         ('SC', .5),
         ('SI_bh', 7.3878921344490012),
         ('N_bh', 817.46),
@@ -70,7 +67,6 @@ def test_increment_basal_area_sw():
     expected = 0.21723711770142046
 
     params = [
-        ('sp', ['Sw']),
         ('SC', .5),
         ('SI_bh', 7.3878921344490012),
         ('N_bh', 817.46),
