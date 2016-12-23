@@ -109,14 +109,20 @@ def get_species_site_indices(dominant_species, site_index):
     return site_index_white_aspen, site_index_pl, site_index_sw, site_index_sb
 
 
-def initsite_index_estimation(temporary_dominant_species):
-    # TODO: docstring
-    if temporary_dominant_species == 'Pb':
-        temporary_dominant_species = 'Aw'
-    elif temporary_dominant_species in ['Fd', 'Fb']:
-        temporary_dominant_species = 'Sw'
+def get_gypsy_valid_species(dominant_species):
+    """Given the plot dominant species, get the gypsy species
 
-    return temporary_dominant_species
+    Pb is reassigned to Aw
+    Fd or Fb are reassigned to Sw
+
+    :param dominant_species:
+    """
+    if dominant_species == 'Pb':
+        dominant_species = 'Aw'
+    elif dominant_species in ['Fd', 'Fb']:
+        dominant_species = 'Sw'
+
+    return dominant_species
 
 
 def dominant_species_site_index_estim(dominant_species,
