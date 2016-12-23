@@ -355,18 +355,6 @@ def prep_standtable(data):
 
         dominant_species = outer_sorted_species_perc_list[0]
 
-
-        # TODO: this section fills fplot with its parameters; when its the
-        # dominant species it cam simply use the plot data when its secondary
-        # species, the values of fplot must be calculated using compute tree
-        # age and compute site index functions. if instead we had a plot class,
-        # composed of species/plot_species perhaps it could hide some of this
-        # complexity
-        # thats essentially what fplot is
-
-        # iterate over each ranked species - populate the dictionary with
-        # values estimated from the dominant species' site_index
-
         fplot = populate_fplot(
             fplot, outer_sorted_species_perc_list,
             dominant_species=dominant_species,
@@ -374,10 +362,7 @@ def prep_standtable(data):
             dominant_species_current_age=dominant_species_current_age,
             dominant_species_current_height=dominant_species_current_height
         )
-        # now we have different lists containing:
-        # species, top height, total age, BHage (from the function),
-        # N (or density), current Basal Area,  Measured Percent Stocking,
-        # StumpDOB , StumpHeight, TopDib, site_index, species proportion
+
         site_index_white_aspen = fplot['Aw']['SI']
         site_index_sw = fplot['Sw']['SI']
         site_index_pl = fplot['Pl']['SI']
@@ -388,23 +373,15 @@ def prep_standtable(data):
         density_pl = fplot['Pl']['N']
         density_sb = fplot['Sb']['N']
 
-        # TODO: sometimes these values are zero because TPH is zero
-        # ...WHY TPH IS ZERO????
         y2bh_aw = fplot['Aw']['tage'] - fplot['Aw']['bhage']
         y2bh_sw = fplot['Sw']['tage'] - fplot['Sw']['bhage']
         y2bh_pl = fplot['Pl']['tage'] - fplot['Pl']['bhage']
         y2bh_sb = fplot['Sb']['tage'] - fplot['Sb']['bhage']
 
-        # y2bh CANNOT BE NEGATIVE
-
         tage_aw = fplot['Aw']['tage']
         tage_sw = fplot['Sw']['tage']
         tage_pl = fplot['Pl']['tage']
         tage_sb = fplot['Sb']['tage']
-
-        #print tage_sw
-
-
 
         sp_aw = [
             'Aw',
@@ -468,7 +445,6 @@ def prep_standtable(data):
         site_index_white_aspen = sp_aw[10]
         y2bh_aw = tage_aw - bhage_aw
         site_index_bh_aw = sp_aw[10]
-        # treeHeight is the Top Height or Htop in the paper
         top_height_aw = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(
             sp_aw[0], site_index_white_aspen, tage_aw
         )
@@ -498,16 +474,6 @@ def prep_standtable(data):
         top_height_sw = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(
             sp_sw[0], si_sw, tage_sw
         )
-
-        # si, bhage, and tage are passed on from the above.
-        # sdfs estimated iteratively
-        # using N from the original input sp_aw etc as the input (density_aw) etc
-        # I think it is suposed to be the density of the species at the bhage = 0, although
-        # the paper says current or inital density
-        density_aw = sp_aw[4]
-        density_sb = sp_sb[4]
-        density_sw = sp_sw[4]
-        density_pl = sp_pl[4]
 
         y_aw = estimate_sdf_aw(sp_aw, site_index_bh_aw, bhage_aw, density_aw)
         sdf_aw0 = y_aw[1]
