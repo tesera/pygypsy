@@ -398,63 +398,6 @@ def prep_standtable(data):
         basal_area_sw = fplot['Sw']['BA']
         basal_area_pl = fplot['Pl']['BA']
 
-        sp_aw = [
-            'Aw',
-            fplot['Aw']['topHeight'],
-            fplot['Aw']['tage'],
-            fplot['Aw']['bhage'],
-            fplot['Aw']['N'],
-            fplot['Aw']['BA'],
-            fplot['Aw']['PS'],
-            fplot['Aw']['StumpDOB'],
-            fplot['Aw']['StumpHeight'],
-            fplot['Aw']['TopDib'],
-            fplot['Aw']['SI'],
-            fplot['Aw']['PCT']
-        ]
-        sp_pl = [
-            'Pl',
-            fplot['Pl']['topHeight'],
-            fplot['Pl']['tage'],
-            fplot['Pl']['bhage'],
-            fplot['Pl']['N'],
-            fplot['Pl']['BA'],
-            fplot['Pl']['PS'],
-            fplot['Pl']['StumpDOB'],
-            fplot['Pl']['StumpHeight'],
-            fplot['Pl']['TopDib'],
-            fplot['Pl']['SI'],
-            fplot['Pl']['PCT']
-        ]
-        sp_sw = [
-            'Sw',
-            fplot['Sw']['topHeight'],
-            fplot['Sw']['tage'],
-            fplot['Sw']['bhage'],
-            fplot['Sw']['N'],
-            fplot['Sw']['BA'],
-            fplot['Sw']['PS'],
-            fplot['Sw']['StumpDOB'],
-            fplot['Sw']['StumpHeight'],
-            fplot['Sw']['TopDib'],
-            fplot['Sw']['SI'],
-            fplot['Sw']['PCT']
-        ]
-        sp_sb = [
-            'Sb',
-            fplot['Sb']['topHeight'],
-            fplot['Sb']['tage'],
-            fplot['Sb']['bhage'],
-            fplot['Sb']['N'],
-            fplot['Sb']['BA'],
-            fplot['Sb']['PS'],
-            fplot['Sb']['StumpDOB'],
-            fplot['Sb']['StumpHeight'],
-            fplot['Sb']['TopDib'],
-            fplot['Sb']['SI'],
-            fplot['Sb']['PCT']
-        ]
-
         top_height_aw = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(
             'Aw', site_index_aw, tage_aw
         )
