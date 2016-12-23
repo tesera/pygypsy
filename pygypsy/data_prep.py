@@ -402,11 +402,6 @@ def prep_standtable(data):
             dominant_species_current_height=dominant_species_current_height
         )
 
-        site_index_white_aspen = species_dict['Aw']['SI']
-        site_index_sw = species_dict['Sw']['SI']
-        site_index_pl = species_dict['Pl']['SI']
-        site_index_sb = species_dict['Sb']['SI']
-
         density_aw = species_dict['Aw']['N']
         density_sw = species_dict['Sw']['N']
         density_pl = species_dict['Pl']['N']
@@ -490,7 +485,7 @@ def prep_standtable(data):
         species_composition_sb = species_composition[2]
         species_composition_pl = species_composition[3]
 
-        # TODO: are these increments used in simulation
+        # TODO: are these increments used in simulation? can we remove
         basal_area_increment_aw = incr.increment_basal_area_aw(
             species_composition_aw, site_index_aw, density_bh_aw,
             initial_density_aw, bhage_aw, basal_area_aw
@@ -511,7 +506,7 @@ def prep_standtable(data):
         )
 
         plot_dict[plot_id] = {
-            'SI_Aw': site_index_white_aspen,
+            'SI_Aw': site_index_aw,
             'SI_Sw': site_index_sw,
             'SI_Pl': site_index_pl,
             'SI_Sb': site_index_sb,
