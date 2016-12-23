@@ -34,7 +34,6 @@ from pygypsy.asaCompileAgeGivenSpSiHt import (
 
 
 LOGGER = logging.getLogger(__name__)
-PLOT_DICT = {}
 
 
 def get_species_site_indices(dominant_species, site_index):
@@ -312,6 +311,7 @@ def prep_standtable(data):
     :param data: input data frame
 
     '''
+    plot_dict = {}
     n_rows = data.shape[0]
     for i, row in data.iterrows():
         _log_loop_progress(i, n_rows)
@@ -504,23 +504,23 @@ def prep_standtable(data):
         species_composition_pl = species_composition[3]
 
         basal_area_increment_aw = incr.increment_basal_area_aw(
-            sp_aw, species_composition_aw, site_index_aw, density_bh_aw,
+            species_composition_aw, site_index_aw, density_bh_aw,
             initial_density_aw, bhage_aw, basal_area_aw
         )
         basal_area_increment_sb = incr.increment_basal_area_sb(
-            sp_sb, species_composition_sb, site_index_sb, density_bh_sb,
+             species_composition_sb, site_index_sb, density_bh_sb,
             initial_density_sb, bhage_sb, basal_area_sb
         )
         basal_area_increment_sw = incr.increment_basal_area_sw(
-            sp_sw, species_composition_sw, site_index_sw, density_bh_sw,
+            species_composition_sw, site_index_sw, density_bh_sw,
             initial_density_sw, bhage_sw, sdf_aw0, sdf_pl0, sdf_sb0, basal_area_sw
         )
         basal_area_increment_pl = incr.increment_basal_area_pl(
-            sp_pl, species_composition_pl, site_index_pl, density_bh_pl,
+            species_composition_pl, site_index_pl, density_bh_pl,
             initial_density_pl, bhage_pl, sdf_aw0, sdf_sw0, sdf_sb0, basal_area_pl
         )
 
-        PLOT_DICT[plot_id] = {
+        plot_dict[plot_id] = {
             'SI_Aw': site_index_white_aspen,
             'SI_Sw': site_index_sw,
             'SI_Pl': site_index_pl,
@@ -571,7 +571,7 @@ def prep_standtable(data):
             'topHeight_Pl': top_height_pl
         }
 
-        plot_df = pd.DataFrame(PLOT_DICT)
+        plot_df = pd.DataFrame(plot_dict)
         plot_df = plot_df.transpose()
 
     return plot_df

@@ -333,21 +333,21 @@ def simulate_forwards_df(plot_df, simulation_choice='yes',
             # after a certain year, then the whole for loop containing this
             # comment could be removed
             if N_bh_SbT > 0:
-                BA_SbT = BA_SbT + incr.increment_basal_area_sb('Sb', SC_SbF, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_SbF, BA_SbT)
+                BA_SbT = BA_SbT + incr.increment_basal_area_sb(SC_SbF, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_SbF, BA_SbT)
                 if BA_SbT < 0:
                     BA_SbT = 0
             else:
                 BA_SbT = 0
 
             if N_bh_SwT > 0:
-                BA_SwT = BA_SwT + incr.increment_basal_area_sw('Sw', SC_SwF, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_SwF, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_SwT)
+                BA_SwT = BA_SwT + incr.increment_basal_area_sw(SC_SwF, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_SwF, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_SwT)
                 if BA_SwT < 0:
                     BA_SwT = 0
             else:
                 BA_SwT = 0
 
             if N_bh_PlT > 0:
-                BA_PlT = BA_PlT + incr.increment_basal_area_pl('Pl', SC_PlF, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_PlF, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_PlT)
+                BA_PlT = BA_PlT + incr.increment_basal_area_pl(SC_PlF, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_PlF, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_PlT)
                 if BA_PlT < 0:
                     BA_PlT = 0
             else:
