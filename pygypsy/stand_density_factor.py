@@ -26,29 +26,31 @@ def estimate_sdf_aw(spc, site_index, bhage, density):
     if density <= 0 or bhage <= 0 or site_index <= 0:
         return density_est, sdf
 
-    if spc[0] in ('Aw', 'Bw', 'Pb', 'A', 'H'):
-        sdf = density # best SDF guess
-        tolerance = 0.00001
-        within_tolerance = False
-        iter_count = 0
+    if spc[0] not in ('Aw', 'Bw', 'Pb', 'A', 'H'):
+        raise ValueError('%s is not a valid species', spc[0])
 
-        while not within_tolerance:
-            result = estimate_density_aw(sdf, bhage, site_index, ret_detail=True)
-            k1 = result['k1'] #pylint: disable=invalid-name
-            k2 = result['k2'] #pylint: disable=invalid-name
-            density_est = result['density']
+    sdf = density # best SDF guess
+    tolerance = 0.00001
+    within_tolerance = False
+    iter_count = 0
 
-            if abs(density-density_est) < tolerance:
-                within_tolerance = True
-            else:
-                density_est = (density + density_est) / 2
-                sdf = density_est * k2 / k1
+    while not within_tolerance:
+        result = estimate_density_aw(sdf, bhage, site_index, ret_detail=True)
+        k1 = result['k1'] #pylint: disable=invalid-name
+        k2 = result['k2'] #pylint: disable=invalid-name
+        density_est = result['density']
 
-            iter_count += 1
+        if abs(density-density_est) < tolerance:
+            within_tolerance = True
+        else:
+            density_est = (density + density_est) / 2
+            sdf = density_est * k2 / k1
 
-            if iter_count == 1500:
-                LOGGER.warning('Slow convergence')
-                break
+        iter_count += 1
+
+        if iter_count == 1500:
+            LOGGER.warning('Slow convergence')
+            break
 
     return density_est, sdf
 
@@ -65,29 +67,35 @@ def estimate_sdf_sb(spc, site_index, tage, density):
     density_est = 0
     sdf = 0
 
-    if density > 0 and (tage > 0 or site_index > 0):
-        if spc[0] in ('Sb', 'Lt', 'La', 'Lw', 'L'):
-            sdf = density # best SDF guess
-            tolerance = 0.00001
-            within_tolerance = False
-            iter_count = 0
+    if density <= 0 or
+    if density <= 0 or (tage <= 0 and site_index <= 0):
+        return
 
-            while not within_tolerance:
-                result = estimate_density_sb(sdf, tage, site_index, ret_detail=True)
-                k1 = result['k1'] #pylint: disable=invalid-name
-                k2 = result['k2'] #pylint: disable=invalid-name
-                density_est = result['density']
+    if spc[0] not in ('Sb', 'Lt', 'La', 'Lw', 'L'):
+        raise ValueError('%s is not a valid species', spc[0])
 
-                if abs(density-density_est) < tolerance:
-                    within_tolerance = True
-                else:
-                    density_est = (density + density_est)/2
-                    sdf = density_est * k2/k1
-                    iter_count += 1
+    sdf = density # best SDF guess
+    tolerance = 0.00001
+    within_tolerance = False
+    iter_count = 0
 
-                if iter_count == 150:
-                    LOGGER.warning('Slow convergence')
-                    break
+    while not within_tolerance:
+        result = estimate_density_sb(sdf, tage, site_index, ret_detail=True)
+        k1 = result['k1'] #pylint: disable=invalid-name
+        k2 = result['k2'] #pylint: disable=invalid-name
+        density_est = result['density']
+
+        if abs(density-density_est) < tolerance:
+            within_tolerance = True
+        else:
+            density_est = (density + density_est)/2
+            sdf = density_est * k2/k1
+
+        iter_count += 1
+
+        if iter_count == 150:
+            LOGGER.warning('Slow convergence')
+            break
 
     return density_est, sdf
 
@@ -106,30 +114,34 @@ def estimate_sdf_sw(spc, site_index, tage, sdfaw, density):
     density_est = 0
     sdf = 0
 
-    if density > 0 and (tage > 0 or site_index > 0):
-        if spc[0] in ('Sw', 'Se', 'Fd', 'Fb', 'Fa'):
-            sdf = density # best SDF guess
-            tolerance = 0.00001
-            within_tolerance = False
-            iter_count = 0
+    if density <= 0 or (tage <= 0 and site_index <= 0):
+        return
 
-            while not within_tolerance:
-                result = estimate_density_sw(sdf, sdfaw, tage, site_index, ret_detail=True)
-                k1 = result['k1'] #pylint: disable=invalid-name
-                k2 = result['k2'] #pylint: disable=invalid-name
-                density_est = result['density']
+    if spc[0] not in ('Sw', 'Se', 'Fd', 'Fb', 'Fa'):
+        raise ValueError('%s is not a valid species', spc[0])
 
-                if abs(density-density_est) < tolerance:
-                    within_tolerance = True
-                else:
-                    density_est = (density + density_est)/2
-                    sdf = density_est * k2/k1
+    sdf = density # best SDF guess
+    tolerance = 0.00001
+    within_tolerance = False
+    iter_count = 0
 
-                iter_count += 1
+    while not within_tolerance:
+        result = estimate_density_sw(sdf, sdfaw, tage, site_index, ret_detail=True)
+        k1 = result['k1'] #pylint: disable=invalid-name
+        k2 = result['k2'] #pylint: disable=invalid-name
+        density_est = result['density']
 
-                if iter_count == 150:
-                    LOGGER.warning('Slow convergence')
-                    break
+        if abs(density-density_est) < tolerance:
+            within_tolerance = True
+        else:
+            density_est = (density + density_est)/2
+            sdf = density_est * k2/k1
+
+        iter_count += 1
+
+        if iter_count == 150:
+            LOGGER.warning('Slow convergence')
+            break
 
     return density_est, sdf
 
@@ -151,30 +163,34 @@ def estimate_sdf_pl(spc, site_index, tage, sdfaw, sdfsw, sdfsb, density):
     density_est = 0
     sdf = 0
 
-    if density > 0 and (tage > 0 or site_index > 0):
-        if spc[0] in ('P', 'Pl', 'Pj', 'Pa', 'Pf'):
-            sdf = density # best SDF guess
-            tolerance = 0.00001
-            within_tolerance = False
-            iter_count = 0
+    if density <= 0 or (tage <= 0 and site_index <= 0):
+        return
 
-            while not within_tolerance:
-                result = estimate_density_pl(sdfaw, sdfsw, sdfsb, sdf,
-                                             tage, site_index, ret_detail=True)
-                k1 = result['k1'] #pylint: disable=invalid-name
-                k2 = result['k2'] #pylint: disable=invalid-name
-                density_est = result['density']
+    if spc[0] not in ('P', 'Pl', 'Pj', 'Pa', 'Pf'):
+        raise ValueError('%s is not a valid species', spc[0])
 
-                if abs(density-density_est) < tolerance:
-                    within_tolerance = True
-                else:
-                    density_est = (density + density_est)/2
-                    sdf = density_est * k2/k1
+    sdf = density # best SDF guess
+    tolerance = 0.00001
+    within_tolerance = False
+    iter_count = 0
 
-                iter_count += 1
+    while not within_tolerance:
+        result = estimate_density_pl(sdfaw, sdfsw, sdfsb, sdf,
+                                     tage, site_index, ret_detail=True)
+        k1 = result['k1'] #pylint: disable=invalid-name
+        k2 = result['k2'] #pylint: disable=invalid-name
+        density_est = result['density']
 
-                if iter_count == 150:
-                    LOGGER.warning('Slow convergence')
-                    break
+        if abs(density-density_est) < tolerance:
+            within_tolerance = True
+        else:
+            density_est = (density + density_est)/2
+            sdf = density_est * k2/k1
+
+        iter_count += 1
+
+        if iter_count == 150:
+            LOGGER.warning('Slow convergence')
+            break
 
     return density_est, sdf
