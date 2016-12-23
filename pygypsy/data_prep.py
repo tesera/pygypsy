@@ -373,15 +373,30 @@ def prep_standtable(data):
         density_pl = fplot['Pl']['N']
         density_sb = fplot['Sb']['N']
 
-        y2bh_aw = fplot['Aw']['tage'] - fplot['Aw']['bhage']
-        y2bh_sw = fplot['Sw']['tage'] - fplot['Sw']['bhage']
-        y2bh_pl = fplot['Pl']['tage'] - fplot['Pl']['bhage']
-        y2bh_sb = fplot['Sb']['tage'] - fplot['Sb']['bhage']
-
         tage_aw = fplot['Aw']['tage']
         tage_sw = fplot['Sw']['tage']
         tage_pl = fplot['Pl']['tage']
         tage_sb = fplot['Sb']['tage']
+
+        bhage_aw = fplot['Aw']['bhage']
+        bhage_sw = fplot['Sw']['bhage']
+        bhage_pl = fplot['Pl']['bhage']
+        bhage_sb = fplot['Sb']['bhage']
+
+        y2bh_aw = tage_aw - bhage_aw
+        y2bh_sw = tage_sw - bhage_sw
+        y2bh_pl = tage_pl - bhage_pl
+        y2bh_sb = tage_sb - bhage_sb
+
+        site_index_aw = fplot['Aw']['SI']
+        site_index_sw = fplot['Sw']['SI']
+        site_index_pl = fplot['Pl']['SI']
+        site_index_sb = fplot['Sb']['SI']
+
+        basal_area_aw = fplot['Aw']['BA']
+        basal_area_sb = fplot['Sb']['BA']
+        basal_area_sw = fplot['Sw']['BA']
+        basal_area_pl = fplot['Pl']['BA']
 
         sp_aw = [
             'Aw',
@@ -440,66 +455,44 @@ def prep_standtable(data):
             fplot['Sb']['PCT']
         ]
 
-        bhage_aw = sp_aw[3]
-        tage_aw = sp_aw[2]
-        site_index_white_aspen = sp_aw[10]
-        y2bh_aw = tage_aw - bhage_aw
-        site_index_bh_aw = sp_aw[10]
         top_height_aw = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(
-            sp_aw[0], site_index_white_aspen, tage_aw
+            'Aw', site_index_aw, tage_aw
         )
-
-        bhage_sb = sp_sb[3]
-        tage_sb = sp_sb[2]
-        si_sb = sp_sb[10]
-        site_index_bh_sb = sp_sb[10]
         top_height_sb = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(
-            sp_sb[0], si_sb, tage_sb
+            'Sb', site_index_sb, tage_sb
         )
-
-        bhage_pl = sp_pl[3]
-        tage_pl = sp_pl[2]
-        si_pl = sp_pl[10]
-        y2bh_pl = tage_pl - bhage_pl
-        site_index_bh_pl = sp_pl[10]
         top_height_pl = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(
-            sp_pl[0], si_pl, tage_pl
+            'Pl', site_index_pl, tage_pl
         )
-
-        bhage_sw = sp_sw[3]
-        tage_sw = sp_sw[2]
-        si_sw = sp_sw[10]
-        y2bh_sw = tage_sw - bhage_sw
-        site_index_bh_sw = sp_sw[10]
         top_height_sw = ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(
-            sp_sw[0], si_sw, tage_sw
+            'Sw', site_index_sw, tage_sw
         )
 
-        y_aw = estimate_sdf_aw(sp_aw, site_index_bh_aw, bhage_aw, density_aw)
+        y_aw = estimate_sdf_aw(sp_aw, site_index_aw, bhage_aw, density_aw)
         sdf_aw0 = y_aw[1]
         density_bh_aw = y_aw[0]
 
-        y_sb = estimate_sdf_sb(sp_sb, site_index_bh_sb, tage_sb, density_sb)
+        y_sb = estimate_sdf_sb(sp_sb, site_index_sb, tage_sb, density_sb)
         sdf_sb0 = y_sb[1]
         density_bh_sb = y_sb[0]
 
-        y_sw = estimate_sdf_sw(sp_sw, site_index_bh_sw, tage_sw, sdf_aw0, density_sw)
+        y_sw = estimate_sdf_sw(sp_sw, site_index_sw, tage_sw, sdf_aw0, density_sw)
         sdf_sw0 = y_sw[1]
         density_bh_sw = y_sw[0]
 
         y_pl = estimate_sdf_pl(
-            sp_pl, site_index_bh_pl, tage_pl,
+            sp_pl, site_index_pl, tage_pl,
             sdf_aw0, sdf_sw0, sdf_sb0, density_pl
         )
         sdf_pl0 = y_pl[1]
         density_bh_pl = y_pl[0]
 
         # estimating species densities at time zero
-        initial_density_aw = estimate_density_aw(sdf_aw0, 0, site_index_bh_aw)
-        initial_density_sb = estimate_density_sb(sdf_sb0, 0, site_index_bh_sb)
-        initial_density_sw = estimate_density_sw(sdf_sw0, sdf_aw0, 0, site_index_bh_sw)
+        initial_density_aw = estimate_density_aw(sdf_aw0, 0, site_index_aw)
+        initial_density_sb = estimate_density_sb(sdf_sb0, 0, site_index_sb)
+        initial_density_sw = estimate_density_sw(sdf_sw0, sdf_aw0, 0, site_index_sw)
         initial_density_pl = estimate_density_pl(
-            sdf_aw0, sdf_sw0, sdf_sb0, sdf_pl0, 0, site_index_bh_pl
+            sdf_aw0, sdf_sw0, sdf_sb0, sdf_pl0, 0, site_index_pl
         )
 
         # estimating species-specific Basal area increment from Densities
@@ -510,31 +503,22 @@ def prep_standtable(data):
         species_composition_sb = species_composition[2]
         species_composition_pl = species_composition[3]
 
-        basal_area_aw = sp_aw[5]
-        basal_area_sb = sp_sb[5]
-        basal_area_sw = sp_sw[5]
-        basal_area_pl = sp_pl[5]
-
         basal_area_increment_aw = incr.increment_basal_area_aw(
-            sp_aw, species_composition_aw, site_index_bh_aw, density_bh_aw,
+            sp_aw, species_composition_aw, site_index_aw, density_bh_aw,
             initial_density_aw, bhage_aw, basal_area_aw
         )
         basal_area_increment_sb = incr.increment_basal_area_sb(
-            sp_sb, species_composition_sb, site_index_bh_sb, density_bh_sb,
+            sp_sb, species_composition_sb, site_index_sb, density_bh_sb,
             initial_density_sb, bhage_sb, basal_area_sb
         )
         basal_area_increment_sw = incr.increment_basal_area_sw(
-            sp_sw, species_composition_sw, site_index_bh_sw, density_bh_sw,
+            sp_sw, species_composition_sw, site_index_sw, density_bh_sw,
             initial_density_sw, bhage_sw, sdf_aw0, sdf_pl0, sdf_sb0, basal_area_sw
         )
         basal_area_increment_pl = incr.increment_basal_area_pl(
-            sp_pl, species_composition_pl, site_index_bh_pl, density_bh_pl,
+            sp_pl, species_composition_pl, site_index_pl, density_bh_pl,
             initial_density_pl, bhage_pl, sdf_aw0, sdf_sw0, sdf_sb0, basal_area_pl
         )
-
-        stump_dob_aw = sp_aw[7]
-        stump_height_aw = sp_aw[8]
-        top_dib_aw = sp_aw[9]
 
         PLOT_DICT[plot_id] = {
             'SI_Aw': site_index_white_aspen,
