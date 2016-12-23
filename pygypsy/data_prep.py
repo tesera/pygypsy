@@ -35,7 +35,7 @@ from pygypsy.asaCompileAgeGivenSpSiHt import (
 
 LOGGER = logging.getLogger(__name__)
 
-
+# TODO: use funct from site_index module
 def get_species_site_indices(dominant_species, site_index):
     '''
     This function gets the site indices for all other species in a plot
@@ -108,7 +108,7 @@ def get_species_site_indices(dominant_species, site_index):
 
     return site_index_white_aspen, site_index_pl, site_index_sw, site_index_sb
 
-
+# TODO: use func from site index modeule - move to utlls
 def get_gypsy_valid_species(dominant_species):
     """Given the plot dominant species, get the gypsy species
 
@@ -124,7 +124,7 @@ def get_gypsy_valid_species(dominant_species):
 
     return dominant_species
 
-
+# TODO: use func from site index module
 def dominant_species_site_index_estim(dominant_species,
                                       dominant_species_current_age,
                                       dominant_species_current_height):
@@ -138,6 +138,7 @@ def dominant_species_site_index_estim(dominant_species,
 
     return site_index
 
+# TODO: combine with funct from site_index module - move to utils
 def generate_species_dict():
     """Create empty spcies dict
 
