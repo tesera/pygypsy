@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 """Simulation"""
+from __future__ import division
+
 import logging
 import datetime
 import numpy as np
@@ -54,57 +56,22 @@ DEFAULT_UTILIZATIONS = {
 }
 
 
-def BA_zeroAw(BA_Aw0, BA_AwT):
-    while BA_Aw0 > BA_AwT * 0.5:
-        BA_Aw0 = BA_Aw0 * 0.5
-    return BA_Aw0
+def halve_x_while_greater_than_half_y(x, y):
+    # TODO: can't we just set x to y if x > y*0.5? why loop?
+    while x > y * 0.5:
+        x /= 2
+    return x
 
-def BA_zeroSw(BA_Sw0, BA_SwT):
-    while BA_Sw0 > BA_SwT * 0.5:
-        BA_Sw0 = BA_Sw0 * 0.5
-    return BA_Sw0
 
-def BA_zeroSb(BA_Sb0, BA_SbT):
-    while BA_Sb0 > BA_SbT * 0.5:
-        BA_Sb0 = BA_Sb0 * 0.5
-    return BA_Sb0
+def get_initial_basal_area(current_basal_area):
+    initial_basal_area = 0.001
 
-def BA_zeroPl(BA_Pl0, BA_PlT):
-    while BA_Pl0 > BA_PlT * 0.5:
-        BA_Pl0 = BA_Pl0 * 0.5
-    return BA_Pl0
+    if initial_basal_area > current_basal_area * 0.5:
+        initial_basal_area = halve_x_while_greater_than_half_y(
+            initial_basal_area, current_basal_area
+        )
 
-def BA0_lower_BAT_Aw(BA_AwT):
-    BA_Aw0 = 0.001
-    if BA_Aw0 > BA_AwT:
-        BA_Aw0 = BA_zeroAw(BA_Aw0, BA_AwT)
-    else:
-        pass
-    return BA_Aw0
-
-def BA0_lower_BAT_Sw(BA_SwT):
-    BA_Sw0 = 0.001
-    if BA_Sw0 > BA_SwT:
-        BA_Sw0 = BA_zeroSw(BA_Sw0, BA_SwT)
-    else:
-        pass
-    return BA_Sw0
-
-def BA0_lower_BAT_Sb(BA_SbT):
-    BA_Sb0 = 0.001
-    if BA_Sb0 > BA_SbT:
-        BA_Sb0 = BA_zeroSb(BA_Sb0, BA_SbT)
-    else:
-        pass
-    return BA_Sb0
-
-def BA0_lower_BAT_Pl(BA_PlT):
-    BA_Pl0 = 0.001
-    if BA_Pl0 > BA_PlT:
-        BA_Pl0 = BA_zeroPl(BA_Pl0, BA_PlT)
-    else:
-        pass
-    return BA_Pl0
+    return initial_basal_area
 
 def get_factors_for_all_species(**kwargs):
     logger.debug('Getting factors for all species')
@@ -183,10 +150,10 @@ def simulate_forwards_df(plot_df, simulation_choice='yes',
         N0_Pl = row.at['N0_Pl']
         N0_Sb = row.at['N0_Sb']
 
-        BA_Aw0 = BA0_lower_BAT_Aw(BA_AwT)
-        BA_Sw0 = BA0_lower_BAT_Sw(BA_SwT)
-        BA_Sb0 = BA0_lower_BAT_Sb(BA_SbT)
-        BA_Pl0 = BA0_lower_BAT_Pl(BA_PlT)
+        BA_Aw0 = get_initial_basal_area(BA_AwT)
+        BA_Sw0 = get_initial_basal_area(BA_SwT)
+        BA_Sb0 = get_initial_basal_area(BA_SbT)
+        BA_Pl0 = get_initial_basal_area(BA_PlT)
         SC_Aw, SC_Sw, SC_Sb, SC_Pl = estimate_species_composition(N0_Aw, N0_Sb, N0_Sw, N0_Pl)
 
         tageData = [tage_AwT, tage_SwT, tage_PlT, tage_SbT]
