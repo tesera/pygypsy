@@ -56,22 +56,14 @@ DEFAULT_UTILIZATIONS = {
 }
 
 
-def halve_x_while_greater_than_half_y(x, y):
-    # TODO: can't we just set x to y if x > y*0.5? why loop?
-    while x > y * 0.5:
-        x /= 2
-    return x
-
-
 def get_initial_basal_area(current_basal_area):
     initial_basal_area = 0.001
 
     if initial_basal_area > current_basal_area * 0.5:
-        initial_basal_area = halve_x_while_greater_than_half_y(
-            initial_basal_area, current_basal_area
-        )
+        initial_basal_area /= 2
 
     return initial_basal_area
+
 
 def get_factors_for_all_species(**kwargs):
     logger.debug('Getting factors for all species')
