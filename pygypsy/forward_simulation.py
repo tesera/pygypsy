@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 import basal_area_increment as incr
-from GYPSYNonSpatial import densities_and_SCs_to_250
+from GYPSYNonSpatial import densities_speciescomp_topheight_to_250
 from utils import _log_loop_progress, estimate_species_composition
 from pygypsy.basal_area_factor import (
     estimate_basal_area_factor_aw,
@@ -65,7 +65,7 @@ def get_initial_basal_area(current_basal_area):
     return initial_basal_area
 
 
-def get_factors_for_all_species(**kwargs):
+def get_basal_area_factors_for_all_species(**kwargs):
     logger.debug('Getting factors for all species')
 
     f_Sb = 0
@@ -161,7 +161,7 @@ def simulate_forwards_df(plot_df, simulation_choice='yes',
         tageData = sorted(tageData, reverse=True)
         startTage = int(tageData[0])
 
-        densities = densities_and_SCs_to_250(
+        densities = densities_speciescomp_topheight_to_250(
             startTage=startTage,
             startTageAw=startTageAw,
             y2bh_Aw=y2bh_Aw,
@@ -184,7 +184,7 @@ def simulate_forwards_df(plot_df, simulation_choice='yes',
         # estimating correction factor to fit BA at t0 and BA at t and
         # choosing whether simulating with multiplication factor
         # or starting at t recalculating the densities and SC
-        species_factors = get_factors_for_all_species(
+        species_factors = get_basal_area_factors_for_all_species(
             startTage=startTage,
             startTageAw=startTageAw,
             y2bh_Aw=y2bh_Aw,
