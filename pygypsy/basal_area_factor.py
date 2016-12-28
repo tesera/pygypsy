@@ -94,11 +94,8 @@ def estimate_basal_area_factor_sb(**kwargs):
     '''
     LOGGER.debug('Getting basal area factor for black spruce')
     initial_age = kwargs['startTage']
-    initial_age_sb = kwargs['startTageSb']
-    years_to_bh_sb = kwargs['y2bh_Sb']
-    species_comp_sb = kwargs['SC_Sb']
     site_index = kwargs['SI_bh_Sb']
-    present_density = kwargs['N_bh_SbT']
+    densities = kwargs['densities']
     density_at_bh_age = kwargs['N0_Sb']
     basal_area_at_bh_age = kwargs['BA_Sb0']
     present_basal_area = kwargs['BA_SbT']
@@ -109,10 +106,8 @@ def estimate_basal_area_factor_sb(**kwargs):
     iter_count = 0
 
     while not within_tolerance:
-        ba_est = sim_basal_area_sb(initial_age, initial_age_sb, years_to_bh_sb,
-                                   species_comp_sb, site_index, present_density,
-                                   density_at_bh_age, basal_area_at_bh_age,
-                                   factor)[-1]
+        ba_est = sim_basal_area_sb(initial_age, site_index, density_at_bh_age,
+                                   basal_area_at_bh_age, factor, densities)[-1]
 
         if abs(present_basal_area - ba_est) < tolerance:
             within_tolerance = True
@@ -163,11 +158,8 @@ def estimate_basal_area_factor_sw(**kwargs):
     '''
     LOGGER.debug('Getting basal area factor for white spruce')
     initial_age = kwargs['startTage']
-    initial_age_sw = kwargs['startTageSw']
-    years_to_bh_sw = kwargs['y2bh_Sw']
-    species_comp_sw = kwargs['SC_Sw']
     site_index = kwargs['SI_bh_Sw']
-    present_density = kwargs['N_bh_SwT']
+    densities = kwargs['densities']
     density_at_bh_age = kwargs['N0_Sw']
     sdf_aw = kwargs['SDF_Aw0']
     sdf_pl = kwargs['SDF_Pl0']
@@ -181,11 +173,10 @@ def estimate_basal_area_factor_sw(**kwargs):
     factor1 = 1.5* factor
 
     while not within_tolerance:
-        ba_est = sim_basal_area_sw(initial_age, initial_age_sw, years_to_bh_sw,
-                                   species_comp_sw, site_index, present_density,
+        ba_est = sim_basal_area_sw(initial_age, site_index,
                                    density_at_bh_age, sdf_aw, sdf_pl, sdf_sb,
                                    basal_area_at_bh_age,
-                                   factor)[-1]
+                                   factor, densities)[-1]
         if abs(present_basal_area - ba_est) < tolerance:
             within_tolerance = True
         else:

@@ -261,7 +261,7 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
         #       increments that's something for another day; because it is
         #       complicated by the whole factor business
         BA_0_to_data_Aw_arr = sim_basal_area_aw(
-            startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities,
+            startTage, SI_bh_Aw,  N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities,
             use_correction_factor_future=True, stop_at_initial_age=False
         )
         BA_0_to_data_Sb_arr = sim_basal_area_sb(
@@ -269,8 +269,8 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
             BA_Sb0, f_Sb, densities, stop_at_initial_age=False
         )
         BA_0_to_data_Sw_arr = sim_basal_area_sw(
-            startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw,
-            SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, stop_at_initial_age=False
+            startTage, SI_bh_Sw, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0,
+            f_Sw, densities, stop_at_initial_age=False
         )
         BA_0_to_data_Pl_arr = sim_basal_area_pl(
             startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,
