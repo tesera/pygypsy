@@ -9,7 +9,6 @@ from pygypsy import basal_area_increment as incr
 LOGGER = logging.getLogger(__name__)
 
 
-# TODO: remove densities
 def sim_basal_area_aw(initial_age, site_index, density_at_bh_age,
                       basal_area_at_bh_age, sdf_aw, correction_factor, densities,
                       use_correction_factor_future=False,

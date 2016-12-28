@@ -141,13 +141,13 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
         N0_Pl = row.at['N0_Pl']
         N0_Sb = row.at['N0_Sb']
 
-        # TODO: don't we already have this from data prep?
+        # TODO: don't we already have this in the data frame from data prep?
         BA_Aw0 = get_initial_basal_area(BA_AwT)
         BA_Sw0 = get_initial_basal_area(BA_SwT)
         BA_Sb0 = get_initial_basal_area(BA_SbT)
         BA_Pl0 = get_initial_basal_area(BA_PlT)
 
-        # TODO: don't we already have this from data prep?
+        # TODO: don't we already have this in the data frame from data prep?
         SC_Aw, SC_Sw, SC_Sb, SC_Pl = estimate_species_composition(N0_Aw, N0_Sb, N0_Sw, N0_Pl)
 
         tageData = [tage_AwT, tage_SwT, tage_PlT, tage_SbT]
@@ -155,11 +155,6 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
         startTageSw = tageData[1]
         startTagePl = tageData[2]
         startTageSb = tageData[3]
-        # TODO: these are never used ... remove?
-        startTageAwF = tageData[0]+1
-        startTageSwF = tageData[1]+1
-        startTagePlF = tageData[2]+1
-        startTageSbF = tageData[3]+1
 
         tageData = sorted(tageData, reverse=True)
         startTage = int(tageData[0])
@@ -243,10 +238,44 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
         # them sw, sb, pl use the factor until the time of data. the subsequent
         # years use the regular basal area increment formula julianno sambatti,
         # november 10, 2016
-        BA_0_to_data_Aw_arr = sim_basal_area_aw(startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, use_correction_factor_future=True, stop_at_initial_age=False)
-        BA_0_to_data_Sb_arr = sim_basal_area_sb(startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, stop_at_initial_age=False)
-        BA_0_to_data_Sw_arr = sim_basal_area_sw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, stop_at_initial_age=False)
-        BA_0_to_data_Pl_arr = sim_basal_area_pl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, stop_at_initial_age=False)
+
+        # TODO: something is amiss with this new approach; everything is OK until startTage,
+        #       then the new approahc and the old approach begin to diverge, with the new approach
+        #       having higher values than old
+        #       the old approach used density, species comp, bhage from SC_Dict
+        #       which was a dict of the params which came frmo an array of the params
+        #       generated frmo the smiulate_species_comp_tree_height_etc_to_250 function
+        #
+        #       but here, below, i guess all those values are fixed and from the time of the data
+        #       i think that would account for it
+        #       in other words, need to pass that densities dict through and use the values?
+        #       that's pretty confusing though. yeesh
+        #
+        #       basically, make sb, sq, pl sim_basal_area_functions work like
+        #       aw function using densities/dict array
+        #
+        #       further inspection of those functions indicates they can be improved
+        #       because the increment only dependds on other values, so we can
+        #       calculate it as a vector operation using the other arrays then
+        #       the actual values are just the cumulative sums of the
+        #       increments that's something for another day; because it is
+        #       complicated by the whole factor business
+        BA_0_to_data_Aw_arr = sim_basal_area_aw(
+            startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities,
+            use_correction_factor_future=True, stop_at_initial_age=False
+        )
+        BA_0_to_data_Sb_arr = sim_basal_area_sb(
+            startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb,
+            BA_Sb0, f_Sb, stop_at_initial_age=False
+        )
+        BA_0_to_data_Sw_arr = sim_basal_area_sw(
+            startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw,
+            SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, stop_at_initial_age=False
+        )
+        BA_0_to_data_Pl_arr = sim_basal_area_pl(
+            startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,
+            SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, stop_at_initial_age=False
+        )
 
         output_DF_Aw = pd.DataFrame(BA_0_to_data_Aw_arr, columns=['BA_Aw'])
         output_DF_Sw = pd.DataFrame(BA_0_to_data_Sw_arr, columns=['BA_Sw'])
@@ -258,8 +287,8 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
             [densities_DF, output_DF_Aw, output_DF_Sw, output_DF_Sb, output_DF_Pl],
             axis=1
         )
-        #http://stackoverflow.com/questions/25314547/cell-var-from-loop-warning-from-pylint
 
+        #import ipdb; ipdb.set_trace()
         for spec in SPECIES:
             output_DF['Gross_Total_Volume_%s' % spec] = gross_total_volume(
                 spec,
