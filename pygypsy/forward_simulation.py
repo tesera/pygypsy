@@ -265,8 +265,8 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
             use_correction_factor_future=True, stop_at_initial_age=False
         )
         BA_0_to_data_Sb_arr = sim_basal_area_sb(
-            startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb,
-            BA_Sb0, f_Sb, stop_at_initial_age=False
+            startTage, SI_bh_Sb, N0_Sb,
+            BA_Sb0, f_Sb, densities, stop_at_initial_age=False
         )
         BA_0_to_data_Sw_arr = sim_basal_area_sw(
             startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw,
