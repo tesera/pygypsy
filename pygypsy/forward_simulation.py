@@ -273,8 +273,8 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
             f_Sw, densities, stop_at_initial_age=False
         )
         BA_0_to_data_Pl_arr = sim_basal_area_pl(
-            startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl,
-            SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, stop_at_initial_age=False
+            startTage, SI_bh_Pl, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0,
+            f_Pl, densities, stop_at_initial_age=False
         )
 
         output_DF_Aw = pd.DataFrame(BA_0_to_data_Aw_arr, columns=['BA_Aw'])

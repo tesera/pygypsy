@@ -224,12 +224,9 @@ def estimate_basal_area_factor_pl(**kwargs):
 
     '''
     initial_age = kwargs['startTage']
-    initial_age_pl = kwargs['startTagePl']
-    years_to_bh_pl = kwargs['y2bh_Pl']
-    species_comp_pl = kwargs['SC_Pl']
     site_index = kwargs['SI_bh_Pl']
-    present_density = kwargs['N_bh_PlT']
     density_at_bh_age = kwargs['N0_Pl']
+    densities = kwargs['densities']
     sdf_aw = kwargs['SDF_Aw0']
     sdf_sw = kwargs['SDF_Sw0']
     sdf_sb = kwargs['SDF_Sb0']
@@ -245,11 +242,9 @@ def estimate_basal_area_factor_pl(**kwargs):
     factor1 = 1.5* factor
 
     while not within_tolerance:
-        ba_est = sim_basal_area_pl(initial_age, initial_age_pl, years_to_bh_pl,
-                                   species_comp_pl, site_index, present_density,
+        ba_est = sim_basal_area_pl(initial_age, site_index,
                                    density_at_bh_age, sdf_aw, sdf_sw, sdf_sb,
-                                   basal_area_at_bh_age,
-                                   factor)[-1]
+                                   basal_area_at_bh_age, factor, densities)[-1]
 
         if abs(present_basal_area - ba_est) < tolerance:
             within_tolerance = True
