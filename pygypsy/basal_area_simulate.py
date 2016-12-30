@@ -12,7 +12,8 @@ from pygypsy import basal_area_increment as incr
 
 LOGGER = logging.getLogger(__name__)
 
-
+# TODO: to maintain backwards compatibility, enable the sim functions to
+# use only  the bhage_pl, species_proportion, density from the year of the data
 def sim_basal_area_aw(initial_age, site_index, density_at_bh_age,
                       basal_area_at_bh_age, sdf_aw, correction_factor, densities,
                       use_correction_factor_future=False,
