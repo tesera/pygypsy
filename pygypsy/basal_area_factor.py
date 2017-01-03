@@ -107,7 +107,8 @@ def estimate_basal_area_factor_sb(**kwargs):
 
     while not within_tolerance:
         ba_est = sim_basal_area_sb(initial_age, site_index, density_at_bh_age,
-                                   basal_area_at_bh_age, factor, densities)[-1]
+                                   basal_area_at_bh_age, factor, densities,
+                                   fix_proportion_and_density_to_initial_age=True)[-1]
 
         if abs(present_basal_area - ba_est) < tolerance:
             within_tolerance = True
@@ -176,7 +177,8 @@ def estimate_basal_area_factor_sw(**kwargs):
         ba_est = sim_basal_area_sw(initial_age, site_index,
                                    density_at_bh_age, sdf_aw, sdf_pl, sdf_sb,
                                    basal_area_at_bh_age,
-                                   factor, densities)[-1]
+                                   factor, densities,
+                                   fix_proportion_and_density_to_initial_age=True)[-1]
         if abs(present_basal_area - ba_est) < tolerance:
             within_tolerance = True
         else:
@@ -239,12 +241,13 @@ def estimate_basal_area_factor_pl(**kwargs):
     tolerance = 0.1
     within_tolerance = False
     iter_count = 0
-    factor1 = 1.5* factor
+    factor1 = 1.5 * factor
 
     while not within_tolerance:
         ba_est = sim_basal_area_pl(initial_age, site_index,
                                    density_at_bh_age, sdf_aw, sdf_sw, sdf_sb,
-                                   basal_area_at_bh_age, factor, densities)[-1]
+                                   basal_area_at_bh_age, factor, densities,
+                                   fix_proportion_and_density_to_initial_age=True)[-1]
 
         if abs(present_basal_area - ba_est) < tolerance:
             within_tolerance = True
