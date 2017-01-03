@@ -29,11 +29,9 @@ from pygypsy.asaCompileAgeGivenSpSiHt import (
     ComputeGypsySiteIndex,
 )
 
-# TODO: use pure functions or class instances to avoid mutating global state
-# TODO: don't nest functions
-
 
 LOGGER = logging.getLogger(__name__)
+
 
 # TODO: use funct from site_index module
 def get_species_site_indices(dominant_species, site_index):
@@ -374,8 +372,6 @@ def prep_standtable(data):
         )
 
         temp_dominant_species = get_gypsy_valid_species(plot_dominant_species)
-
-        # TODO: should this use plot dominant species instead of temp?
         gypsy_site_indices = get_species_site_indices(temp_dominant_species,
                                                       site_index)
 
