@@ -270,7 +270,6 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
             axis=1
         )
 
-        import ipdb; ipdb.set_trace()
         for spec in SPECIES:
             output_DF['Gross_Total_Volume_%s' % spec] = gross_total_volume(
                 spec,

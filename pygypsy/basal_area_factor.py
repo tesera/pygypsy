@@ -68,7 +68,7 @@ def estimate_basal_area_factor_aw(**kwargs):
         if iter_count == 10000:
             LOGGER.warning(('Slow convergence with Basal Area: %s'
                             ' and factor:%s '), ba_est, factor)
-            return factor
+            break
     return factor
 
 
@@ -129,7 +129,7 @@ def estimate_basal_area_factor_sb(**kwargs):
         if iter_count == 1500:
             LOGGER.warning(('Slow convergence with Basal Area: %s'
                             ' and factor:%s '), ba_est, factor)
-            return factor
+            break
 
     return factor
 
@@ -162,6 +162,7 @@ def estimate_basal_area_factor_sw(**kwargs):
     site_index = kwargs['SI_bh_Sw']
     densities = kwargs['densities']
     density_at_bh_age = kwargs['N0_Sw']
+    species_proportion_at_bh_age = kwargs['SC_Sw']
     sdf_aw = kwargs['SDF_Aw0']
     sdf_pl = kwargs['SDF_Pl0']
     sdf_sb = kwargs['SDF_Sb0']
@@ -178,7 +179,8 @@ def estimate_basal_area_factor_sw(**kwargs):
                                    density_at_bh_age, sdf_aw, sdf_pl, sdf_sb,
                                    basal_area_at_bh_age,
                                    factor, densities,
-                                   fix_proportion_and_density_to_initial_age=True)[-1]
+                                   fix_proportion_and_density_to_initial_age=True,
+                                   species_proportion_at_bh_age=species_proportion_at_bh_age)[-1]
         if abs(present_basal_area - ba_est) < tolerance:
             within_tolerance = True
         else:
@@ -197,7 +199,7 @@ def estimate_basal_area_factor_sw(**kwargs):
         if iter_count == 1500:
             LOGGER.warning(('Slow convergence with Basal Area: %s'
                             ' and factor:%s '), ba_est, factor)
-            return factor
+            break
 
     return factor
 
@@ -264,6 +266,6 @@ def estimate_basal_area_factor_pl(**kwargs):
         if iter_count == 150:
             LOGGER.warning(('Slow convergence with Basal Area: %s'
                             ' and factor:%s '), ba_est, factor)
-            return factor
+            break
 
     return factor

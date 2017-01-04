@@ -157,7 +157,8 @@ def sim_basal_area_sw(initial_age, site_index, density_at_bh_age, sdf_aw,
                       sdf_pl, sdf_sb, basal_area_at_bh_age, correction_factor,
                       densities, use_correction_factor_future=False,
                       stop_at_initial_age=True,
-                      fix_proportion_and_density_to_initial_age=False):
+                      fix_proportion_and_density_to_initial_age=False,
+                      species_proportion_at_bh_age=None):
     '''Simlulate basal area forward in time for White Spruce
     It created the trajectory of basal area from bhage up to the inventory year
     given a correction factor that is being optimized
@@ -184,16 +185,15 @@ def sim_basal_area_sw(initial_age, site_index, density_at_bh_age, sdf_aw,
 
     '''
     max_age = initial_age if stop_at_initial_age else 250
-    year = 0
     basal_area_arr = np.zeros(max_age)
     basal_area_temp = basal_area_at_bh_age
 
     for i, spec_comp_dict in enumerate(densities[0: max_age]):
         sc_factor = correction_factor \
-                    if year < initial_age or use_correction_factor_future\
+                    if i < initial_age or use_correction_factor_future\
                     else 1
         bh_age_sw = spec_comp_dict['bhage_Sw']
-        spec_proportion = densities[initial_age]['SC_Sw'] \
+        spec_proportion = species_proportion_at_bh_age \
                           if fix_proportion_and_density_to_initial_age \
                           else spec_comp_dict['SC_Sw']
         present_density = densities[initial_age]['N_bh_SwT'] \
