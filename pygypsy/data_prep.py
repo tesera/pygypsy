@@ -278,7 +278,8 @@ def populate_species_dict(partial_species_list,
     species_dict = deepcopy(partial_species_list)
     outer_sorted_species_perc_list = sorted_species_abbrev_perc_tuples_list
     for species in outer_sorted_species_perc_list:
-        # TODO: continue or raise, not break? if this is true, there's no species at all, I think
+        # TODO: raise NoDominantSpeciesError and catch it where called instead of break
+        # confirmed with julianno
         if species[1] == 0:
             break
         # TODO: this is always true on first pass of the loop
@@ -482,26 +483,6 @@ def prep_standtable(data):
         species_composition_sb = species_composition[2]
         species_composition_pl = species_composition[3]
 
-        # TODO: are these increments used in simulation? can we remove
-        basal_area_increment_aw = incr.increment_basal_area_aw(
-            species_composition_aw, site_index_aw, density_bh_aw,
-            initial_density_aw, bhage_aw, basal_area_aw
-        )
-        basal_area_increment_sb = incr.increment_basal_area_sb(
-             species_composition_sb, site_index_sb, density_bh_sb,
-            initial_density_sb, bhage_sb, basal_area_sb
-        )
-        basal_area_increment_sw = incr.increment_basal_area_sw(
-            species_composition_sw, site_index_sw, density_bh_sw,
-            initial_density_sw, bhage_sw, sdf_aw0, sdf_pl0,
-            sdf_sb0, basal_area_sw
-        )
-        basal_area_increment_pl = incr.increment_basal_area_pl(
-            species_composition_pl, site_index_pl, density_bh_pl,
-            initial_density_pl, bhage_pl, sdf_aw0, sdf_sw0,
-            sdf_sb0, basal_area_pl
-        )
-
         plot_dict[plot_id] = {
             'SI_Aw': site_index_aw,
             'SI_Sw': site_index_sw,
@@ -523,10 +504,6 @@ def prep_standtable(data):
             'BA_Sw': basal_area_sw,
             'BA_Pl': basal_area_pl,
             'BA_Sb': basal_area_sb,
-            'BAinc_Aw': basal_area_increment_aw,
-            'BAinc_Sw': basal_area_increment_sw,
-            'BAinc_Pl': basal_area_increment_pl,
-            'BAinc_Sb': basal_area_increment_sb,
             'SDF_Aw': sdf_aw0,
             'SDF_Sw': sdf_sw0,
             'SDF_Pl': sdf_pl0,
