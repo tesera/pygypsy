@@ -141,13 +141,11 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
         N0_Pl = row.at['N0_Pl']
         N0_Sb = row.at['N0_Sb']
 
-        # TODO: don't we already have this in the data frame from data prep?
         BA_Aw0 = get_initial_basal_area(BA_AwT)
         BA_Sw0 = get_initial_basal_area(BA_SwT)
         BA_Sb0 = get_initial_basal_area(BA_SbT)
         BA_Pl0 = get_initial_basal_area(BA_PlT)
 
-        # TODO: don't we already have this in the data frame from data prep?
         SC_Aw, SC_Sw, SC_Sb, SC_Pl = estimate_species_composition(N0_Aw, N0_Sb, N0_Sw, N0_Pl)
 
         tageData = [tage_AwT, tage_SwT, tage_PlT, tage_SbT]
