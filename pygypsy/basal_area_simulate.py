@@ -270,6 +270,8 @@ def sim_basal_area_pl(initial_age, site_index, density_at_bh_age, sdf_aw,
 
         if density_at_bh_age > 0:
             if bh_age_pl > 0:
+                # factor empirically determined to work better when multiplied with whole
+                # increment - julianno sambatti
                 basal_area_increment = sc_factor \
                                        * incr.increment_basal_area_pl(
                                            spec_proportion, site_index,
