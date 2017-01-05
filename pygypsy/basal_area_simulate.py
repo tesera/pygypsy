@@ -158,7 +158,7 @@ def sim_basal_area_sw(initial_age, site_index, density_at_bh_age, sdf_aw,
                       densities, use_correction_factor_future=False,
                       stop_at_initial_age=True,
                       fix_proportion_and_density_to_initial_age=False,
-                      species_proportion_at_bh_age=None):
+                      species_proportion_at_bh_age=None, present_density=None):
     '''Simlulate basal area forward in time for White Spruce
     It created the trajectory of basal area from bhage up to the inventory year
     given a correction factor that is being optimized
@@ -196,7 +196,7 @@ def sim_basal_area_sw(initial_age, site_index, density_at_bh_age, sdf_aw,
         spec_proportion = species_proportion_at_bh_age \
                           if fix_proportion_and_density_to_initial_age \
                           else spec_comp_dict['SC_Sw']
-        present_density = densities[initial_age]['N_bh_SwT'] \
+        present_density = present_density \
                           if fix_proportion_and_density_to_initial_age \
                           else spec_comp_dict['N_bh_SwT']
 

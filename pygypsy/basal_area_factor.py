@@ -168,6 +168,7 @@ def estimate_basal_area_factor_sw(**kwargs):
     sdf_sb = kwargs['SDF_Sb0']
     basal_area_at_bh_age = kwargs['BA_Sw0']
     present_basal_area = kwargs['BA_SwT']
+    present_density = kwargs['N_bh_SwT']
     factor = 2.5
     tolerance = 0.1
     within_tolerance = False
@@ -180,7 +181,8 @@ def estimate_basal_area_factor_sw(**kwargs):
                                    basal_area_at_bh_age,
                                    factor, densities,
                                    fix_proportion_and_density_to_initial_age=True,
-                                   species_proportion_at_bh_age=species_proportion_at_bh_age)[-1]
+                                   species_proportion_at_bh_age=species_proportion_at_bh_age,
+                                   present_density=present_density)[-1]
         if abs(present_basal_area - ba_est) < tolerance:
             within_tolerance = True
         else:
