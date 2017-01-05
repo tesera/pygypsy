@@ -4,10 +4,8 @@ from __future__ import division
 
 import logging
 import datetime
-import numpy as np
 import pandas as pd
 
-import basal_area_increment as incr
 from GYPSYNonSpatial import densities_speciescomp_topheight_to_250
 from utils import _log_loop_progress, estimate_species_composition
 from pygypsy.basal_area_factor import (
