@@ -286,9 +286,17 @@ def sim_basal_area_pl(initial_age, site_index, density_at_bh_age, sdf_aw,
                     else 1
         bh_age_pl = spec_comp_dict['bhage_Pl']
 
-        spec_proportion = species_proportion_at_bh_age \
-                          if i < initial_age or fix_proportion_and_density_to_initial_age \
-                          else spec_comp_dict['SC_Sw']
+        # the first time in this for loop, spec proportion must be assigned
+        if i==0:
+            spec_proportion = species_proportion_at_bh_age
+        # until the year of the data is reached we then do not reassign it, and the
+        # value of spec_proportion * sc_factor increases exponentially
+        elif i < initial_age:
+            pass
+        # future values use the estimated species proportion and it is constant
+        else:
+            spec_proportion = spec_comp_dict['SC_Pl']
+
         present_density = present_density \
                           if i < initial_age or fix_proportion_and_density_to_initial_age \
                           else spec_comp_dict['N_bh_PlT']

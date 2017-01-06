@@ -175,9 +175,6 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
             SI_bh_Pl=SI_bh_Pl
         )
 
-        # estimating correction factor to fit BA at t0 and BA at t and
-        # choosing whether simulating with multiplication factor
-        # or starting at t recalculating the densities and SC
         species_factors = get_basal_area_factors_for_all_species(
             startTage=startTage,
             startTageAw=startTageAw,
@@ -225,21 +222,17 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
         f_Sb = species_factors['f_Sb']
         f_Pl = species_factors['f_Pl']
 
-        logger.debug('Getting basal area from time 0 to time of data')
         # use_correction_factor_future here is True because aspen was peculiar,
         # empirically demonstrated that using the factor for the whole
         # simulation yielded better results, probably because of variability in
         # density and basal area unique to aspen we can't do simulation choice
-        # = no here for sb, sw, pl because the factor should not be applied for
-        # them sw, sb, pl use the factor until the time of data. the subsequent
-        # years use the regular basal area increment formula julianno sambatti,
-        # november 10, 2016
-        # further inspection of those functions indicates they can be improved
-        # because the increment only dependds on other values, so we can
-        # calculate it as a vector operation using the other arrays then
-        # the actual values are just the cumulative sums of the
-        # increments that's something for another day; because it is
-        # complicated by the whole factor business
+
+        # sim functions can be improved because the increment is not
+        # autoregressive, so we can calculate it as a vector operation using
+        # the other arrays then the actual values are just the cumulative sums
+        # of the increments that's something for another day; because it is
+        # complicated by the whole factor business TODO: these are no longer 0
+        # to data
         BA_0_to_data_Aw_arr = sim_basal_area_aw(
             startTage, SI_bh_Aw,  N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities,
             use_correction_factor_future=True, stop_at_initial_age=False
@@ -288,6 +281,7 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
         output_DF['Gross_Total_Volume_Tot'] = output_DF['Gross_Total_Volume_Con'] \
                                               + output_DF['Gross_Total_Volume_Dec']
 
+        # TODO: put this above to DEDUP
         # this could go in the loop above, but is left here for now since
         # the tests are sensitive to column order
         for spec in SPECIES:
