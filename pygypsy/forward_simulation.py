@@ -25,8 +25,8 @@ from pygypsy.density import (
     estimate_density_sb,
     estimate_density_sw,
 )
-from pygypsy.utils import estimate_species_composition
-from pygypsy.asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
+from pygypsy.asaCompileAgeGivenSpSiHt \
+    import ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge
 
 
 LOGGER = logging.getLogger(__name__)
@@ -88,7 +88,7 @@ def densities_speciescomp_topheight_to_250(**kwargs):
     starttageswb = starttagesw
     starttageplb = starttagepl
     starttagesbb = starttagesb
-    year = 1
+    year = 0
 
     while year < 250:
         tage_aw = starttageawb - starttage
