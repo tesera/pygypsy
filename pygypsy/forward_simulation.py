@@ -274,17 +274,6 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
                 output_DF['topHeight_%s' % spec]
             )
 
-        output_DF['Gross_Total_Volume_Con'] = output_DF['Gross_Total_Volume_Sw'] \
-                                              + output_DF['Gross_Total_Volume_Sb'] \
-                                              + output_DF['Gross_Total_Volume_Pl']
-        output_DF['Gross_Total_Volume_Dec'] = output_DF['Gross_Total_Volume_Aw']
-        output_DF['Gross_Total_Volume_Tot'] = output_DF['Gross_Total_Volume_Con'] \
-                                              + output_DF['Gross_Total_Volume_Dec']
-
-        # TODO: put this above to DEDUP
-        # this could go in the loop above, but is left here for now since
-        # the tests are sensitive to column order
-        for spec in SPECIES:
             output_DF['MerchantableVolume%s' % spec] = merchantable_volume(
                 spec,
                 output_DF['N_bh_%sT' % spec],
@@ -296,6 +285,13 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
                 stump_height=utiliz_params[spec.lower()]['stumpHeight']
             )
 
+
+        output_DF['Gross_Total_Volume_Con'] = output_DF['Gross_Total_Volume_Sw'] \
+                                              + output_DF['Gross_Total_Volume_Sb'] \
+                                              + output_DF['Gross_Total_Volume_Pl']
+        output_DF['Gross_Total_Volume_Dec'] = output_DF['Gross_Total_Volume_Aw']
+        output_DF['Gross_Total_Volume_Tot'] = output_DF['Gross_Total_Volume_Con'] \
+                                              + output_DF['Gross_Total_Volume_Dec']
         output_DF['MerchantableVolume_Con'] = output_DF['MerchantableVolumeSw'] \
                                               + output_DF['MerchantableVolumeSb'] \
                                               + output_DF['MerchantableVolumePl']
