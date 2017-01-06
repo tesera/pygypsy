@@ -144,7 +144,9 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
         BA_Sb0 = get_initial_basal_area(BA_SbT)
         BA_Pl0 = get_initial_basal_area(BA_PlT)
 
-        SC_Aw, SC_Sw, SC_Sb, SC_Pl = estimate_species_composition(N0_Aw, N0_Sb, N0_Sw, N0_Pl)
+        SC_Aw, SC_Sw, SC_Sb, SC_Pl = estimate_species_composition(
+            N0_Aw, N0_Sb, N0_Sw, N0_Pl
+        )
 
         tageData = [tage_AwT, tage_SwT, tage_PlT, tage_SbT]
         startTageAw = tageData[0]
@@ -177,129 +179,94 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
 
         species_factors = get_basal_area_factors_for_all_species(
             startTage=startTage,
-            startTageAw=startTageAw,
-            y2bh_Aw=y2bh_Aw,
-            SC_Aw=SC_Aw,
-            SI_bh_Aw=SI_bh_Aw,
-            N_bh_AwT=N_bh_AwT,
-            N0_Aw=N0_Aw,
-            BA_Aw0=BA_Aw0,
-            BA_AwT=BA_AwT,
-            startTageSb=startTageSb,
-            y2bh_Sb=y2bh_Sb,
-            SC_Sb=SC_Sb,
-            SI_bh_Sb=SI_bh_Sb,
-            N_bh_SbT=N_bh_SbT,
-            N0_Sb=N0_Sb,
-            BA_Sb0=BA_Sb0,
-            BA_SbT=BA_SbT,
-            startTageSw=startTageSw,
-            y2bh_Sw=y2bh_Sw,
-            SC_Sw=SC_Sw,
-            SI_bh_Sw=SI_bh_Sw,
-            N_bh_SwT=N_bh_SwT,
-            N0_Sw=N0_Sw,
-            SDF_Pl0=SDF_Pl0,
-            SDF_Sb0=SDF_Sb0,
-            BA_Sw0=BA_Sw0,
-            BA_SwT=BA_SwT,
-            startTagePl=startTagePl,
-            y2bh_Pl=y2bh_Pl,
-            SC_Pl=SC_Pl,
-            SI_bh_Pl=SI_bh_Pl,
-            N_bh_PlT=N_bh_PlT,
-            N0_Pl=N0_Pl,
-            SDF_Aw0=SDF_Aw0,
-            SDF_Sw0=SDF_Sw0,
-            BA_Pl0=BA_Pl0,
-            BA_PlT=BA_PlT,
-            densities=densities,
-            printWarnings=True
+            startTageAw=startTageAw, startTageSb=startTageSb,
+            startTageSw=startTageSw, startTagePl=startTagePl,
+            y2bh_Aw=y2bh_Aw, y2bh_Sb=y2bh_Sb, y2bh_Sw=y2bh_Sw, y2bh_Pl=y2bh_Pl,
+            SC_Aw=SC_Aw, SC_Sb=SC_Sb, SC_Sw=SC_Sw, SC_Pl=SC_Pl,
+            SI_bh_Aw=SI_bh_Aw, SI_bh_Sb=SI_bh_Sb, SI_bh_Sw=SI_bh_Sw, SI_bh_Pl=SI_bh_Pl,
+            N_bh_AwT=N_bh_AwT, N_bh_SbT=N_bh_SbT, N_bh_SwT=N_bh_SwT, N_bh_PlT=N_bh_PlT,
+            N0_Aw=N0_Aw, N0_Sb=N0_Sb, N0_Sw=N0_Sw, N0_Pl=N0_Pl,
+            BA_Aw0=BA_Aw0, BA_Sb0=BA_Sb0, BA_Sw0=BA_Sw0, BA_Pl0=BA_Pl0,
+            BA_AwT=BA_AwT, BA_SbT=BA_SbT, BA_SwT=BA_SwT, BA_PlT=BA_PlT,
+            SDF_Pl0=SDF_Pl0, SDF_Sb0=SDF_Sb0, SDF_Aw0=SDF_Aw0, SDF_Sw0=SDF_Sw0,
+            densities=densities
         )
-
-        f_Aw = species_factors['f_Aw']
-        f_Sw = species_factors['f_Sw']
-        f_Sb = species_factors['f_Sb']
-        f_Pl = species_factors['f_Pl']
 
         # use_correction_factor_future here is True because aspen was peculiar,
         # empirically demonstrated that using the factor for the whole
         # simulation yielded better results, probably because of variability in
-        # density and basal area unique to aspen we can't do simulation choice
-
-        # sim functions can be improved because the increment is not
-        # autoregressive, so we can calculate it as a vector operation using
-        # the other arrays then the actual values are just the cumulative sums
-        # of the increments that's something for another day; because it is
-        # complicated by the whole factor business TODO: these are no longer 0
-        # to data
-        BA_0_to_data_Aw_arr = sim_basal_area_aw(
-            startTage, SI_bh_Aw,  N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities,
+        # density and basal area unique to aspen
+        basal_area_aw_arr = sim_basal_area_aw(
+            startTage, SI_bh_Aw,  N0_Aw, BA_Aw0, SDF_Aw0,
+            species_factors['f_Aw'], densities,
             use_correction_factor_future=True, stop_at_initial_age=False
         )
-        BA_0_to_data_Sb_arr = sim_basal_area_sb(
-            startTage, SI_bh_Sb, N0_Sb,
-            BA_Sb0, f_Sb, densities, use_correction_factor_future=False,
-            stop_at_initial_age=False, fix_proportion_and_density_to_initial_age=False,
+        basal_area_sb_arr = sim_basal_area_sb(
+            startTage, SI_bh_Sb, N0_Sb, BA_Sb0,
+            species_factors['f_Sb'], densities,
+            use_correction_factor_future=False, stop_at_initial_age=False,
+            fix_proportion_and_density_to_initial_age=False,
             species_proportion_at_bh_age=SC_Sb, present_density=N_bh_SbT
         )
-        BA_0_to_data_Sw_arr = sim_basal_area_sw(
+        basal_area_sw_arr = sim_basal_area_sw(
             startTage, SI_bh_Sw, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0,
-            f_Sw, densities, use_correction_factor_future=False,
-            stop_at_initial_age=False, fix_proportion_and_density_to_initial_age=False,
+            species_factors['f_Sw'], densities,
+            use_correction_factor_future=False, stop_at_initial_age=False,
+            fix_proportion_and_density_to_initial_age=False,
             species_proportion_at_bh_age=SC_Sw, present_density=N_bh_SwT
         )
-        BA_0_to_data_Pl_arr = sim_basal_area_pl(
+        basal_area_pl_arr = sim_basal_area_pl(
             startTage, SI_bh_Pl, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0,
-            f_Pl, densities, use_correction_factor_future=False,
-            stop_at_initial_age=False, fix_proportion_and_density_to_initial_age=False,
+            species_factors['f_Pl'], densities,
+            use_correction_factor_future=False, stop_at_initial_age=False,
+            fix_proportion_and_density_to_initial_age=False,
             species_proportion_at_bh_age=SC_Pl, present_density=N_bh_PlT
         )
 
-        output_DF_Aw = pd.DataFrame(BA_0_to_data_Aw_arr, columns=['BA_Aw'])
-        output_DF_Sw = pd.DataFrame(BA_0_to_data_Sw_arr, columns=['BA_Sw'])
-        output_DF_Sb = pd.DataFrame(BA_0_to_data_Sb_arr, columns=['BA_Sb'])
-        output_DF_Pl = pd.DataFrame(BA_0_to_data_Pl_arr, columns=['BA_Pl'])
+        output_df_aw = pd.DataFrame(basal_area_aw_arr, columns=['BA_Aw'])
+        output_df_sw = pd.DataFrame(basal_area_sw_arr, columns=['BA_Sw'])
+        output_df_sb = pd.DataFrame(basal_area_sb_arr, columns=['BA_Sb'])
+        output_df_pl = pd.DataFrame(basal_area_pl_arr, columns=['BA_Pl'])
 
-        densities_DF = pd.DataFrame(densities)
-        output_DF = pd.concat(
-            [densities_DF, output_DF_Aw, output_DF_Sw, output_DF_Sb, output_DF_Pl],
+        densities_df = pd.DataFrame(densities)
+        output_df = pd.concat(
+            [densities_df, output_df_aw, output_df_sw, output_df_sb, output_df_pl],
             axis=1
         )
 
         for spec in SPECIES:
-            output_DF['Gross_Total_Volume_%s' % spec] = gross_total_volume(
+            output_df['Gross_Total_Volume_%s' % spec] = gross_total_volume(
                 spec,
-                output_DF['BA_%s' % spec],
-                output_DF['topHeight_%s' % spec]
+                output_df['BA_%s' % spec],
+                output_df['topHeight_%s' % spec]
             )
 
-            output_DF['MerchantableVolume%s' % spec] = merchantable_volume(
+            output_df['MerchantableVolume%s' % spec] = merchantable_volume(
                 spec,
-                output_DF['N_bh_%sT' % spec],
-                output_DF['BA_%s' % spec],
-                output_DF['topHeight_%s' % spec],
-                output_DF['Gross_Total_Volume_%s' % spec],
+                output_df['N_bh_%sT' % spec],
+                output_df['BA_%s' % spec],
+                output_df['topHeight_%s' % spec],
+                output_df['Gross_Total_Volume_%s' % spec],
                 top_dib=utiliz_params[spec.lower()]['topDiamInsideBark'],
                 stump_dob=utiliz_params[spec.lower()]['stumpDiamOutsideBark'],
                 stump_height=utiliz_params[spec.lower()]['stumpHeight']
             )
 
 
-        output_DF['Gross_Total_Volume_Con'] = output_DF['Gross_Total_Volume_Sw'] \
-                                              + output_DF['Gross_Total_Volume_Sb'] \
-                                              + output_DF['Gross_Total_Volume_Pl']
-        output_DF['Gross_Total_Volume_Dec'] = output_DF['Gross_Total_Volume_Aw']
-        output_DF['Gross_Total_Volume_Tot'] = output_DF['Gross_Total_Volume_Con'] \
-                                              + output_DF['Gross_Total_Volume_Dec']
-        output_DF['MerchantableVolume_Con'] = output_DF['MerchantableVolumeSw'] \
-                                              + output_DF['MerchantableVolumeSb'] \
-                                              + output_DF['MerchantableVolumePl']
-        output_DF['MerchantableVolume_Dec'] = output_DF['MerchantableVolumeAw']
-        output_DF['MerchantableVolume_Tot'] = output_DF['MerchantableVolume_Con'] \
-                                              + output_DF['MerchantableVolume_Dec']
+        output_df['Gross_Total_Volume_Con'] = output_df['Gross_Total_Volume_Sw'] \
+                                              + output_df['Gross_Total_Volume_Sb'] \
+                                              + output_df['Gross_Total_Volume_Pl']
+        output_df['Gross_Total_Volume_Dec'] = output_df['Gross_Total_Volume_Aw']
+        output_df['Gross_Total_Volume_Tot'] = output_df['Gross_Total_Volume_Con'] \
+                                              + output_df['Gross_Total_Volume_Dec']
+        output_df['MerchantableVolume_Con'] = output_df['MerchantableVolumeSw'] \
+                                              + output_df['MerchantableVolumeSb'] \
+                                              + output_df['MerchantableVolumePl']
+        output_df['MerchantableVolume_Dec'] = output_df['MerchantableVolumeAw']
+        output_df['MerchantableVolume_Tot'] = output_df['MerchantableVolume_Con'] \
+                                              + output_df['MerchantableVolume_Dec']
 
-        output_dict[plot_id] = output_DF
+        output_dict[plot_id] = output_df
 
         end = datetime.datetime.now()
         duration = end - start
