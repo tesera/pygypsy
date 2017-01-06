@@ -73,29 +73,44 @@ def get_basal_area_factors_for_all_species(**kwargs):
 
     if kwargs['N0_Aw'] > 0:
         f_Aw = estimate_basal_area_factor_aw(**kwargs)
-
     if kwargs['N0_Sb'] > 0:
         f_Sb = estimate_basal_area_factor_sb(**kwargs)
-
     if kwargs['N0_Sw'] > 0:
         f_Sw = estimate_basal_area_factor_sw(**kwargs)
-
     if kwargs['N0_Pl'] > 0:
         f_Pl = estimate_basal_area_factor_pl(**kwargs)
 
-    return {'f_Aw':f_Aw,
-            'f_Sb':f_Sb,
-            'f_Sw':f_Sw,
-            'f_Pl':f_Pl,}
+    return {
+        'f_Aw':f_Aw,
+        'f_Sb':f_Sb,
+        'f_Sw':f_Sw,
+        'f_Pl':f_Pl,
+    }
 
 def simulate_forwards_df(plot_df, utiliz_params=None):
-    """Run forwards simulation
+    """Simulate the evolution of plot characteristics through time
 
-    Keyword Arguments:
-    plot_df -- pandas.DataFrame with plot data
+    This begins with the simulation of densities, species, and top height.
 
-    Return:
-    !TODO!
+    With the time series of those items in hand, the simulation from time zero
+    (primary succession) to the time of observation can be skipped. If it is
+    not skipped, an optimization routine is used to find factors for each
+    species. The factors are multiplied with a parameter of the basal area
+    increment to ensure that the simulation time timer zero to the time of
+    observation passes through a basal area of 0 and the observed basal area.
+    Between time zero and the time of observation, fixed values may optionally
+    be used for density, species compositon. This optimization is expensive.
+
+    Once the simulation reaches the year of observation, the simulated
+    densities, species composition, and top heights are used in the increment
+    functions, instead of using fixed values.
+
+    :param plot_df: pandas.DataFrame with plot data
+    :param utliz_params: dictionary of utilization parameters
+
+    :return: dictoriony with keys corresponding to plot id and values data
+    frame of time  series of the simulated plot characteristics
+
     """
     if utiliz_params is None:
         utiliz_params = DEFAULT_UTILIZATIONS
