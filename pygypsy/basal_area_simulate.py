@@ -193,9 +193,13 @@ def sim_basal_area_sw(initial_age, site_index, density_at_bh_age, sdf_aw,
                     if i < initial_age or use_correction_factor_future\
                     else 1
         bh_age_sw = spec_comp_dict['bhage_Sw']
+        # TODO: do not want to reset this spec_proportion if were below initial age
+        # so that it can non linearly grow
+        # TODO: fix this to proportion at bhage if i < initial age
         spec_proportion = species_proportion_at_bh_age \
                           if fix_proportion_and_density_to_initial_age \
                           else spec_comp_dict['SC_Sw']
+        # TODO: fix this to present density at if i < initial age
         present_density = present_density \
                           if fix_proportion_and_density_to_initial_age \
                           else spec_comp_dict['N_bh_SwT']
