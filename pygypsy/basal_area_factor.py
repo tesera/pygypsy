@@ -13,6 +13,29 @@ from pygypsy.basal_area_simulate import (
 LOGGER = logging.getLogger(__name__)
 
 
+def get_basal_area_factors_for_all_species(**kwargs):
+    f_sb = 0
+    f_aw = 0
+    f_sw = 0
+    f_pl = 0
+
+    if kwargs['N0_Aw'] > 0:
+        f_aw = estimate_basal_area_factor_aw(**kwargs)
+    if kwargs['N0_Sb'] > 0:
+        f_sb = estimate_basal_area_factor_sb(**kwargs)
+    if kwargs['N0_Sw'] > 0:
+        f_sw = estimate_basal_area_factor_sw(**kwargs)
+    if kwargs['N0_Pl'] > 0:
+        f_pl = estimate_basal_area_factor_pl(**kwargs)
+
+    return {
+        'f_Aw':f_aw,
+        'f_Sb':f_sb,
+        'f_Sw':f_sw,
+        'f_Pl':f_pl,
+    }
+
+
 def estimate_basal_area_factor_aw(**kwargs):
     '''This function guarantees that the trajectory of the species basal area
     passes through the basal area measured when the data was collected
@@ -33,7 +56,7 @@ def estimate_basal_area_factor_aw(**kwargs):
     '''
     initial_age = kwargs['startTage']
     site_index = kwargs['SI_bh_Aw']
-    # present_density = kwargs['N_bh_AwT']
+    present_density = kwargs['N_bh_AwT']
     basal_area_at_bh_age = kwargs['BA_Aw0']
     present_basal_area = kwargs['BA_AwT']
     sdf_aw = kwargs['SDF_Aw0']
@@ -52,7 +75,7 @@ def estimate_basal_area_factor_aw(**kwargs):
                                    stop_at_initial_age=True,
                                    fix_proportion_and_density_to_initial_age=False,
                                    species_proportion_at_bh_age=None,
-                                   present_density=None)[-1]
+                                   present_density=present_density)[-1]
 
         if abs(present_basal_area - ba_est) < tolerance:
             within_tolerance = True

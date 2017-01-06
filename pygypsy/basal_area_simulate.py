@@ -1,5 +1,8 @@
 """Basal Area Simulation"""
 #pylint: disable=no-member
+# these  functions can be improved because the increment is not
+# autoregressive, so we can calculate it as a vector operation using
+# the other arrays then the actual values are just the cumulative sums
 # TODO: imrpove names - e.g. densities is actually densities and other varsiables
 # TODO: shouldn't bhage be a constant? is it actuall years since bh_age?
 # TODO: is it really density at bh age or is it density at time of data?

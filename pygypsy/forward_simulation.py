@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Simulation"""
+# TODO: change module/funct name - 'forward' is not necessary or strictly true
 from __future__ import division
 
 import logging
@@ -8,12 +9,7 @@ import pandas as pd
 
 from GYPSYNonSpatial import densities_speciescomp_topheight_to_250
 from utils import _log_loop_progress, estimate_species_composition
-from pygypsy.basal_area_factor import (
-    estimate_basal_area_factor_aw,
-    estimate_basal_area_factor_sb,
-    estimate_basal_area_factor_sw,
-    estimate_basal_area_factor_pl,
-)
+from pygypsy.basal_area_factor import get_basal_area_factors_for_all_species
 from pygypsy.basal_area_simulate import (
     sim_basal_area_aw,
     sim_basal_area_sw,
@@ -23,6 +19,7 @@ from pygypsy.basal_area_simulate import (
 from pygypsy.volume import(
     merchantable_volume,
     gross_total_volume,
+    DEFAULT_UTILIZATIONS
 )
 
 
@@ -30,31 +27,7 @@ logger = logging.getLogger(__name__)
 
 SPECIES = ('Aw', 'Sw', 'Sb', 'Pl')
 
-DEFAULT_UTILIZATIONS = {
-    "aw": {
-        "topDiamInsideBark": 7,
-        "stumpDiamOutsideBark": 13,
-        "stumpHeight": 0.3
-    },
-    "sw": {
-        "topDiamInsideBark": 7,
-        "stumpDiamOutsideBark": 13,
-        "stumpHeight": 0.3
-    },
-    "sb": {
-        "topDiamInsideBark": 7,
-        "stumpDiamOutsideBark": 13,
-        "stumpHeight": 0.3
-    },
-    "pl": {
-        "topDiamInsideBark": 7,
-        "stumpDiamOutsideBark": 13,
-        "stumpHeight": 0.3
-    }
-}
-
-
-def get_initial_basal_area(current_basal_area):
+def _get_initial_basal_area(current_basal_area):
     initial_basal_area = 0.001
 
     if initial_basal_area > current_basal_area * 0.5:
@@ -62,30 +35,6 @@ def get_initial_basal_area(current_basal_area):
 
     return initial_basal_area
 
-
-def get_basal_area_factors_for_all_species(**kwargs):
-    logger.debug('Getting factors for all species')
-
-    f_Sb = 0
-    f_Aw = 0
-    f_Sw = 0
-    f_Pl = 0
-
-    if kwargs['N0_Aw'] > 0:
-        f_Aw = estimate_basal_area_factor_aw(**kwargs)
-    if kwargs['N0_Sb'] > 0:
-        f_Sb = estimate_basal_area_factor_sb(**kwargs)
-    if kwargs['N0_Sw'] > 0:
-        f_Sw = estimate_basal_area_factor_sw(**kwargs)
-    if kwargs['N0_Pl'] > 0:
-        f_Pl = estimate_basal_area_factor_pl(**kwargs)
-
-    return {
-        'f_Aw':f_Aw,
-        'f_Sb':f_Sb,
-        'f_Sw':f_Sw,
-        'f_Pl':f_Pl,
-    }
 
 def simulate_forwards_df(plot_df, utiliz_params=None):
     """Simulate the evolution of plot characteristics through time
@@ -154,10 +103,10 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
         N0_Pl = row.at['N0_Pl']
         N0_Sb = row.at['N0_Sb']
 
-        BA_Aw0 = get_initial_basal_area(BA_AwT)
-        BA_Sw0 = get_initial_basal_area(BA_SwT)
-        BA_Sb0 = get_initial_basal_area(BA_SbT)
-        BA_Pl0 = get_initial_basal_area(BA_PlT)
+        BA_Aw0 = _get_initial_basal_area(BA_AwT)
+        BA_Sw0 = _get_initial_basal_area(BA_SwT)
+        BA_Sb0 = _get_initial_basal_area(BA_SbT)
+        BA_Pl0 = _get_initial_basal_area(BA_PlT)
 
         SC_Aw, SC_Sw, SC_Sb, SC_Pl = estimate_species_composition(
             N0_Aw, N0_Sb, N0_Sw, N0_Pl
@@ -212,7 +161,7 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
         # simulation yielded better results, probably because of variability in
         # density and basal area unique to aspen
         basal_area_aw_arr = sim_basal_area_aw(
-            startTage, SI_bh_Aw,  N0_Aw, BA_Aw0, SDF_Aw0,
+            startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0,
             species_factors['f_Aw'], densities,
             use_correction_factor_future=True, stop_at_initial_age=False
         )

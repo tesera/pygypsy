@@ -7,6 +7,30 @@
 from __future__ import division
 import numpy as np
 
+DEFAULT_UTILIZATIONS = {
+    "aw": {
+        "topDiamInsideBark": 7,
+        "stumpDiamOutsideBark": 13,
+        "stumpHeight": 0.3
+    },
+    "sw": {
+        "topDiamInsideBark": 7,
+        "stumpDiamOutsideBark": 13,
+        "stumpHeight": 0.3
+    },
+    "sb": {
+        "topDiamInsideBark": 7,
+        "stumpDiamOutsideBark": 13,
+        "stumpHeight": 0.3
+    },
+    "pl": {
+        "topDiamInsideBark": 7,
+        "stumpDiamOutsideBark": 13,
+        "stumpHeight": 0.3
+    }
+}
+
+
 def _gross_totalvolume_aw(basal_area, top_height):
     ''' White Aspen Gross Total Volume
 
