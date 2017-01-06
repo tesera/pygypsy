@@ -136,8 +136,8 @@ def sim_basal_area_sb(initial_age, site_index, density_at_bh_age,
         else:
             spec_proportion = spec_comp_dict['SC_Sw']
 
-        present_density = densities[initial_age]['N_bh_SbT'] \
-                          if fix_proportion_and_density_to_initial_age \
+        present_density = present_density \
+                          if i < initial_age or fix_proportion_and_density_to_initial_age \
                           else spec_comp_dict['N_bh_SbT']
 
         if density_at_bh_age > 0:
@@ -286,25 +286,17 @@ def sim_basal_area_pl(initial_age, site_index, density_at_bh_age, sdf_aw,
                     else 1
         bh_age_pl = spec_comp_dict['bhage_Pl']
 
-        # the first time in this for loop, spec proportion must be assigned
-        if i==0:
-            spec_proportion = species_proportion_at_bh_age
-        # until the year of the data is reached we then do not reassign it, and the
-        # value of spec_proportion * sc_factor increases exponentially
-        elif i < initial_age:
-            pass
-        # future values use the estimated species proportion and it is constant
-        else:
-            spec_proportion = spec_comp_dict['SC_Sw']
-
-        present_density = densities[initial_age]['N_bh_PlT'] \
-                          if fix_proportion_and_density_to_initial_age \
+        spec_proportion = species_proportion_at_bh_age \
+                          if i < initial_age or fix_proportion_and_density_to_initial_age \
+                          else spec_comp_dict['SC_Sw']
+        present_density = present_density \
+                          if i < initial_age or fix_proportion_and_density_to_initial_age \
                           else spec_comp_dict['N_bh_PlT']
 
         if density_at_bh_age > 0:
             if bh_age_pl > 0:
-                # factor empirically determined to work better when multiplied with whole
-                # increment
+                # factor empirically determined to work better when multiplied
+                # with whole increment
                 basal_area_increment = sc_factor \
                                        * incr.increment_basal_area_pl(
                                            spec_proportion, site_index,
