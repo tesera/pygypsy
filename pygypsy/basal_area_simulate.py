@@ -188,20 +188,29 @@ def sim_basal_area_sw(initial_age, site_index, density_at_bh_age, sdf_aw,
     basal_area_arr = np.zeros(max_age)
     basal_area_temp = basal_area_at_bh_age
 
+    # some of the conditional assignments in this loop could be simplified by
+    # initializing them outside the loop and assigning them when the simulation
+    # passes the initial age. this is not done because we are striving to reach
+    # a place where these are more configurable and thus easier to test
     for i, spec_comp_dict in enumerate(densities[0: max_age]):
         sc_factor = correction_factor \
                     if i < initial_age or use_correction_factor_future\
                     else 1
         bh_age_sw = spec_comp_dict['bhage_Sw']
-        # TODO: do not want to reset this spec_proportion if were below initial age
-        # so that it can non linearly grow
-        # TODO: fix this to proportion at bhage if i < initial age
-        spec_proportion = species_proportion_at_bh_age \
-                          if fix_proportion_and_density_to_initial_age \
-                          else spec_comp_dict['SC_Sw']
-        # TODO: fix this to present density at if i < initial age
+
+        # the first time in this for loop, spec proportion must be assigned
+        if i==0:
+            spec_proportion = species_proportion_at_bh_age
+        # until the year of the data is reached we then do not reassign it, and the
+        # value of spec_proportion * sc_factor increases exponentially
+        elif i < initial_age:
+            pass
+        # future values use the estimated species proportion and it is constant
+        else:
+            spec_proportion = spec_comp_dict['SC_Sw']
+
         present_density = present_density \
-                          if fix_proportion_and_density_to_initial_age \
+                          if i < initial_age or fix_proportion_and_density_to_initial_age \
                           else spec_comp_dict['N_bh_SwT']
 
         if density_at_bh_age > 0:
