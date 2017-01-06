@@ -48,7 +48,11 @@ def estimate_basal_area_factor_aw(**kwargs):
     while not within_tolerance:
         ba_est = sim_basal_area_aw(initial_age, site_index, density_at_bh_age,
                                    basal_area_at_bh_age, sdf_aw, factor,
-                                   densities)[-1]
+                                   densities, use_correction_factor_future=False,
+                                   stop_at_initial_age=True,
+                                   fix_proportion_and_density_to_initial_age=False,
+                                   species_proportion_at_bh_age=None,
+                                   present_density=None)[-1]
 
         if abs(present_basal_area - ba_est) < tolerance:
             within_tolerance = True
@@ -99,6 +103,8 @@ def estimate_basal_area_factor_sb(**kwargs):
     density_at_bh_age = kwargs['N0_Sb']
     basal_area_at_bh_age = kwargs['BA_Sb0']
     present_basal_area = kwargs['BA_SbT']
+    species_proportion_at_bh_age = kwargs['SC_Sb']
+    present_density = kwargs['N_bh_SwT']
     factor = 1.2
     factor1 = 1.5 * factor
     tolerance = 0.1
@@ -106,9 +112,14 @@ def estimate_basal_area_factor_sb(**kwargs):
     iter_count = 0
 
     while not within_tolerance:
-        ba_est = sim_basal_area_sb(initial_age, site_index, density_at_bh_age,
-                                   basal_area_at_bh_age, factor, densities,
-                                   fix_proportion_and_density_to_initial_age=True)[-1]
+        ba_est = sim_basal_area_sb(initial_age, site_index,
+                                   density_at_bh_age,
+                                   basal_area_at_bh_age,
+                                   factor, densities,
+                                   fix_proportion_and_density_to_initial_age=True,
+                                   species_proportion_at_bh_age=species_proportion_at_bh_age,
+                                   present_density=present_density,
+                                   stop_at_initial_age=True)[-1]
 
         if abs(present_basal_area - ba_est) < tolerance:
             within_tolerance = True
@@ -173,7 +184,7 @@ def estimate_basal_area_factor_sw(**kwargs):
     tolerance = 0.1
     within_tolerance = False
     iter_count = 0
-    factor1 = 1.5* factor
+    factor1 = 1.5 * factor
 
     while not within_tolerance:
         ba_est = sim_basal_area_sw(initial_age, site_index,
@@ -182,7 +193,8 @@ def estimate_basal_area_factor_sw(**kwargs):
                                    factor, densities,
                                    fix_proportion_and_density_to_initial_age=True,
                                    species_proportion_at_bh_age=species_proportion_at_bh_age,
-                                   present_density=present_density)[-1]
+                                   present_density=present_density,
+                                   stop_at_initial_age=True)[-1]
         if abs(present_basal_area - ba_est) < tolerance:
             within_tolerance = True
         else:
@@ -238,9 +250,8 @@ def estimate_basal_area_factor_pl(**kwargs):
     sdf_sb = kwargs['SDF_Sb0']
     basal_area_at_bh_age = kwargs['BA_Pl0']
     present_basal_area = kwargs['BA_PlT']
-    # the start guess is critical. If it is too large,
-    # it may crash before the simulation. 100 worked
-    # for a sample os stands. 1000 failed
+    species_proportion_at_bh_age = kwargs['SC_Sb']
+    present_density = kwargs['N_bh_SwT']
     factor = 100.0
     tolerance = 0.1
     within_tolerance = False
@@ -250,8 +261,12 @@ def estimate_basal_area_factor_pl(**kwargs):
     while not within_tolerance:
         ba_est = sim_basal_area_pl(initial_age, site_index,
                                    density_at_bh_age, sdf_aw, sdf_sw, sdf_sb,
-                                   basal_area_at_bh_age, factor, densities,
-                                   fix_proportion_and_density_to_initial_age=True)[-1]
+                                   basal_area_at_bh_age,
+                                   factor, densities,
+                                   fix_proportion_and_density_to_initial_age=True,
+                                   species_proportion_at_bh_age=species_proportion_at_bh_age,
+                                   present_density=present_density,
+                                   stop_at_initial_age=True)[-1]
 
         if abs(present_basal_area - ba_est) < tolerance:
             within_tolerance = True

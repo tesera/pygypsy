@@ -246,15 +246,21 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
         )
         BA_0_to_data_Sb_arr = sim_basal_area_sb(
             startTage, SI_bh_Sb, N0_Sb,
-            BA_Sb0, f_Sb, densities, stop_at_initial_age=False
+            BA_Sb0, f_Sb, densities, use_correction_factor_future=False,
+            stop_at_initial_age=False, fix_proportion_and_density_to_initial_age=False,
+            species_proportion_at_bh_age=SC_Sb, present_density=N_bh_SbT
         )
         BA_0_to_data_Sw_arr = sim_basal_area_sw(
             startTage, SI_bh_Sw, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0,
-            f_Sw, densities, stop_at_initial_age=False
+            f_Sw, densities, use_correction_factor_future=False,
+            stop_at_initial_age=False, fix_proportion_and_density_to_initial_age=False,
+            species_proportion_at_bh_age=SC_Sw, present_density=N_bh_SwT
         )
         BA_0_to_data_Pl_arr = sim_basal_area_pl(
             startTage, SI_bh_Pl, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0,
-            f_Pl, densities, stop_at_initial_age=False
+            f_Pl, densities, use_correction_factor_future=False,
+            stop_at_initial_age=False, fix_proportion_and_density_to_initial_age=False,
+            species_proportion_at_bh_age=SC_Pl, present_density=N_bh_PlT
         )
 
         output_DF_Aw = pd.DataFrame(BA_0_to_data_Aw_arr, columns=['BA_Aw'])

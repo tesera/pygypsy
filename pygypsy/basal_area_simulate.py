@@ -3,6 +3,8 @@
 # TODO: imrpove names - e.g. densities is actually densities and other varsiables
 # TODO: shouldn't bhage be a constant? is it actuall years since bh_age?
 # TODO: is it really density at bh age or is it density at time of data?
+# TODO: change initial age to data age
+# TODO: change present density to density_at_data
 
 import logging
 import numpy as np
@@ -13,11 +15,14 @@ from pygypsy import basal_area_increment as incr
 LOGGER = logging.getLogger(__name__)
 
 
+# TODO: make this consistent with the other functions will need an option for
+# making species proportion constant and not expentially increasing with the factor
 def sim_basal_area_aw(initial_age, site_index, density_at_bh_age,
                       basal_area_at_bh_age, sdf_aw, correction_factor, densities,
                       use_correction_factor_future=False,
                       stop_at_initial_age=True,
-                      fix_proportion_and_density_to_initial_age=False):
+                      fix_proportion_and_density_to_initial_age=False,
+                      species_proportion_at_bh_age=None, present_density=None):
     '''Simlulate basal area forward in time for White Aspen
 
     It creates the trajectory of basal area from bhage up to the inventory year
@@ -87,7 +92,8 @@ def sim_basal_area_sb(initial_age, site_index, density_at_bh_age,
                       basal_area_at_bh_age, correction_factor, densities,
                       use_correction_factor_future=False,
                       stop_at_initial_age=True,
-                      fix_proportion_and_density_to_initial_age=False):
+                      fix_proportion_and_density_to_initial_age=False,
+                      species_proportion_at_bh_age=None, present_density=None):
     '''Simlulate basal area forward in time for Black Spruce
 
     It creates the trajectory of basal area from bhage up to the inventory year
@@ -114,7 +120,6 @@ def sim_basal_area_sb(initial_age, site_index, density_at_bh_age,
 
     '''
     max_age = initial_age if stop_at_initial_age else 250
-
     basal_area_arr = np.zeros(max_age)
     basal_area_temp = basal_area_at_bh_age
 
@@ -123,9 +128,14 @@ def sim_basal_area_sb(initial_age, site_index, density_at_bh_age,
                     if i < initial_age or use_correction_factor_future \
                     else 1
         bh_age_sb = spec_comp_dict['bhage_Sb']
-        spec_proportion = densities[initial_age]['SC_Sb'] \
-                          if fix_proportion_and_density_to_initial_age \
-                          else spec_comp_dict['SC_Sb']
+
+        if i==0:
+            spec_proportion = species_proportion_at_bh_age
+        elif i < initial_age:
+            pass
+        else:
+            spec_proportion = spec_comp_dict['SC_Sw']
+
         present_density = densities[initial_age]['N_bh_SbT'] \
                           if fix_proportion_and_density_to_initial_age \
                           else spec_comp_dict['N_bh_SbT']
@@ -241,7 +251,8 @@ def sim_basal_area_pl(initial_age, site_index, density_at_bh_age, sdf_aw,
                       sdf_sw, sdf_sb, basal_area_at_bh_age, correction_factor,
                       densities, use_correction_factor_future=False,
                       stop_at_initial_age=True,
-                      fix_proportion_and_density_to_initial_age=False):
+                      fix_proportion_and_density_to_initial_age=False,
+                      species_proportion_at_bh_age=None, present_density=None):
     '''Simlulate basal area forward in time for Lodgepole Pine
 
     :param float initial_age: Clock that uses the oldest species as a reference to
@@ -274,9 +285,18 @@ def sim_basal_area_pl(initial_age, site_index, density_at_bh_age, sdf_aw,
                     if i < initial_age or use_correction_factor_future \
                     else 1
         bh_age_pl = spec_comp_dict['bhage_Pl']
-        spec_proportion = densities[initial_age]['SC_Pl'] \
-                          if fix_proportion_and_density_to_initial_age \
-                          else spec_comp_dict['SC_Pl']
+
+        # the first time in this for loop, spec proportion must be assigned
+        if i==0:
+            spec_proportion = species_proportion_at_bh_age
+        # until the year of the data is reached we then do not reassign it, and the
+        # value of spec_proportion * sc_factor increases exponentially
+        elif i < initial_age:
+            pass
+        # future values use the estimated species proportion and it is constant
+        else:
+            spec_proportion = spec_comp_dict['SC_Sw']
+
         present_density = densities[initial_age]['N_bh_PlT'] \
                           if fix_proportion_and_density_to_initial_age \
                           else spec_comp_dict['N_bh_PlT']
@@ -284,7 +304,7 @@ def sim_basal_area_pl(initial_age, site_index, density_at_bh_age, sdf_aw,
         if density_at_bh_age > 0:
             if bh_age_pl > 0:
                 # factor empirically determined to work better when multiplied with whole
-                # increment - julianno sambatti
+                # increment
                 basal_area_increment = sc_factor \
                                        * incr.increment_basal_area_pl(
                                            spec_proportion, site_index,
