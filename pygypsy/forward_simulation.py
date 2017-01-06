@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Simulation"""
 # TODO: change module/funct name - 'forward' is not necessary or strictly true
 from __future__ import division
@@ -23,9 +22,9 @@ from pygypsy.volume import(
 )
 
 
-logger = logging.getLogger(__name__)
-
+LOGGER = logging.getLogger(__name__)
 SPECIES = ('Aw', 'Sw', 'Sb', 'Pl')
+
 
 def _get_initial_basal_area(current_basal_area):
     initial_basal_area = 0.001
@@ -65,7 +64,6 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
         utiliz_params = DEFAULT_UTILIZATIONS
 
     output_dict = {}
-    logger.debug('Starting forwards simulation')
     n_rows = plot_df.shape[0]
 
     for _, row in plot_df.iterrows():
@@ -73,7 +71,7 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
         _log_loop_progress(_, n_rows)
         plot_id = str(int(row['id_l1']))
 
-        logger.info('Starting simulation for plot: %s', plot_id)
+        LOGGER.debug('Starting simulation for plot: %s', plot_id)
         SI_bh_Aw = row.at['SI_Aw']
         SI_bh_Sw = row.at['SI_Sw']
         SI_bh_Pl = row.at['SI_Pl']
@@ -234,6 +232,6 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
 
         end = datetime.datetime.now()
         duration = end - start
-        logger.info('plot %s took %f seconds', plot_id, duration.total_seconds())
+        LOGGER.debug('plot %s took %f seconds', plot_id, duration.total_seconds())
 
     return output_dict

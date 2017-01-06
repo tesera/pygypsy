@@ -3,9 +3,6 @@
 # these  functions can be improved because the increment is not
 # autoregressive, so we can calculate it as a vector operation using
 # the other arrays then the actual values are just the cumulative sums
-# TODO: imrpove names - e.g. densities is actually densities and other varsiables
-# TODO: shouldn't bhage be a constant? is it actuall years since bh_age?
-# TODO: is it really density at bh age or is it density at time of data?
 # TODO: change initial age to data age
 # TODO: change present density to density_at_data
 
@@ -60,7 +57,7 @@ def sim_basal_area_aw(initial_age, site_index, density_at_bh_age,
                     if i < initial_age or use_correction_factor_future \
                     else 1
 
-        bh_age_aw = spec_comp_dict['bhage_Aw']
+        years_from_bhage = spec_comp_dict['bhage_Aw']
         spec_proportion = densities[initial_age]['SC_Aw'] \
                           if fix_proportion_and_density_to_initial_age \
                           else spec_comp_dict['SC_Aw']
@@ -69,11 +66,11 @@ def sim_basal_area_aw(initial_age, site_index, density_at_bh_age,
                           else spec_comp_dict['N_bh_AwT']
 
         if density_at_bh_age > 0:
-            if bh_age_aw > 0:
+            if years_from_bhage > 0:
                 spec_proportion = spec_proportion * sc_factor
                 basal_area_increment = incr.increment_basal_area_aw(
                     spec_proportion, site_index, present_density,
-                    density_at_bh_age, bh_age_aw, basal_area_temp
+                    density_at_bh_age, years_from_bhage, basal_area_temp
                 )
                 basal_area_temp = basal_area_temp + basal_area_increment
                 new_basal_area = basal_area_temp
@@ -130,7 +127,7 @@ def sim_basal_area_sb(initial_age, site_index, density_at_bh_age,
         sc_factor = correction_factor \
                     if i < initial_age or use_correction_factor_future \
                     else 1
-        bh_age_sb = spec_comp_dict['bhage_Sb']
+        years_from_bhage = spec_comp_dict['bhage_Sb']
 
         if i==0:
             spec_proportion = species_proportion_at_bh_age
@@ -144,11 +141,11 @@ def sim_basal_area_sb(initial_age, site_index, density_at_bh_age,
                           else spec_comp_dict['N_bh_SbT']
 
         if density_at_bh_age > 0:
-            if bh_age_sb > 0:
+            if years_from_bhage > 0:
                 spec_proportion = spec_proportion * sc_factor
                 basal_area_increment = incr.increment_basal_area_sb(
                     spec_proportion, site_index, present_density,
-                    density_at_bh_age, bh_age_sb, basal_area_temp
+                    density_at_bh_age, years_from_bhage, basal_area_temp
                 )
                 basal_area_temp = basal_area_temp + basal_area_increment
                 new_basal_area = basal_area_temp
@@ -209,7 +206,7 @@ def sim_basal_area_sw(initial_age, site_index, density_at_bh_age, sdf_aw,
         sc_factor = correction_factor \
                     if i < initial_age or use_correction_factor_future\
                     else 1
-        bh_age_sw = spec_comp_dict['bhage_Sw']
+        years_from_bhage = spec_comp_dict['bhage_Sw']
 
         # the first time in this for loop, spec proportion must be assigned
         if i==0:
@@ -227,11 +224,11 @@ def sim_basal_area_sw(initial_age, site_index, density_at_bh_age, sdf_aw,
                           else spec_comp_dict['N_bh_SwT']
 
         if density_at_bh_age > 0:
-            if bh_age_sw > 0:
+            if years_from_bhage > 0:
                 spec_proportion = spec_proportion * sc_factor
                 basal_area_increment = incr.increment_basal_area_sw(
                     spec_proportion, site_index, present_density,
-                    density_at_bh_age, bh_age_sw, sdf_aw, sdf_pl,
+                    density_at_bh_age, years_from_bhage, sdf_aw, sdf_pl,
                     sdf_sb, basal_area_temp
                 )
                 basal_area_temp = basal_area_temp + basal_area_increment
@@ -287,7 +284,7 @@ def sim_basal_area_pl(initial_age, site_index, density_at_bh_age, sdf_aw,
         sc_factor = correction_factor \
                     if i < initial_age or use_correction_factor_future \
                     else 1
-        bh_age_pl = spec_comp_dict['bhage_Pl']
+        years_from_bhage = spec_comp_dict['bhage_Pl']
 
         # the first time in this for loop, spec proportion must be assigned
         if i==0:
@@ -305,14 +302,14 @@ def sim_basal_area_pl(initial_age, site_index, density_at_bh_age, sdf_aw,
                           else spec_comp_dict['N_bh_PlT']
 
         if density_at_bh_age > 0:
-            if bh_age_pl > 0:
+            if years_from_bhage > 0:
                 # factor empirically determined to work better when multiplied
                 # with whole increment
                 basal_area_increment = sc_factor \
                                        * incr.increment_basal_area_pl(
                                            spec_proportion, site_index,
                                            present_density, density_at_bh_age,
-                                           bh_age_pl, sdf_aw, sdf_sw,
+                                           years_from_bhage, sdf_aw, sdf_sw,
                                            sdf_sb, basal_area_temp
                                        )
                 basal_area_temp = basal_area_temp + basal_area_increment
