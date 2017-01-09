@@ -40,14 +40,14 @@ def sim_basal_area_aw(initial_age, site_index, density_at_bh_age,
                                               factor will be used for the future years
     :param bool stop_at_initial_age: switch that determines whether simulation
                                      will stop at the date of the inventory or
-                                     will continue until year 250
+                                     will continue for the length of the densities object
     :param bool fix_proportion_and_density_to_initial_age: if true, uses the
     proportion and density from the initial age for all years of the
     simulation. this is provided for consistency with a previous version which
     did this implicityly in for estiamting the basal area factors
 
     '''
-    max_age = initial_age if stop_at_initial_age else 250
+    max_age = initial_age if stop_at_initial_age else len(densities)
 
     basal_area_aw_arr = np.zeros(max_age)
     basal_area_temp = basal_area_at_bh_age
@@ -111,7 +111,7 @@ def sim_basal_area_sb(initial_age, site_index, density_at_bh_age,
                                               factor will be used for the future years
     :param bool stop_at_initial_age: switch that determines whether simulation
                                      will stop at the date of the inventory or
-                                     will continue until year 250
+                                     will continue for the length of the densities object
 
     :param bool fix_proportion_and_density_to_initial_age: if true, uses the
     proportion and density from the initial age for all years of the
@@ -119,7 +119,7 @@ def sim_basal_area_sb(initial_age, site_index, density_at_bh_age,
     did this implicityly in for estiamting the basal area factors
 
     '''
-    max_age = initial_age if stop_at_initial_age else 250
+    max_age = initial_age if stop_at_initial_age else len(densities)
     basal_area_arr = np.zeros(max_age)
     basal_area_temp = basal_area_at_bh_age
 
@@ -187,14 +187,14 @@ def sim_basal_area_sw(initial_age, site_index, density_at_bh_age, sdf_aw,
                                               factor will be used for the future years
     :param bool stop_at_initial_age: switch that determines whether simulation
                                      will stop at the date of the inventory or
-                                     will continue until year 250
+                                     will continue for the length of the densities object
     :param bool fix_proportion_and_density_to_initial_age: if true, uses the
     proportion and density from the initial age for all years of the
     simulation. this is provided for consistency with a previous version which
     did this implicityly in for estiamting the basal area factors
 
     '''
-    max_age = initial_age if stop_at_initial_age else 250
+    max_age = initial_age if stop_at_initial_age else len(densities)
     basal_area_arr = np.zeros(max_age)
     basal_area_temp = basal_area_at_bh_age
 
@@ -269,14 +269,14 @@ def sim_basal_area_pl(initial_age, site_index, density_at_bh_age, sdf_aw,
                                               factor will be used for the future years
     :param bool stop_at_initial_age: switch that determines whether simulation
                                      will stop at the date of the inventory or
-                                     will continue until year 250
+                                     will continue for the length of the densities object
     :param bool fix_proportion_and_density_to_initial_age: if true, uses the
     proportion and density from the initial age for all years of the
     simulation. this is provided for consistency with a previous version which
     did this implicityly in for estiamting the basal area factors
 
     '''
-    max_age = initial_age if stop_at_initial_age else 250
+    max_age = initial_age if stop_at_initial_age else len(densities)
     basal_area_arr = np.zeros(max_age)
     basal_area_temp = basal_area_at_bh_age
 
