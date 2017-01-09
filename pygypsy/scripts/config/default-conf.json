@@ -14,7 +14,8 @@
         }
     },
     "simulation": {
-        "years": 250
+        "years": 250,
+        "backwards": true
     },
     "deadwood": {
         "include": true
