@@ -4,7 +4,10 @@ import pandas as pd
 from glob import glob
 import numpy as np
 
-from pygypsy.forward_simulation import simulate_forwards_df
+from pygypsy.forward_simulation import (
+    simulate_forwards_df,
+    simulate_densities_speciescomp_topheight
+)
 
 from conftest import DATA_DIR
 
@@ -37,3 +40,28 @@ def test_compare_forward_simulation(test_file):
 
     # regenerate output files
     # result.to_csv(expected_data_path)
+
+def test_simulate_densities_speciescomp_topheight_duration():
+    kwargs = {
+        'SDF_Aw0': 160.4249489,
+        'SDF_Pl0': 2224.0681509299998,
+        'SDF_Sb0': 0.0,
+        'SDF_Sw0': 417.084487712,
+        'SI_bh_Aw': 5.1790722387499999,
+        'SI_bh_Pl': 7.7958239311399993,
+        'SI_bh_Sb': 7.7493273159300005,
+        'SI_bh_Sw': 6.5731557601199997,
+        'startTage': 56,
+        'startTageAw': 56.351482955500003,
+        'startTagePl': 37.0,
+        'startTageSb': 0.0,
+        'startTageSw': 44.545032732899998,
+        'y2bh_Aw': 12.365087300999999,
+        'y2bh_Pl': 12.2784422109,
+        'y2bh_Sb': 0.0,
+        'y2bh_Sw': 15.174260170999998
+    }
+
+    result = simulate_densities_speciescomp_topheight(years=5, **kwargs)
+    assert len(result) == 5
+    # TODO: reconcile this duration, and time-zero, time of data with basal area simulation
