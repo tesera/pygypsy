@@ -1,8 +1,9 @@
 import os
 import pytest
+from glob import glob
+
 import numpy as np
 import pandas as pd
-from glob import glob
 
 from pygypsy.forward_simulation import (
     simulate_forwards_df,
@@ -40,6 +41,15 @@ def test_compare_forward_simulation(test_file):
 
     # regenerate output files
     # result.to_csv(expected_data_path)
+
+def test_forward_simulation_duration_without_backwards():
+    input_data_path = os.path.join(DATA_DIR, 'forward_simulation_files',
+                                   '1049300.csv')
+    input_df = pd.read_csv(input_data_path)
+    result = simulate_forwards_df(input_df, backwards=False, n_years=5)
+
+    import ipdb; ipdb.set_trace()
+    assert result['1049300'].shape[0] == 5
 
 def test_simulate_densities_speciescomp_topheight_duration():
     kwargs = {
