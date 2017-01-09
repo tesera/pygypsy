@@ -183,7 +183,9 @@ def simulate(ctx, data, config_file):
 
         LOGGER.info('Running simulation...')
         result = simulate_forwards_df(standtable_old,
-                                      utiliz_params=config_file['utilization'])
+                                      utiliz_params=config_file['utilization'],
+                                      n_years=config_file['simulation']['years'],
+                                      backwards=config_file['simulation']['backwards'])
 
         LOGGER.info('Saving output data')
 
