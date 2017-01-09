@@ -1,9 +1,10 @@
 """Simulation"""
 # TODO: change module/funct name - 'forward' is not necessary or strictly true
 from __future__ import division
-
 import logging
 import datetime
+from collections import defaultdict
+
 import pandas as pd
 
 from pygypsy.utils import _log_loop_progress, estimate_species_composition
@@ -302,7 +303,7 @@ def simulate_forwards_df(plot_df, utiliz_params=None, backwards=True,
             SI_bh_Pl=SI_bh_Pl
         )
 
-        species_factors = None if not backwards else \
+        species_factors = defaultdict(lambda: 1) if not backwards else \
                           get_basal_area_factors_for_all_species(
             startTage=startTage,
             startTageAw=startTageAw, startTageSb=startTageSb,
