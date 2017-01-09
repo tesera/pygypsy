@@ -186,7 +186,8 @@ def simulate_densities_speciescomp_topheight(n_years=250, start_at_data_year=Fal
     return densities_along_time
 
 
-def simulate_forwards_df(plot_df, utiliz_params=None):
+def simulate_forwards_df(plot_df, utiliz_params=None, backwards=True,
+                         n_years=250):
     """Simulate the evolution of plot characteristics through time
 
     This begins with the simulation of densities, species, and top height.
@@ -206,9 +207,18 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
 
     :param plot_df: pandas.DataFrame with plot data
     :param utliz_params: dictionary of utilization parameters
+    :param int n_years: number of years to simulate
+    :param bool backwards: whether the simulation from year zero to the
+                           year of the data should be done
 
     :return: dictoriony with keys corresponding to plot id and values data
     frame of time  series of the simulated plot characteristics
+
+    .. warning:: the backwards parameter must be set to True in order to
+                 utilize the correction factors, which ensure the data passes
+                 through 0 and the observation. without the backwards simulation,
+                 this is already ensured. However, for Aspen, the factor found
+                 is also used for the forward simulation
 
     """
     if utiliz_params is None:
@@ -271,6 +281,8 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
         startTage = int(tageData[0])
 
         densities = simulate_densities_speciescomp_topheight(
+            n_years=n_years,
+            start_at_data_year=False if backwards else True,
             startTage=startTage,
             startTageAw=startTageAw,
             y2bh_Aw=y2bh_Aw,
