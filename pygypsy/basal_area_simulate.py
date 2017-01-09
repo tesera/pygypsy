@@ -56,14 +56,14 @@ def sim_basal_area_aw(initial_age, site_index, density_at_bh_age,
     basal_area_temp = basal_area_at_bh_age
 
     for i, spec_comp_dict in enumerate(densities[0: max_age]):
+        sc_factor = correction_factor \
+                    if i < initial_age or use_correction_factor_future \
+                       else 1
         if force_use_densities:
             years_from_bhage = spec_comp_dict['bhage_Aw']
             spec_proportion = spec_comp_dict['SC_Aw']
             present_density = spec_comp_dict['N_bh_AwT']
         else:
-            sc_factor = correction_factor \
-                    if i < initial_age or use_correction_factor_future \
-                    else 1
             years_from_bhage = spec_comp_dict['bhage_Aw']
             # TODO: revise to match the funcs of the other species
             spec_proportion = densities[initial_age]['SC_Aw'] \
@@ -135,14 +135,14 @@ def sim_basal_area_sb(initial_age, site_index, density_at_bh_age,
     basal_area_temp = basal_area_at_bh_age
 
     for i, spec_comp_dict in enumerate(densities[0: max_age]):
+        sc_factor = correction_factor \
+                    if i < initial_age or use_correction_factor_future \
+                       else 1
         if force_use_densities:
             years_from_bhage = spec_comp_dict['bhage_Aw']
             spec_proportion = spec_comp_dict['SC_Aw']
             present_density = spec_comp_dict['N_bh_AwT']
         else:
-            sc_factor = correction_factor \
-                        if i < initial_age or use_correction_factor_future \
-                        else 1
             years_from_bhage = spec_comp_dict['bhage_Sb']
             if i==0:
                 spec_proportion = species_proportion_at_bh_age
@@ -220,14 +220,14 @@ def sim_basal_area_sw(initial_age, site_index, density_at_bh_age, sdf_aw,
     # passes the initial age. this is not done because we are striving to reach
     # a place where these are more configurable and thus easier to test
     for i, spec_comp_dict in enumerate(densities[0: max_age]):
+        sc_factor = correction_factor \
+                    if i < initial_age or use_correction_factor_future\
+                       else 1
         if force_use_densities:
             years_from_bhage = spec_comp_dict['bhage_Aw']
             spec_proportion = spec_comp_dict['SC_Aw']
             present_density = spec_comp_dict['N_bh_AwT']
         else:
-            sc_factor = correction_factor \
-                        if i < initial_age or use_correction_factor_future\
-                        else 1
             years_from_bhage = spec_comp_dict['bhage_Sw']
             # the first time in this for loop, spec proportion must be assigned
             if i==0:
@@ -304,14 +304,14 @@ def sim_basal_area_pl(initial_age, site_index, density_at_bh_age, sdf_aw,
     basal_area_temp = basal_area_at_bh_age
 
     for i, spec_comp_dict in enumerate(densities[0: max_age]):
+        sc_factor = correction_factor \
+                    if i < initial_age or use_correction_factor_future \
+                       else 1
         if force_use_densities:
             years_from_bhage = spec_comp_dict['bhage_Aw']
             spec_proportion = spec_comp_dict['SC_Aw']
             present_density = spec_comp_dict['N_bh_AwT']
         else:
-            sc_factor = correction_factor \
-                        if i < initial_age or use_correction_factor_future \
-                        else 1
             years_from_bhage = spec_comp_dict['bhage_Pl']
             # the first time in this for loop, spec proportion must be assigned
             if i==0:
