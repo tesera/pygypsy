@@ -42,11 +42,21 @@ def _get_initial_basal_area(current_basal_area):
     return initial_basal_area
 
 
-def densities_speciescomp_topheight_to_250(**kwargs):
+# note: the complexity from basal area/factor finder simulation could be moved
+# here. simulation supports using the values from the year of observation for
+# all years before the year of observation. that could be enforced here, or
+# with an intermediate function. it would be key to get that complexity out of
+# the basal area simulation functions to vectorize them
+# TODO: this could also be vectorized instead of in a loop
+# DESIGN: could use callbacks here instead of calling each of the functions
+# DESIGN: should the responsibility to return 0 be in the called functions or
+#         in if clauses here?
+def simulate_densities_speciescomp_topheight(n_years=250, start_at_data_year=False, **kwargs):
     '''Estimate, species composition, top height for all species along time
 
     Time is counted independently for each species.
 
+    :param in duration:
     :param float startTage: It uses the oldest species as a reference to
                             become the stand age
     :param float startTageAw, startTageSw, startTageSb, and startTagePl: age
@@ -84,17 +94,16 @@ def densities_speciescomp_topheight_to_250(**kwargs):
     si_bh_sb = kwargs['SI_bh_Sb']
     si_bh_pl = kwargs['SI_bh_Pl']
     densities_along_time = []
-    starttageawb = starttageaw
-    starttageswb = starttagesw
-    starttageplb = starttagepl
-    starttagesbb = starttagesb
-    year = 0
 
-    while year < 250:
-        tage_aw = starttageawb - starttage
-        tage_sw = starttageswb - starttage
-        tage_pl = starttageplb - starttage
-        tage_sb = starttagesbb - starttage
+    end_year = n_years if not start_at_data_year else n_years + starttage
+
+    year = 0 if not start_at_data_year else starttage
+    tage_aw = starttageaw - starttage if not start_at_data_year else starttageaw
+    tage_sw = starttagesw - starttage if not start_at_data_year else starttagesw
+    tage_pl = starttagepl - starttage if not start_at_data_year else starttagepl
+    tage_sb = starttagesb - starttage if not start_at_data_year else starttagesb
+
+    while year < end_year:
         bhage_aw = tage_aw - y2bh_aw
         bhage_sw = tage_sw - y2bh_sw
         bhage_pl = tage_pl - y2bh_pl
@@ -103,6 +112,7 @@ def densities_speciescomp_topheight_to_250(**kwargs):
         if bhage_aw < 0:
             n_bh_awt = 0
         else:
+            # bhage instead of tage, as specified by the GYPSY model itself
             n_bh_awt = estimate_density_aw(sdf_aw0, bhage_aw, si_bh_aw)
 
         if tage_sb < 0:
@@ -120,8 +130,6 @@ def densities_speciescomp_topheight_to_250(**kwargs):
         else:
             n_bh_plt = estimate_density_pl(sdf_aw0, sdf_sw0, sdf_sb0, sdf_pl0,
                                            tage_pl, si_bh_pl)
-
-
 
         if n_bh_awt <= 0:
             topheight_aw = 0
@@ -152,8 +160,10 @@ def densities_speciescomp_topheight_to_250(**kwargs):
             )
 
 
-        sc_aw, sc_sw, sc_sb, sc_pl = estimate_species_composition(n_bh_awt, n_bh_sbt,
-                                                                  n_bh_swt, n_bh_plt)
+        sc_aw, sc_sw, sc_sb, sc_pl = estimate_species_composition(
+            n_bh_awt, n_bh_sbt,
+            n_bh_swt, n_bh_plt
+        )
 
         densities_along_time.append({
             'N_bh_AwT': n_bh_awt, 'N_bh_SwT': n_bh_swt,
@@ -168,10 +178,10 @@ def densities_speciescomp_topheight_to_250(**kwargs):
             'topHeight_Sb': topheight_sb, 'topHeight_Pl': topheight_pl
         })
         year += 1
-        starttageawb += 1
-        starttageswb += 1
-        starttageplb += 1
-        starttagesbb += 1
+        tage_aw += 1
+        tage_sw += 1
+        tage_pl += 1
+        tage_sb += 1
 
     return densities_along_time
 
@@ -260,7 +270,7 @@ def simulate_forwards_df(plot_df, utiliz_params=None):
         tageData = sorted(tageData, reverse=True)
         startTage = int(tageData[0])
 
-        densities = densities_speciescomp_topheight_to_250(
+        densities = simulate_densities_speciescomp_topheight(
             startTage=startTage,
             startTageAw=startTageAw,
             y2bh_Aw=y2bh_Aw,
