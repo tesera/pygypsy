@@ -20,8 +20,13 @@ from pygypsy.density import (
     estimate_density_sb,
     estimate_density_pl,
 )
-from utils import _log_loop_progress
-from pygypsy.utils import estimate_species_composition
+from pygypsy.site_index import (
+    get_site_indices_from_dominant_species,
+)
+from pygypsy.utils import (
+    estimate_species_composition,
+    _log_loop_progress
+)
 from pygypsy.asaCompileAgeGivenSpSiHt import (
     computeTreeAge,
     ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge,
@@ -31,79 +36,6 @@ from pygypsy.asaCompileAgeGivenSpSiHt import (
 
 LOGGER = logging.getLogger(__name__)
 
-
-# TODO: use funct from site_index module
-def get_species_site_indices(dominant_species, site_index):
-    '''
-    This function gets the site indices for all other species in a plot
-    given the site indices of the dominant species of that plot
-    '''
-    if site_index > 0:
-        if dominant_species == 'Aw':
-            site_index_white_aspen = site_index
-            site_index_pl = 0.85 * site_index_white_aspen + 3.4
-            site_index_sw = 1.31 * site_index_white_aspen - 2.64
-            site_index_fb = 0.92 * site_index_sw + 1.68
-            site_index_fb = 0.94 * site_index_pl + 0.71
-            site_index_sb = 0.64 * site_index_pl + 2.76
-            site_index_pb = site_index_white_aspen
-
-        elif dominant_species == 'Sw':
-            site_index_sw = site_index
-            site_index_pl = 0.86 * site_index_sw + 2.13
-            site_index_white_aspen = 0.76 * site_index_sw + 2.01
-            site_index_fb = 0.92 * site_index_sw + 1.68
-            site_index_fb = 0.74 * site_index_sw + 4.75
-            site_index_sb = 0.64 * site_index_pl + 2.76
-            site_index_pb = site_index_white_aspen
-
-        elif dominant_species == 'Fb':
-            site_index_fb = site_index
-            site_index_sw = 1.09 * site_index_fb - 1.83
-            site_index_pl = 0.86 * site_index_sw + 2.13
-            site_index_white_aspen = 0.76 * site_index_sw + 2.01
-            site_index_fb = 0.74 * site_index_sw + 4.75
-            site_index_sb = 0.64 * site_index_pl + 2.76
-            site_index_pb = site_index_white_aspen
-
-        elif dominant_species == 'Fd':
-            site_index_fb = site_index
-            site_index_pl = 1.07 * site_index_fb - 0.76
-            site_index_white_aspen = 1.18 * site_index_pl  - 4.02
-            site_index_sw = 1.36 * site_index_fb - 6.45
-            site_index_pb = site_index_white_aspen
-            site_index_fb = 0.92 * site_index_sw + 1.68
-            site_index_sb = 0.64 * site_index_pl + 2.76
-
-        elif dominant_species == 'Pl':
-            site_index_pl = site_index
-            site_index_white_aspen = 1.18 * site_index_pl  - 4.02
-            site_index_sw = 1.16 * site_index_pl - 2.47
-            site_index_fb = 0.94* site_index_pl + 0.71
-            site_index_pb = site_index_white_aspen
-            site_index_fb = 0.92 * site_index_sw + 1.68
-            site_index_sb = 0.64 * site_index_pl + 2.76
-
-        elif dominant_species == 'Pb':
-            site_index_pb = site_index
-            site_index_white_aspen = site_index_pb
-            site_index_pl = 0.85 * site_index_white_aspen + 3.4
-            site_index_sw = 1.31 * site_index_white_aspen -2.64
-            site_index_fb = 0.92* site_index_pl + 1.68
-            site_index_fb = 0.92 * site_index_sw + 1.68
-            site_index_sb = 0.64 * site_index_pl + 2.76
-
-        elif dominant_species == 'Sb':
-            site_index_sb = site_index
-            site_index_pl = 1.57 * site_index_sb - 4.33
-            site_index_sb = 0.64 * site_index_pl + 2.76
-            site_index_fb = 0.92* site_index_pl + 1.68
-            site_index_sw = 1.16 * site_index_pl - 2.47
-            site_index_white_aspen = 1.18 * site_index_pl - 4.02
-            site_index_pb = site_index_white_aspen
-
-
-    return site_index_white_aspen, site_index_pl, site_index_sw, site_index_sb
 
 # TODO: use func from site index modeule - move to utlls
 def get_gypsy_valid_species(dominant_species):
@@ -173,9 +105,7 @@ def generate_species_dict():
 
     return species_dict
 
-def populate_species_dict_with_indices(species_dict, dominant_species,
-                                       dominant_species_site_index,
-                                       estimated_site_indices):
+def populate_species_dict_with_indices(species_dict, estimated_site_indices):
     """Fill the dictionary with estimated SIs
 
     Fill all the SIs to avoid IFs and loops. Some of them will not be
@@ -191,29 +121,8 @@ def populate_species_dict_with_indices(species_dict, dominant_species,
     """
     local_species_dict = deepcopy(species_dict)
 
-    if dominant_species == 'Aw':
-        local_species_dict['Aw']['SI'] = dominant_species_site_index
-        local_species_dict['Pl']['SI'] = estimated_site_indices[1]
-        local_species_dict['Sw']['SI'] = estimated_site_indices[2]
-        local_species_dict['Sb']['SI'] = estimated_site_indices[3]
-
-    elif dominant_species == 'Sw':
-        local_species_dict['Aw']['SI'] = estimated_site_indices[0]
-        local_species_dict['Pl']['SI'] = estimated_site_indices[1]
-        local_species_dict['Sw']['SI'] = dominant_species_site_index
-        local_species_dict['Sb']['SI'] = estimated_site_indices[3]
-
-    elif dominant_species == 'Pl':
-        local_species_dict['Aw']['SI'] = estimated_site_indices[0]
-        local_species_dict['Pl']['SI'] = dominant_species_site_index
-        local_species_dict['Sw']['SI'] = estimated_site_indices[2]
-        local_species_dict['Sb']['SI'] = estimated_site_indices[3]
-
-    elif dominant_species == 'Sb':
-        local_species_dict['Aw']['SI'] = estimated_site_indices[0]
-        local_species_dict['Pl']['SI'] = estimated_site_indices[1]
-        local_species_dict['Sw']['SI'] = estimated_site_indices[2]
-        local_species_dict['Sb']['SI'] = dominant_species_site_index
+    for species, site_index in estimated_site_indices.items():
+        local_species_dict[species]['SI'] = site_index
 
     return local_species_dict
 
@@ -372,14 +281,13 @@ def prep_standtable(data):
         )
 
         temp_dominant_species = get_gypsy_valid_species(plot_dominant_species)
-        gypsy_site_indices = get_species_site_indices(temp_dominant_species,
-                                                      site_index)
-
-        empty_species_dict = generate_species_dict()
-        species_dict = populate_species_dict_with_indices(
-            empty_species_dict,
+        gypsy_site_indices = get_site_indices_from_dominant_species(
             temp_dominant_species,
-            site_index, gypsy_site_indices)
+            site_index
+        )
+        empty_species_dict = generate_species_dict()
+        species_dict = populate_species_dict_with_indices(empty_species_dict,
+                                                          gypsy_site_indices)
 
         outer_sorted_species_perc_list, outer_species_perc_dict = \
             reclassify_and_sort_species(species_abbrev_percent_list)

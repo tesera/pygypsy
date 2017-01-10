@@ -29,19 +29,18 @@ def get_site_indices_from_dominant_species(dominant_species=None,
         'pl': _get_all_site_indices_from_dominant_pl,
         'pb': _get_all_site_indices_from_dominant_pb,
     }
-
+    dominant_species = dominant_species.lower()
     try:
         all_site_indices = functs[dominant_species](dominant_species_site_index)
     except KeyError:
         raise ValueError('No function is available to calculate site index from '
                          'species %s' %dominant_species)
 
-    species_subset = ('aw', 'pl', 'sw', 'sb')
+    species_subset = ('Aw', 'Pl', 'Sw', 'Sb')
     site_indices_subset = {
-        species: all_site_indices[species] for species in species_subset
+        species: all_site_indices[species.lower()] for species in species_subset
     }
 
-    # NOTE: using a dict here so that contents are explicit/non-ambiguous
     return site_indices_subset
 
 

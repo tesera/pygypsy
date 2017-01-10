@@ -11,10 +11,10 @@ from pygypsy.site_index import (
 def test_get_site_indices_from_dominant_species():
     indices = get_site_indices_from_dominant_species('aw', 1)
     expected = {
-        'sb': 5.48,
-        'sw': -1.33,
-        'pl': 4.25,
-        'aw': 1
+        'Sb': 5.48,
+        'Sw': -1.33,
+        'Pl': 4.25,
+        'Aw': 1
     }
 
     assert indices == expected
