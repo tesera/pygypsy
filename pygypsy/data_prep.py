@@ -28,6 +28,7 @@ from pygypsy.utils import (
     _get_gypsy_valid_species,
     _log_loop_progress,
     _generate_fplot_dict,
+    _reclassify_and_sort_species,
 )
 from pygypsy.asaCompileAgeGivenSpSiHt import (
     computeTreeAge,
@@ -59,45 +60,6 @@ def _populate_species_dict_with_indices(species_dict, estimated_site_indices):
         local_species_dict[species]['SI'] = site_index
 
     return local_species_dict
-
-
-# TODO: split into 2 functions
-def reclassify_and_sort_species(species_abbrev_perc_tuples_list):
-    '''Classify all species in valid gypsy species and sort by percent
-
-    re-classification of species that are not considered in pygypsy as one of
-    the species considered in pygypsy (Aw, Sw, Sb, or Pl) and sort the species
-    to obtain the dominant species in the plot
-
-    '''
-    species_perc_dict = {'Aw':0, 'Pl':0, 'Sw':0, 'Sb':0}
-    for species_abbrev_perc_tup in species_abbrev_perc_tuples_list:
-        species_abbrev = species_abbrev_perc_tup[0]
-        species_perc = species_abbrev_perc_tup[1]
-
-        if species_abbrev in ['Aw', 'Pb']:
-            species_perc_dict['Aw'] = species_perc_dict['Aw'] + species_perc
-
-        elif species_abbrev in ['Sw', 'Fb', 'Fd']:
-            species_perc_dict['Sw'] = species_perc_dict['Sw'] + species_perc
-
-        elif species_abbrev == 'Pl':
-            species_perc_dict['Pl'] = species_perc_dict['Pl'] + species_perc
-
-        elif species_abbrev == 'Sb':
-            species_perc_dict['Sb'] = species_perc_dict['Sb'] + species_perc
-
-    sorted_species_perc_list = [(k, v) for v, k in sorted(
-        [(v, k) for k, v in species_perc_dict.items()]
-    )]
-    sorted_species_perc_list.reverse()
-
-    check_prop1 = sum(species_perc_dict.values())
-    if check_prop1 != 100:
-        raise ValueError(('Species proportions after grouping '
-                          'into 4 species is not correct: %s') % check_prop1)
-
-    return sorted_species_perc_list, species_perc_dict
 
 
 def populate_species_dict(partial_species_list,
@@ -224,7 +186,7 @@ def prep_standtable(data):
                                                            gypsy_site_indices)
 
         outer_sorted_species_perc_list, outer_species_perc_dict = \
-            reclassify_and_sort_species(species_abbrev_percent_list)
+            _reclassify_and_sort_species(species_abbrev_percent_list)
 
         species_dict['Aw']['PCT'] = outer_species_perc_dict['Aw']
         species_dict['Pl']['PCT'] = outer_species_perc_dict['Pl']
