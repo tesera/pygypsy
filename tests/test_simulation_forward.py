@@ -29,10 +29,11 @@ def test_compare_forward_simulation(test_file):
 
     plot_id = str(int(input_df.loc[0, 'id_l1']))
 
-    result = simulate_forwards_df(input_df)[plot_id]
+    result = simulate_forwards_df(input_df, backwards=True, n_years=250)[plot_id]
     expected = pd.read_csv(expected_data_path, index_col=0)
 
     assert isinstance(result, pd.DataFrame)
+    assert result.shape[0]==250
     np.testing.assert_allclose(
         expected.values, result.values,
         rtol=0.01, atol=0.1,
@@ -48,9 +49,10 @@ def test_forward_simulation_duration_without_backwards():
     input_df = pd.read_csv(input_data_path)
     result = simulate_forwards_df(input_df, backwards=False, n_years=5)
 
-    import ipdb; ipdb.set_trace()
     assert result['1049300'].shape[0] == 5
 
+# this can be cleaned up if the tree height, density, and species comp were
+# self sufficient (i.e. behaved OK) with a density of 0
 def test_simulate_densities_speciescomp_topheight_duration():
     kwargs = {
         'SDF_Aw0': 160.4249489, 'SDF_Pl0': 2224.0681509299998,
