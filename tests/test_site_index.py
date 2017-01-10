@@ -3,9 +3,8 @@ import pytest
 from pygypsy.site_index import (
     get_site_indices_from_dominant_species,
     _get_temporary_dominant_species,
-    _estimate_dominant_species_site_index,
+    _estimate_site_index,
     )
-from pygypsy.utils import _generate_fplot_dict
 
 
 def test_get_site_indices_from_dominant_species():
@@ -34,28 +33,15 @@ def test__get_temporary_dominant_species():
     assert _get_temporary_dominant_species('Fb') == 'Sw'
 
 
-@pytest.mark.skip(reason="TODO!")
-def test__estimate_dominant_species_site_index():
-    species = 'aa'
-    height = 1
-    age = 200
-    expected = None
-    assert _estimate_dominant_species_site_index(species, age, height) == expected
+def test_estimate_site_index():
+    assert _estimate_site_index('Aw', 10, 10) == 27.089299487182057
+    assert _estimate_site_index('Sb', 10, 10) == 37.472425731733637
+    assert _estimate_site_index('Aw', 100, 10) == 5.7588933884113027
+    assert _estimate_site_index('Aw', 10, 100) == 107.39828771776254
 
 
-def test_generate_fplot():
-    result = _generate_fplot_dict()
+def test_estimate_site_index_with_invalid_species():
+    with pytest.raises(UnboundLocalError) as err:
+        _estimate_site_index('aa', 10, 100)
 
-    site_index_key = 'SI'
-    expected_species_keys = ['Aw', 'Pl', 'Sb', 'Sw']
-    expected_plot_keys = ['topHeight', 'tage', 'bhage', 'N', 'BA', 'PS', 'StumpDOB',
-                          'StumpHeight', 'TopDib', 'SI', 'PCT']
-
-    assert all(
-        [species in result.keys() for species in expected_species_keys]
-    )
-
-    for species, plot_dict in result.items():
-        assert all(
-            [key in plot_dict for key in expected_plot_keys]
-        )
+    assert '\'SI_t\' referenced before assignment' in err.value.message

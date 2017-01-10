@@ -104,6 +104,7 @@ def _copy_file(source, dest, bucket_conn=None):
     else:
         _copy_file_to_s3(bucket_conn, source, dest)
 
+
 def _generate_fplot_dict():
     """Generate 'fplot'
 
@@ -138,3 +139,21 @@ def _generate_fplot_dict():
         fplot_dict[s] = deepcopy(default_species_params)
 
     return fplot_dict
+
+
+def _get_gypsy_valid_species(dominant_species):
+    """Given the plot dominant species, get the gypsy species
+
+    The dominant species in a plot may not be one of the species in the GYPSY
+    model. Douglas Fir for example is not in the GYPSY model, and it is
+    appropriate to substitute it with White Spruce.
+
+    :param str dominant_species: abbreviation of plot dominant species
+    """
+    if dominant_species == 'Pb':
+        dominant_species = 'Aw'
+    elif dominant_species in ['Fd', 'Fb']:
+        dominant_species = 'Sw'
+
+    return dominant_species
+

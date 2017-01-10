@@ -22,9 +22,10 @@ from pygypsy.density import (
 )
 from pygypsy.site_index import (
     get_site_indices_from_dominant_species,
+    _estimate_site_index
 )
 from pygypsy.utils import (
-    estimate_species_composition,
+    _get_gypsy_valid_species,
     _log_loop_progress,
     _generate_fplot_dict,
 )
@@ -37,36 +38,6 @@ from pygypsy.asaCompileAgeGivenSpSiHt import (
 
 LOGGER = logging.getLogger(__name__)
 
-
-# TODO: use func from site index modeule - move to utlls
-def get_gypsy_valid_species(dominant_species):
-    """Given the plot dominant species, get the gypsy species
-
-    Pb is reassigned to Aw
-    Fd or Fb are reassigned to Sw
-
-    :param dominant_species:
-    """
-    if dominant_species == 'Pb':
-        dominant_species = 'Aw'
-    elif dominant_species in ['Fd', 'Fb']:
-        dominant_species = 'Sw'
-
-    return dominant_species
-
-# TODO: use func from site index module
-def dominant_species_site_index_estim(dominant_species,
-                                      dominant_species_current_age,
-                                      dominant_species_current_height):
-    dom_si = ComputeGypsySiteIndex(
-        dominant_species,
-        dominant_species_current_height,
-        0,
-        dominant_species_current_age
-    )
-    site_index = dom_si[2]
-
-    return site_index
 
 def _populate_species_dict_with_indices(species_dict, estimated_site_indices):
     """Fill the dictionary with estimated SIs
@@ -237,13 +208,13 @@ def prep_standtable(data):
         dominant_species_current_age = row['AGE']
         dominant_species_current_height = row['HD']
 
-        site_index = dominant_species_site_index_estim(
+        site_index = _estimate_site_index(
             plot_dominant_species,
             dominant_species_current_age,
             dominant_species_current_height
         )
 
-        temp_dominant_species = get_gypsy_valid_species(plot_dominant_species)
+        temp_dominant_species = _get_gypsy_valid_species(plot_dominant_species)
         gypsy_site_indices = get_site_indices_from_dominant_species(
             temp_dominant_species,
             site_index
@@ -343,15 +314,6 @@ def prep_standtable(data):
         initial_density_pl = estimate_density_pl(
             sdf_aw0, sdf_sw0, sdf_sb0, sdf_pl0, 0, site_index_pl
         )
-
-        # estimating species-specific Basal area increment from Densities
-        species_composition = estimate_species_composition(
-            density_bh_aw, density_bh_sb, density_bh_sw, density_bh_pl
-        )
-        species_composition_aw = species_composition[0]
-        species_composition_sw = species_composition[1]
-        species_composition_sb = species_composition[2]
-        species_composition_pl = species_composition[3]
 
         plot_dict[plot_id] = {
             'SI_Aw': site_index_aw,

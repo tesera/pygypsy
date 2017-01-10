@@ -1,14 +1,9 @@
-# -*- coding: utf-8 -*-
 """Functions for calculating site indices
 
 """
-from collections import defaultdict
-
-
-# TODO: reduce repetition
-# - decorator for returns_all_site_indices
-# - utility functions/class for <species>_from_<otherspecies>
-# - make species stuff case insensitive
+from pygypsy.asaCompileAgeGivenSpSiHt import (
+    ComputeGypsySiteIndex,
+)
 
 
 def get_site_indices_from_dominant_species(dominant_species=None,
@@ -218,26 +213,22 @@ def _get_temporary_dominant_species(actual_dominant_species):
     return temp_dominant_species
 
 
-def _estimate_dominant_species_site_index(dominant_species, age, height):
+def _estimate_site_index(species, age, height):
     """Estimate site index of dominant species
 
     This is a wrapper around ComputeGypsySiteIndex for readability
 
-    It assumes site_index = site_index at time?
-
     Keyword Arguments:
-    dominant_species -- str, abbreviation of dominant species
-    age              -- float, age of dominant species
-    height           -- float, height of dominant species
+    species -- str, abbreviation of dominant species
+    age     -- float, age of dominant species
+    height  -- float, height of dominant species
 
     Return:
     float - site index
 
     """
-    dominant_site_index_list = ComputeGypsySiteIndex(dominant_species,
+    dominant_site_index_list = ComputeGypsySiteIndex(species,
                                                      height, 0, age)
-    # TODO: use dictionary for return from Computegypsysiteindex - that way someone
-    # knows clearly what domSI[2] means
     dominant_site_index = dominant_site_index_list[2]
 
     return dominant_site_index
