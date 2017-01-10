@@ -7,6 +7,7 @@ import errno
 import shutil
 import logging
 from urlparse import urlparse
+from copy import deepcopy
 
 from log import CONSOLE_LOGGER_NAME
 
@@ -102,3 +103,38 @@ def _copy_file(source, dest, bucket_conn=None):
         shutil.copyfile(source, dest)
     else:
         _copy_file_to_s3(bucket_conn, source, dest)
+
+def _generate_fplot_dict():
+    """Generate 'fplot'
+
+    Given a known dominant species and its site index, and estimation of all
+    site indices, generates the 'fplot' dictionary
+
+    Return:
+    dict - ???
+
+    ..note: topHeight - top height
+    tage - total age
+    bhage - breast height age
+    N - density
+    BA - current Basal Area
+    PS - Measured Percent Stocking
+    StumpDOB - stump diameter outside bark
+    StumpHeight - stump height
+    TopDib - top diameter inside bark
+    site_index - site index
+    PCT - species proportion in plot
+
+    """
+    default_species_params = {
+        'topHeight': 0, 'tage': 0, 'bhage': 0,
+        'N': 0, 'BA': 0, 'PS': 16.9, 'StumpDOB':13,
+        'StumpHeight': 0.3, 'TopDib': 7, 'SI': 0, 'PCT': 0
+    }
+    species = ('Aw', 'Pl', 'Sw', 'Sb')
+    fplot_dict = {}
+
+    for s in species:
+        fplot_dict[s] = deepcopy(default_species_params)
+
+    return fplot_dict

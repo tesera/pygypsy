@@ -25,7 +25,8 @@ from pygypsy.site_index import (
 )
 from pygypsy.utils import (
     estimate_species_composition,
-    _log_loop_progress
+    _log_loop_progress,
+    _generate_fplot_dict,
 )
 from pygypsy.asaCompileAgeGivenSpSiHt import (
     computeTreeAge,
@@ -67,56 +68,18 @@ def dominant_species_site_index_estim(dominant_species,
 
     return site_index
 
-# TODO: combine with funct from site_index module - move to utils
-def generate_species_dict():
-    """Create empty spcies dict
-
-    Species dict has keys which are species.
-
-    value are dicts with keys corresponding to parameter names and values
-    corresponding to parameter values
-
-    topHeight - top height
-    tage - total age
-    bhage - breast height age
-    N - density
-    BA - current Basal Area
-    PS - Measured Percent Stocking
-    StumpDOB - stump diameter outside bark
-    StumpHeight - stump height
-    TopDib - top diameter inside bark
-    site_index - site index
-    PCT - species proportion in plot
-
-    """
-    default_species_params = {
-        'topHeight': 0, 'tage': 0, 'bhage': 0, 'N': 0, 'BA': 0,
-        'PS': 16.9, 'StumpDOB':13, 'StumpHeight': 0.3, 'TopDib': 7,
-        'site_index': 0, 'PCT': 0
-    }
-    # plot properties for each species, starting with default values
-    # defined above
-    species_dict = {
-        'Aw': deepcopy(default_species_params),
-        'Pl': deepcopy(default_species_params),
-        'Sw': deepcopy(default_species_params),
-        'Sb': deepcopy(default_species_params),
-    }
-
-    return species_dict
-
-def populate_species_dict_with_indices(species_dict, estimated_site_indices):
+def _populate_species_dict_with_indices(species_dict, estimated_site_indices):
     """Fill the dictionary with estimated SIs
 
     Fill all the SIs to avoid IFs and loops. Some of them will not be
     used.
 
     :param species_dict: dictionary used to store params for all species
-    :param dominant_species_site_index: site index for dominant species
-    :param dominant_species: abbreviation, dominant species for
-                             the plot
     :param estimated_site_indices: array of estimated site indices from
                                    get_species_site_indices function
+
+    ..note: the dominant species in the estiamted_site_indices uses its
+    observed site index
 
     """
     local_species_dict = deepcopy(species_dict)
@@ -285,9 +248,9 @@ def prep_standtable(data):
             temp_dominant_species,
             site_index
         )
-        empty_species_dict = generate_species_dict()
-        species_dict = populate_species_dict_with_indices(empty_species_dict,
-                                                          gypsy_site_indices)
+        empty_species_dict = _generate_fplot_dict()
+        species_dict = _populate_species_dict_with_indices(empty_species_dict,
+                                                           gypsy_site_indices)
 
         outer_sorted_species_perc_list, outer_species_perc_dict = \
             reclassify_and_sort_species(species_abbrev_percent_list)

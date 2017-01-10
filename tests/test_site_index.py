@@ -4,8 +4,8 @@ from pygypsy.site_index import (
     get_site_indices_from_dominant_species,
     _get_temporary_dominant_species,
     _estimate_dominant_species_site_index,
-    _generate_fplot_dict
     )
+from pygypsy.utils import _generate_fplot_dict
 
 
 def test_get_site_indices_from_dominant_species():
@@ -43,17 +43,8 @@ def test__estimate_dominant_species_site_index():
     assert _estimate_dominant_species_site_index(species, age, height) == expected
 
 
-def test__generate_fplot():
-    dominant_species = 'Aw'
-    dominant_species_site_index = 100
-    all_species_site_indices = {
-        'sb': 5.48,
-        'sw': -1.33,
-        'pl': 4.25,
-        'aw': 1
-    }
-    result = _generate_fplot_dict(dominant_species, dominant_species_site_index,
-                                  all_species_site_indices)
+def test_generate_fplot():
+    result = _generate_fplot_dict()
 
     site_index_key = 'SI'
     expected_species_keys = ['Aw', 'Pl', 'Sb', 'Sw']
@@ -68,8 +59,3 @@ def test__generate_fplot():
         assert all(
             [key in plot_dict for key in expected_plot_keys]
         )
-        if species != dominant_species:
-            assert result[species][site_index_key] == \
-                all_species_site_indices[species.lower()]
-        else:
-            assert result[species][site_index_key] == dominant_species_site_index
