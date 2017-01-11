@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """Simulation"""
+from __future__ import division
+
 import logging
 import datetime
-import numpy as np
 import pandas as pd
 
-import basal_area_increment as incr
-from GYPSYNonSpatial import densities_and_SCs_to_250
+from GYPSYNonSpatial import densities_speciescomp_topheight_to_250
 from utils import _log_loop_progress, estimate_species_composition
 from pygypsy.basal_area_factor import (
     estimate_basal_area_factor_aw,
@@ -54,59 +54,16 @@ DEFAULT_UTILIZATIONS = {
 }
 
 
-def BA_zeroAw(BA_Aw0, BA_AwT):
-    while BA_Aw0 > BA_AwT * 0.5:
-        BA_Aw0 = BA_Aw0 * 0.5
-    return BA_Aw0
+def get_initial_basal_area(current_basal_area):
+    initial_basal_area = 0.001
 
-def BA_zeroSw(BA_Sw0, BA_SwT):
-    while BA_Sw0 > BA_SwT * 0.5:
-        BA_Sw0 = BA_Sw0 * 0.5
-    return BA_Sw0
+    if initial_basal_area > current_basal_area * 0.5:
+        initial_basal_area /= 2
 
-def BA_zeroSb(BA_Sb0, BA_SbT):
-    while BA_Sb0 > BA_SbT * 0.5:
-        BA_Sb0 = BA_Sb0 * 0.5
-    return BA_Sb0
+    return initial_basal_area
 
-def BA_zeroPl(BA_Pl0, BA_PlT):
-    while BA_Pl0 > BA_PlT * 0.5:
-        BA_Pl0 = BA_Pl0 * 0.5
-    return BA_Pl0
 
-def BA0_lower_BAT_Aw(BA_AwT):
-    BA_Aw0 = 0.001
-    if BA_Aw0 > BA_AwT:
-        BA_Aw0 = BA_zeroAw(BA_Aw0, BA_AwT)
-    else:
-        pass
-    return BA_Aw0
-
-def BA0_lower_BAT_Sw(BA_SwT):
-    BA_Sw0 = 0.001
-    if BA_Sw0 > BA_SwT:
-        BA_Sw0 = BA_zeroSw(BA_Sw0, BA_SwT)
-    else:
-        pass
-    return BA_Sw0
-
-def BA0_lower_BAT_Sb(BA_SbT):
-    BA_Sb0 = 0.001
-    if BA_Sb0 > BA_SbT:
-        BA_Sb0 = BA_zeroSb(BA_Sb0, BA_SbT)
-    else:
-        pass
-    return BA_Sb0
-
-def BA0_lower_BAT_Pl(BA_PlT):
-    BA_Pl0 = 0.001
-    if BA_Pl0 > BA_PlT:
-        BA_Pl0 = BA_zeroPl(BA_Pl0, BA_PlT)
-    else:
-        pass
-    return BA_Pl0
-
-def get_factors_for_all_species(**kwargs):
+def get_basal_area_factors_for_all_species(**kwargs):
     logger.debug('Getting factors for all species')
 
     f_Sb = 0
@@ -131,8 +88,7 @@ def get_factors_for_all_species(**kwargs):
             'f_Sw':f_Sw,
             'f_Pl':f_Pl,}
 
-def simulate_forwards_df(plot_df, simulation_choice='yes',
-                         utiliz_params=None):
+def simulate_forwards_df(plot_df, utiliz_params=None):
     """Run forwards simulation
 
     Keyword Arguments:
@@ -183,10 +139,11 @@ def simulate_forwards_df(plot_df, simulation_choice='yes',
         N0_Pl = row.at['N0_Pl']
         N0_Sb = row.at['N0_Sb']
 
-        BA_Aw0 = BA0_lower_BAT_Aw(BA_AwT)
-        BA_Sw0 = BA0_lower_BAT_Sw(BA_SwT)
-        BA_Sb0 = BA0_lower_BAT_Sb(BA_SbT)
-        BA_Pl0 = BA0_lower_BAT_Pl(BA_PlT)
+        BA_Aw0 = get_initial_basal_area(BA_AwT)
+        BA_Sw0 = get_initial_basal_area(BA_SwT)
+        BA_Sb0 = get_initial_basal_area(BA_SbT)
+        BA_Pl0 = get_initial_basal_area(BA_PlT)
+
         SC_Aw, SC_Sw, SC_Sb, SC_Pl = estimate_species_composition(N0_Aw, N0_Sb, N0_Sw, N0_Pl)
 
         tageData = [tage_AwT, tage_SwT, tage_PlT, tage_SbT]
@@ -194,15 +151,11 @@ def simulate_forwards_df(plot_df, simulation_choice='yes',
         startTageSw = tageData[1]
         startTagePl = tageData[2]
         startTageSb = tageData[3]
-        startTageAwF = tageData[0]+1
-        startTageSwF = tageData[1]+1
-        startTagePlF = tageData[2]+1
-        startTageSbF = tageData[3]+1
 
         tageData = sorted(tageData, reverse=True)
         startTage = int(tageData[0])
 
-        densities = densities_and_SCs_to_250(
+        densities = densities_speciescomp_topheight_to_250(
             startTage=startTage,
             startTageAw=startTageAw,
             y2bh_Aw=y2bh_Aw,
@@ -222,10 +175,7 @@ def simulate_forwards_df(plot_df, simulation_choice='yes',
             SI_bh_Pl=SI_bh_Pl
         )
 
-        # estimating correction factor to fit BA at t0 and BA at t and
-        # choosing whether simulating with multiplication factor
-        # or starting at t recalculating the densities and SC
-        species_factors = get_factors_for_all_species(
+        species_factors = get_basal_area_factors_for_all_species(
             startTage=startTage,
             startTageAw=startTageAw,
             y2bh_Aw=y2bh_Aw,
@@ -272,103 +222,50 @@ def simulate_forwards_df(plot_df, simulation_choice='yes',
         f_Sb = species_factors['f_Sb']
         f_Pl = species_factors['f_Pl']
 
-        logger.debug('Getting basal area from time 0 to time of data')
-        # simulation choice here is no because aspen was peculiar, empirically demonstrated that using the factor
-        # for the whole simulation yielded better results, probably because of variability in density and basal area
-        # unique to aspen
-        # we can't do simulation choice = no here for sb, sw, pl because the factor should not be applied for them
-        # sw, sb, pl use the factor until the time of data. the subsequent years use the regular basal area increment formula
-        # julianno sambatti, november 10, 2016
-        BA_0_to_data_Aw_arr = sim_basal_area_aw(startTage, SI_bh_Aw, N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities, simulation_choice='no')
-        BA_0_to_data_Sb_arr = sim_basal_area_sb(startTage, startTageSb, y2bh_Sb, SC_Sb, SI_bh_Sb, N_bh_SbT, N0_Sb, BA_Sb0, f_Sb, simulation_choice)
-        BA_0_to_data_Sw_arr = sim_basal_area_sw(startTage, startTageSw, y2bh_Sw, SC_Sw, SI_bh_Sw, N_bh_SwT, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0, f_Sw, simulation_choice)
-        BA_0_to_data_Pl_arr = sim_basal_area_pl(startTage, startTagePl, y2bh_Pl, SC_Pl, SI_bh_Pl, N_bh_PlT, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0, f_Pl, simulation_choice)
+        # use_correction_factor_future here is True because aspen was peculiar,
+        # empirically demonstrated that using the factor for the whole
+        # simulation yielded better results, probably because of variability in
+        # density and basal area unique to aspen we can't do simulation choice
+
+        # sim functions can be improved because the increment is not
+        # autoregressive, so we can calculate it as a vector operation using
+        # the other arrays then the actual values are just the cumulative sums
+        # of the increments that's something for another day; because it is
+        # complicated by the whole factor business TODO: these are no longer 0
+        # to data
+        BA_0_to_data_Aw_arr = sim_basal_area_aw(
+            startTage, SI_bh_Aw,  N0_Aw, BA_Aw0, SDF_Aw0, f_Aw, densities,
+            use_correction_factor_future=True, stop_at_initial_age=False
+        )
+        BA_0_to_data_Sb_arr = sim_basal_area_sb(
+            startTage, SI_bh_Sb, N0_Sb,
+            BA_Sb0, f_Sb, densities, use_correction_factor_future=False,
+            stop_at_initial_age=False, fix_proportion_and_density_to_initial_age=False,
+            species_proportion_at_bh_age=SC_Sb, present_density=N_bh_SbT
+        )
+        BA_0_to_data_Sw_arr = sim_basal_area_sw(
+            startTage, SI_bh_Sw, N0_Sw, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_Sw0,
+            f_Sw, densities, use_correction_factor_future=False,
+            stop_at_initial_age=False, fix_proportion_and_density_to_initial_age=False,
+            species_proportion_at_bh_age=SC_Sw, present_density=N_bh_SwT
+        )
+        BA_0_to_data_Pl_arr = sim_basal_area_pl(
+            startTage, SI_bh_Pl, N0_Pl, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_Pl0,
+            f_Pl, densities, use_correction_factor_future=False,
+            stop_at_initial_age=False, fix_proportion_and_density_to_initial_age=False,
+            species_proportion_at_bh_age=SC_Pl, present_density=N_bh_PlT
+        )
 
         output_DF_Aw = pd.DataFrame(BA_0_to_data_Aw_arr, columns=['BA_Aw'])
         output_DF_Sw = pd.DataFrame(BA_0_to_data_Sw_arr, columns=['BA_Sw'])
         output_DF_Sb = pd.DataFrame(BA_0_to_data_Sb_arr, columns=['BA_Sb'])
         output_DF_Pl = pd.DataFrame(BA_0_to_data_Pl_arr, columns=['BA_Pl'])
 
-        if simulation_choice == 'no':
-            continue
-
-        # allocate extra space for the simulation results
-        # this is not ideal, would rather follow what is done for aspen, but at least
-        # this only appends once instead of for every year in the iteration
-        n_extra_rows = len(densities) - startTage+1
-        output_DF_Sb = pd.concat([
-            output_DF_Sb,
-            pd.DataFrame({'BA_Sb': [np.NaN]*n_extra_rows})
-        ], axis=0, ignore_index=True)
-        output_DF_Sw = pd.concat([
-            output_DF_Sw,
-            pd.DataFrame({'BA_Sw': [np.NaN]*n_extra_rows})
-        ], axis=0, ignore_index=True)
-        output_DF_Pl = pd.concat([
-            output_DF_Pl,
-            pd.DataFrame({'BA_Pl': [np.NaN]*n_extra_rows})
-        ], axis=0, ignore_index=True)
-
-        logger.debug('Starting main simulation')
-        t = startTage
-        for SC_Dict in densities[t-1:]:
-            bhage_SwF = SC_Dict['bhage_Sw']
-            SC_SwF = SC_Dict['SC_Sw']
-            N_bh_SwT = SC_Dict['N_bh_SwT']
-
-            bhage_SbF = SC_Dict['bhage_Sb']
-            SC_SbF = SC_Dict['SC_Sb']
-            N_bh_SbT = SC_Dict['N_bh_SbT']
-
-            bhage_PlF = SC_Dict['bhage_Pl']
-            SC_PlF = SC_Dict['SC_Pl']
-            N_bh_PlT = SC_Dict['N_bh_PlT']
-            logger.debug('Simulating year %d', t)
-
-
-            # TODO: Aw uses bafromzerotodataaw as described and called above,
-            # but htese are here to avoid using the factors, which should only
-            # apply until time t, then a implicit factor of 1 is used we can
-            # refactor the frmozerotodata functions to switch the factor off
-            # after a certain year, then the whole for loop containing this
-            # comment could be removed
-            if N_bh_SbT > 0:
-                BA_SbT = BA_SbT + incr.increment_basal_area_sb(SC_SbF, SI_bh_Sb, N_bh_SbT, N0_Sb, bhage_SbF, BA_SbT)
-                if BA_SbT < 0:
-                    BA_SbT = 0
-            else:
-                BA_SbT = 0
-
-            if N_bh_SwT > 0:
-                BA_SwT = BA_SwT + incr.increment_basal_area_sw(SC_SwF, SI_bh_Sw, N_bh_SwT, N0_Sw, bhage_SwF, SDF_Aw0, SDF_Pl0, SDF_Sb0, BA_SwT)
-                if BA_SwT < 0:
-                    BA_SwT = 0
-            else:
-                BA_SwT = 0
-
-            if N_bh_PlT > 0:
-                BA_PlT = BA_PlT + incr.increment_basal_area_pl(SC_PlF, SI_bh_Pl, N_bh_PlT, N0_Pl, bhage_PlF, SDF_Aw0, SDF_Sw0, SDF_Sb0, BA_PlT)
-                if BA_PlT < 0:
-                    BA_PlT = 0
-            else:
-                BA_PlT = 0
-
-            output_DF_Sw.at[t, 'BA_Sw'] = BA_SwT
-            output_DF_Sb.at[t, 'BA_Sb'] = BA_SbT
-            output_DF_Pl.at[t, 'BA_Pl'] = BA_PlT
-
-            t += 1
-            startTageAwF += 1
-            startTageSwF += 1
-            startTagePlF += 1
-            startTageSbF += 1
-
         densities_DF = pd.DataFrame(densities)
         output_DF = pd.concat(
             [densities_DF, output_DF_Aw, output_DF_Sw, output_DF_Sb, output_DF_Pl],
             axis=1
         )
-        #http://stackoverflow.com/questions/25314547/cell-var-from-loop-warning-from-pylint
 
         for spec in SPECIES:
             output_DF['Gross_Total_Volume_%s' % spec] = gross_total_volume(
@@ -384,6 +281,7 @@ def simulate_forwards_df(plot_df, simulation_choice='yes',
         output_DF['Gross_Total_Volume_Tot'] = output_DF['Gross_Total_Volume_Con'] \
                                               + output_DF['Gross_Total_Volume_Dec']
 
+        # TODO: put this above to DEDUP
         # this could go in the loop above, but is left here for now since
         # the tests are sensitive to column order
         for spec in SPECIES:

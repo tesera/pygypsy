@@ -14,7 +14,7 @@ from pygypsy.asaCompileAgeGivenSpSiHt import ComputeGypsyTreeHeightGivenSiteInde
 LOGGER = logging.getLogger(__name__)
 
 
-def densities_and_SCs_to_250(**kwargs):
+def densities_speciescomp_topheight_to_250(**kwargs):
     '''Estimate, species composition, top height for all species along time
 
     Time is counted independently for each species.
