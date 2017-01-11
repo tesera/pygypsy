@@ -65,10 +65,14 @@
           "multipleOf": 1,
           "maximum": 500,
           "minimum": 1
+        },
+        "backwards": {
+          "type": "boolean"
         }
       },
       "required": [
-        "years"
+        "years",
+        "backwards"
       ]
     },
     "deadwood": {

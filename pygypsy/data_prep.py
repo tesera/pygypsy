@@ -8,7 +8,6 @@ import logging
 import pandas as pd
 from copy import deepcopy
 
-import basal_area_increment as incr
 from pygypsy.stand_density_factor import (
     estimate_sdf_aw,
     estimate_sdf_sb,
@@ -21,8 +20,16 @@ from pygypsy.density import (
     estimate_density_sb,
     estimate_density_pl,
 )
-from utils import _log_loop_progress
-from pygypsy.utils import estimate_species_composition
+from pygypsy.site_index import (
+    get_site_indices_from_dominant_species,
+    _estimate_site_index
+)
+from pygypsy.utils import (
+    _get_gypsy_valid_species,
+    _log_loop_progress,
+    _generate_fplot_dict,
+    _reclassify_and_sort_species,
+)
 from pygypsy.asaCompileAgeGivenSpSiHt import (
     computeTreeAge,
     ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge,
@@ -33,229 +40,26 @@ from pygypsy.asaCompileAgeGivenSpSiHt import (
 LOGGER = logging.getLogger(__name__)
 
 
-# TODO: use funct from site_index module
-def get_species_site_indices(dominant_species, site_index):
-    '''
-    This function gets the site indices for all other species in a plot
-    given the site indices of the dominant species of that plot
-    '''
-    if site_index > 0:
-        if dominant_species == 'Aw':
-            site_index_white_aspen = site_index
-            site_index_pl = 0.85 * site_index_white_aspen + 3.4
-            site_index_sw = 1.31 * site_index_white_aspen - 2.64
-            site_index_fb = 0.92 * site_index_sw + 1.68
-            site_index_fb = 0.94 * site_index_pl + 0.71
-            site_index_sb = 0.64 * site_index_pl + 2.76
-            site_index_pb = site_index_white_aspen
-
-        elif dominant_species == 'Sw':
-            site_index_sw = site_index
-            site_index_pl = 0.86 * site_index_sw + 2.13
-            site_index_white_aspen = 0.76 * site_index_sw + 2.01
-            site_index_fb = 0.92 * site_index_sw + 1.68
-            site_index_fb = 0.74 * site_index_sw + 4.75
-            site_index_sb = 0.64 * site_index_pl + 2.76
-            site_index_pb = site_index_white_aspen
-
-        elif dominant_species == 'Fb':
-            site_index_fb = site_index
-            site_index_sw = 1.09 * site_index_fb - 1.83
-            site_index_pl = 0.86 * site_index_sw + 2.13
-            site_index_white_aspen = 0.76 * site_index_sw + 2.01
-            site_index_fb = 0.74 * site_index_sw + 4.75
-            site_index_sb = 0.64 * site_index_pl + 2.76
-            site_index_pb = site_index_white_aspen
-
-        elif dominant_species == 'Fd':
-            site_index_fb = site_index
-            site_index_pl = 1.07 * site_index_fb - 0.76
-            site_index_white_aspen = 1.18 * site_index_pl  - 4.02
-            site_index_sw = 1.36 * site_index_fb - 6.45
-            site_index_pb = site_index_white_aspen
-            site_index_fb = 0.92 * site_index_sw + 1.68
-            site_index_sb = 0.64 * site_index_pl + 2.76
-
-        elif dominant_species == 'Pl':
-            site_index_pl = site_index
-            site_index_white_aspen = 1.18 * site_index_pl  - 4.02
-            site_index_sw = 1.16 * site_index_pl - 2.47
-            site_index_fb = 0.94* site_index_pl + 0.71
-            site_index_pb = site_index_white_aspen
-            site_index_fb = 0.92 * site_index_sw + 1.68
-            site_index_sb = 0.64 * site_index_pl + 2.76
-
-        elif dominant_species == 'Pb':
-            site_index_pb = site_index
-            site_index_white_aspen = site_index_pb
-            site_index_pl = 0.85 * site_index_white_aspen + 3.4
-            site_index_sw = 1.31 * site_index_white_aspen -2.64
-            site_index_fb = 0.92* site_index_pl + 1.68
-            site_index_fb = 0.92 * site_index_sw + 1.68
-            site_index_sb = 0.64 * site_index_pl + 2.76
-
-        elif dominant_species == 'Sb':
-            site_index_sb = site_index
-            site_index_pl = 1.57 * site_index_sb - 4.33
-            site_index_sb = 0.64 * site_index_pl + 2.76
-            site_index_fb = 0.92* site_index_pl + 1.68
-            site_index_sw = 1.16 * site_index_pl - 2.47
-            site_index_white_aspen = 1.18 * site_index_pl - 4.02
-            site_index_pb = site_index_white_aspen
-
-
-    return site_index_white_aspen, site_index_pl, site_index_sw, site_index_sb
-
-# TODO: use func from site index modeule - move to utlls
-def get_gypsy_valid_species(dominant_species):
-    """Given the plot dominant species, get the gypsy species
-
-    Pb is reassigned to Aw
-    Fd or Fb are reassigned to Sw
-
-    :param dominant_species:
-    """
-    if dominant_species == 'Pb':
-        dominant_species = 'Aw'
-    elif dominant_species in ['Fd', 'Fb']:
-        dominant_species = 'Sw'
-
-    return dominant_species
-
-# TODO: use func from site index module
-def dominant_species_site_index_estim(dominant_species,
-                                      dominant_species_current_age,
-                                      dominant_species_current_height):
-    dom_si = ComputeGypsySiteIndex(
-        dominant_species,
-        dominant_species_current_height,
-        0,
-        dominant_species_current_age
-    )
-    site_index = dom_si[2]
-
-    return site_index
-
-# TODO: combine with funct from site_index module - move to utils
-def generate_species_dict():
-    """Create empty spcies dict
-
-    Species dict has keys which are species.
-
-    value are dicts with keys corresponding to parameter names and values
-    corresponding to parameter values
-
-    topHeight - top height
-    tage - total age
-    bhage - breast height age
-    N - density
-    BA - current Basal Area
-    PS - Measured Percent Stocking
-    StumpDOB - stump diameter outside bark
-    StumpHeight - stump height
-    TopDib - top diameter inside bark
-    site_index - site index
-    PCT - species proportion in plot
-
-    """
-    default_species_params = {
-        'topHeight': 0, 'tage': 0, 'bhage': 0, 'N': 0, 'BA': 0,
-        'PS': 16.9, 'StumpDOB':13, 'StumpHeight': 0.3, 'TopDib': 7,
-        'site_index': 0, 'PCT': 0
-    }
-    # plot properties for each species, starting with default values
-    # defined above
-    species_dict = {
-        'Aw': deepcopy(default_species_params),
-        'Pl': deepcopy(default_species_params),
-        'Sw': deepcopy(default_species_params),
-        'Sb': deepcopy(default_species_params),
-    }
-
-    return species_dict
-
-def populate_species_dict_with_indices(species_dict, dominant_species,
-                                       dominant_species_site_index,
-                                       estimated_site_indices):
+def _populate_species_dict_with_indices(species_dict, estimated_site_indices):
     """Fill the dictionary with estimated SIs
 
     Fill all the SIs to avoid IFs and loops. Some of them will not be
     used.
 
     :param species_dict: dictionary used to store params for all species
-    :param dominant_species_site_index: site index for dominant species
-    :param dominant_species: abbreviation, dominant species for
-                             the plot
     :param estimated_site_indices: array of estimated site indices from
                                    get_species_site_indices function
+
+    ..note: the dominant species in the estiamted_site_indices uses its
+    observed site index
 
     """
     local_species_dict = deepcopy(species_dict)
 
-    if dominant_species == 'Aw':
-        local_species_dict['Aw']['SI'] = dominant_species_site_index
-        local_species_dict['Pl']['SI'] = estimated_site_indices[1]
-        local_species_dict['Sw']['SI'] = estimated_site_indices[2]
-        local_species_dict['Sb']['SI'] = estimated_site_indices[3]
-
-    elif dominant_species == 'Sw':
-        local_species_dict['Aw']['SI'] = estimated_site_indices[0]
-        local_species_dict['Pl']['SI'] = estimated_site_indices[1]
-        local_species_dict['Sw']['SI'] = dominant_species_site_index
-        local_species_dict['Sb']['SI'] = estimated_site_indices[3]
-
-    elif dominant_species == 'Pl':
-        local_species_dict['Aw']['SI'] = estimated_site_indices[0]
-        local_species_dict['Pl']['SI'] = dominant_species_site_index
-        local_species_dict['Sw']['SI'] = estimated_site_indices[2]
-        local_species_dict['Sb']['SI'] = estimated_site_indices[3]
-
-    elif dominant_species == 'Sb':
-        local_species_dict['Aw']['SI'] = estimated_site_indices[0]
-        local_species_dict['Pl']['SI'] = estimated_site_indices[1]
-        local_species_dict['Sw']['SI'] = estimated_site_indices[2]
-        local_species_dict['Sb']['SI'] = dominant_species_site_index
+    for species, site_index in estimated_site_indices.items():
+        local_species_dict[species]['SI'] = site_index
 
     return local_species_dict
-
-
-# TODO: split into 2 functions
-def reclassify_and_sort_species(species_abbrev_perc_tuples_list):
-    '''Classify all species in valid gypsy species and sort by percent
-
-    re-classification of species that are not considered in pygypsy as one of
-    the species considered in pygypsy (Aw, Sw, Sb, or Pl) and sort the species
-    to obtain the dominant species in the plot
-
-    '''
-    species_perc_dict = {'Aw':0, 'Pl':0, 'Sw':0, 'Sb':0}
-    for species_abbrev_perc_tup in species_abbrev_perc_tuples_list:
-        species_abbrev = species_abbrev_perc_tup[0]
-        species_perc = species_abbrev_perc_tup[1]
-
-        if species_abbrev in ['Aw', 'Pb']:
-            species_perc_dict['Aw'] = species_perc_dict['Aw'] + species_perc
-
-        elif species_abbrev in ['Sw', 'Fb', 'Fd']:
-            species_perc_dict['Sw'] = species_perc_dict['Sw'] + species_perc
-
-        elif species_abbrev == 'Pl':
-            species_perc_dict['Pl'] = species_perc_dict['Pl'] + species_perc
-
-        elif species_abbrev == 'Sb':
-            species_perc_dict['Sb'] = species_perc_dict['Sb'] + species_perc
-
-    sorted_species_perc_list = [(k, v) for v, k in sorted(
-        [(v, k) for k, v in species_perc_dict.items()]
-    )]
-    sorted_species_perc_list.reverse()
-
-    check_prop1 = sum(species_perc_dict.values())
-    if check_prop1 != 100:
-        raise ValueError(('Species proportions after grouping '
-                          'into 4 species is not correct: %s') % check_prop1)
-
-    return sorted_species_perc_list, species_perc_dict
 
 
 def populate_species_dict(partial_species_list,
@@ -366,24 +170,23 @@ def prep_standtable(data):
         dominant_species_current_age = row['AGE']
         dominant_species_current_height = row['HD']
 
-        site_index = dominant_species_site_index_estim(
+        site_index = _estimate_site_index(
             plot_dominant_species,
             dominant_species_current_age,
             dominant_species_current_height
         )
 
-        temp_dominant_species = get_gypsy_valid_species(plot_dominant_species)
-        gypsy_site_indices = get_species_site_indices(temp_dominant_species,
-                                                      site_index)
-
-        empty_species_dict = generate_species_dict()
-        species_dict = populate_species_dict_with_indices(
-            empty_species_dict,
+        temp_dominant_species = _get_gypsy_valid_species(plot_dominant_species)
+        gypsy_site_indices = get_site_indices_from_dominant_species(
             temp_dominant_species,
-            site_index, gypsy_site_indices)
+            site_index
+        )
+        empty_species_dict = _generate_fplot_dict()
+        species_dict = _populate_species_dict_with_indices(empty_species_dict,
+                                                           gypsy_site_indices)
 
         outer_sorted_species_perc_list, outer_species_perc_dict = \
-            reclassify_and_sort_species(species_abbrev_percent_list)
+            _reclassify_and_sort_species(species_abbrev_percent_list)
 
         species_dict['Aw']['PCT'] = outer_species_perc_dict['Aw']
         species_dict['Pl']['PCT'] = outer_species_perc_dict['Pl']
@@ -473,15 +276,6 @@ def prep_standtable(data):
         initial_density_pl = estimate_density_pl(
             sdf_aw0, sdf_sw0, sdf_sb0, sdf_pl0, 0, site_index_pl
         )
-
-        # estimating species-specific Basal area increment from Densities
-        species_composition = estimate_species_composition(
-            density_bh_aw, density_bh_sb, density_bh_sw, density_bh_pl
-        )
-        species_composition_aw = species_composition[0]
-        species_composition_sw = species_composition[1]
-        species_composition_sb = species_composition[2]
-        species_composition_pl = species_composition[3]
 
         plot_dict[plot_id] = {
             'SI_Aw': site_index_aw,

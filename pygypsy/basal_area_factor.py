@@ -1,4 +1,5 @@
 """Basal Area correction factor estimators"""
+# TODO: validate that none of the variables taken from kwargs are missing
 import logging
 import numpy as np
 
@@ -11,6 +12,29 @@ from pygypsy.basal_area_simulate import (
 
 
 LOGGER = logging.getLogger(__name__)
+
+
+def get_basal_area_factors_for_all_species(**kwargs):
+    f_sb = 0
+    f_aw = 0
+    f_sw = 0
+    f_pl = 0
+
+    if kwargs['N0_Aw'] > 0:
+        f_aw = estimate_basal_area_factor_aw(**kwargs)
+    if kwargs['N0_Sb'] > 0:
+        f_sb = estimate_basal_area_factor_sb(**kwargs)
+    if kwargs['N0_Sw'] > 0:
+        f_sw = estimate_basal_area_factor_sw(**kwargs)
+    if kwargs['N0_Pl'] > 0:
+        f_pl = estimate_basal_area_factor_pl(**kwargs)
+
+    return {
+        'f_Aw':f_aw,
+        'f_Sb':f_sb,
+        'f_Sw':f_sw,
+        'f_Pl':f_pl,
+    }
 
 
 def estimate_basal_area_factor_aw(**kwargs):
@@ -29,11 +53,11 @@ def estimate_basal_area_factor_aw(**kwargs):
     :param float BA_AwT: basal area of Aw at time T
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float N0_Aw: initial density of species Aw at breast height age
-
+    :param list densities: array of 'densities' objects
     '''
-    initial_age = kwargs['startTage']
+    age_at_observation = kwargs['startTage']
     site_index = kwargs['SI_bh_Aw']
-    # present_density = kwargs['N_bh_AwT']
+    present_density = kwargs['N_bh_AwT']
     basal_area_at_bh_age = kwargs['BA_Aw0']
     present_basal_area = kwargs['BA_AwT']
     sdf_aw = kwargs['SDF_Aw0']
@@ -46,13 +70,13 @@ def estimate_basal_area_factor_aw(**kwargs):
     iter_count = 0
 
     while not within_tolerance:
-        ba_est = sim_basal_area_aw(initial_age, site_index, density_at_bh_age,
+        ba_est = sim_basal_area_aw(age_at_observation, site_index, density_at_bh_age,
                                    basal_area_at_bh_age, sdf_aw, factor,
                                    densities, use_correction_factor_future=False,
                                    stop_at_initial_age=True,
                                    fix_proportion_and_density_to_initial_age=False,
                                    species_proportion_at_bh_age=None,
-                                   present_density=None)[-1]
+                                   present_density=present_density)[-1]
 
         if abs(present_basal_area - ba_est) < tolerance:
             within_tolerance = True
@@ -67,7 +91,7 @@ def estimate_basal_area_factor_aw(**kwargs):
             elif (present_basal_area - ba_est) > 0:
                 factor = (factor+factor1)/2
 
-        iter_count = iter_count + 1
+        iter_count += 1
 
         if iter_count == 10000:
             LOGGER.warning(('Slow convergence with Basal Area: %s'
@@ -77,12 +101,11 @@ def estimate_basal_area_factor_aw(**kwargs):
 
 
 def estimate_basal_area_factor_sb(**kwargs):
-    '''This function guarantees that the trajectory of the species basal area
+    '''Black spruce basal area factor estimator
+
+    This function guarantees that the trajectory of the species basal area
     passes through the basal area measured when the data was collected
     (inventory data)
-
-    There is a trade-off between the precision with one wants this estimate, which is
-    given by the parameter - tolerance -, and the time the convergence time
 
     :param float startTage: Clock that uses the oldest species as a reference to
                             become the stand age
@@ -94,10 +117,10 @@ def estimate_basal_area_factor_sb(**kwargs):
     :param float y2bh_Sb: time elapseed in years from zero to breast height age of sp Sb
     :param float startTageSb: species specific ages counted independently
     :param float SC_Sb: proportion of species Sb in the stand
+    :param list densities: array of 'densities' objects
 
     '''
-    LOGGER.debug('Getting basal area factor for black spruce')
-    initial_age = kwargs['startTage']
+    age_at_observation = kwargs['startTage']
     site_index = kwargs['SI_bh_Sb']
     densities = kwargs['densities']
     density_at_bh_age = kwargs['N0_Sb']
@@ -112,7 +135,7 @@ def estimate_basal_area_factor_sb(**kwargs):
     iter_count = 0
 
     while not within_tolerance:
-        ba_est = sim_basal_area_sb(initial_age, site_index,
+        ba_est = sim_basal_area_sb(age_at_observation, site_index,
                                    density_at_bh_age,
                                    basal_area_at_bh_age,
                                    factor, densities,
@@ -135,7 +158,7 @@ def estimate_basal_area_factor_sb(**kwargs):
             elif (present_basal_area - ba_est) > 0:
                 factor = (factor+factor1)/2
 
-        iter_count = iter_count + 1
+        iter_count += 1
 
         if iter_count == 1500:
             LOGGER.warning(('Slow convergence with Basal Area: %s'
@@ -146,12 +169,11 @@ def estimate_basal_area_factor_sb(**kwargs):
 
 
 def estimate_basal_area_factor_sw(**kwargs):
-    '''This function guarantees that the trajectory of the species basal area
+    '''White Spruce basal area factor estimator
+
+    This function guarantees that the trajectory of the species basal area
     passes through the basal area measured when the data was collected
     (inventory data)
-
-    There is a trade-off between the precision with one wants this estimate, which is
-    given by the parameter - tolerance -, and the time the convergence time
 
     :param float startTage: Clock that uses the oldest species as a reference
                             to become the stand age
@@ -166,10 +188,10 @@ def estimate_basal_area_factor_sw(**kwargs):
     :param float SDF_Pl0: Stand Density Factor of species Pl
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float SDF_Sb0: Stand Density Factor of species Sb
+    :param list densities: array of 'densities' objects
 
     '''
-    LOGGER.debug('Getting basal area factor for white spruce')
-    initial_age = kwargs['startTage']
+    age_at_observation = kwargs['startTage']
     site_index = kwargs['SI_bh_Sw']
     densities = kwargs['densities']
     density_at_bh_age = kwargs['N0_Sw']
@@ -187,7 +209,7 @@ def estimate_basal_area_factor_sw(**kwargs):
     factor1 = 1.5 * factor
 
     while not within_tolerance:
-        ba_est = sim_basal_area_sw(initial_age, site_index,
+        ba_est = sim_basal_area_sw(age_at_observation, site_index,
                                    density_at_bh_age, sdf_aw, sdf_pl, sdf_sb,
                                    basal_area_at_bh_age,
                                    factor, densities,
@@ -208,7 +230,7 @@ def estimate_basal_area_factor_sw(**kwargs):
             elif (present_basal_area - ba_est) > 0:
                 factor = (factor + factor1)/2
 
-        iter_count = iter_count + 1
+        iter_count += 1
 
         if iter_count == 1500:
             LOGGER.warning(('Slow convergence with Basal Area: %s'
@@ -219,12 +241,11 @@ def estimate_basal_area_factor_sw(**kwargs):
 
 
 def estimate_basal_area_factor_pl(**kwargs):
-    '''This function guarantees that the trajectory of the species basal area
+    '''Lodgepole pine basal area factor estimator
+
+    This function guarantees that the trajectory of the species basal area
     passes through the basal area measured when the data was collected
     (inventory data)
-
-    There is a trade-off between the precision with one wants this estimate, which is
-    given by the parameter - tolerance -, and the time the convergence time
 
     :param float startTage: Clock that uses the oldest species as a reference
                             to become the stand age
@@ -239,9 +260,10 @@ def estimate_basal_area_factor_pl(**kwargs):
     :param float SDF_Sw0: Stand Density Factor of species Sw
     :param float SDF_Aw0: Stand Density Factor of species Aw
     :param float SDF_Sb0: Stand Density Factor of species Sb
+    :param list densities: array of 'densities' objects
 
     '''
-    initial_age = kwargs['startTage']
+    age_at_observation = kwargs['startTage']
     site_index = kwargs['SI_bh_Pl']
     density_at_bh_age = kwargs['N0_Pl']
     densities = kwargs['densities']
@@ -259,7 +281,7 @@ def estimate_basal_area_factor_pl(**kwargs):
     factor1 = 1.5 * factor
 
     while not within_tolerance:
-        ba_est = sim_basal_area_pl(initial_age, site_index,
+        ba_est = sim_basal_area_pl(age_at_observation, site_index,
                                    density_at_bh_age, sdf_aw, sdf_sw, sdf_sb,
                                    basal_area_at_bh_age,
                                    factor, densities,
@@ -278,7 +300,7 @@ def estimate_basal_area_factor_pl(**kwargs):
             elif (present_basal_area - ba_est) > 0:
                 factor = (factor + factor1)/2
 
-        iter_count = iter_count + 1
+        iter_count += 1
 
         if iter_count == 150:
             LOGGER.warning(('Slow convergence with Basal Area: %s'
