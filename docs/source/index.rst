@@ -23,13 +23,20 @@ It's benefits over other offerings are:
 - easy to simulate multiple plots
 
 
-Guide
------
+User Guide
+----------
 
 .. toctree::
    :maxdepth: 2
 
    usage
+
+Developer Guide
+---------------
+.. toctree::
+   :maxdepth: 1
+
+   contributing
 
 API
 ---
@@ -39,13 +46,6 @@ API
 
    modules
 
-
-Development
------------
-.. toctree::
-   :maxdepth: 1
-
-   contributing
 
 References
 ----------
