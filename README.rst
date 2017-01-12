@@ -22,6 +22,7 @@ Its main usage mode is a command line interface; it also has a an API for
 programmatic use.
 
 It's benefits over other offerings are:
+
 - configurable
 - control over the implementation
 - fast
