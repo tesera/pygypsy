@@ -8,6 +8,15 @@ from pygypsy.scripts import DEFAULT_CONF_FILE
 from conftest import DATA_DIR
 
 
+def test_version():
+    runner = CliRunner()
+
+    with runner.isolated_filesystem():
+        result = runner.invoke(cli, ['--version'])
+
+        assert result.exit_code == 0
+        assert result.output
+
 def test_generate_config():
     runner = CliRunner()
     output_dir = 'pygypsy-output'

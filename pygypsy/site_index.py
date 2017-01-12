@@ -1,14 +1,9 @@
-# -*- coding: utf-8 -*-
 """Functions for calculating site indices
 
 """
-from collections import defaultdict
-
-
-# TODO: reduce repetition
-# - decorator for returns_all_site_indices
-# - utility functions/class for <species>_from_<otherspecies>
-# - make species stuff case insensitive
+from pygypsy.asaCompileAgeGivenSpSiHt import (
+    ComputeGypsySiteIndex,
+)
 
 
 def get_site_indices_from_dominant_species(dominant_species=None,
@@ -29,19 +24,18 @@ def get_site_indices_from_dominant_species(dominant_species=None,
         'pl': _get_all_site_indices_from_dominant_pl,
         'pb': _get_all_site_indices_from_dominant_pb,
     }
-
+    dominant_species = dominant_species.lower()
     try:
         all_site_indices = functs[dominant_species](dominant_species_site_index)
     except KeyError:
         raise ValueError('No function is available to calculate site index from '
                          'species %s' %dominant_species)
 
-    species_subset = ('aw', 'pl', 'sw', 'sb')
+    species_subset = ('Aw', 'Pl', 'Sw', 'Sb')
     site_indices_subset = {
-        species: all_site_indices[species] for species in species_subset
+        species: all_site_indices[species.lower()] for species in species_subset
     }
 
-    # NOTE: using a dict here so that contents are explicit/non-ambiguous
     return site_indices_subset
 
 
@@ -219,63 +213,22 @@ def _get_temporary_dominant_species(actual_dominant_species):
     return temp_dominant_species
 
 
-def _estimate_dominant_species_site_index(dominant_species, age, height):
+def _estimate_site_index(species, age, height):
     """Estimate site index of dominant species
 
     This is a wrapper around ComputeGypsySiteIndex for readability
 
-    It assumes site_index = site_index at time?
-
     Keyword Arguments:
-    dominant_species -- str, abbreviation of dominant species
-    age              -- float, age of dominant species
-    height           -- float, height of dominant species
+    species -- str, abbreviation of dominant species
+    age     -- float, age of dominant species
+    height  -- float, height of dominant species
 
     Return:
     float - site index
 
     """
-    dominant_site_index_list = ComputeGypsySiteIndex(dominant_species,
+    dominant_site_index_list = ComputeGypsySiteIndex(species,
                                                      height, 0, age)
-    # TODO: use dictionary for return from Computegypsysiteindex - that way someone
-    # knows clearly what domSI[2] means
     dominant_site_index = dominant_site_index_list[2]
 
     return dominant_site_index
-
-
-
-
-def _generate_fplot_dict(dominant_species, dominant_species_site_index,
-                         all_species_site_indices):
-    """Generate 'fplot'
-
-    Given a known dominant species and its site index, and estimation of all
-    site indices, generates the 'fplot' dictionary
-
-    Keyword Arguments:
-    dominant_species            -- str, dominant species abbrev
-    dominant_species_site_index -- float, dominant species site index
-    all_species_site_indices    -- dict, site index of all species
-
-    Return:
-    dict - ???
-
-    """
-    def gen_template_dict():
-        return {
-            'topHeight': 0, 'tage': 0, 'bhage': 0,
-            'N': 0, 'BA': 0, 'PS': 16.9, 'StumpDOB':13,
-            'StumpHeight': 0.3, 'TopDib': 7, 'SI': 0, 'PCT': 0
-        }
-
-    fplot_dict = defaultdict(gen_template_dict)
-
-    fplot_dict['Aw']['SI'] = all_species_site_indices['pl']
-    fplot_dict['Pl']['SI'] = all_species_site_indices['pl']
-    fplot_dict['Sw']['SI'] = all_species_site_indices['sw']
-    fplot_dict['Sb']['SI'] = all_species_site_indices['sb']
-    # override the given dominant species with the given value
-    fplot_dict[dominant_species]['SI'] = dominant_species_site_index
-
-    return fplot_dict

@@ -269,7 +269,7 @@ integration environment; maintainers be warned!**
 Release Process
 ~~~~~~~~~~~~~~~
 
--  Create a new branch - release-x.y.z from dev
+-  Create a new branch named **release-x.y.z** from dev where:
 
    -  x.y.z is the version increment using `semantic
       versioning <http://semver.org/>`__, familiarize with semantic
@@ -287,7 +287,7 @@ Release Process
 
    -  the command below can be used to get a list of changes since the
       previous release; summarize and prepend
-   -  ``git log $(git tag -l \| grep -E ':raw-latex:`\d`(.:raw-latex:`\d`){1,2}' \| tail -n 1)… –oneline –decorate –reverse``
+   - git log `git describe --tags --abbrev=0`..HEAD --oneline
 
 -  Open pull request with target of master
 -  When pull request is merged, create a release on github
@@ -298,13 +298,12 @@ Release Process
 -  Merge master back to dev
 - In |read the docs|, activate and build the documentation for the release
 - Publish the pygypsy release on `zenodo <https://zenodo.org/>`__ as described `here https://guides.github.com/activities/citable-code/>`__
-
-Once the new release is on PyPI, the `conda-forge
-feedstock <https://github.com/conda-forge/pygypsy-feedstock>`__
-conda-forge release should be updated to build and deploy for conda.
-This can be done by bumping the version in the
-`meta.yaml <https://github.com/conda-forge/pygypsy-feedstock/blob/master/recipe/meta.yaml>`__
-file.
+- Once the new release is on PyPI, the `conda-forge feedstock
+<https://github.com/conda-forge/pygypsy-feedstock>`__ conda-forge release
+should be updated to build and deploy for conda. This can be done by bumping
+the version in the `meta.yaml
+<https://github.com/conda-forge/pygypsy-feedstock/blob/master/recipe/meta.yaml>`__
+file. You will also need to update the sha256 for the package, which can be obtained from `pypi <https://pypi.org/project/pygypsy/#files>`__
 
 .. |pygypsy docs| replace:: `pygypsy docs <https://pygypsy.readthedocs.io/en/latest>`__
 .. |read the docs| replace:: `Read The Docs <http://readthedocs.org/>`__

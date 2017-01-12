@@ -7,6 +7,7 @@ import errno
 import shutil
 import logging
 from urlparse import urlparse
+from copy import deepcopy
 
 from log import CONSOLE_LOGGER_NAME
 
@@ -102,3 +103,100 @@ def _copy_file(source, dest, bucket_conn=None):
         shutil.copyfile(source, dest)
     else:
         _copy_file_to_s3(bucket_conn, source, dest)
+
+
+def _generate_fplot_dict():
+    """Generate 'fplot'
+
+    Given a known dominant species and its site index, and estimation of all
+    site indices, generates the 'fplot' dictionary
+
+    Return:
+    dict - ???
+
+    ..note: topHeight - top height
+    tage - total age
+    bhage - breast height age
+    N - density
+    BA - current Basal Area
+    PS - Measured Percent Stocking
+    StumpDOB - stump diameter outside bark
+    StumpHeight - stump height
+    TopDib - top diameter inside bark
+    site_index - site index
+    PCT - species proportion in plot
+
+    """
+    default_species_params = {
+        'topHeight': 0, 'tage': 0, 'bhage': 0,
+        'N': 0, 'BA': 0, 'PS': 16.9, 'StumpDOB':13,
+        'StumpHeight': 0.3, 'TopDib': 7, 'SI': 0, 'PCT': 0
+    }
+    species = ('Aw', 'Pl', 'Sw', 'Sb')
+    fplot_dict = {}
+
+    for s in species:
+        fplot_dict[s] = deepcopy(default_species_params)
+
+    return fplot_dict
+
+
+def _get_gypsy_valid_species(dominant_species):
+    """Given the plot dominant species, get the gypsy species
+
+    The dominant species in a plot may not be one of the species in the GYPSY
+    model. Douglas Fir for example is not in the GYPSY model, and it is
+    appropriate to substitute it with White Spruce.
+
+    :param str dominant_species: abbreviation of plot dominant species
+    """
+    if dominant_species == 'Pb':
+        dominant_species = 'Aw'
+    elif dominant_species in ['Fd', 'Fb']:
+        dominant_species = 'Sw'
+
+    return dominant_species
+
+
+def _reclassify_and_sort_species(species_abbrev_perc):
+    '''Classify all species in valid gypsy species and sort by percent
+
+    re-classification of species that are not considered in pygypsy as one of
+    the species considered in pygypsy (Aw, Sw, Sb, or Pl) and sort the species
+    to obtain the dominant species in the plot
+
+    :param list species_abbrev_perc: list of tuples where each element is a
+    species abbreviation followed by its percentage
+
+    '''
+    species_perc_dict = {'Aw':0, 'Pl':0, 'Sw':0, 'Sb':0}
+
+    for tup in species_abbrev_perc:
+        species_abbrev = tup[0]
+        species_perc = tup[1]
+
+        if species_abbrev in ['Aw', 'Pb']:
+            species_perc_dict['Aw'] = species_perc_dict['Aw'] + species_perc
+
+        elif species_abbrev in ['Sw', 'Fb', 'Fd']:
+            species_perc_dict['Sw'] = species_perc_dict['Sw'] + species_perc
+
+        elif species_abbrev == 'Pl':
+            species_perc_dict['Pl'] = species_perc_dict['Pl'] + species_perc
+
+        elif species_abbrev == 'Sb':
+            species_perc_dict['Sb'] = species_perc_dict['Sb'] + species_perc
+
+    sorted_species_perc_list = [(k, v) for v, k in sorted(
+        [(v, k) for k, v in species_perc_dict.items()]
+    )]
+    sorted_species_perc_list.reverse()
+
+    check_prop1 = sum(species_perc_dict.values())
+    if check_prop1 != 100:
+        raise ValueError(('Species proportions after grouping '
+                          'into 4 species is not correct: %s') % check_prop1)
+
+    return sorted_species_perc_list, species_perc_dict
+
+

@@ -6,6 +6,23 @@
 Welcome to pygypsy's documentation!
 ===================================
 
+About
+-----
+
+pygypsy is a python implementation of the forest **Growth and Yield Projection
+SYstem** [HuangEtAl2009]_.
+
+Its main usage mode is a command line interface; it also has a an API for
+programmatic use.
+
+It's benefits over other offerings are:
+
+- configurable
+- control over the implementation
+- fast
+- easy to simulate multiple plots
+
+
 Guide
 -----
 
@@ -29,3 +46,9 @@ Development
    :maxdepth: 1
 
    contributing
+
+References
+----------
+
+.. [HuangEtAl2009] Huang, Meng, Yang (2009). A Growth and Yield Projection System for Natural and Post-Harvest Stands in Alberta. Retrieved from http://www1.agric.gov.ab.ca/$department/deptdocs.nsf/all/formain15784/$file/GYPSY-Natural-PostHarvestStands-Alberta-May21-2009.pdf?OpenElement
+
