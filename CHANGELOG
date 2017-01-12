@@ -13,6 +13,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 - n/a
 
+## 0.3.1 - 2017-01-11
+### Added
+- n/a
+
+### Changed
+- n/a
+
+### Fixed
+- PyPI deploy script to include linux wheel, why legacy pypi did not accept
+
 ## 0.3.0 - 2017-01-10
 ### Added
 - Simulation length option to configuration file
