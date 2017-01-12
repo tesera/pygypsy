@@ -287,7 +287,7 @@ Release Process
 
    -  the command below can be used to get a list of changes since the
       previous release; summarize and prepend
-   -  ``git log $(git tag -l \| grep -E ':raw-latex:`\d`(.:raw-latex:`\d`){1,2}' \| tail -n 1)… –oneline –decorate –reverse``
+   - git log `git describe --tags --abbrev=0`..HEAD --oneline
 
 -  Open pull request with target of master
 -  When pull request is merged, create a release on github
