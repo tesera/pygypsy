@@ -298,13 +298,12 @@ Release Process
 -  Merge master back to dev
 - In |read the docs|, activate and build the documentation for the release
 - Publish the pygypsy release on `zenodo <https://zenodo.org/>`__ as described `here https://guides.github.com/activities/citable-code/>`__
-
-Once the new release is on PyPI, the `conda-forge
-feedstock <https://github.com/conda-forge/pygypsy-feedstock>`__
-conda-forge release should be updated to build and deploy for conda.
-This can be done by bumping the version in the
-`meta.yaml <https://github.com/conda-forge/pygypsy-feedstock/blob/master/recipe/meta.yaml>`__
-file.
+- Once the new release is on PyPI, the `conda-forge feedstock
+<https://github.com/conda-forge/pygypsy-feedstock>`__ conda-forge release
+should be updated to build and deploy for conda. This can be done by bumping
+the version in the `meta.yaml
+<https://github.com/conda-forge/pygypsy-feedstock/blob/master/recipe/meta.yaml>`__
+file. You will also need to update the sha256 for the package, which can be obtained from `pypi <https://pypi.org/project/pygypsy/#files>`__
 
 .. |pygypsy docs| replace:: `pygypsy docs <https://pygypsy.readthedocs.io/en/latest>`__
 .. |read the docs| replace:: `Read The Docs <http://readthedocs.org/>`__
