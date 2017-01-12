@@ -269,7 +269,7 @@ integration environment; maintainers be warned!**
 Release Process
 ~~~~~~~~~~~~~~~
 
--  Create a new branch - release-x.y.z from dev
+-  Create a new branch named **release-x.y.z** from dev where:
 
    -  x.y.z is the version increment using `semantic
       versioning <http://semver.org/>`__, familiarize with semantic
