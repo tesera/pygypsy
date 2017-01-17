@@ -37,7 +37,7 @@ Prepare your plot data as follows
 
    pygypsy prep --config-file ./pygypsy-output/config.json /path/to/your/plot-data.csv
 
-Take note of the consolte output to see where the prepared plot data is created.
+Take note of the console output to see where the prepared plot data is created.
 
 Running simulation
 ------------------
@@ -65,9 +65,9 @@ This way you can manage data for several simulations
 
 ::
 
-   pygypsy --output-dir /lothlorien simulate
-   pygypsy --output-dir /mirkwood simulate
-   pygypsy --output-dir /mirkwood-5-year-simulation simulate
+   pygypsy --output-dir /lothlorien simulate /lothlorien/data-prepped.csv
+   pygypsy --output-dir /mirkwood simulate /mirkwood/data-prepped.csv
+   pygypsy --output-dir /mirkwood-5-year simulate /mirkwood-5-year/data-prepped.csv
 
 If it is not specified, the default output directory, ``./pygypsy-output`` will
 be used.
