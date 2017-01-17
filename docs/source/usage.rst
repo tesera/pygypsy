@@ -15,9 +15,9 @@ This way you can manage data for several simulations
 
 ::
 
-   pygypsy --output-dir /lothlorien simulate /lothlorien/data-prepped.csv
-   pygypsy --output-dir /mirkwood simulate /mirkwood/data-prepped.csv
-   pygypsy --output-dir /mirkwood-5-year simulate /mirkwood-5-year/data-prepped.csv
+   pygypsy --output-dir /lothlorien simulate /lothlorien/plot_data_prepped.csv
+   pygypsy --output-dir /mirkwood simulate /mirkwood/plot_data_prepped.csv
+   pygypsy --output-dir /mirkwood-5-year simulate /mirkwood-5-year/plot_data_prepped.csv
 
 If it is not specified, the default output directory, ``./pygypsy-output`` will
 be used.
@@ -70,7 +70,7 @@ Run the gypsy simulation as follows
 
 ::
 
-   pygypsy simulate --config-file ./pygypsy-output/config.json /pygypsy-output/plot-data-prepped.csv
+   pygypsy simulate --config-file ./pygypsy-output/config.json /pygypsy-output/plot_data_prepped.csv
 
 Troubleshooting
 ===============
