@@ -35,7 +35,7 @@ Prepare your plot data as follows
 
 ::
 
-   pygypsy prep --config-file ./pygypsy-output/config.json /path/to/your/plot-data.csv
+   pygypsy prep --config-file ./pygypsy-output/pygypsy-config.json /path/to/your/plot-data.csv
 
 Take note of the console output to see where the prepared plot data is created.
 
@@ -55,7 +55,7 @@ Output for each pygypsy command is created at a fixed path relative to a
 configurable output directory
 
 The output directory can be specified after the pygypsy command and before
-subcommands, i.e.
+subcommands, e.g.
 
 ::
 
