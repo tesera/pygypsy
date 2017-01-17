@@ -123,6 +123,7 @@ def prep(ctx, standtable, config_file):
         standtable_df = pd.read_csv(standtable)
         prepped_data = prep_standtable(standtable_df)
 
+        LOGGER.info('Writing prepped data to %s', output_path)
         if bucket_name:
             df_to_s3_bucket(prepped_data, bucket_conn, output_path,
                             index_label=index_label)
@@ -187,9 +188,8 @@ def simulate(ctx, data, config_file):
                                       n_years=config_file['simulation']['years'],
                                       backwards=config_file['simulation']['backwards'])
 
-        LOGGER.info('Saving output data')
-
         simulation_output_dir = os.path.join(output_dir, 'simulation-data')
+        LOGGER.info('Saving output data to %s', simulation_output_dir)
 
         if bucket_name is None:
             os.mkdir(simulation_output_dir)
