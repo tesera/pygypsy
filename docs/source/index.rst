@@ -17,14 +17,16 @@ programmatic use.
 
 It's benefits over other offerings are:
 
+- easy to simulate multiple plots in one step
 - configurable
-- control over the implementation
-- fast
-- easy to simulate multiple plots
+- performance
 
+`Install pygypsy now with conda or pip
+<https://github.com/conda-forge/pygypsy-feedstock#installing-pygypsy>`__ to
+simulate the growth of your forests!
 
-User Guide
-----------
+CLI User Guide
+--------------
 
 .. toctree::
    :maxdepth: 2
