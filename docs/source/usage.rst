@@ -7,7 +7,7 @@ A template configuration can be generated as follows:
 
 ::
 
-    pygypsy generate-config
+    pygypsy generate_config
 
 The configuration file is a json file and must follow `json syntax <http://www.w3schools.com/js/js_json_syntax.asp>`__.
 
@@ -59,7 +59,7 @@ subcommands, i.e.
 
 ::
 
-   pygypsy --output-dir /your/own/output-dir generate-config
+   pygypsy --output-dir /your/own/output-dir generate_config
 
 This way you can manage data for several simulations
 
