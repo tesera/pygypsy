@@ -1,3 +1,27 @@
+Data Management
+===============
+
+Output for each pygypsy command is created at a fixed path relative to a
+configurable output directory
+
+The output directory can be specified after the pygypsy command and before
+subcommands, e.g.
+
+::
+
+   pygypsy --output-dir /your/own/output-dir generate_config
+
+This way you can manage data for several simulations
+
+::
+
+   pygypsy --output-dir /lothlorien simulate /lothlorien/data-prepped.csv
+   pygypsy --output-dir /mirkwood simulate /mirkwood/data-prepped.csv
+   pygypsy --output-dir /mirkwood-5-year simulate /mirkwood-5-year/data-prepped.csv
+
+If it is not specified, the default output directory, ``./pygypsy-output`` will
+be used.
+
 Configuration
 =============
 
@@ -47,30 +71,6 @@ Run the gypsy simulation as follows
 ::
 
    pygypsy simulate --config-file ./pygypsy-output/config.json /pygypsy-output/plot-data-prepped.csv
-
-Data Management
-===============
-
-Output for each pygypsy command is created at a fixed path relative to a
-configurable output directory
-
-The output directory can be specified after the pygypsy command and before
-subcommands, e.g.
-
-::
-
-   pygypsy --output-dir /your/own/output-dir generate_config
-
-This way you can manage data for several simulations
-
-::
-
-   pygypsy --output-dir /lothlorien simulate /lothlorien/data-prepped.csv
-   pygypsy --output-dir /mirkwood simulate /mirkwood/data-prepped.csv
-   pygypsy --output-dir /mirkwood-5-year simulate /mirkwood-5-year/data-prepped.csv
-
-If it is not specified, the default output directory, ``./pygypsy-output`` will
-be used.
 
 Troubleshooting
 ===============
