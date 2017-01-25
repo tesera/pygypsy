@@ -75,7 +75,7 @@
         "backwards"
       ]
     },
-    "yearDefinition":{
+    "dataAcquiistionYear":{
         "type": "number",
         "properties": {
         "initialYear": {
@@ -91,7 +91,6 @@
         },
         "required":[
             "initialYear"
-            "finalYear"
         ]
     },
     "deadwood": {

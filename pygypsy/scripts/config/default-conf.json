@@ -17,7 +17,7 @@
         "years": 250,
         "backwards": true
     },
-    "yearDefinition":{
+    "dataAcquiistionYear":{
         "initialYear": 2011,
         "finalYear": 2017
 
