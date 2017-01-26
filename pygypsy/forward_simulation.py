@@ -384,7 +384,6 @@ def simulate_forwards_df(plot_df, utiliz_params=None, backwards=True,
                 stump_height=utiliz_params[spec.lower()]['stumpHeight']
             )
 
-
         output_df['Gross_Total_Volume_Con'] = output_df['Gross_Total_Volume_Sw'] \
                                               + output_df['Gross_Total_Volume_Sb'] \
                                               + output_df['Gross_Total_Volume_Pl']
@@ -397,7 +396,6 @@ def simulate_forwards_df(plot_df, utiliz_params=None, backwards=True,
         output_df['MerchantableVolume_Dec'] = output_df['MerchantableVolumeAw']
         output_df['MerchantableVolume_Tot'] = output_df['MerchantableVolume_Con'] \
                                               + output_df['MerchantableVolume_Dec']
-
 
         output_df.reset_index(inplace=True)
         output_df=output_df.rename(columns={'index': 'year'})
