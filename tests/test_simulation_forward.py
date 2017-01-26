@@ -104,3 +104,12 @@ def test_simulate_densities_speciescomp_topheight_duration():
     assert len(result2) == 5
     assert result[4] == expected
     assert result2[4] == expected2
+
+def test_year_index():
+    input_data_path = os.path.join(DATA_DIR, 'forward_simulation_files',
+                                   '1049300.csv')
+    input_df = pd.read_csv(input_data_path)
+    result = simulate_forwards_df(input_df, backwards=False, n_years=1,  
+                                  year_of_data_acquisition=2000)
+
+    assert result['1049300'].index.values[-1] == 2001
