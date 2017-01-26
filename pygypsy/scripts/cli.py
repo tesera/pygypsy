@@ -120,7 +120,10 @@ def prep(ctx, standtable, config_file):
 
     try:
         standtable_df = pd.read_csv(standtable)
-        prepped_data = prep_standtable(standtable_df)
+        prepped_data = prep_standtable(
+            standtable_df,
+            minimum_age=config_file['prep']['minimumAge']
+        )
 
         LOGGER.info('Writing prepped data to %s', output_path)
         if bucket_name:

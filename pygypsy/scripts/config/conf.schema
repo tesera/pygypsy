@@ -75,6 +75,19 @@
         "backwards"
       ]
     },
+    "prep": {
+      "type": "object",
+      "properties": {
+        "minimumAge": {
+          "type": "integer",
+          "multipleOf": 1,
+          "minimum": 0
+        }
+      },
+      "required": [
+        "minimumAge",
+      ]
+    },
     "deadwood": {
       "type": "object",
       "properties": {
@@ -125,11 +138,9 @@
     }
   },
   "required": [
-    "tolerance",
     "simulation",
-    "deadwood",
-    "dataReduction",
-    "utilization"
+    "utilization",
+    "prep"
   ],
   "definitions": {
     "tolerance": {

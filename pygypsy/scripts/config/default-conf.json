@@ -1,27 +1,10 @@
 {
-    "tolerance": {
-        "basalAreaFactor": {
-            "aw": 0.1,
-            "sp": 0.1,
-            "pl": 0.1,
-            "sw": 0.1
-        },
-        "siteDensityFactor": {
-            "aw": 0.1,
-            "sp": 0.1,
-            "pl": 0.1,
-            "sw": 0.1
-        }
+    "prep": {
+        "minimumAge": 25
     },
     "simulation": {
-        "years": 250,
-        "backwards": true
-    },
-    "deadwood": {
-        "include": true
-    },
-    "dataReduction": {
-        "outputResolution": 5
+        "years": 10,
+        "backwards": false
     },
     "utilization": {
         "aw": {
