@@ -109,9 +109,7 @@ def populate_species_dict(partial_species_list,
                 species[0],
                 treeHt=dominant_species_current_height,
                 treeSi=si_sp,
-                maxTreeAge=450,
-                rowIndex=0,
-                printWarnings=True
+                maxTreeAge=450
             )
             # density based on the proportion of the species
             species_dict[species[0]]['N'] = row['TPH'] * species[1]/100
