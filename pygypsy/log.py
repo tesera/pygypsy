@@ -14,7 +14,7 @@ def setup_logging():
                 'format': '%(levelname)s %(asctime)s %(process)d %(thread)d %(message)s'
             },
             'standard': {
-                'format': '%(levelname)s %(asctime)s %(message)s'
+                'format': '%(pathname)s: %(funcName)s %(levelname)s %(asctime)s %(message)s'
             },
             'colored': {
                 '()': 'colorlog.ColoredFormatter',
@@ -36,6 +36,11 @@ def setup_logging():
             },
         },
         'loggers': {
+            'pygypsy.asaCompileAgeGivenSpSiHt': {
+                'handlers':['file'],
+                'level':'INFO',
+                'propagate': True,
+            },
             'pygypsy.forward_simulation': {
                 'handlers':['file'],
                 'level':'INFO',

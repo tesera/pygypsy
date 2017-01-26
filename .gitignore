@@ -72,7 +72,7 @@ codeship.aes
 /.bash_history
 
 # ephemeral test data
-gypsy-output/
+pygypsy-output/
 /data/raw_standtable.csv.prepped
 /lint-output.txt
 data/figures/
