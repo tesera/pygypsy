@@ -188,7 +188,7 @@ def simulate_densities_speciescomp_topheight(n_years=250, start_at_data_year=Fal
 
 
 def simulate_forwards_df(plot_df, utiliz_params=None, backwards=True,
-                         n_years=250):
+                         n_years=250, year_of_data_acquisition):
     """Simulate the evolution of plot characteristics through time
 
     This begins with the simulation of densities, species, and top height.
