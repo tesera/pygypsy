@@ -26,3 +26,17 @@ def test_prep_standtable():
 
     # regenerate output files
     # result.to_csv(expected_data_path)
+
+def test_prep_omits_young_plots():
+    data_file_name = 'raw_standtable_young.csv'
+    plot_data = pd.read_csv(os.path.join(DATA_DIR, data_file_name))
+    result = prep_standtable(plot_data)
+
+    assert result.shape[0] == 1
+
+def test_prep_omits_all_plots():
+    data_file_name = 'raw_standtable_young.csv'
+    plot_data = pd.read_csv(os.path.join(DATA_DIR, data_file_name))
+    result = prep_standtable(plot_data, minimum_age=5000)
+
+    assert result.shape[0] == 0

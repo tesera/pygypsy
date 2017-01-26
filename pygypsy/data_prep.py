@@ -124,7 +124,7 @@ def populate_species_dict(partial_species_list,
     return species_dict
 
 
-def prep_standtable(data):
+def prep_standtable(data, minimum_age=25):
     '''Define site_index of all other species given the dominant species
 
     The site index is only defined for the dominant species in a plot. This
@@ -210,6 +210,13 @@ def prep_standtable(data):
         tage_sw = species_dict['Sw']['tage']
         tage_pl = species_dict['Pl']['tage']
         tage_sb = species_dict['Sb']['tage']
+
+        ages = [tage_aw, tage_sw, tage_pl, tage_sb]
+        if not any([age > minimum_age for age in ages]):
+            msg = ('No speices have age greater than the minimum age %s;'
+                   'skipping plot %s') % (minimum_age, plot_id)
+            LOGGER.warning(msg)
+            continue
 
         bhage_aw = species_dict['Aw']['bhage']
         bhage_sw = species_dict['Sw']['bhage']
@@ -322,7 +329,7 @@ def prep_standtable(data):
             'topHeight_Pl': top_height_pl
         }
 
-        plot_df = pd.DataFrame(plot_dict)
-        plot_df = plot_df.transpose()
+    plot_df = pd.DataFrame(plot_dict)
+    plot_df = plot_df.transpose()
 
     return plot_df
