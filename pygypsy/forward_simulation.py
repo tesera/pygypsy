@@ -399,9 +399,14 @@ def simulate_forwards_df(plot_df, utiliz_params=None, backwards=True,
                                               + output_df['MerchantableVolume_Dec']
 
         output_dict[plot_id] = output_df
+        output_df.insert(0, 'plot_id', plot_id)
 
         end = datetime.datetime.now()
         duration = end - start
         LOGGER.debug('plot %s took %f seconds', plot_id, duration.total_seconds())
 
-    return output_dict
+    big_output_df = pd.concat(output_dict.values(), copy=False)
+    big_output_df.set_index(['plot_id', 'date'], inplace=True)
+    import ipdb; ipdb.set_trace()
+
+    return big_output_df
