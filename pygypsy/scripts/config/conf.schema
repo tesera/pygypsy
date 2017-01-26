@@ -85,7 +85,7 @@
         }
       },
       "required": [
-        "minimumAge",
+        "minimumAge"
       ]
     },
     "deadwood": {
