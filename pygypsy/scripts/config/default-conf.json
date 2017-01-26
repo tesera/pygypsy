@@ -6,6 +6,9 @@
         "years": 10,
         "backwards": false
     },
+    "data":{
+        "acquistionYear": 2011
+    },
     "utilization": {
         "aw": {
             "topDiamInsideBark": 7,
