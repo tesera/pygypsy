@@ -17,6 +17,9 @@
         "years": 250,
         "backwards": true
     },
+    "data":{
+        "acquistionYear": 2011
+    },
     "deadwood": {
         "include": true
     },

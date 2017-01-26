@@ -75,6 +75,16 @@
         "backwards"
       ]
     },
+    "data":{
+        "type": "object",
+        "properties": {
+        "acquistionYear": {
+            "type":"integer",
+            "maximum": 2017,
+            "minimum": 1990
+        }
+      }
+    },
     "deadwood": {
       "type": "object",
       "properties": {

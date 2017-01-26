@@ -4,9 +4,11 @@ Calculates and joins parameters required for pygypsy to a plot table
 
 """
 #pylint: disable=no-member
+from __future__ import division
 import logging
 import pandas as pd
 from copy import deepcopy
+
 
 from pygypsy.stand_density_factor import (
     estimate_sdf_aw,
