@@ -187,7 +187,7 @@ def simulate(ctx, data, config_file):
                                       utiliz_params=config_file['utilization'],
                                       n_years=config_file['simulation']['years'],
                                       backwards=config_file['simulation']['backwards'],
-                                      year_of_data_acquisition=config_file['dataAcquiistionYear'])
+                                      year_of_data_acquisition=config_file['data']['acquistionYear'])
 
         simulation_output_dir = os.path.join(output_dir, 'simulation-data')
         LOGGER.info('Saving output data to %s', simulation_output_dir)

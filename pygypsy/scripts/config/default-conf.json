@@ -17,10 +17,8 @@
         "years": 250,
         "backwards": true
     },
-    "dataAcquiistionYear":{
-        "initialYear": 2011,
-        "finalYear": 2017
-
+    "data":{
+        "acquistionYear": 2011
     },
     "deadwood": {
         "include": true
