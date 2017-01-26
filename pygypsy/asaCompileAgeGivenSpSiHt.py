@@ -89,9 +89,9 @@ def ComputeGypsySiteIndex(species = 'Aw', totalHeight = 1.3, bhage = 0, totalAge
                     si0 = (si0+si1)/2
                     iterCount = iterCount + 1
                     if iterCount == 1000:
-                        print '\n asaCompileAgeGivenSpHt.ComputeGypsySiteIndex()'
-                        print ' species:', species, 'totalHeight:', totalHeight, '\n bhage:', \
-                              bhage, 'totalAge', totalAge, 'si0:', si0
+                        LOGGER.warning(('Site index Routine Terminated; iter > 1000 '
+                                        'Sp = %s, treeHt = %s, treeSi = %s, treeAge = %s'),
+                                       species, totalHeight, si0, totalAge)
                     SI_bh=0
                 SI_t=si1
                 # estimating Site index BH
@@ -273,7 +273,7 @@ def ComputeGypsyTreeHeightGivenSiteIndexAndTotalAge(species = 'Aw', siteIndex = 
     return treeHeight
 
 def computeTreeAge(siSp='',treeHt = 20, treeSi=15, maxTreeAge = 450,
-                   rowIndex = 0, printWarnings = True):
+                   rowIndex = 0):
     if treeHt >1.3:
         maxTreeAgeAw = 200
         maxTreeAgePl = 250
@@ -293,10 +293,10 @@ def computeTreeAge(siSp='',treeHt = 20, treeSi=15, maxTreeAge = 450,
                 treeAge = ((treeHt-newHt)/treeHt)*(treeAge) + treeAge
             iterCount = iterCount + 1
 
-            if iterCount == 150 and printWarnings == True:
-                print '\n asaCompileAgeGivenSpSiHt.computeTreeAge()'
-                print ' Slow convergence'
-                print ' rowIndex:', rowIndex, 'siSp:', siSp, 'treeHt:', treeHt, 'treeSi:', treeSi, 'current treeAge:', treeAge
+            if iterCount == 150:
+                LOGGER.info(('Slow convergence'
+                             'Sp = %s, treeHt = %s, treeSi = %s, treeAge = %s'),
+                            siSp, treeHt, treeSi, treeAge)
             if treeAge > 1000:
                 htDiffFlag = True
                 LOGGER.warning(('Tree Age Search Routine Terminated; treeAge > 1000 '
@@ -308,12 +308,9 @@ def computeTreeAge(siSp='',treeHt = 20, treeSi=15, maxTreeAge = 450,
                 LOGGER.warning('Slow convergence with negative treeAge: %s', treeAge)
                 treeAge = 0
     else:
-        print 'tree si  ', treeSi
         y2bh = computeGypsyY2BHGivenSpSI(siSp, treeSi)
-        print 'y2bh ', y2bh
         ht = 1.3
         startHt = 0.01 # start tree height assumed tom be 1 cm
-        #eq 1.3 = 'startHt *a**y2bh'
 
         a = numpy.log(ht/startHt)/y2bh
         treeAge = numpy.log(treeHt/startHt)/a
