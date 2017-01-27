@@ -398,11 +398,10 @@ def simulate_forwards_df(plot_df, utiliz_params=None, backwards=True,
                                               + output_df['MerchantableVolume_Dec']
 
         output_df.reset_index(inplace=True)
-        output_df=output_df.rename(columns={'index': 'year'})
-        output_df['year'] = output_df['year']+year_of_data_acquisition+1
+        output_df = output_df.rename(columns={'index': 'year'})
+        output_df['year'] = output_df['year'] + year_of_data_acquisition + 1
+        output_df['plot_id'] = plot_id
         output_dict[plot_id] = output_df
-        output_df.insert(0, 'plot_id', plot_id)
-
 
         end = datetime.datetime.now()
         duration = end - start
