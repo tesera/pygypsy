@@ -408,7 +408,7 @@ def simulate_forwards_df(plot_df, utiliz_params=None, backwards=True,
         duration = end - start
         LOGGER.debug('plot %s took %f seconds', plot_id, duration.total_seconds())
 
-    big_output_df = pd.concat(output_dict.values(), copy=False)
-    big_output_df.set_index(['plot_id', 'year'], inplace=True)
+    complete_output_df = pd.concat(output_dict.values(), copy=False)
+    complete_output_df.set_index(['plot_id', 'year'], inplace=True)
 
-    return big_output_df
+    return complete_output_df
