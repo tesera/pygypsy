@@ -170,8 +170,9 @@ def simulate(ctx, data, config_file):
         if bucket_name is None:
             os.mkdir(simulation_output_dir)
 
-        for plot_id, data in result.items():
-            filename = '%s.csv' % plot_id
+        group_level = 1 if config_file['output']['level'] == 'annual' else 0
+        for year_or_plot, data in result.groupby(level=group_level):
+            filename = '%s.csv' % year_or_plot
             output_path = os.path.join(simulation_output_dir, filename)
             if bucket_name:
                 df_to_s3_bucket(data, bucket_conn, output_path,

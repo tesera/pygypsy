@@ -75,17 +75,34 @@
         "backwards"
       ]
     },
-    "prep": {
+    "simulation": {
       "type": "object",
       "properties": {
-        "minimumAge": {
+        "years": {
           "type": "integer",
           "multipleOf": 1,
-          "minimum": 0
+          "maximum": 500,
+          "minimum": 1
+        },
+        "backwards": {
+          "type": "boolean"
         }
       },
       "required": [
-        "minimumAge"
+        "years",
+        "backwards"
+      ]
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "type": "string",
+          "pattern": "^(annual|plot)$"
+        }
+      },
+      "required": [
+        "level"
       ]
     },
     "data":{
