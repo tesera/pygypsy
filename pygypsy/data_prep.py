@@ -4,6 +4,7 @@ Calculates and joins parameters required for pygypsy to a plot table
 
 """
 #pylint: disable=no-member
+from __future__ import division
 import logging
 import pandas as pd
 from copy import deepcopy
@@ -124,7 +125,7 @@ def populate_species_dict(partial_species_list,
     return species_dict
 
 
-def prep_standtable(data):
+def prep_standtable(data, minimum_age=25):
     '''Define site_index of all other species given the dominant species
 
     The site index is only defined for the dominant species in a plot. This
@@ -167,6 +168,12 @@ def prep_standtable(data):
         plot_dominant_species = row['SP1']
         dominant_species_current_age = row['AGE']
         dominant_species_current_height = row['HD']
+
+        if dominant_species_current_age < minimum_age:
+            msg = ('Dominant species age is less than minimum age %s;'
+                   'skipping plot %s') % (minimum_age, plot_id)
+            LOGGER.warning(msg)
+            continue
 
         site_index = _estimate_site_index(
             plot_dominant_species,
@@ -322,7 +329,7 @@ def prep_standtable(data):
             'topHeight_Pl': top_height_pl
         }
 
-        plot_df = pd.DataFrame(plot_dict)
-        plot_df = plot_df.transpose()
+    plot_df = pd.DataFrame(plot_dict)
+    plot_df = plot_df.transpose()
 
     return plot_df

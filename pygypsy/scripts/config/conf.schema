@@ -75,6 +75,29 @@
         "backwards"
       ]
     },
+    "prep": {
+      "type": "object",
+      "properties": {
+        "minimumAge": {
+          "type": "integer",
+          "multipleOf": 1,
+          "minimum": 0
+        }
+      },
+      "required": [
+        "minimumAge"
+      ]
+    },
+    "data":{
+        "type": "object",
+        "properties": {
+        "acquistionYear": {
+            "type":"integer",
+            "maximum": 2017,
+            "minimum": 1900
+        }
+      }
+    },
     "deadwood": {
       "type": "object",
       "properties": {
@@ -125,11 +148,9 @@
     }
   },
   "required": [
-    "tolerance",
     "simulation",
-    "deadwood",
-    "dataReduction",
-    "utilization"
+    "utilization",
+    "prep"
   ],
   "definitions": {
     "tolerance": {

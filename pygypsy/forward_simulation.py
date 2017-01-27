@@ -188,7 +188,7 @@ def simulate_densities_speciescomp_topheight(n_years=250, start_at_data_year=Fal
 
 
 def simulate_forwards_df(plot_df, utiliz_params=None, backwards=True,
-                         n_years=250):
+                         n_years=250, year_of_data_acquisition=0):
     """Simulate the evolution of plot characteristics through time
 
     This begins with the simulation of densities, species, and top height.
@@ -384,7 +384,6 @@ def simulate_forwards_df(plot_df, utiliz_params=None, backwards=True,
                 stump_height=utiliz_params[spec.lower()]['stumpHeight']
             )
 
-
         output_df['Gross_Total_Volume_Con'] = output_df['Gross_Total_Volume_Sw'] \
                                               + output_df['Gross_Total_Volume_Sb'] \
                                               + output_df['Gross_Total_Volume_Pl']
@@ -398,8 +397,13 @@ def simulate_forwards_df(plot_df, utiliz_params=None, backwards=True,
         output_df['MerchantableVolume_Tot'] = output_df['MerchantableVolume_Con'] \
                                               + output_df['MerchantableVolume_Dec']
 
+        output_df.reset_index(inplace=True)
+        output_df=output_df.rename(columns={'index': 'year'})
+        output_df['year'] = output_df['year']+year_of_data_acquisition+1
+        output_df.set_index(['year'], inplace=True)
         output_dict[plot_id] = output_df
         output_df.insert(0, 'plot_id', plot_id)
+
 
         end = datetime.datetime.now()
         duration = end - start
