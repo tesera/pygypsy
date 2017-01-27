@@ -169,6 +169,12 @@ def prep_standtable(data, minimum_age=25):
         dominant_species_current_age = row['AGE']
         dominant_species_current_height = row['HD']
 
+        if dominant_species_current_age < minimum_age:
+            msg = ('Dominant species age is less than minimum age %s;'
+                   'skipping plot %s') % (minimum_age, plot_id)
+            LOGGER.warning(msg)
+            continue
+
         site_index = _estimate_site_index(
             plot_dominant_species,
             dominant_species_current_age,
@@ -211,13 +217,6 @@ def prep_standtable(data, minimum_age=25):
         tage_sw = species_dict['Sw']['tage']
         tage_pl = species_dict['Pl']['tage']
         tage_sb = species_dict['Sb']['tage']
-
-        ages = [tage_aw, tage_sw, tage_pl, tage_sb]
-        if not any([age > minimum_age for age in ages]):
-            msg = ('No speices have age greater than the minimum age %s;'
-                   'skipping plot %s') % (minimum_age, plot_id)
-            LOGGER.warning(msg)
-            continue
 
         bhage_aw = species_dict['Aw']['bhage']
         bhage_sw = species_dict['Sw']['bhage']
