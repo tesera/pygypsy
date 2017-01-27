@@ -15,7 +15,6 @@ from pygypsy.scripts.callbacks import _load_and_validate_config
 from pygypsy.plot import save_plot
 from pygypsy.utils import (
     _log_loop_progress,
-    _filter_young_stands,
     _append_file,
     _parse_s3_url,
     _copy_file,
@@ -121,7 +120,10 @@ def prep(ctx, standtable, config_file):
 
     try:
         standtable_df = pd.read_csv(standtable)
-        prepped_data = prep_standtable(standtable_df)
+        prepped_data = prep_standtable(
+            standtable_df,
+            minimum_age=config_file['prep']['minimumAge']
+        )
 
         LOGGER.info('Writing prepped data to %s', output_path)
         if bucket_name:
@@ -141,8 +143,6 @@ def prep(ctx, standtable, config_file):
                bucket_conn)
 
 
-
-# TODO: needs refactor
 @cli.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('data', type=click.Path(exists=False))
 @click.option('--config-file', '-c', type=click.Path(exists=False),
@@ -158,32 +158,7 @@ def simulate(ctx, data, config_file):
 
     try:
         standtable = pd.read_csv(data)
-
-        min_age = 25
-        LOGGER.info('Filtering plots to those with a species older than %d years',
-                    min_age)
-        standtable_old, standtable_young = _filter_young_stands(standtable,
-                                                            min_age=25)
-
-        if standtable_young.shape[0] > 0:
-            skipped_plots_filename = 'skipped-plots.csv'
-            LOGGER.info('%d young plots were removed. IDs saved to %s',
-                        standtable_young.shape[0],
-                        skipped_plots_filename)
-            standtable_young_path = os.path.join(output_dir,
-                                                 skipped_plots_filename)
-            if bucket_name:
-                df_to_s3_bucket(standtable_young, bucket_conn,
-                                standtable_young_path, index_label=index_label)
-            else:
-                standtable_young.to_csv(standtable_young_path,
-                                        columns=['PlotID'],
-                                        idex_label=index_label)
-        else:
-            LOGGER.info('No plots less than %d years old present', min_age)
-
-        LOGGER.info('Running simulation...')
-        result = simulate_forwards_df(standtable_old,
+        result = simulate_forwards_df(standtable,
                                       utiliz_params=config_file['utilization'],
                                       n_years=config_file['simulation']['years'],
                                       backwards=config_file['simulation']['backwards'],
