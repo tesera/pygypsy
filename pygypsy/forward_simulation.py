@@ -400,7 +400,6 @@ def simulate_forwards_df(plot_df, utiliz_params=None, backwards=True,
         output_df.reset_index(inplace=True)
         output_df=output_df.rename(columns={'index': 'year'})
         output_df['year'] = output_df['year']+year_of_data_acquisition+1
-        output_df.set_index(['year'], inplace=True)
         output_dict[plot_id] = output_df
         output_df.insert(0, 'plot_id', plot_id)
 
@@ -410,7 +409,6 @@ def simulate_forwards_df(plot_df, utiliz_params=None, backwards=True,
         LOGGER.debug('plot %s took %f seconds', plot_id, duration.total_seconds())
 
     big_output_df = pd.concat(output_dict.values(), copy=False)
-    big_output_df.set_index(['plot_id', 'date'], inplace=True)
-    import ipdb; ipdb.set_trace()
+    big_output_df.set_index(['plot_id', 'year'], inplace=True)
 
     return big_output_df
