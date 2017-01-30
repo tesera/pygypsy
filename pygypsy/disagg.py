@@ -110,6 +110,9 @@ def build_disaggregated_simulated_df(simulated_data_with_sp_original_prop):
     df['MerchantableVolumeFd'] = df.MerchantableVolumeSw * df.PER_Fd_data * df.prop_Sw_class
     df['MerchantableVolumePb'] = df.MerchantableVolumeAw * df.PER_Pb_data * df.prop_Aw_class
     
+    df.reindex_axis(sorted(df.columns), axis=1)
+    
+    
     return df
 
 #build_disaggregated_simulated_df(simulated_data_with_sp_original_prop)
