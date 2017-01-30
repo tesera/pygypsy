@@ -376,7 +376,7 @@ def _simulate_row(row, utiliz_params=None, n_years=250, backwards=True,
     output_df.reset_index(inplace=True)
     output_df = output_df.rename(columns={'index': 'year'})
     output_df['year'] = output_df['year'] + year_of_data_acquisition + 1
-    output_df['plot_id'] = int(row['id_l1'])
+    output_df['id_l1'] = int(row['id_l1'])
 
     return output_df
 
@@ -433,6 +433,6 @@ def simulate_forwards_df(plot_df, **kwargs):
                      duration.total_seconds())
 
     complete_output_df = pd.concat(output_dict.values(), copy=False)
-    complete_output_df.set_index(['plot_id', 'year'], inplace=True)
+    complete_output_df.set_index(['id_l1', 'year'], inplace=True)
 
     return complete_output_df
