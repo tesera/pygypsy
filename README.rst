@@ -22,6 +22,7 @@ Its main usage mode is a command line interface; it also has a an API for
 programmatic use.
 
 It's benefits over other offerings are:
+
 - configurable
 - control over the implementation
 - fast
@@ -48,9 +49,9 @@ pygypsy is available in the following package repositories
     conda config --add channels conda-forge
     conda install pygypsy
 
-Conda is the recommended environment for using gypsy. Installation from
-PyPI currently requires compilation of cython extensions and C code; on
-Linux and OSX this is generally not problematic.
+Conda is the recommended environment for using gypsy on windows. Installation
+from PyPI currently requires compilation of cython extensions and C code; on
+Linux and OSX this is rarely problematic.
 
 It is recommended to install in a
 `virtualenv <https://virtualenv.pypa.io/en/stable/userguide/>`__ or

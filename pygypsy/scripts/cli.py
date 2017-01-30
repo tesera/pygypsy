@@ -15,7 +15,6 @@ from pygypsy.scripts.callbacks import _load_and_validate_config
 from pygypsy.plot import save_plot
 from pygypsy.utils import (
     _log_loop_progress,
-    _filter_young_stands,
     _append_file,
     _parse_s3_url,
     _copy_file,
@@ -121,8 +120,12 @@ def prep(ctx, standtable, config_file):
 
     try:
         standtable_df = pd.read_csv(standtable)
-        prepped_data = prep_standtable(standtable_df)
+        prepped_data = prep_standtable(
+            standtable_df,
+            minimum_age=config_file['prep']['minimumAge']
+        )
 
+        LOGGER.info('Writing prepped data to %s', output_path)
         if bucket_name:
             df_to_s3_bucket(prepped_data, bucket_conn, output_path,
                             index_label=index_label)
@@ -140,8 +143,6 @@ def prep(ctx, standtable, config_file):
                bucket_conn)
 
 
-
-# TODO: needs refactor
 @cli.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('data', type=click.Path(exists=False))
 @click.option('--config-file', '-c', type=click.Path(exists=False),
@@ -153,55 +154,29 @@ def simulate(ctx, data, config_file):
     bucket_name = ctx.obj['s3-bucket-name']
     bucket_conn = ctx.obj['s3-bucket-conn']
     output_dir = ctx.obj['output-dir']
-    index_label = 'id_l1'
 
     try:
         standtable = pd.read_csv(data)
-
-        min_age = 25
-        LOGGER.info('Filtering plots to those with a species older than %d years',
-                    min_age)
-        standtable_old, standtable_young = _filter_young_stands(standtable,
-                                                            min_age=25)
-
-        if standtable_young.shape[0] > 0:
-            skipped_plots_filename = 'skipped-plots.csv'
-            LOGGER.info('%d young plots were removed. IDs saved to %s',
-                        standtable_young.shape[0],
-                        skipped_plots_filename)
-            standtable_young_path = os.path.join(output_dir,
-                                                 skipped_plots_filename)
-            if bucket_name:
-                df_to_s3_bucket(standtable_young, bucket_conn,
-                                standtable_young_path, index_label=index_label)
-            else:
-                standtable_young.to_csv(standtable_young_path,
-                                        columns=['PlotID'],
-                                        idex_label=index_label)
-        else:
-            LOGGER.info('No plots less than %d years old present', min_age)
-
-        LOGGER.info('Running simulation...')
-        result = simulate_forwards_df(standtable_old,
+        result = simulate_forwards_df(standtable,
                                       utiliz_params=config_file['utilization'],
                                       n_years=config_file['simulation']['years'],
-                                      backwards=config_file['simulation']['backwards'])
-
-        LOGGER.info('Saving output data')
+                                      backwards=config_file['simulation']['backwards'],
+                                      year_of_data_acquisition=config_file['data']['acquistionYear'])
 
         simulation_output_dir = os.path.join(output_dir, 'simulation-data')
+        LOGGER.info('Saving output data to %s', simulation_output_dir)
 
         if bucket_name is None:
             os.mkdir(simulation_output_dir)
 
-        for plot_id, data in result.items():
-            filename = '%s.csv' % plot_id
+        group_level = 1 if config_file['output']['level'] == 'annual' else 0
+        for year_or_plot, data in result.groupby(level=group_level):
+            filename = '%s.csv' % year_or_plot
             output_path = os.path.join(simulation_output_dir, filename)
             if bucket_name:
-                df_to_s3_bucket(data, bucket_conn, output_path,
-                                index_label=index_label)
+                df_to_s3_bucket(data, bucket_conn, output_path)
             else:
-                data.to_csv(output_path, index_label=index_label)
+                data.to_csv(output_path)
     except:
         _copy_file(LOG_FILE_NAME, gyppath._join(output_dir, 'simulate.log'),
                    bucket_conn)

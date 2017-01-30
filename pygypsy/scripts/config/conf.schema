@@ -75,6 +75,46 @@
         "backwards"
       ]
     },
+    "simulation": {
+      "type": "object",
+      "properties": {
+        "years": {
+          "type": "integer",
+          "multipleOf": 1,
+          "maximum": 500,
+          "minimum": 1
+        },
+        "backwards": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "years",
+        "backwards"
+      ]
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "type": "string",
+          "pattern": "^(annual|plot)$"
+        }
+      },
+      "required": [
+        "level"
+      ]
+    },
+    "data":{
+        "type": "object",
+        "properties": {
+        "acquistionYear": {
+            "type":"integer",
+            "maximum": 2017,
+            "minimum": 1900
+        }
+      }
+    },
     "deadwood": {
       "type": "object",
       "properties": {
@@ -125,11 +165,9 @@
     }
   },
   "required": [
-    "tolerance",
     "simulation",
-    "deadwood",
-    "dataReduction",
-    "utilization"
+    "utilization",
+    "prep"
   ],
   "definitions": {
     "tolerance": {

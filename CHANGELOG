@@ -13,6 +13,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 - n/a
 
+## 0.4.0 - 2017-01-30
+### Added
+- n/a
+
+### Changed
+- Skip plots that raise an error in the preparation/simulation
+- Output uses multi-index data frame, with plot id and year index
+- Skip young plots in data prep instead of in simulation
+- Output the absolute year of the simulation (by adding the year of data acquisition)
+- Set maximum age if estimated age is greater than 1000
+
+### Fixed
+- n/a
+
 ## 0.3.1 - 2017-01-11
 ### Added
 - n/a
