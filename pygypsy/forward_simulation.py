@@ -373,7 +373,7 @@ def simulate_forwards_df(plot_df, utiliz_params=None, backwards=True,
                 output_df['topHeight_%s' % spec]
             )
 
-            output_df['MerchantableVolume%s' % spec] = merchantable_volume(
+            output_df['Merchantable_Volume_%s' % spec] = merchantable_volume(
                 spec,
                 output_df['N_bh_%sT' % spec],
                 output_df['BA_%s' % spec],
@@ -390,12 +390,12 @@ def simulate_forwards_df(plot_df, utiliz_params=None, backwards=True,
         output_df['Gross_Total_Volume_Dec'] = output_df['Gross_Total_Volume_Aw']
         output_df['Gross_Total_Volume_Tot'] = output_df['Gross_Total_Volume_Con'] \
                                               + output_df['Gross_Total_Volume_Dec']
-        output_df['MerchantableVolume_Con'] = output_df['MerchantableVolumeSw'] \
-                                              + output_df['MerchantableVolumeSb'] \
-                                              + output_df['MerchantableVolumePl']
-        output_df['MerchantableVolume_Dec'] = output_df['MerchantableVolumeAw']
-        output_df['MerchantableVolume_Tot'] = output_df['MerchantableVolume_Con'] \
-                                              + output_df['MerchantableVolume_Dec']
+        output_df['Merchantable_Volume_Con'] = output_df['Merchantable_Volume_Sw'] \
+                                              + output_df['Merchantable_Volume_Sb'] \
+                                              + output_df['Merchantable_Volume_Pl']
+        output_df['Merchantable_Volume_Dec'] = output_df['Merchantable_Volume_Aw']
+        output_df['Merchantable_Volume_Tot'] = output_df['Merchantable_Volume_Con'] \
+                                              + output_df['Merchantable_Volume_Dec']
 
         output_df.reset_index(inplace=True)
         output_df = output_df.rename(columns={'index': 'year'})
