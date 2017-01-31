@@ -42,6 +42,70 @@ The schema, against which the configuration file is validated, is available
 `here
 <https://github.com/tesera/pygypsy/blob/dev/pygypsy/scripts/config/conf.schema>`__.
 
+Growing Plots
+-------------
+
+To bring plot data to the current date, and combination of configuration files
+parameters can be used:
+
+E.g. to bring data collected in 2011 to date as of 2017 use the following
+  values in the configuration file
+
+    {
+        # other variables ...
+        "simulation": {
+            "years": 6,
+            "backwards": false
+        },
+        "data": {
+            "acquistionYear": 2011
+        },
+        "output": {
+            "level": "annual"
+        },
+        # other variables ...
+    }
+
+
+Developing Yield Curves
+-----------------------
+
+Yield curve development is another common use case, this consists, for example,
+of plot-level simulations of 250 year duration. The following configuration values
+will produce one output file for each plot, with the gypsy properties
+
+
+    {
+        # other variables ...
+        "simulation": {
+            "years": 250,
+            "backwards": true
+        },
+        "data": {
+            "acquistionYear": 0
+        },
+        "output": {
+            "level": "plot"
+        },
+        # other variables ...
+    }
+
+Backwards simulation
+--------------------
+
+The backwards configuration
+
+    {
+        # other variables ...
+        "simulation": {
+            # other variables ...
+            "backwards": true
+    },
+
+Controls whether the curve is simulated from primary succession. If true, the
+simulation goes from a clear plot until the simulation duration. If false, the
+simulation goes from the time of data acquisition until the simulation duration.
+
 Simulations
 ===========
 
