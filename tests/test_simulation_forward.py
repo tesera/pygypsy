@@ -39,8 +39,8 @@ def test_compare_forward_simulation(test_file):
         equal_nan=True
     )
 
-    # regenerate output files
-    # result.to_csv(expected_data_path)
+    #regenerate output files
+#    result.to_csv(expected_data_path)
 
 def test_forward_simulation_duration_without_backwards():
     input_data_path = os.path.join(DATA_DIR, 'forward_simulation_files',

@@ -18,9 +18,9 @@ def test_sp_prop_total():
         ('', 0)
     ]
 
-    assert sp_prop_total(perc_sp) == {'PER_Aw_data':0.5,
-                                      'PER_Pb_data':0.2, 'PER_Sw_data':0.3,
-                                      'PER_Fb_data':0, 'PER_Fd_data':0}
+    assert sp_prop_total(perc_sp) == {'PROP_Aw_data':0.5,
+                                      'PROP_Pb_data':0.2, 'PROP_Sw_data':0.3,
+                                      'PROP_Fb_data':0, 'PROP_Fd_data':0}
 
 
 
