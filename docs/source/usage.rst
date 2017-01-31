@@ -49,7 +49,7 @@ To bring plot data to the current date, and combination of configuration files
 parameters can be used:
 
 E.g. to bring data collected in 2011 to date as of 2017 use the following
-  values in the configuration file
+values in the configuration file: ::
 
     {
         # other variables ...
@@ -66,13 +66,16 @@ E.g. to bring data collected in 2011 to date as of 2017 use the following
         # other variables ...
     }
 
+The output will be a file for each year, with each file containing the
+properties of all the plots.
 
 Developing Yield Curves
 -----------------------
 
 Yield curve development is another common use case, this consists, for example,
-of plot-level simulations of 250 year duration. The following configuration values
-will produce one output file for each plot, with the gypsy properties
+of plot-level simulations of 250 year duration. The following configuration
+values will produce one output file for each plot, with the gypsy properties
+for each year of the simulation: ::
 
 
     {
@@ -93,7 +96,7 @@ will produce one output file for each plot, with the gypsy properties
 Backwards simulation
 --------------------
 
-The backwards configuration
+The backwards configuration: ::
 
     {
         # other variables ...
