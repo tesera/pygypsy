@@ -19,7 +19,7 @@ from pygypsy.utils import (
     _parse_s3_url,
     _copy_file,
 )
-from pygypsy.io import df_to_s3_bucket
+from pygypsy.io_ops import df_to_s3_bucket
 from pygypsy.data_prep import prep_standtable
 from pygypsy.log import setup_logging, CONSOLE_LOGGER_NAME
 from pygypsy.forward_simulation import simulate_forwards_df

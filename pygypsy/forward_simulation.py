@@ -1,3 +1,4 @@
+#pylint: disable=invalid-name
 """Simulation"""
 # TODO: change module/funct name - 'forward' is not necessary or strictly true
 from __future__ import division

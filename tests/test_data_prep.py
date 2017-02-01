@@ -1,4 +1,4 @@
-#pylint: disable=missing-docstring,invalid-name
+#pylint: disable=missing-docstring,invalid-name,no-member
 import os
 import pytest
 import pandas as pd
