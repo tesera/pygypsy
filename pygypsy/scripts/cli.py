@@ -154,7 +154,6 @@ def simulate(ctx, data, config_file):
     bucket_name = ctx.obj['s3-bucket-name']
     bucket_conn = ctx.obj['s3-bucket-conn']
     output_dir = ctx.obj['output-dir']
-    index_label = 'id_l1'
 
     try:
         standtable = pd.read_csv(data)
@@ -175,10 +174,9 @@ def simulate(ctx, data, config_file):
             filename = '%s.csv' % year_or_plot
             output_path = os.path.join(simulation_output_dir, filename)
             if bucket_name:
-                df_to_s3_bucket(data, bucket_conn, output_path,
-                                index_label=index_label)
+                df_to_s3_bucket(data, bucket_conn, output_path)
             else:
-                data.to_csv(output_path, index_label=index_label)
+                data.to_csv(output_path)
     except:
         _copy_file(LOG_FILE_NAME, gyppath._join(output_dir, 'simulate.log'),
                    bucket_conn)
