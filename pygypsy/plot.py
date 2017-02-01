@@ -30,15 +30,15 @@ def _plot_basal_area(simulation_dataframe, axis=None): #pylint: disable=missing-
 
 def _plot_merch_volume(simulation_dataframe, axis): #pylint: disable=missing-docstring
     _plot_simulation_variables(simulation_dataframe, axis=axis,
-                               plot_vars=['MerchantableVolumeAw', 'MerchantableVolumeSw',
-                                          'MerchantableVolumeSb', 'MerchantableVolumePl'],
+                               plot_vars=['Merchantable_Volume_Aw', 'Merchantable_Volume_Sw',
+                                          'Merchantable_Volume_Sb', 'Merchantable_Volume_Pl'],
                                y_lab='Merc. Vo. (m3)')
 
 def _plot_merch_volume_conif_decid(simulation_dataframe, axis): #pylint: disable=missing-docstring
     _plot_simulation_variables(simulation_dataframe, axis=axis,
-                               plot_vars=['MerchantableVolume_Con',
-                                          'MerchantableVolume_Dec',
-                                          'MerchantableVolume_Tot'],
+                               plot_vars=['Merchantable_Volume_Con',
+                                          'Merchantable_Volume_Dec',
+                                          'Merchantable_Volume_Tot'],
                                y_lab='Merc. Vo. (m3)')
 
 def _plot_top_height(simulation_dataframe, axis=None): #pylint: disable=missing-docstring
