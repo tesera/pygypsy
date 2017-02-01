@@ -29,7 +29,7 @@ def test_compare_forward_simulation(test_file):
     )
 
     result = simulate_forwards_df(input_df, backwards=True, n_years=250)
-    expected = pd.read_csv(expected_data_path, index_col=0)
+    expected = pd.read_csv(expected_data_path, index_col=[0,1])
 
     assert isinstance(result, pd.DataFrame)
     assert result.shape[0]==250
