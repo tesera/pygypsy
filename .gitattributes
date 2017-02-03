@@ -1,1 +1,2 @@
 pygypsy/_version.py export-subst
+notebooks/* linguist-vendored=false
